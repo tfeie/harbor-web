@@ -10,7 +10,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title></title>
+<title>用户注册</title>
 <script type="text/javascript"
 	src="${_base }/resources/js/jquery.min.js"></script>
 <script type="text/javascript" src="${_base }/resources/js/main.js"></script>
