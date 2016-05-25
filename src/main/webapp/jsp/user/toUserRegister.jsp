@@ -1,19 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ include file="/jsp/inc/inc.jsp"%>
+<%
+    String _base = request.getContextPath();
+			request.setAttribute("_base", _base);
+%>
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>用户注册</title>
+<title></title>
+<script type="text/javascript"
+	src="${_base }/resources/js/jquery.min.js"></script>
+<script type="text/javascript" src="${_base }/resources/js/main.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${_base }/resources/css/style.css">
+<script type="text/javascript"
+	src="${_base }/resources/js/owl.carousel.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${_base }/resources/css/owl.carousel.min.css">
 </head>
 <body css="body_css"
-	style="background: url(img/banner2.png) no-repeat center center; background-size: cover">
+	style="background: url(${_base }/resources/img/banner2.png) no-repeat center center; background-size: cover">
 	<div class="mask1"></div>
 	<section class="sec_top">
 		<div class="img">
-			<img src="img/img3.png" />
+			<img src="${_base }/resources/img/img3.png" />
 		</div>
 		<div class="text">
 			<h2>海湾，我们的舞台</h2>
@@ -24,8 +37,9 @@
 
 	<section class="zhuce">
 		<div class="div_six">
-			<span><a class="on"><img src="img/boy.png" /></a></span> <span><a><img
-					src="img/girl.png" /></a></span>
+			<span><a class="on"><img
+					src="${_base }/resources/img/boy.png" /></a></span> <span><a><img
+					src="${_base }/resources/img/girl.png" /></a></span>
 		</div>
 		<div class="div_input">
 			<div class="item">

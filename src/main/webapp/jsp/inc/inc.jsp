@@ -10,12 +10,7 @@
     response.setDateHeader("Expires", 0);
     response.setHeader("Pragma", "No-cache");
 %> 
-<link rel="stylesheet" type="text/css" href="${_base }/resources/css/style.css"/>
-<link rel="stylesheet" type="text/css" href="${_base }/resources/owl.carousel.min.css"/>
 
-<script src="${_base}/resources/js/jquery.min.js" ></script>
-<script src="${_base}/resources/js/owl.carousel.js" ></script>
-<script src="${_base}/resources/js/selectivizr.js" ></script> 
 <script>
     var _base = "${_base}";
 </script>
