@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+	compile "com.the.harbor.commons:harbor-commons:1.0-SNAPSHOT"
     compile 'com.google.code.gson:gson:2.3.1'
     compile "jstl:jstl:1.2"
     compile "org.springframework:spring-web:4.1.7.RELEASE"
@@ -41,7 +42,7 @@ dependencies {
 
     compile 'org.apache.curator:curator-framework:2.8.0'
     compile 'org.apache.curator:curator-recipes:2.8.0'
-    //compile "org.apache.zookeeper:zookeeper:3.4.6"
+    compile "org.apache.zookeeper:zookeeper:3.4.6"
     compile 'com.google.code.gson:gson:2.3.1'
 	compile "org.javassist:javassist:3.15.0-GA"
 	
@@ -53,6 +54,8 @@ dependencies {
             "org.springframework:spring-test:4.1.7.RELEASE",
             "junit:junit:4.12"
     )
+    
+    compile "com.the.harbor.api:user:1.0-SNAPSHOT"
 }
 
 eclipse {
