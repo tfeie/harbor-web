@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
@@ -20,6 +21,8 @@ import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.wechatutils.MessageConstants;
 import com.the.harbor.web.weixin.param.MenuClickRequest;
 
+@Controller
+@RequestMapping("/harbor")
 public class WeiXinCoreController {
 	
     private static Log log = LogFactory.getLog(WeiXinCoreController.class);
