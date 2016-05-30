@@ -1,4 +1,4 @@
-package com.the.harbor.web.weixin.param.req;
+package com.the.harbor.web.system.wechatutils.req;
 /**
 * @ClassName: BaseMessage 
 * @Description: 微信请求服务后台的消息基类

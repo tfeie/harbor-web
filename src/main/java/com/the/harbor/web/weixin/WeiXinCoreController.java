@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.web.system.utils.CommonUtil;
 import com.the.harbor.web.system.utils.StringUtil;
-import com.the.harbor.web.system.utils.WXRequestUtil;
-import com.the.harbor.web.system.wechatutils.MessageConstants;
+import com.the.harbor.web.system.wechatutils.MessageUtil;
 import com.the.harbor.web.weixin.param.MenuClickRequest;
 
 @Controller
@@ -92,34 +91,34 @@ public class WeiXinCoreController {
         request.setCharacterEncoding("UTF-8");
         // response.setCharacterEncoding("UTF-8");
         String respMessage = "";
-        MenuClickRequest requestObject = WXRequestUtil.parseObject(request);
+        MenuClickRequest requestObject = MessageUtil.parseObject(request);
         log.debug("微信请求参数：" + JSONObject.toJSONString(requestObject));
         if (requestObject == null) {
             log.error("请求异常,未能得到请求参数.");
             return;
         }
         // 事件类消息
-        if (MessageConstants.RequestMsgType.REQ_MESSAGE_TYPE_EVENT.equals(requestObject.getMsgType())) {
+        if (MessageUtil.RequestMsgType.REQ_MESSAGE_TYPE_EVENT.equals(requestObject.getMsgType())) {
             // 订阅事件
-            if (MessageConstants.EventType.EVENT_TYPE_SUBSCRIBE.equals(requestObject.getEvent())) {
+            if (MessageUtil.EventType.EVENT_TYPE_SUBSCRIBE.equals(requestObject.getEvent())) {
                 // TODO 订阅之后推送欢迎页.
                 
             }
             // 退订事件
-            if (MessageConstants.EventType.EVENT_TYPE_UNSUBSCRIBE.equals(requestObject.getEvent())) {
+            if (MessageUtil.EventType.EVENT_TYPE_UNSUBSCRIBE.equals(requestObject.getEvent())) {
                 // 退订解绑关系
             }
             // 点击类事件
-            if (MessageConstants.EventType.EVENT_TYPE_CLICK.equals(requestObject.getEvent())) {
+            if (MessageUtil.EventType.EVENT_TYPE_CLICK.equals(requestObject.getEvent())) {
                 // 根据事件KEY来处理点击事物.;
             }
             // 跳转类事件
-            if (MessageConstants.EventType.EVENT_TYPE_VIEW.equals(requestObject.getEvent())) {
+            if (MessageUtil.EventType.EVENT_TYPE_VIEW.equals(requestObject.getEvent())) {
                 // 根据事件KEY来处理点击事物.;
                 
             }
         }else {// 其他类型消息统一从这里回复 有业务之后再拆分
-        	if (MessageConstants.RequestMsgType.REQ_MESSAGE_TYPE_TEXT.equals(requestObject.getMsgType())){
+        	if (MessageUtil.RequestMsgType.REQ_MESSAGE_TYPE_TEXT.equals(requestObject.getMsgType())){
         		log.info("++++++++++++++自动回复开始fromUserName:"+requestObject.getFromUserName()+"toUserName:"+requestObject.getToUserName()+"content:"+requestObject.getContent());
             	
             	log.info("++++++++++++++自动回复结束:"+respMessage);

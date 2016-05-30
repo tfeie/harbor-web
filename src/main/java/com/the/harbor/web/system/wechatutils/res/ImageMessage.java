@@ -1,8 +1,8 @@
-package com.the.harbor.web.weixin.param.res;
+package com.the.harbor.web.system.wechatutils.res;
 
 import java.util.Date;
 
-import com.the.harbor.web.system.wechatutils.MessageConstants;
+import com.the.harbor.web.system.wechatutils.MessageUtil;
 
 /**
 * @version V1.0
@@ -18,7 +18,7 @@ public class ImageMessage extends BaseMessage {
         this.setFromUserName(fromUserName);
         this.setToUserName(toUserName);
         this.setCreateTime(new Date().getTime());
-        this.setMsgType(MessageConstants.ResponseMsgType.RESP_MESSAGE_TYPE_IMAGE);
+        this.setMsgType(MessageUtil.ResponseMsgType.RESP_MESSAGE_TYPE_IMAGE);
     }
 	
     public Media getImage() {

@@ -1,4 +1,4 @@
-package com.the.harbor.web.weixin.param.req;
+package com.the.harbor.web.system.wechatutils.req;
 
 /**
  * 
