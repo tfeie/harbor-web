@@ -17,7 +17,7 @@ $(function(){
 		var orderAmount = "0.01";
 		location.href="<%=_base%>/payment/getAuthorizeCode?orderId=" + orderId + "&orderAmount=" + orderAmount;
 	});
-}
+});
 </script>
 
 <body>
