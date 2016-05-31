@@ -23,7 +23,6 @@ import com.the.harbor.web.constants.WXConstants;
 public class WXRequestUtil {
 	private static Log log = LogFactory.getLog(WXRequestUtil.class);
 	
-	
 	/**
 	 * 获取预支付流水
 	 * @param openId

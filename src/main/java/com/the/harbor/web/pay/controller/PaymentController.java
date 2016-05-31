@@ -10,6 +10,8 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,7 +28,7 @@ import com.the.harbor.web.system.utils.WXRequestUtil;
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
-    private static final Logger log = Logger.getLogger(PaymentController.class);
+	private static final Log log = LogFactory.getLog(PaymentController.class);
 
 	@RequestMapping(value="/creatOrder")
 	public @ResponseBody Object creatOrder(HttpServletRequest request) {
@@ -113,6 +115,7 @@ public class PaymentController {
         finalpackage.put("signType", "MD5");
         String finalSign = CommonUtil.createSign(finalpackage,"Tgbnhy21qwerty39jjygbnh77ijnbvcx");
         finalpackage.put("sign", finalSign);
+        log.info("支付参数：" + JSONObject.toJSONString(finalpackage));
         /*组织跳转密码输入页面参数*/
         request.setAttribute("appId", "wxbec41326662016d1");
         request.setAttribute("timeStamp", timestamp);
