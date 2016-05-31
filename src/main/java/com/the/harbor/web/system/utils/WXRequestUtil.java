@@ -79,7 +79,7 @@ public class WXRequestUtil {
                 + "appid="
                 + "wxbec41326662016d1"
                 + "&secret="
-                + "e36347870c9b64d75acbb3e300fdcdbc"
+                + "276c6d27f07239411cd9ba93a40aac4c"
                 + "&code="
                 + code 
                 + "&grant_type=authorization_code";

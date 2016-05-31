@@ -80,17 +80,18 @@ public class PaymentController {
 	
 	@RequestMapping(value="/toPay")
 	public ModelAndView toPay(HttpServletRequest request,HttpServletResponse response) {
-		log.debug("支付授权==========结束===========");
-
 		String orderId = request.getParameter("orderId");
 		String orderAmount = request.getParameter("orderAmount");
 		String code = request.getParameter("code");
+		log.info("支付授权==========结束===========:orderId=" + 
+				orderId + ",orderAmount=" + orderAmount + ",code=" + code);
 		WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
 		if(wtoken == null) {
 			log.error("获取token失败");
 		}
 		
 		String openId = wtoken.getOpenId();
+		log.info("支付授权openid="+openId);
 		String notifyUrl = "http://harbor.tfeie.com/payment/notifyUrl";
 		JSONObject json = WXRequestUtil.wxUnifiedorder(openId,notifyUrl,request);
 		if("FAILD".equals(json.getString("STATE"))) {
