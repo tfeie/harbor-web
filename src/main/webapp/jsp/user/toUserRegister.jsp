@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%
-    String _base = request.getContextPath();
-			request.setAttribute("_base", _base);
+	String _base = request.getContextPath();
+	request.setAttribute("_base", _base);
 %>
 <!DOCTYPE html>
 <html>
@@ -22,7 +22,7 @@
 	href="${_base }/resources/css/owl.carousel.min.css">
 </head>
 <body css="body_css"
-	style="background: url(${_base }/resources/img/banner2.png) no-repeat center center; background-size: cover">
+	style="background: url(${_base }/resources/img/aimg1.png) no-repeat center center; background-size: cover; background-attachment: fixed;">
 	<div class="mask1"></div>
 	<section class="sec_top">
 		<div class="img">
@@ -37,9 +37,8 @@
 
 	<section class="zhuce">
 		<div class="div_six">
-			<span><a class="on"><img
-					src="${_base }/resources/img/boy.png" /></a></span> <span><a><img
-					src="${_base }/resources/img/girl.png" /></a></span>
+			<span><i class="on"><img src="${_base }/resources/img/boy.png" /></i></span> <span><i><img
+					src="${_base }/resources/img/girl.png" /></i></span>
 		</div>
 		<div class="div_input">
 			<div class="item">
@@ -60,12 +59,16 @@
 				<span><input type="text" name="" placeholder="请输入验证码" /></span><a
 					href="" class="send_yzm">发送验证码</a>
 			</div>
+			<div class="message-err">
+				<p>
+					<span>X</span>验证码错误
+				</p>
+			</div>
 			<div class="item_btn">
 				<a href="">确认注册</a>
 			</div>
 		</div>
 
 	</section>
-
 </body>
 </html>
