@@ -41,8 +41,8 @@ $(this).toggleClass("on")
 })
 
 
-$(".div_six span a").click(function(){
-	$(this).parents(".div_six").find("a").removeClass("on")
+$(".div_six span i").click(function(){
+	$(this).parents(".div_six").find("i").removeClass("on")
 	$(this).addClass("on")
 })
 
@@ -68,6 +68,16 @@ $(".info_sex p span").click(function(){
 
 
 
+
+
+
+
+
+
+$(".yuejian-bott p").click(function(){
+	$(this).parents(".yuejian-bott").find("p").removeClass("on")
+	$(this).addClass("on")
+})
 
 
 
