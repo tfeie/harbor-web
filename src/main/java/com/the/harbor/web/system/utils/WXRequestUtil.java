@@ -52,11 +52,10 @@ public class WXRequestUtil {
         String sign = CommonUtil.createSign(map, appsecret);
         map.put("sign", sign);
         
-        log.info("获取预支付流水输入参数：" + JSONObject.toJSONString(map));
         try {
         	String xml = CommonUtil.getRequestXml(map);
         	JSONObject json = CommonUtil.getPayNo2(url, xml);
-        	log.info("获取预支付流水输出参数：" + json);
+        	log.info("获取预支付流水输出参数：" + json.toJSONString());
         	return json;
         } catch (Exception e1) {
             log.error("获取预支付流水:" + e1);
