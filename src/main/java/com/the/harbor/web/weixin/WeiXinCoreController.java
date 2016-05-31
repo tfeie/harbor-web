@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.web.system.utils.CommonUtil;
 import com.the.harbor.web.system.utils.StringUtil;
 import com.the.harbor.web.system.wechatutils.MessageUtil;
+import com.the.harbor.web.system.wechatutils.res.TextMessage;
 import com.the.harbor.web.weixin.param.MenuClickRequest;
 
 @Controller
@@ -101,8 +102,17 @@ public class WeiXinCoreController {
         if (MessageUtil.RequestMsgType.REQ_MESSAGE_TYPE_EVENT.equals(requestObject.getMsgType())) {
             // 订阅事件
             if (MessageUtil.EventType.EVENT_TYPE_SUBSCRIBE.equals(requestObject.getEvent())) {
-                // TODO 订阅之后推送欢迎页.
-                
+                //订阅之后推送欢迎页.
+            	String fromUserName = requestObject.getFromUserName();
+            	String toUserName = requestObject.getToUserName();
+        		// 默认返回的文本消息内容
+        		StringBuffer respContent = new StringBuffer();
+        		TextMessage textMessage = new TextMessage(fromUserName,toUserName);
+        		textMessage.setToUserName(fromUserName);
+        		textMessage.setFromUserName(toUserName);
+        		respContent.append("感谢您的关注，海归港湾欢迎您！\r\n");
+        		textMessage.setContent(respContent.toString());
+        		respMessage = MessageUtil.textMessageToXml(textMessage);
             }
             // 退订事件
             if (MessageUtil.EventType.EVENT_TYPE_UNSUBSCRIBE.equals(requestObject.getEvent())) {
