@@ -114,7 +114,7 @@ public class PaymentController {
         request.setAttribute("packageValue", "prepay_id=" + json.get("MSG"));
         request.setAttribute("signType", "MD5");
         request.setAttribute("sign", finalSign);
-		ModelAndView view = new ModelAndView("pay/toPay");
+		ModelAndView view = new ModelAndView("pay/topay");
 	    return view;
 	}
 	
