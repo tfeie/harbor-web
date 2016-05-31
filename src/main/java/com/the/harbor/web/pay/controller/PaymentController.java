@@ -42,8 +42,6 @@ public class PaymentController {
 	
 	@RequestMapping(value="/testpay")
 	public ModelAndView testpay(HttpServletRequest request) {
-		String orderId = request.getParameter("orderId");
-		request.setAttribute("orderId", orderId);
 		
 		ModelAndView view = new ModelAndView("user/payment");
         return view;

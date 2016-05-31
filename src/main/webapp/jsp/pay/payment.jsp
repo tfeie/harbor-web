@@ -13,7 +13,7 @@
 <script type="text/javascript">
 $(function(){
 	$("#btn-quera").bind("click",function(){
-		var orderId = '${orderId}';
+		var orderId = $("#norder").val();
 		var orderAmount = "0.01";
 		location.href="<%=_base%>/payment/getAuthorizeCode?orderId=" + orderId + "&orderAmount=" + orderAmount;
 	});
@@ -21,6 +21,9 @@ $(function(){
 </script>
 
 <body>
+ <li>验证码：
+ <input id="norder" type="text" placeholder="请输入订单号" maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')"/></li>
+ 
 <div style="width:100%; float:left; padding-bottom:44px; margin-top:20px; padding:0 10px;" id='pbtnIda'>
     <a style="width:100%; float:left; color:#fff; background:#ffc323; line-height:44px; text-align:center;border-radius:5px;" 
     href="#" id="btn-quera">确定</a>
