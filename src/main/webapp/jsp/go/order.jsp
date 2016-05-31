@@ -20,6 +20,8 @@
 	src="${_base }/resources/js/owl.carousel.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="${_base }/resources/css/owl.carousel.min.css">
+	
+	
 </head>
 <body class="body">
 	<section class="hailiuqueren yuejian">
