@@ -13,14 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
+import com.the.harbor.web.system.utils.MathUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.web.pay.param.WeixinOauth2Token;
 import com.the.harbor.web.pay.param.WeixinUserInfo;
-import com.the.harbor.web.weixin.param.MenuClickRequest;
 import com.the.harbor.web.constants.WXConstants;
 
 public class WXRequestUtil {
@@ -46,7 +43,7 @@ public class WXRequestUtil {
         map.put("nonce_str", StringUtil.getRandomNumStr());
         map.put("body", "海归海湾微信支付");
         map.put("out_trade_no", orderId);
-        map.put("total_fee", fee);
+        map.put("total_fee", MathUtil.changeYuanToFen(Double.parseDouble(fee)) + "");
         map.put("fee_type", "CNY");
         map.put("spbill_create_ip", request.getRemoteAddr());
         map.put("trade_type", WXConstants.WEIXIN_TRADE_TYPE.JSAPI);
