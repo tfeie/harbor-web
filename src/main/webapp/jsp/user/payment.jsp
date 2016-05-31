@@ -1,0 +1,29 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%
+    String _base = request.getContextPath();
+			request.setAttribute("_base", _base);
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<title>支付</title>
+</head>
+<script type="text/javascript">
+$(function(){
+	$("#btn-quera").bind("click",function(){
+		var orderId = '${orderId}';
+		var orderAmount = "0.01";
+		location.href="<%=_base%>/payment/getAuthorizeCode?orderId=" + orderId + "&orderAmount=" + orderAmount;
+	});
+}
+</script>
+
+<body>
+<div style="width:100%; float:left; padding-bottom:44px; margin-top:20px; padding:0 10px;" id='pbtnIda'>
+    <a style="width:100%; float:left; color:#fff; background:#ffc323; line-height:44px; text-align:center;border-radius:5px;" 
+    href="#" id="btn-quera">确定</a>
+ </div>
+</body>
+</html>

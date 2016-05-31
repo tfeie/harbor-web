@@ -33,8 +33,6 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
  * 
  * @ClassName: MessageUtil
  * @Description: 消息处理工具类
- * @author lifeng lifeng3@asiainfo.com
- * @date 2014年9月3日 下午5:16:12
  */
 public class MessageUtil {
 	

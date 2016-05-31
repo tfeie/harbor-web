@@ -4,8 +4,6 @@ package com.the.harbor.web.system.wechatutils.req;
  * 
 * @ClassName: LocationMessage 
 * @Description: 地理位置
-* @author lifeng lifeng3@asiainfo.com
-* @date 2014年9月3日 下午5:15:22
  */
 public class LocationMessage extends BaseMessage {
 

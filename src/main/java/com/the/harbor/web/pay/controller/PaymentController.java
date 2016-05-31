@@ -40,6 +40,15 @@ public class PaymentController {
 		return result;
 	}
 	
+	@RequestMapping(value="/testpay")
+	public ModelAndView testpay(HttpServletRequest request) {
+		String orderId = request.getParameter("orderId");
+		request.setAttribute("orderId", orderId);
+		
+		ModelAndView view = new ModelAndView("user/payment");
+        return view;
+	}
+	
 	/**
 	 * 
 	 * @param request
@@ -47,6 +56,7 @@ public class PaymentController {
 	 */
 	@RequestMapping(value="/getAuthorizeCode")
 	public void getAuthorizeCode(HttpServletRequest request,HttpServletResponse response) {
+		log.debug("支付授权==========开始===========");
 		String orderId = request.getParameter("orderId");
 		String orderAmount = request.getParameter("orderAmount");
 
@@ -72,6 +82,8 @@ public class PaymentController {
 	
 	@RequestMapping(value="/toPay")
 	public ModelAndView toPay(HttpServletRequest request,HttpServletResponse response) {
+		log.debug("支付授权==========结束===========");
+
 		String orderId = request.getParameter("orderId");
 		String orderAmount = request.getParameter("orderAmount");
 		String code = request.getParameter("code");

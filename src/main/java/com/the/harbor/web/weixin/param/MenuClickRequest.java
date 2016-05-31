@@ -1,12 +1,18 @@
 package com.the.harbor.web.weixin.param;
 
 public class MenuClickRequest {
-	private String FromUserName;//发送方帐号（open_id）
-	private String ToUserName;//公众帐号
-	private String MsgType;//消息类型
-	private String Event;//事件类型
-	private String EventKey;//事件key
-	private String Content;//文本内容
+	//发送方帐号（open_id）
+	private String FromUserName;
+	//公众帐号
+	private String ToUserName;
+	//消息类型
+	private String MsgType;
+	//事件类型
+	private String Event;
+	//事件key
+	private String EventKey;
+	//文本内容
+	private String Content;
 	
 	public String getFromUserName() {
 		return FromUserName;

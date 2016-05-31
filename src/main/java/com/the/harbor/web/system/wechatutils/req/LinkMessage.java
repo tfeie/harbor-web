@@ -4,8 +4,6 @@ package com.the.harbor.web.system.wechatutils.req;
  * 
 * @ClassName: LinkMessage 
 * @Description: 链接消息
-* @author lifeng lifeng3@asiainfo.com
-* @date 2014年9月3日 下午5:15:01
  */
 public class LinkMessage extends BaseMessage {
 

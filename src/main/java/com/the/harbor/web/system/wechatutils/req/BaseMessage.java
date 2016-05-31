@@ -2,8 +2,6 @@ package com.the.harbor.web.system.wechatutils.req;
 /**
 * @ClassName: BaseMessage 
 * @Description: 微信请求服务后台的消息基类
-* @author lifeng lifeng3@asiainfo.com
-* @date 2014年9月3日 下午4:17:27
  */
 public class BaseMessage {
 

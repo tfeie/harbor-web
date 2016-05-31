@@ -4,8 +4,6 @@ package com.the.harbor.web.system.wechatutils.req;
  * 
 * @ClassName: VoiceMessage 
 * @Description: 文本消息
-* @author lifeng lifeng3@asiainfo.com
-* @date 2014年9月3日 下午5:15:43
  */
 public class VoiceMessage extends BaseMessage {
 
