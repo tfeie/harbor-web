@@ -2,7 +2,7 @@ package com.the.harbor.web.constants;
 
 public class WXConstants {
 	// 与接口配置信息中的Token要一致
-	public static String token = "minsheng";
+	public static String token = "harbor";
 	
 	public static class WEIXIN_TRADE_TYPE { 
         // 交易类型： JSAPI,NATIVE,APP
