@@ -43,7 +43,7 @@ public class PaymentController {
 	@RequestMapping(value="/testpay")
 	public ModelAndView testpay(HttpServletRequest request) {
 		
-		ModelAndView view = new ModelAndView("user/payment");
+		ModelAndView view = new ModelAndView("pay/payment");
         return view;
 	}
 	
