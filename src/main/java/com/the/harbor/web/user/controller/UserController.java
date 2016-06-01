@@ -24,36 +24,38 @@ public class UserController {
 	private static final Logger LOG = Logger.getLogger(UserController.class);
 
 	@RequestMapping("/toUserRegister.html")
-	public void toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		LOG.debug("用户注册授权==========开始===========");
 		String redirectURL = URLEncoder.encode(GlobalSettings.getHarborDomain() + "/user/toUserRegister.html", "utf-8");
 		String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid=" + GlobalSettings.getWeiXinAppId()
 				+ "&response_type=code&scope=snsapi_userinfo&state=haigui&redirect_uri=" + redirectURL
 				+ "#wechat_redirect";
-		
+
 		String code = request.getParameter("code");
-		if(StringUtil.isBlank(code)){
-			//如果没有，则说明没有经过授权，进行授权
+		if (StringUtil.isBlank(code)) {
+			// 如果没有，则说明没有经过授权，进行授权
 			response.sendRedirect(authorURL);
-		}else{
-			//如果传入了code，则可能是授权过的，获取access_token
+		} else {
+			// 如果传入了code，则可能是授权过的，获取access_token
 			WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
 			if (wtoken == null) {
-				//如果获取不到access_token,说明是非法入侵的，重定向到微信授权
+				// 如果获取不到access_token,说明是非法入侵的，重定向到微信授权
 				LOG.error("获取token失败，可能是认证失效或者token是侵入的");
 				response.sendRedirect(authorURL);
-			}else{
-				//如果可以获取到，则获取用户信息
+			} else {
+				// 如果可以获取到，则获取用户信息
 				WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
 				if (wxUserInfo == null) {
 					response.sendRedirect(authorURL);
-				}else{
+				} else {
 					request.setAttribute("userInfo", wxUserInfo);
 					ModelAndView view = new ModelAndView("user/toUserRegister");
+					return view;
 				}
 			}
 		}
-		
+		return null;
+
 	}
 
 	@RequestMapping("/toRegister")
