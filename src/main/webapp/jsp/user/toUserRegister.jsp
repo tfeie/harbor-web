@@ -35,11 +35,10 @@ $(document).ready(function() {
 		},
 		prototype : {
 			init : function() {
-				var ss1 = '${userInfo1}';
-				var ss = '${userInfo}';
-				var ss2 = '${userInfo2}';
-				var wxInfo = jQuery.parseJSON(${userInfo});
-				alert(wxInfo);
+				var authorURL = '${authorURL}';
+				if(authorURL!=""){
+					window.location.href=authorURL;
+				}
 				
 			}
 		}

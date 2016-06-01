@@ -34,29 +34,28 @@ public class UserController {
 		String code = request.getParameter("code");
 		if (StringUtil.isBlank(code)) {
 			// 如果没有，则说明没有经过授权，进行授权
-			response.sendRedirect(authorURL);
-			return null;
+			//response.sendRedirect(authorURL);
+			request.setAttribute("authorURL", authorURL);
 		} else {
 			// 如果传入了code，则可能是授权过的，获取access_token
 			WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
 			if (wtoken == null) {
 				// 如果获取不到access_token,说明是非法入侵的，重定向到微信授权
 				LOG.error("获取token失败，可能是认证失效或者token是侵入的");
-				response.sendRedirect(authorURL);
-				return null;
+				request.setAttribute("authorURL", authorURL);
+				
 			} else {
 				// 如果可以获取到，则获取用户信息
 				WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
 				if (wxUserInfo == null) {
-					response.sendRedirect(authorURL);
-					return null;
+					request.setAttribute("authorURL", authorURL);
 				} else {
 					request.setAttribute("userInfo", wxUserInfo);
-					ModelAndView view = new ModelAndView("user/toUserRegister");
-					return view;
 				}
 			}
 		}
+		ModelAndView view = new ModelAndView("user/toUserRegister");
+		return view;
 
 	}
 
