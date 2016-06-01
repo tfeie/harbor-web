@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.util.AmountUtils;
 import com.the.harbor.commons.util.RandomUtil;
 import com.the.harbor.web.constants.WXConstants;
@@ -19,7 +20,7 @@ public class WXRequestUtil {
 	private static Log log = LogFactory.getLog(WXRequestUtil.class);
 
 	/**
-	 * 获取预支付流水
+	 * 统一下单处理
 	 * 
 	 * @param openId
 	 * @param notifyUrl
@@ -29,14 +30,14 @@ public class WXRequestUtil {
 	public static JSONObject wxUnifiedorder(String openId, String notifyUrl, HttpServletRequest request) {
 		String orderId = request.getParameter("orderId");
 		String fee = request.getParameter("orderAmount");
-		String appsecret = "Tgbnhy21qwerty39jjygbnh77ijnbvcx";
-		String url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+		String appsecret = GlobalSettings.getWeiXinAppSecret();
+		String url = GlobalSettings.getWeiXinMCHPayUnifiedorderAPI();
 		SortedMap<String, String> map = new TreeMap<String, String>();
-		map.put("appid", "wxbec41326662016d1");
-		map.put("mch_id", "1333852501");
+		map.put("appid", GlobalSettings.getWeiXinAppId());
+		map.put("mch_id", GlobalSettings.getWeiXinMerchantId());
 		map.put("device_info", "WEB");
 		map.put("nonce_str", RandomUtil.generateString(32));
-		map.put("body", "海归海湾微信支付");
+		map.put("body", GlobalSettings.getWeiXinMerchantName() + "微信支付");
 		map.put("out_trade_no", orderId);
 		map.put("total_fee", AmountUtils.changeY2F(fee));
 		map.put("fee_type", "CNY");
@@ -67,8 +68,8 @@ public class WXRequestUtil {
 	 */
 	public static WeixinOauth2Token refreshAccessToken(String code) {
 		WeixinOauth2Token wtoken = null;
-		String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + "appid=" + "wxbec41326662016d1" + "&secret="
-				+ "276c6d27f07239411cd9ba93a40aac4c" + "&code=" + code + "&grant_type=authorization_code";
+		String url = GlobalSettings.getWeiXinSNSAuthAccessTokenAPI() + "?appid=" + GlobalSettings.getWeiXinAppId()
+				+ "&secret=" + GlobalSettings.getWeiXinAppSecret() + "&code=" + code + "&grant_type=authorization_code";
 		JSONObject jsonObject = CommonUtil.httpsRequest(url, "GET", null);
 		if (null != jsonObject) {
 			log.info("获取网页授权凭证:" + jsonObject.toString());
@@ -99,7 +100,7 @@ public class WXRequestUtil {
 	 */
 	public static WeixinUserInfo getWxUserInfo(String accessToken, String openId) {
 		WeixinUserInfo userInfo = null;
-		String url = "https://api.weixin.qq.com/sns/userinfo?" + "access_token=" + accessToken + "&openid=" + openId
+		String url = GlobalSettings.getWeiXinSNSUserInfoAPI() + "?access_token=" + accessToken + "&openid=" + openId
 				+ "&lang=zh_CN";
 		JSONObject jsonObject = CommonUtil.httpsRequest(url, "GET", null);
 		if (null != jsonObject) {

@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
 <script type="text/javascript"
-	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
+	src="//static.tfeie.com/js/zepto.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
