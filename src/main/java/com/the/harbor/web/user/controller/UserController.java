@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
@@ -57,6 +58,13 @@ public class UserController {
 			return view;
 		}
 		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(),wtoken.getOpenId());
+		if(wxUserInfo == null) {
+			LOG.error("获取token失败");
+			request.setAttribute("errmsg", "获取token失败");
+			ModelAndView view = new ModelAndView("pay/error");
+			return view;
+		}
+		LOG.debug("微信用户信息：" + JSONObject.toJSONString(wxUserInfo));
 		ModelAndView view = new ModelAndView("user/toUserRegister");
 		return view;
 	}

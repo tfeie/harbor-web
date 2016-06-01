@@ -109,7 +109,7 @@ public class WXRequestUtil {
                 + "&lang=zh_CN";
 		JSONObject jsonObject = CommonUtil.httpsRequest(url, "GET", null);
 		if (null != jsonObject) {
-            log.info("获取网页授权凭证:" + jsonObject.toString());
+            log.info("获取网页授权用户信息:" + jsonObject.toString());
             try {
         		userInfo = (WeixinUserInfo) JSONObject.toJavaObject(jsonObject, WeixinUserInfo.class);
             	
