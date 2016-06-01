@@ -23,24 +23,7 @@
 
 </head>
 <script type="text/javascript">
-var Manager;
-$(document).ready(function() {
-	Manager = new $.Manager();
-});
-(function() {
-	$.Manager = function() {
-		this.settings = $.extend(true, {}, $.Manager.defaults);
-		this.init();
-	};
-	$.extend($.Manager, {
-		defaults : {
-		},
-		prototype : {
-			init : function() { 
-			}
-		}
-	});
-})(jQuery);
+
 </script>
 
 <body css="body_css"
@@ -72,7 +55,7 @@ $(document).ready(function() {
 				<span><select><option>UK-英国</option></select></span>
 			</div>
 			<div class="item">
-				<span><input type="text" name="" placeholder="请输入留学学校英文名称" /></span>
+				<span><input type="text" name="" placeholder="请输入留学学校英文名称" value="${userInfo.nickname}"/></span>
 			</div>
 			<div class="item">
 				<span><input type="text" name=""
