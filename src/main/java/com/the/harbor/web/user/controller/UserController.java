@@ -1,11 +1,19 @@
 package com.the.harbor.web.user.controller;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.the.harbor.web.system.utils.WXRequestUtil;
+import com.the.harbor.web.weixin.param.WeixinOauth2Token;
+import com.the.harbor.web.weixin.param.WeixinUserInfo;
 
 @RestController
 @RequestMapping("/user")
@@ -14,7 +22,41 @@ public class UserController {
 	private static final Logger LOG = Logger.getLogger(UserController.class);
 
 	@RequestMapping("/toUserRegister.html")
-	public ModelAndView toUserRegister(HttpServletRequest request) {
+	public void toUserRegister(HttpServletRequest request,HttpServletResponse response) {
+		LOG.debug("用户注册授权==========开始===========");
+		String orderId = request.getParameter("orderId");
+		String orderAmount = request.getParameter("orderAmount");
+
+		String backUri = "http://harbor.tfeie.com/user/toRegister";
+                
+		backUri = URLEncoder.encode(backUri);
+		String url = "https://open.weixin.qq.com/connect/oauth2/authorize?"
+                + "appid="
+                + "wxbec41326662016d1"
+                + "&redirect_uri="
+                + backUri
+                + "&response_type=code&scope="
+                + "snsapi_base"
+                + "&state=haigui#wechat_redirect";
+		LOG.info("用户注册授权！！！！");
+        try {
+            response.sendRedirect(url);
+        } catch (IOException e) {
+        	LOG.error("授权失败！！！！",e);
+        }
+	}
+	
+	@RequestMapping("/toRegister")
+	public ModelAndView toRegister(HttpServletRequest request) {
+		String code = request.getParameter("code");
+		WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
+		if(wtoken == null) {
+			LOG.error("获取token失败");
+			request.setAttribute("errmsg", "获取token失败");
+			ModelAndView view = new ModelAndView("pay/error");
+			return view;
+		}
+		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(),wtoken.getOpenId());
 		ModelAndView view = new ModelAndView("user/toUserRegister");
 		return view;
 	}

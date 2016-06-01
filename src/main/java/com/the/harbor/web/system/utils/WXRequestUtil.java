@@ -1,11 +1,5 @@
 package com.the.harbor.web.system.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -15,9 +9,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.the.harbor.web.system.utils.MathUtil;
+import com.the.harbor.web.weixin.param.WeixinOauth2Token;
+import com.the.harbor.web.weixin.param.WeixinUserInfo;
 import com.alibaba.fastjson.JSONObject;
-import com.the.harbor.web.pay.param.WeixinOauth2Token;
-import com.the.harbor.web.pay.param.WeixinUserInfo;
 import com.the.harbor.web.constants.WXConstants;
 
 public class WXRequestUtil {

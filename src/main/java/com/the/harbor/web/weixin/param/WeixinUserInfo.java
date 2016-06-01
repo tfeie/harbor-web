@@ -1,4 +1,4 @@
-package com.the.harbor.web.pay.param;
+package com.the.harbor.web.weixin.param;
 
 public class WeixinUserInfo {
 	//用户的唯一标识

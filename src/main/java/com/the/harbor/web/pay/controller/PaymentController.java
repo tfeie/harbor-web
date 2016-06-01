@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.the.harbor.web.pay.param.WeixinOauth2Token;
 import com.the.harbor.web.system.utils.CommonUtil;
 import com.the.harbor.web.system.utils.StringUtil;
 import com.the.harbor.web.system.utils.WXRequestUtil;
+import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 
 
 @RestController

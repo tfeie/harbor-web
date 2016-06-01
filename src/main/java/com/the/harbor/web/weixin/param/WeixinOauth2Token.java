@@ -1,4 +1,4 @@
-package com.the.harbor.web.pay.param;
+package com.the.harbor.web.weixin.param;
 
 public class WeixinOauth2Token {
 	//网页授权接口调用凭证
