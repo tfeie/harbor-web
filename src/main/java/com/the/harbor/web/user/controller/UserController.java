@@ -22,6 +22,12 @@ import com.the.harbor.web.weixin.param.WeixinUserInfo;
 public class UserController {
 
 	private static final Logger LOG = Logger.getLogger(UserController.class);
+	
+	@RequestMapping("/toUserRegister.html")
+	public ModelAndView toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView view = new ModelAndView("user/toUserRegister");
+		return view;
+	}
 
 	@RequestMapping("/toUserRegister1.html")
 	public ModelAndView toUserRegister1(HttpServletRequest request, HttpServletResponse response) throws Exception {
