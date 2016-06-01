@@ -23,8 +23,8 @@ public class UserController {
 
 	private static final Logger LOG = Logger.getLogger(UserController.class);
 
-	@RequestMapping("/toUserRegister.html")
-	public ModelAndView toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping("/toUserRegister1.html")
+	public ModelAndView toUserRegister1(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		LOG.debug("用户注册授权==========开始===========");
 		String redirectURL = URLEncoder.encode(GlobalSettings.getHarborDomain() + "/user/toUserRegister.html", "utf-8");
 		String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid=" + GlobalSettings.getWeiXinAppId()
