@@ -10,16 +10,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="dns-prefetch" href="//static.tfeie.com" />
 <title>Go预约</title>
 <script type="text/javascript"
-	src="${_base }/resources/js/jquery.min.js"></script>
-<script type="text/javascript" src="${_base }/resources/js/main.js"></script>
+	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/style.css">
+	href="//static.tfeie.com/css/style.css">
 <script type="text/javascript"
-	src="${_base }/resources/js/owl.carousel.js"></script>
+	src="//static.tfeie.com/js/owl.carousel.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/owl.carousel.min.css">
+	href="//static.tfeie.com/css/owl.carousel.min.css">
 </head>
 <body>
 	<section class="hailiuqueren">
@@ -39,7 +40,7 @@
 
 		<section class="feiyong">
 			<p>
-				<img src="${_base }/resources/img/img23.png">
+				<img src="//static.tfeie.com/img/img23.png">
 			</p>
 			<section class="monry-info">
 				<p>
@@ -55,7 +56,7 @@
 				</section>
 
 				<p class="tishi">
-					<img src="${_base }/resources/img/img24.png">海牛3个工作日没有确认，自动退款
+					<img src="//static.tfeie.com/img/img24.png">海牛3个工作日没有确认，自动退款
 				</p>
 			</section>
 		</section>

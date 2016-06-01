@@ -1,8 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%
-	String _base = request.getContextPath();
-	request.setAttribute("_base", _base);
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,23 +6,26 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- 预解析DNS，减少用户访问资源时候解析DNS带来的响应损失 -->
+<link rel="dns-prefetch" href="//static.tfeie.com" />
 <title>用户注册</title>
-<script type="text/javascript"
-	src="${_base }/resources/js/jquery.min.js"></script>
-<script type="text/javascript" src="${_base }/resources/js/main.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/style.css">
-<script type="text/javascript"
-	src="${_base }/resources/js/owl.carousel.js"></script>
+	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/owl.carousel.min.css">
+	href="//static.tfeie.com/css/owl.carousel.min.css">
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/owl.carousel.js"></script>
+
 </head>
 <body css="body_css"
-	style="background: url(${_base }/resources/img/aimg1.png) no-repeat center center; background-size: cover; background-attachment: fixed;">
+	style="background: url(//static.tfeie.com/images/aimg1.png) no-repeat center center; background-size: cover; background-attachment: fixed;">
 	<div class="mask1"></div>
 	<section class="sec_top">
 		<div class="img">
-			<img src="${_base }/resources/img/img3.png" />
+			<img src="//static.tfeie.com/images/img3.png" />
 		</div>
 		<div class="text">
 			<h2>海湾，我们的舞台</h2>
@@ -37,8 +36,9 @@
 
 	<section class="zhuce">
 		<div class="div_six">
-			<span><i class="on"><img src="${_base }/resources/img/boy.png" /></i></span> <span><i><img
-					src="${_base }/resources/img/girl.png" /></i></span>
+			<span><i class="on"><img
+					src="//static.tfeie.com/images/boy.png" /></i></span> <span><i><img
+					src="//static.tfeie.com/images/girl.png" /></i></span>
 		</div>
 		<div class="div_input">
 			<div class="item">
