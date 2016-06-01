@@ -37,7 +37,7 @@ public class UserController {
                 + "&redirect_uri="
                 + backUri
                 + "&response_type=code&scope="
-                + "snsapi_base"
+                + "snsapi_userinfo"
                 + "&state=haigui#wechat_redirect";
 		LOG.info("用户注册授权！！！！");
         try {
