@@ -35,7 +35,9 @@ $(document).ready(function() {
 		},
 		prototype : {
 			init : function() {
-				var ss = ${userInfo};
+				var ss1 = '${userInfo1}';
+				var ss = '${userInfo}';
+				var ss2 = '${userInfo2}';
 				var wxInfo = jQuery.parseJSON(${userInfo});
 				alert(wxInfo);
 				
