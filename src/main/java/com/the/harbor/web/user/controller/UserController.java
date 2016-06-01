@@ -65,7 +65,7 @@ public class UserController {
 			ModelAndView view = new ModelAndView("pay/error");
 			return view;
 		}
-		LOG.debug("微信用户信息：" + JSONObject.toJSONString(wxUserInfo));
+		LOG.info("微信用户信息：" + JSONObject.toJSONString(wxUserInfo));
 		ModelAndView view = new ModelAndView("user/toUserRegister");
 		return view;
 	}
