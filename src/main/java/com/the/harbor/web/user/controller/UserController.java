@@ -57,7 +57,7 @@ public class UserController {
 			ModelAndView view = new ModelAndView("pay/error");
 			return view;
 		}
-		LOG.info("注册openid=" + wtoken.getOpenId());
+		LOG.info("注册openid=" + JSONObject.toJSONString(wtoken));
 		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(),wtoken.getOpenId());
 		if(wxUserInfo == null) {
 			LOG.error("获取token失败");
