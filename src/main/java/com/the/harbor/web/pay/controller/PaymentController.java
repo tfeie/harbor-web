@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.commons.util.RandomUtil;
 import com.the.harbor.web.system.utils.CommonUtil;
-import com.the.harbor.web.system.utils.StringUtil;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 
@@ -75,7 +75,7 @@ public class PaymentController {
 			ModelAndView view = new ModelAndView("pay/error");
 			return view;
 		}
-		String nonceStr = StringUtil.getRandomNumStr();
+		String nonceStr = RandomUtil.generateString(32);
 		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
 		SortedMap<String, String> finalpackage = new TreeMap<String, String>();
 		finalpackage.put("appId", "wxbec41326662016d1");

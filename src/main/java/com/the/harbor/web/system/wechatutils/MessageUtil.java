@@ -14,7 +14,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.the.harbor.web.system.utils.StringUtil;
+import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.web.system.wechatutils.req.BaseMessage;
 import com.the.harbor.web.system.wechatutils.req.ImageMessage;
 import com.the.harbor.web.system.wechatutils.req.VoiceMessage;

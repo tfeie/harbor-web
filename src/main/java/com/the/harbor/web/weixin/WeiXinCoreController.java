@@ -15,8 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.web.system.utils.CommonUtil;
-import com.the.harbor.web.system.utils.StringUtil;
 import com.the.harbor.web.system.wechatutils.MessageUtil;
 import com.the.harbor.web.system.wechatutils.res.TextMessage;
 import com.the.harbor.web.weixin.param.MenuClickRequest;
