@@ -1,6 +1,5 @@
 package com.the.harbor.web.user.controller;
 
-import java.io.IOException;
 import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
@@ -23,43 +23,29 @@ public class UserController {
 	private static final Logger LOG = Logger.getLogger(UserController.class);
 
 	@RequestMapping("/toUserRegister.html")
-	public void toUserRegister(HttpServletRequest request,HttpServletResponse response) {
+	public void toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		LOG.debug("用户注册授权==========开始===========");
-		String orderId = request.getParameter("orderId");
-		String orderAmount = request.getParameter("orderAmount");
-
-		String backUri = "http://harbor.tfeie.com/user/toRegister";
-                
-		backUri = URLEncoder.encode(backUri);
-		String url = "https://open.weixin.qq.com/connect/oauth2/authorize?"
-                + "appid="
-                + "wxbec41326662016d1"
-                + "&redirect_uri="
-                + backUri
-                + "&response_type=code&scope="
-                + "snsapi_userinfo"
-                + "&state=haigui#wechat_redirect";
-		LOG.info("用户注册授权！！！！");
-        try {
-            response.sendRedirect(url);
-        } catch (IOException e) {
-        	LOG.error("授权失败！！！！",e);
-        }
+		String redirectURL = GlobalSettings.getHarborDomain() + "/user/toRegister";
+		redirectURL = URLEncoder.encode(redirectURL, "utf-8");
+		String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid=" + GlobalSettings.getWeiXinAppId()
+				+ "&response_type=code&scope=snsapi_userinfo&state=haigui&redirect_uri=" + redirectURL
+				+ "#wechat_redirect";
+		response.sendRedirect(authorURL);
 	}
-	
+
 	@RequestMapping("/toRegister")
 	public ModelAndView toRegister(HttpServletRequest request) {
 		String code = request.getParameter("code");
 		request.setAttribute("userInfo1", null);
 		WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
-		if(wtoken == null) {
+		if (wtoken == null) {
 			LOG.error("获取token失败");
 			ModelAndView view = new ModelAndView("user/toUserRegister");
 			return view;
 		}
 		LOG.info("注册openid=" + JSONObject.toJSONString(wtoken));
-		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(),wtoken.getOpenId());
-		if(wxUserInfo == null) {
+		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
+		if (wxUserInfo == null) {
 			LOG.error("获取微信用户信息失败");
 			ModelAndView view = new ModelAndView("user/toUserRegister");
 			return view;
