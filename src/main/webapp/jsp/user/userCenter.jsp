@@ -12,22 +12,22 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
 <title>个人中心</title>
-<script type="text/javascript"
-	src="${_base }/resources/js/jquery.min.js"></script>
-<script type="text/javascript" src="${_base }/resources/js/main.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/style.css">
-<script type="text/javascript"
-	src="${_base }/resources/js/owl.carousel.js"></script>
+	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/owl.carousel.min.css">
+	href="//static.tfeie.com/css/owl.carousel.min.css">
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/owl.carousel.js"></script>
 </head>
 <body>
 	<section class="ip2_zhongxin">
 		<section class="ip2_top">
-			<p><img src="${_base }/resources/img/banner4.png"></p>
+			<p><img src="//static.tfeie.com/images/banner4.png"></p>
 			<section class="ip_logo ip2">
-				<p><span><img src="${_base }/resources/img/icon18.png"/></span></p>
+				<p><span><img src="//static.tfeie.com/images/icon18.png"/></span></p>
 			</section>
 		</section>
 		
@@ -36,7 +36,7 @@
 		</section>
 		<section class="ip_shengf ip2">
 			<p>金融/合伙人/北京</p>
-			<p><span><img src="${_base }/resources/img/icon19.png"/></span></p>
+			<p><span><img src="//static.tfeie.com/images/icon19.png"/></span></p>
 		</section>
 		
 		<section class="ip2_pengyou">
@@ -76,27 +76,27 @@
 	<footer class="footer">
         <ul>
             <li><a href="">
-                <div class="img"><img src="${_base }/resources/img/f1.png" /></div>
+                <div class="img"><img src="//static.tfeie.com/images/f1.png" /></div>
                 <div class="text">Be</div>
                 </a>
             </li>
             <li><a href="">
-                <div class="img"><img src="${_base }/resources/img/f2.png" /></div>
+                <div class="img"><img src="//static.tfeie.com/images/f2.png" /></div>
                 <div class="text">Go</div>
                 </a>
             </li>
             <li><a href="">
-                <div class="img"><img src="${_base }/resources/img/f3.png" /></div>
+                <div class="img"><img src="//static.tfeie.com/images/f3.png" /></div>
                 <div class="text">Frd</div>
                 </a>
             </li>
             <li><a href="">
-                <div class="img"><img src="${_base }/resources/img/f4.png" /><i>6</i></div>
+                <div class="img"><img src="//static.tfeie.com/images/f4.png" /><i>6</i></div>
                 <div class="text">Msg</div>
                 </a>
             </li>
             <li class="on"><a href="">
-                <div class="img"><img src="${_base }/resources/img/f5.png" /></div>
+                <div class="img"><img src="//static.tfeie.com/images/f5.png" /></div>
                 <div class="text">Me</div>
                 </a>
             </li>

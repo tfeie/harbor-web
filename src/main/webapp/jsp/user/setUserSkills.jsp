@@ -12,15 +12,15 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
 <title>兴趣技能</title>
-<script type="text/javascript"
-	src="${_base }/resources/js/jquery.min.js"></script>
-<script type="text/javascript" src="${_base }/resources/js/main.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/style.css">
-<script type="text/javascript"
-	src="${_base }/resources/js/owl.carousel.js"></script>
+	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/owl.carousel.min.css">
+	href="//static.tfeie.com/css/owl.carousel.min.css">
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/owl.carousel.js"></script>
 </head>
 <body>
 	<section class="skill_top">

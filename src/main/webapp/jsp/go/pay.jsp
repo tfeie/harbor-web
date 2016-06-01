@@ -12,15 +12,15 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
 <title>Go预约</title>
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/style.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/owl.carousel.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/style.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/owl.carousel.min.css">
 </head>
 <body>
 	<section class="hailiuqueren">

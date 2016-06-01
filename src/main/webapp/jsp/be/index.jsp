@@ -12,15 +12,15 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
 <title>首页</title>
-<script type="text/javascript"
-	src="${_base }/resources/js/jquery.min.js"></script>
-<script type="text/javascript" src="${_base }/resources/js/main.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/style.css">
-<script type="text/javascript"
-	src="${_base }/resources/js/owl.carousel.js"></script>
+	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/owl.carousel.min.css">
+	href="//static.tfeie.com/css/owl.carousel.min.css">
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/owl.carousel.js"></script>
 <script>
 	$(function() {
 		$(".banner").owlCarousel({
@@ -38,16 +38,16 @@
 
 	<section class="banner">
 		<section class="item">
-			<a href=""><img src="${_base }/resources/img/aimg.jpg" /></a>
+			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
 		</section>
 		<section class="item">
-			<a href=""><img src="${_base }/resources/img/aimg.jpg" /></a>
+			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
 		</section>
 		<section class="item">
-			<a href=""><img src="${_base }/resources/img/aimg.jpg" /></a>
+			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
 		</section>
 		<section class="item">
-			<a href=""><img src="${_base }/resources/img/aimg.jpg" /></a>
+			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
 		</section>
 	</section>
 	<div class="clear"></div>
@@ -89,7 +89,7 @@
 					<section class="list">
 						<div class="member_info">
 							<div class="img">
-								<img src="${_base }/resources/img/img1.png" />
+								<img src="//static.tfeie.com/images/img1.png" />
 							</div>
 							<span>Martin</span> <label class="lbl2">英国</label> <em>已认证</em>
 						</div>
@@ -102,7 +102,7 @@
 									<a>#</a><a>摄影</a><a>风景</a><a>建筑</a><a>欧洲</a><a>手机</a>
 								</p>
 								<div class="img">
-									<img src="${_base }/resources/img/img2.png" />
+									<img src="//static.tfeie.com/images/img2.png" />
 								</div>
 							</div>
 						</div>
@@ -118,7 +118,7 @@
 					<section class="list">
 						<div class="member_info">
 							<div class="img">
-								<img src="${_base }/resources/img/img1.png" />
+								<img src="//static.tfeie.com/images/img1.png" />
 							</div>
 							<span>Martin</span> <label class="lbl1">美国</label> <em>已认证</em>
 						</div>
@@ -131,7 +131,7 @@
 									<a>#</a><a>摄影</a><a>风景</a><a>建筑</a><a>欧洲</a><a>手机</a>
 								</p>
 								<div class="img">
-									<img src="${_base }/resources/img/img2.png" />
+									<img src="//static.tfeie.com/images/img2.png" />
 								</div>
 							</div>
 						</div>
@@ -147,7 +147,7 @@
 					<section class="list">
 						<div class="member_info">
 							<div class="img">
-								<img src="${_base }/resources/img/img1.png" />
+								<img src="//static.tfeie.com/images/img1.png" />
 							</div>
 							<span>Martin</span> <label class="lbl2">英国</label> <em>已认证</em>
 						</div>
@@ -160,7 +160,7 @@
 									<a>#</a><a>摄影</a><a>风景</a><a>建筑</a><a>欧洲</a><a>手机</a>
 								</p>
 								<div class="img">
-									<img src="${_base }/resources/img/img2.png" />
+									<img src="//static.tfeie.com/images/img2.png" />
 								</div>
 							</div>
 						</div>
@@ -176,7 +176,7 @@
 					<section class="list">
 						<div class="member_info">
 							<div class="img">
-								<img src="${_base }/resources/img/img1.png" />
+								<img src="//static.tfeie.com/images/img1.png" />
 							</div>
 							<span>Martin</span> <label class="lbl1">美国</label> <em>已认证</em>
 						</div>
@@ -189,7 +189,7 @@
 									<a>#</a><a>摄影</a><a>风景</a><a>建筑</a><a>欧洲</a><a>手机</a>
 								</p>
 								<div class="img">
-									<img src="${_base }/resources/img/img2.png" />
+									<img src="//static.tfeie.com/images/img2.png" />
 								</div>
 							</div>
 						</div>
@@ -210,31 +210,31 @@
 		<ul>
 			<li class="on"><a href="">
 					<div class="img">
-						<img src="${_base }/resources/img/f1.png" />
+						<img src="//static.tfeie.com/images/f1.png" />
 					</div>
 					<div class="text">Be</div>
 			</a></li>
 			<li><a href="">
 					<div class="img">
-						<img src="${_base }/resources/img/f2.png" />
+						<img src="//static.tfeie.com/images/f2.png" />
 					</div>
 					<div class="text">Go</div>
 			</a></li>
 			<li><a href="">
 					<div class="img">
-						<img src="${_base }/resources/img/f3.png" />
+						<img src="//static.tfeie.com/images/f3.png" />
 					</div>
 					<div class="text">Frd</div>
 			</a></li>
 			<li><a href="">
 					<div class="img">
-						<img src="${_base }/resources/img/f4.png" />
+						<img src="//static.tfeie.com/images/f4.png" />
 					</div>
 					<div class="text">Msg</div>
 			</a></li>
 			<li><a href="">
 					<div class="img">
-						<img src="${_base }/resources/img/f5.png" />
+						<img src="//static.tfeie.com/images/f5.png" />
 					</div>
 					<div class="text">Me</div>
 			</a></li>
@@ -246,10 +246,10 @@
 	<section class="sec_menu">
 		<div class="wrap">
 			<span class="span1"><a><img
-					src="${_base }/resources/img/circle.png" /></a></span> <span class="span2"><a
-				href=""><img src="${_base }/resources/img/be.png" /></a></span> <span
+					src="//static.tfeie.com/images/circle.png" /></a></span> <span class="span2"><a
+				href=""><img src="//static.tfeie.com/images/be.png" /></a></span> <span
 				class="span3"><a href=""><img
-					src="${_base }/resources/img/go.png" /></a></span>
+					src="//static.tfeie.com/images/go.png" /></a></span>
 		</div>
 	</section>
 </body>

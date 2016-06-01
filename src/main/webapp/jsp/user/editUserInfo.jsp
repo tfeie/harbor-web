@@ -12,15 +12,15 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
 <title>编辑个人信息</title>
-<script type="text/javascript"
-	src="${_base }/resources/js/jquery.min.js"></script>
-<script type="text/javascript" src="${_base }/resources/js/main.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/style.css">
-<script type="text/javascript"
-	src="${_base }/resources/js/owl.carousel.js"></script>
+	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
-	href="${_base }/resources/css/owl.carousel.min.css">
+	href="//static.tfeie.com/css/owl.carousel.min.css">
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/owl.carousel.js"></script>
 </head>
 <body class="body">
 	<section class="per_info">
@@ -31,8 +31,8 @@
 		</section>
 		<section class="info_sex">
 			<p>
-				<span><img src="${_base }/resources/img/boy.png" /></span><span><img
-					src="${_base }/resources/img/girl.png" /></span><span class="in">各种可能</span>
+				<span><img src="//static.tfeie.com/images/boy.png" /></span><span><img
+					src="//static.tfeie.com/images/girl.png" /></span><span class="in">各种可能</span>
 			</p>
 		</section>
 		<section class="sel_con">
@@ -72,7 +72,7 @@
 						</p>
 						<div class="det">
 							<p>
-								<img src="${_base }/resources/img/icon16.png" />
+								<img src="//static.tfeie.com/images/icon16.png" />
 							</p>
 						</div>
 					</div>
@@ -84,7 +84,7 @@
 						</p>
 						<div class="det">
 							<p>
-								<img src="${_base }/resources/img/icon16.png" />
+								<img src="//static.tfeie.com/images/icon16.png" />
 							</p>
 						</div>
 					</div>
@@ -96,7 +96,7 @@
 						</p>
 						<div class="det">
 							<p>
-								<img src="${_base }/resources/img/icon16.png" />
+								<img src="//static.tfeie.com/images/icon16.png" />
 							</p>
 						</div>
 					</div>
@@ -108,7 +108,7 @@
 						</p>
 						<div class="det">
 							<p>
-								<img src="${_base }/resources/img/icon16.png" />
+								<img src="//static.tfeie.com/images/icon16.png" />
 							</p>
 						</div>
 					</div>
@@ -116,7 +116,7 @@
 				<li class="on">
 					<div class="xinqi_1">
 						<p>
-							<a href="#"><img src="${_base }/resources/img/icon15.png" /></a>
+							<a href="#"><img src="//static.tfeie.com/images/icon15.png" /></a>
 						</p>
 					</div>
 				</li>
@@ -174,7 +174,7 @@
 						</p>
 						<div class="det">
 							<p>
-								<img src="${_base }/resources/img/icon16.png" />
+								<img src="//static.tfeie.com/images/icon16.png" />
 							</p>
 						</div>
 					</div>
@@ -186,7 +186,7 @@
 						</p>
 						<div class="det">
 							<p>
-								<img src="${_base }/resources/img/icon16.png" />
+								<img src="//static.tfeie.com/images/icon16.png" />
 							</p>
 						</div>
 					</div>
@@ -198,7 +198,7 @@
 						</p>
 						<div class="det">
 							<p>
-								<img src="${_base }/resources/img/icon16.png" />
+								<img src="//static.tfeie.com/images/icon16.png" />
 							</p>
 						</div>
 					</div>
@@ -206,7 +206,7 @@
 				<li class="on">
 					<div class="xinqi_1">
 						<p>
-							<a href="#"><img src="${_base }/resources/img/icon15.png" /></a>
+							<a href="#"><img src="//static.tfeie.com/images/icon15.png" /></a>
 						</p>
 					</div>
 				</li>
@@ -237,31 +237,31 @@
 		<ul>
 			<li><a href="">
 					<div class="img">
-						<img src="${_base }/resources/img/f1.png" />
+						<img src="//static.tfeie.com/images/f1.png" />
 					</div>
 					<div class="text">Be</div>
 			</a></li>
 			<li><a href="">
 					<div class="img">
-						<img src="${_base }/resources/img/f2.png" />
+						<img src="//static.tfeie.com/images/f2.png" />
 					</div>
 					<div class="text">Go</div>
 			</a></li>
 			<li><a href="">
 					<div class="img">
-						<img src="${_base }/resources/img/f3.png" />
+						<img src="//static.tfeie.com/images/f3.png" />
 					</div>
 					<div class="text">Frd</div>
 			</a></li>
 			<li><a href="">
 					<div class="img">
-						<img src="${_base }/resources/img/f4.png" /><i>6</i>
+						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
 					</div>
 					<div class="text">Msg</div>
 			</a></li>
 			<li class="on"><a href="">
 					<div class="img">
-						<img src="${_base }/resources/img/f5.png" />
+						<img src="//static.tfeie.com/images/f5.png" />
 					</div>
 					<div class="text">Me</div>
 			</a></li>
