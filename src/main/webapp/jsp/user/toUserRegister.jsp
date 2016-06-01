@@ -36,12 +36,7 @@ $(document).ready(function() {
 		defaults : {
 		},
 		prototype : {
-			init : function() {
-				var authorURL = '${authorURL}';
-				if(authorURL!=""){
-					window.location.href=authorURL;
-				}
-				
+			init : function() { 
 			}
 		}
 	});
