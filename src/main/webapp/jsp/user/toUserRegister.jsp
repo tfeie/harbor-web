@@ -20,6 +20,31 @@
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
 
 </head>
+<script type="text/javascript">
+var Manager;
+$(document).ready(function() {
+	Manager = new $.Manager();
+});
+(function() {
+	$.Manager = function() {
+		this.settings = $.extend(true, {}, $.Manager.defaults);
+		this.init();
+	};
+	$.extend($.Manager, {
+		defaults : {
+		},
+		prototype : {
+			init : function() {
+				var ss = ${userInfo};
+				var wxInfo = jQuery.parseJSON(${userInfo});
+				alert(wxInfo);
+				
+			}
+		}
+	});
+})(jQuery);
+</script>
+
 <body css="body_css"
 	style="background: url(//static.tfeie.com/images/aimg1.png) no-repeat center center; background-size: cover; background-attachment: fixed;">
 	<div class="mask1"></div>

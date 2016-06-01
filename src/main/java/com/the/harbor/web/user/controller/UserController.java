@@ -50,21 +50,21 @@ public class UserController {
 	@RequestMapping("/toRegister")
 	public ModelAndView toRegister(HttpServletRequest request) {
 		String code = request.getParameter("code");
+		request.setAttribute("userInfo", null);
 		WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
 		if(wtoken == null) {
 			LOG.error("获取token失败");
-			request.setAttribute("errmsg", "获取token失败");
-			ModelAndView view = new ModelAndView("pay/error");
+			ModelAndView view = new ModelAndView("user/toUserRegister");
 			return view;
 		}
 		LOG.info("注册openid=" + JSONObject.toJSONString(wtoken));
 		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(),wtoken.getOpenId());
 		if(wxUserInfo == null) {
-			LOG.error("获取token失败");
-			request.setAttribute("errmsg", "获取token失败");
-			ModelAndView view = new ModelAndView("pay/error");
+			LOG.error("获取微信用户信息失败");
+			ModelAndView view = new ModelAndView("user/toUserRegister");
 			return view;
 		}
+		request.setAttribute("userInfo", wxUserInfo);
 		LOG.info("微信用户信息：" + JSONObject.toJSONString(wxUserInfo));
 		ModelAndView view = new ModelAndView("user/toUserRegister");
 		return view;
