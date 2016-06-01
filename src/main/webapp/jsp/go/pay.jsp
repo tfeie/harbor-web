@@ -65,7 +65,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#HREF_GO_PAY").bind("click",function(){
-		var orderId = "1123411231212121";
+		var orderId = new Date().getTime();
 		var orderAmount = "0.01";
 		location.href="../payment/getAuthorizeCode?orderId=" + orderId + "&orderAmount=" + orderAmount;
 	})
