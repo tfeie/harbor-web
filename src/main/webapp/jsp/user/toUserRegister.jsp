@@ -22,6 +22,8 @@
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/json2.js"></script>
 </head>
 
 <body css="body_css"
@@ -50,8 +52,8 @@
 			</div>
 			<section class="sel_con zhuche">
 				<p class="boss">
-					<select><option>请选择留学国家</option>
-						<option>UK-英国</option></select>
+					<select id="countryCode"><option>请选择留学国家</option>
+					</select>
 				</p>
 			</section>
 			<section class="sel_con zhuche">
@@ -93,6 +95,7 @@
 			prototype: {
 				init: function(){
 					this.bindEvents();
+					this.getAllHyCountries();
 				},
 				
 				bindEvents: function(){
@@ -103,6 +106,30 @@
 					$(".send_yzm").bind("click",function(){
 						_this.sendRandomCode();
 					})
+				},
+				
+				getAllHyCountries: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/getAllHyCountries",
+						type: "post", 
+						success: function(transport){
+							var data =transport.data;
+							alert(JSON.stringify(transport));
+							_this.fillCountriesSelelct(data);
+						},
+						failure: function(transport){
+							_this.fillCountriesSelelct([]);
+						}
+						
+					});
+				},
+				
+				fillCountriesSelelct: function(data){
+					
+					$.each(data,function(i,d){
+						$("#countryCode").append("<option value='"+ d.countryCode+"'>"+d.countryCode+"-"+d.countryName+"</option>");
+					}) 
 				},
 				
 				sendRandomCode: function(){
