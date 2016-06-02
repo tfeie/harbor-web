@@ -36,5 +36,11 @@ public class GoController {
 		ModelAndView view = new ModelAndView("go/pay");
 		return view;
 	}
+	
+	@RequestMapping("/publishGo.html")
+	public ModelAndView publishGo(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/publishgo");
+		return view;
+	}
 
 }
