@@ -115,7 +115,7 @@
 						return ;
 					}
 					ajaxController.ajax({
-						url: "${_base}/user/getRandomCode",
+						url: "../user/getRandomCode",
 						type: "post",
 						data: {
 							phoneNumber: phoneNumber
