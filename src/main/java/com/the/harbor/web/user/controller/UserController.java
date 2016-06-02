@@ -100,7 +100,7 @@ public class UserController {
 			req.setSmsFreeSignName(GlobalSettings.getSMSFreeSignName());
 			req.setSmsParams(smsParams);
 			req.setSmsTemplateCode(GlobalSettings.getSMSUserRandomCodeTemplate());
-			SMSSender.send(req);
+			//SMSSender.send(req);
 			SMSRandomCodeUtil.setSmsRandomCode(phoneNumber, randomCode);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
 		} catch (BusinessException e) {
