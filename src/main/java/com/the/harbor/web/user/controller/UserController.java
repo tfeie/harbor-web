@@ -97,27 +97,23 @@ public class UserController {
 			JSONObject smsParams = new JSONObject();
 			smsParams.put("randomCode", randomCode);
 			req.setRecNumbers(recNumbers);
-			//req.setSmsFreeSignName(GlobalSettings.getSMSFreeSignName());
-			req.setSmsFreeSignName("海归港湾");
+			req.setSmsFreeSignName(GlobalSettings.getSMSFreeSignName());
 			req.setSmsParams(smsParams);
-			//req.setSmsTemplateCode(GlobalSettings.getSMSUserRandomCodeTemplate());
-			req.setSmsTemplateCode("SMS_10230570");
+			req.setSmsTemplateCode(GlobalSettings.getSMSUserRandomCodeTemplate());
 			SMSSender.send(req);
 			SMSRandomCodeUtil.setSmsRandomCode(phoneNumber, randomCode);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
 		} catch (BusinessException e) {
 			LOG.error(e);
-			e.printStackTrace();
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, e.getMessage());
 		} catch (Exception e) {
 			LOG.error(e);
-			e.printStackTrace();
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
-	
-	public static void main(String[] agrs){
+
+	public static void main(String[] agrs) {
 		System.out.println(GlobalSettings.getSMSUserRandomCodeTemplate());
 	}
 
