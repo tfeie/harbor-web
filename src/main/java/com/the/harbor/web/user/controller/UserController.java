@@ -89,7 +89,7 @@ public class UserController {
 				throw new BusinessException("SMS-10000", "验证码已经发送，一分钟内不要重复获取");
 			}
 			// 生成随机验证码，并且存入到缓存中
-			//randomCode = SMSRandomCodeUtil.createRandomCode();
+			randomCode = SMSRandomCodeUtil.createRandomCode();
 			/* 调用API发送短信 */
 			/*SMSSendRequest req = new SMSSendRequest();
 			List<String> recNumbers = new ArrayList<String>();
@@ -100,8 +100,8 @@ public class UserController {
 			req.setSmsFreeSignName(GlobalSettings.getSMSFreeSignName());
 			req.setSmsParams(smsParams);
 			req.setSmsTemplateCode(GlobalSettings.getSMSUserRandomCodeTemplate());
-			SMSSender.send(req);
-			SMSRandomCodeUtil.setSmsRandomCode(phoneNumber, randomCode);*/
+			SMSSender.send(req);*/
+			SMSRandomCodeUtil.setSmsRandomCode(phoneNumber, randomCode);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
 		} catch (BusinessException e) {
 			LOG.error(e);
