@@ -47,12 +47,12 @@
 		</div>
 		<div class="div_input">
 			<div class="item">
-				<span><input type="text" name=""
+				<span><input type="text" id="enName"
 					placeholder="请输入英文名ie.Martin" /></span>
 			</div>
 			<section class="sel_con zhuche">
 				<p class="boss">
-					<select id="countryCode"><option>请选择留学国家</option>
+					<select id="countryCode"><option value="">请选择留学国家</option>
 					</select>
 				</p>
 			</section>
@@ -83,6 +83,8 @@
 		</div>
 
 	</section>
+	<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
 	<script type="text/javascript">
 	(function($){
 		$.UserRegisterPage = function(){
@@ -96,12 +98,66 @@
 				init: function(){
 					this.bindEvents();
 					this.getAllHyCountries();
+					this.bindRules();
+				},
+				
+				bindRules: function(){
+					var valueValidator = new $.ValueValidator();
+					valueValidator.addRule({
+						labelName: "英文名",
+						fieldName: "enName",
+						getValue: function(){
+							return $("#enName").val();
+						},
+						fieldRules: {
+							required: true,
+							notContainCN:true
+						},
+						ruleMessages: {
+							required: "请输入英文名",
+							notContainCN:"英文名不能包含中文"
+						}
+					}).addRule({
+						labelName: "留学国家",
+						fieldName: "countryCode",
+						getValue: function(){
+							return $("#countryCode").val();
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择留学国家"
+						}
+					}).addRule({
+						labelName: "手机号码",
+						fieldName: "phoneNumber",
+						getValue: function(){
+							return $("#phoneNumber").val();
+						},
+						fieldRules: {
+							required: true,
+							phonenumber:true
+						},
+						ruleMessages: {
+							required: "请输入手机号码",
+							phonenumber:"手机号码格式不正确"
+						}
+					});
+					this.valueValidator =valueValidator;
 				},
 				
 				bindEvents: function(){
 					var _this = this;
 					$("#HREF_CONFIRM").bind("click",function(){
-						alert("注册");
+						var res=_this.valueValidator.fireRulesAndReturnFirstError();
+						if(res){
+							_this.showError(res);
+							return;
+						}
+						_this.hideError();
+						alert("注册")
+						
 					});
 					$(".send_yzm").bind("click",function(){
 						_this.sendRandomCode();
