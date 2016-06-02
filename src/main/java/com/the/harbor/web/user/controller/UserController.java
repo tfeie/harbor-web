@@ -91,7 +91,7 @@ public class UserController {
 			// 生成随机验证码，并且存入到缓存中
 			randomCode = SMSRandomCodeUtil.createRandomCode();
 			/* 调用API发送短信 */
-			SMSSendRequest req = new SMSSendRequest();
+			/*SMSSendRequest req = new SMSSendRequest();
 			List<String> recNumbers = new ArrayList<String>();
 			recNumbers.add(phoneNumber);
 			JSONObject smsParams = new JSONObject();
@@ -101,7 +101,7 @@ public class UserController {
 			req.setSmsParams(smsParams);
 			req.setSmsTemplateCode(GlobalSettings.getSMSUserRandomCodeTemplate());
 			SMSSender.send(req);
-			SMSRandomCodeUtil.setSmsRandomCode(phoneNumber, randomCode);
+			SMSRandomCodeUtil.setSmsRandomCode(phoneNumber, randomCode);*/
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
 		} catch (BusinessException e) {
 			LOG.error(e);
