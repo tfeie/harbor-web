@@ -115,7 +115,6 @@
 						type: "post", 
 						success: function(transport){
 							var data =transport.data;
-							alert(JSON.stringify(transport));
 							_this.fillCountriesSelelct(data);
 						},
 						failure: function(transport){
