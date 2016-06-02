@@ -23,7 +23,7 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
 <script type="text/javascript"
-	src="../js/jquery.ajaxcontroller.js"></script>
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 </head>
 
 <body css="body_css"

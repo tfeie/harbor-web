@@ -82,7 +82,7 @@ public class UserController {
 		ResponseData<String> responseData = null;
 		try {
 			if (StringUtil.isBlank(phoneNumber)) {
-				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请输入手机号码");
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请输入您的手机号码");
 			}
 			String randomCode = SMSRandomCodeUtil.getSmsRandomCode(phoneNumber);
 			if (!StringUtil.isBlank(randomCode)) {
