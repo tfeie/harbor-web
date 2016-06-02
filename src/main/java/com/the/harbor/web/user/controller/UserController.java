@@ -84,12 +84,12 @@ public class UserController {
 			if (StringUtil.isBlank(phoneNumber)) {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请输入您的手机号码");
 			}
-			String randomCode = SMSRandomCodeUtil.getSmsRandomCode(phoneNumber);
+			/*String randomCode = SMSRandomCodeUtil.getSmsRandomCode(phoneNumber);
 			if (!StringUtil.isBlank(randomCode)) {
 				throw new BusinessException("SMS-10000", "验证码已经发送，一分钟内不要重复获取");
-			}
+			}*/
 			// 生成随机验证码，并且存入到缓存中
-			randomCode = SMSRandomCodeUtil.createRandomCode();
+			String randomCode = SMSRandomCodeUtil.createRandomCode();
 			/* 调用API发送短信 */
 			/*SMSSendRequest req = new SMSSendRequest();
 			List<String> recNumbers = new ArrayList<String>();
