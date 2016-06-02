@@ -1,7 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%
-	request.setAttribute("harbordomain", "http://harbor.tfeie.com");
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -116,7 +113,7 @@
 						return ;
 					}
 					ajaxController.ajax({
-						url: "${harbordomain}/user/getRandomCode",
+						url: "../user/getRandomCode",
 						type: "post",
 						data: {
 							phoneNumber: phoneNumber
