@@ -92,7 +92,7 @@ public class UserController {
 			randomCode = SMSRandomCodeUtil.createRandomCode();
 			/* 调用API发送短信 */
 			SMSSendRequest req = new SMSSendRequest();
-			List<String> recNumbers = new ArrayList<String>();
+			/*List<String> recNumbers = new ArrayList<String>();
 			recNumbers.add(phoneNumber);
 			JSONObject smsParams = new JSONObject();
 			smsParams.put("randomCode", randomCode);
@@ -100,7 +100,7 @@ public class UserController {
 			req.setSmsFreeSignName(GlobalSettings.getSMSFreeSignName());
 			req.setSmsParams(smsParams);
 			req.setSmsTemplateCode(GlobalSettings.getSMSUserRandomCodeTemplate());
-			//SMSSender.send(req);
+			SMSSender.send(req);*/
 			SMSRandomCodeUtil.setSmsRandomCode(phoneNumber, randomCode);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
 		} catch (BusinessException e) {
