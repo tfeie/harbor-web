@@ -105,9 +105,11 @@ public class UserController {
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
 		} catch (BusinessException e) {
 			LOG.error(e);
+			e.printStackTrace();
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, e.getMessage());
 		} catch (Exception e) {
 			LOG.error(e);
+			e.printStackTrace();
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
