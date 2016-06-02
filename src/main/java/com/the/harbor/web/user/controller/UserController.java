@@ -97,9 +97,11 @@ public class UserController {
 			JSONObject smsParams = new JSONObject();
 			smsParams.put("randomCode", randomCode);
 			req.setRecNumbers(recNumbers);
-			req.setSmsFreeSignName(GlobalSettings.getSMSFreeSignName());
+			//req.setSmsFreeSignName(GlobalSettings.getSMSFreeSignName());
+			req.setSmsFreeSignName("海归港湾");
 			req.setSmsParams(smsParams);
-			req.setSmsTemplateCode(GlobalSettings.getSMSUserRandomCodeTemplate());
+			//req.setSmsTemplateCode(GlobalSettings.getSMSUserRandomCodeTemplate());
+			req.setSmsTemplateCode("SMS_10230570");
 			SMSSender.send(req);
 			SMSRandomCodeUtil.setSmsRandomCode(phoneNumber, randomCode);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
