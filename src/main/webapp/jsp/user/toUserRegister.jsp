@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%
-	String _base = request.getContextPath();
-	request.setAttribute("_base", _base);
+	request.setAttribute("harbordomain", "http://harbor.tfeie.com");
 %>
 <!DOCTYPE html>
 <html>
@@ -12,6 +11,8 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <!-- 预解析DNS，减少用户访问资源时候解析DNS带来的响应损失 -->
 <link rel="dns-prefetch" href="//static.tfeie.com" />
+<link rel="dns-prefetch" href="//harbor.tfeie.com" />
+
 <title>用户注册</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
@@ -115,7 +116,7 @@
 						return ;
 					}
 					ajaxController.ajax({
-						url: "../user/getRandomCode",
+						url: "${harbordomain}/user/getRandomCode",
 						type: "post",
 						data: {
 							phoneNumber: phoneNumber
