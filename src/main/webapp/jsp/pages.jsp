@@ -37,10 +37,11 @@
 				<span>用户相关</span><label></label>
 			</p>
 			<p class="on1">
-				<span>海友注册</span><label>user/toUserRegister.jsp-开发中 <a href="../user/toUserRegister.html">Go</a></label>
-			</p>
+				<span>海友注册</span> <label>user/toUserRegister.jsp-开发中 <a
+					href="../user/toUserRegister.html">Go</a></label>
+			</p> 
 			<p class="on1">
-				<span>申请认证</span>user/toApplyCertficate.jsp <label><a
+				<span>申请认证</span> <label>user/toApplyCertficate.jsp <a
 					href="../user/toApplyCertficate.html">Go</a></label>
 			</p>
 			<p class="on1">
