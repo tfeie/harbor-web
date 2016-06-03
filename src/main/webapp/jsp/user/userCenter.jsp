@@ -25,20 +25,37 @@
 <body>
 	<section class="ip2_zhongxin">
 		<section class="ip2_top">
-			<p><img src="//static.tfeie.com/images/banner4.png"></p>
+			<p>
+				<img src="//static.tfeie.com/images/aimg3.png">
+			</p>
 			<section class="ip_logo ip2">
-				<p><span><img src="//static.tfeie.com/images/icon18.png"/></span></p>
+				<p>
+					<span><img src="//static.tfeie.com/images/icon18.png" /></span>
+				</p>
 			</section>
 		</section>
-		
+
 		<section class="ip_name ip2">
-			<p><span>Martin</span><label>英国</label>已认证</p>
+			<p>
+				<span>Martin</span><label class="lbl2">英国</label>已认证
+			</p>
 		</section>
 		<section class="ip_shengf ip2">
 			<p>金融/合伙人/北京</p>
-			<p><span><img src="//static.tfeie.com/images/icon19.png"/></span></p>
+			<p>
+				<span><a href="#"><img
+						src="//static.tfeie.com/images/icon19_1.png"></a><a href="#"><img
+						src="//static.tfeie.com/images/icon19_2.png"></a><a href="#"><img
+						src="//static.tfeie.com/images/icon19_3.png"></a><a href="#"><img
+						src="//static.tfeie.com/images/icon19_4.png"></a><a href="#"><img
+						src="//static.tfeie.com/images/icon19_5.png"></a><a href="#"><img
+						src="//static.tfeie.com/images/icon19_6.png"></a><a href="#"><img
+						src="//static.tfeie.com/images/icon19_7.png"></a><a href="#"><img
+						src="//static.tfeie.com/images/icon19_8.png"></a><a href="#"><img
+						src="//static.tfeie.com/images/icon19_9.png"></a></span>
+			</p>
 		</section>
-		
+
 		<section class="ip2_pengyou">
 			<ul>
 				<li><a href="#"><span>10</span><label>益友</label></a></li>
@@ -48,60 +65,80 @@
 			</ul>
 			<div class="clear"></div>
 		</section>
-		
+
 		<section class="ip2_my">
 			<section class="ip2_wid">
-				<p class="ip2_1"><a href="#">我参加的</a></p>
-				<p class="ip2_2"><a href="#">我发起的</a></p>
-				<p class="ip2_3"><a href="#">我的收藏</a></p>
+				<p class="ip2_1">
+					<a href="#">我参加的</a>
+				</p>
+				<p class="ip2_2">
+					<a href="#">我发起的</a>
+				</p>
+				<p class="ip2_3">
+					<a href="#">我的收藏</a>
+				</p>
 			</section>
 		</section>
-		
+
 		<section class="ip2_my">
 			<section class="ip2_wid">
-				<p class="ip2_4"><a href="#">我的时间线</a></p>
-				<p class="ip2_5"><a href="#">我的名片</a></p>
-				<p class="ip2_6"><a href="#">财富</a></p>
+				<p class="ip2_4">
+					<a href="#">我的时间线</a>
+				</p>
+				<p class="ip2_5">
+					<a href="#">我的名片</a>
+				</p>
+				<p class="ip2_6">
+					<a href="#">财富</a>
+				</p>
 			</section>
 		</section>
-		
+
 		<section class="ip2_my">
 			<section class="ip2_wid">
-				<p class="ip2_7"><a href="#">会员中心</a></p>
-				<p class="ip2_8"><a href="#">设置</a></p>
+				<p class="ip2_7">
+					<a href="#">会员中心</a>
+				</p>
+				<p class="ip2_8">
+					<a href="#">设置</a>
+				</p>
 			</section>
 		</section>
-		
+
 	</section>
 	<footer class="footer">
-        <ul>
-            <li><a href="">
-                <div class="img"><img src="//static.tfeie.com/images/f1.png" /></div>
-                <div class="text">Be</div>
-                </a>
-            </li>
-            <li><a href="">
-                <div class="img"><img src="//static.tfeie.com/images/f2.png" /></div>
-                <div class="text">Go</div>
-                </a>
-            </li>
-            <li><a href="">
-                <div class="img"><img src="//static.tfeie.com/images/f3.png" /></div>
-                <div class="text">Frd</div>
-                </a>
-            </li>
-            <li><a href="">
-                <div class="img"><img src="//static.tfeie.com/images/f4.png" /><i>6</i></div>
-                <div class="text">Msg</div>
-                </a>
-            </li>
-            <li class="on"><a href="">
-                <div class="img"><img src="//static.tfeie.com/images/f5.png" /></div>
-                <div class="text">Me</div>
-                </a>
-            </li>
-        </ul>
-    </footer>
-	
+		<ul>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f1.png" />
+					</div>
+					<div class="text">Be</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f2.png" />
+					</div>
+					<div class="text">Go</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f3.png" />
+					</div>
+					<div class="text">Frd</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
+					</div>
+					<div class="text">Msg</div>
+			</a></li>
+			<li class="on"><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f5.png" />
+					</div>
+					<div class="text">Me</div>
+			</a></li>
+		</ul>
+	</footer>
 </body>
 </html>
