@@ -58,8 +58,8 @@
 			</section>
 			<section class="sel_con zhuche">
 				<p class="boss2">
-					<select><option>请选择所在行业</option>
-						<option>UK-英国</option></select>
+					<select id="industryCode"><option value="">请选择所在行业</option>
+					</select>
 				</p>
 			</section>
 			<div class="item">
@@ -97,6 +97,7 @@
 				init: function(){
 					this.bindEvents();
 					this.getAllHyCountries();
+					this.getAllHyIndustries();
 					this.bindRules();
 				},
 				
@@ -127,6 +128,18 @@
 						},
 						ruleMessages: {
 							required: "请选择留学国家"
+						}
+					}).addRule({
+						labelName: "所在行业",
+						fieldName: "industryCode",
+						getValue: function(){
+							return $("#industryCode").val();
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择所在行业"
 						}
 					}).addRule({
 						labelName: "手机号码",
@@ -166,7 +179,7 @@
 				getAllHyCountries: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../user/getAllHyCountries",
+						url: "../sys/getAllHyCountries",
 						type: "post", 
 						success: function(transport){
 							var data =transport.data;
@@ -180,9 +193,30 @@
 				},
 				
 				fillCountriesSelelct: function(data){
-					
 					$.each(data,function(i,d){
 						$("#countryCode").append("<option value='"+ d.countryCode+"'>"+d.countryCode+"-"+d.countryName+"</option>");
+					}) 
+				},
+				
+				getAllHyIndustries: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../sys/getAllHyIndustries",
+						type: "post", 
+						success: function(transport){
+							var data =transport.data;
+							_this.fillIndustriesSelelct(data);
+						},
+						failure: function(transport){
+							_this.fillIndustriesSelelct([]);
+						}
+						
+					});
+				},
+				
+				fillIndustriesSelelct: function(data){
+					$.each(data,function(i,d){
+						$("#industryCode").append("<option value='"+ d.industryCode+"'>"+d.industryName+"</option>");
 					}) 
 				},
 				

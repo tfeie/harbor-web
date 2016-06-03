@@ -18,8 +18,6 @@ import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
 import com.the.harbor.commons.components.aliyuncs.sms.param.SMSSendRequest;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
-import com.the.harbor.commons.redisdata.def.HyCountryVo;
-import com.the.harbor.commons.redisdata.util.HyCountryUtil;
 import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
@@ -119,23 +117,6 @@ public class UserController {
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
-	}
-
-	@RequestMapping("/getAllHyCountries")
-	public ResponseData<List<HyCountryVo>> getAllHyCountries(String phoneNumber) {
-		ResponseData<List<HyCountryVo>> responseData = null;
-		try {
-			List<HyCountryVo> countries = HyCountryUtil.getAllHyCountries();
-			responseData = new ResponseData<List<HyCountryVo>>(ResponseData.AJAX_STATUS_SUCCESS, "获取国家列表成功", countries);
-		} catch (Exception e) {
-			LOG.error(e);
-			responseData = new ResponseData<List<HyCountryVo>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
-		}
-		return responseData;
-	}
-
-	public static void main(String[] agrs) {
-		System.out.println(GlobalSettings.getSMSUserRandomCodeTemplate());
 	}
 
 	@RequestMapping("/toRegister")
