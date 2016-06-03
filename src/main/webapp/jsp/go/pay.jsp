@@ -40,25 +40,29 @@
 
 		<section class="feiyong">
 			<p>
-				<img src="//static.tfeie.com/images/img23.png">
+				<img src="img/img23.png">
 			</p>
 			<section class="monry-info">
 				<p>
 					<label>海外市场如此sexy</label>
 				</p>
 				<p>待支付</p>
-				<span>0.01</span>元
+				<p>
+					<span>0.01</span>元
+				</p>
 
 				<section class="but_baoc on">
-					<a href="javascript:void(0)" id="HREF_GO_PAY">立即支付</a>
+					<p>
+						<a href="javascript:void(0)" id="HREF_GO_PAY">立即支付</a>
+					</p>
 				</section>
-
 				<p class="tishi">
-					<img src="//static.tfeie.com/images/img24.png">海牛3个工作日没有确认，自动退款
+				<img src="//static.tfeie.com/images/img24.png">海牛3个工作日没有确认，自动退款
 				</p>
 			</section>
 		</section>
 	</section>
+
 </body>
 <script type="text/javascript">
 	$(document)
