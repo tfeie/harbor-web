@@ -33,6 +33,12 @@ public class UserController {
 
 	private static final Logger LOG = Logger.getLogger(UserController.class);
 
+	@RequestMapping("/pages.html")
+	public ModelAndView pages(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView view = new ModelAndView("pages");
+		return view;
+	}
+
 	@RequestMapping("/toUserRegisterTest.html")
 	public ModelAndView toUserRegisterTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView view = new ModelAndView("user/toUserRegister");

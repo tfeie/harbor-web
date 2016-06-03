@@ -14,13 +14,13 @@ public class GoController {
 	private static final Logger LOG = Logger.getLogger(GoController.class);
 
 	@RequestMapping("/toConfirm.html")
-	public ModelAndView toUserRegister(HttpServletRequest request) {
+	public ModelAndView toConfirm(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("go/confirm");
 		return view;
 	}
 
 	@RequestMapping("/toOrder.html")
-	public ModelAndView order(HttpServletRequest request) {
+	public ModelAndView toOrder(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("go/order");
 		return view;
 	}
@@ -42,5 +42,41 @@ public class GoController {
 		ModelAndView view = new ModelAndView("go/publishgo");
 		return view;
 	}
+	
+	@RequestMapping("/toFeedback.html")
+	public ModelAndView toFeedback(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/feedback");
+		return view;
+	}
+	
+	@RequestMapping("/confirmlist.html")
+	public ModelAndView confirmlist(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/confirmlist");
+		return view;
+	}
+	
+	@RequestMapping("/godetail.html")
+	public ModelAndView godetail(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/godetail");
+		return view;
+	}
 
+	
+	@RequestMapping("/groupindex.html")
+	public ModelAndView groupindex(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/groupindex");
+		return view;
+	}
+	
+	@RequestMapping("/oneononeindex.html")
+	public ModelAndView oneononeindex(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/oneononeindex");
+		return view;
+	}
+	
+	@RequestMapping("/comments.html")
+	public ModelAndView comments(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/comments");
+		return view;
+	}
 }
