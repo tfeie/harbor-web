@@ -55,13 +55,47 @@
 
 		<section class="keyong">
 			<p>
-				<span>可用海贝<i>170</i></span><a href="#">购贝</a>
+				<span>可用海贝<i>170</i></span><input type="button" value="购贝">
 			</p>
 			<p class="on">
-				<span>现金余额<i>2000.00</i></span><a href="#">充值</a><a href="#"
-					class="on">提现</a>
+				<span>现金余额<i>2000.00</i></span><input type="button" value="充值"><input
+					type="button" value="提现" class="on">
 			</p>
 		</section>
 	</section>
+	<footer class="footer">
+		<ul>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f1.png" />
+					</div>
+					<div class="text">Be</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f2.png" />
+					</div>
+					<div class="text">Go</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f3.png" />
+					</div>
+					<div class="text">Frd</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
+					</div>
+					<div class="text">Msg</div>
+			</a></li>
+			<li class="on"><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f5.png" />
+					</div>
+					<div class="text">Me</div>
+			</a></li>
+		</ul>
+	</footer>
 </body>
 </html>

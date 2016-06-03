@@ -21,8 +21,8 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
-	
-	
+
+
 </head>
 <body class="body">
 	<section class="hailiuqueren yuejian">
@@ -67,8 +67,10 @@
 				</p>
 			</section>
 
-			<section class="sec_btn2">
-				<a href="#">预约, 去支付</a>
+			<section class="but_baoc">
+				<p>
+					<input type="button" value="预约, 去支付" />
+				</p>
 			</section>
 		</section>
 	</section>

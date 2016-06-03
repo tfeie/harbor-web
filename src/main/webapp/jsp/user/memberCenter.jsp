@@ -51,8 +51,10 @@
 		</div>
 	</section>
 
-	<section class="sec_btn2">
-		<a href="">立即购买</a>
+	<section class="but_baoc">
+		<p>
+			<input type="button" value="立即购买" />
+		</p>
 	</section>
 
 </section>

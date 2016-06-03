@@ -34,19 +34,23 @@
 		</section>
 		<section class="per_info">
 			<p class="name">
-				<span>Candy</span><label>英国</label><i>已认证</i>
+				<span>Candy</span><label class="lbl2">英国</label><i>已认证</i>
 			</p>
 			<p class="pengyou">
 				<a href="#">益友 10</a><a href="#" class="on">助人 10</a><a href="#">公益贝
 					100</a>
 			</p>
 			<p class="aihao">健身 / 游泳 / 水上运动 / 旅游 / 摄影 / 马术</p>
-			<p>金融</p>
-			<p>北京</p>
-			<p class="aihao">金融 / 设计 / 新媒体 / 人才管理</p>
+			<section class="jinrong">
+				<p>金融</p>
+				<p>北京</p>
+				<p class="aihao">金融 / 设计 / 新媒体 / 人才管理</p>
+			</section>
 			<p class="but">
-				<a href="#">分享</a><a href="#">应邀</a>
+				<input type="button" value="分享"><input type="button"
+					value="应邀" class="on">
 			</p>
+
 			<div class="clear"></div>
 			<p>（Cindy还剩 3 个邀请名额）</p>
 			<p>海湾，我们的舞台...</p>

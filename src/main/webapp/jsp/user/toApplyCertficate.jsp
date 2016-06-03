@@ -55,8 +55,44 @@
 			<img src="//static.tfeie.com/images/img5.png" />
 		</div>
 	</section>
-	<section class="sec_btn2">
-		<a href="">提交认证</a>
+	<section class="but_baoc">
+		<p>
+			<input type="button" value="提交认证" />
+		</p>
 	</section>
+	<footer class="footer">
+		<ul>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f1.png" />
+					</div>
+					<div class="text">Be</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f2.png" />
+					</div>
+					<div class="text">Go</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f3.png" />
+					</div>
+					<div class="text">Frd</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
+					</div>
+					<div class="text">Msg</div>
+			</a></li>
+			<li class="on"><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f5.png" />
+					</div>
+					<div class="text">Me</div>
+			</a></li>
+		</ul>
+	</footer>
 </body>
 </html>

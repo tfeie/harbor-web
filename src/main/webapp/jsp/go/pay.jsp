@@ -47,11 +47,9 @@
 					<label>海外市场如此sexy</label>
 				</p>
 				<p>待支付</p>
-				<p>
-					<span>0.01</span>元
-				</p>
+				<span>0.01</span>元
 
-				<section class="sec_btn2">
+				<section class="but_baoc on">
 					<a href="javascript:void(0)" id="HREF_GO_PAY">立即支付</a>
 				</section>
 
@@ -63,13 +61,20 @@
 	</section>
 </body>
 <script type="text/javascript">
-$(document).ready(function(){
-	$("#HREF_GO_PAY").bind("click",function(){
-		var orderId = new Date().getTime();
-		var orderAmount = "0.01";
-		location.href="../payment/getAuthorizeCode?orderId=" + orderId + "&orderAmount=" + orderAmount;
-	})
-})
-	
+	$(document)
+			.ready(
+					function() {
+						$("#HREF_GO_PAY")
+								.bind(
+										"click",
+										function() {
+											var orderId = new Date().getTime();
+											var orderAmount = "0.01";
+											location.href = "../payment/getAuthorizeCode?orderId="
+													+ orderId
+													+ "&orderAmount="
+													+ orderAmount;
+										})
+					})
 </script>
 </html>

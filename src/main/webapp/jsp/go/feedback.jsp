@@ -30,7 +30,7 @@
 	})
 </script>
 </head>
-<body>
+<body class="">
 	<section class="haiuliu-top pingjia">
 		<p class="bgcolor">
 			<label></label>
@@ -51,7 +51,7 @@
 		</section>
 		<section class="ip_info group">
 			<section class="info_img">
-				<span><img src="//static.tfeie.com/images/img29.png"></span>
+				<span><img src="//static.tfeie.com/images/img29.png" /></span>
 			</section>
 			<section class="ip_text2 frt">
 				<span>线下服务</span> <label>21人见过</label>
@@ -68,7 +68,7 @@
 		<section class="good_friend">
 			<section class="friend_num">
 				<p>
-					<span><img src="//static.tfeie.com/images/img35.png"></span><label>3</label>
+					<span><img src="//static.tfeie.com/images/img35.png" /></span><label>3</label>
 				</p>
 				<p>
 					<span>助人统计</span>
@@ -86,7 +86,7 @@
 		<section class="good_friend">
 			<section class="friend_num">
 				<p>
-					<span><img src="//static.tfeie.com/images/img36.png"></span>
+					<span><img src="//static.tfeie.com/images/img36.png" /></span>
 				</p>
 				<p>
 					<span>赏海贝</span>
@@ -150,4 +150,5 @@
 			</section>
 		</section>
 	</section>
+</body>
 </html>

@@ -10,7 +10,7 @@
 <link rel="dns-prefetch" href="//static.tfeie.com" />
 <link rel="dns-prefetch" href="//harbor.tfeie.com" />
 
-<title>用户注册</title>
+<title>海友注册</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
@@ -70,19 +70,18 @@
 				<span><input type="text" name="" placeholder="请输入验证码" /></span><a
 					href="javascript:void(0)" class="send_yzm">发送验证码</a>
 			</div>
-			<div class="message-err">
-				<!-- 
+			<div class="message-err"> 
+			</div>
+			<section class="but_baoc on zhuc">
 				<p>
-					<span>X</span>验证码错误
+					<a href="javascript:void(0)" id="HREF_CONFIRM">确认注册</a>
 				</p>
-				 -->
-			</div>
-			<div class="item_btn">
-				<a href="javascript:void(0)" id="HREF_CONFIRM">确认注册</a>
-			</div>
+			</section>
 		</div>
 
 	</section>
+	
+
 	<script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
 	<script type="text/javascript">

@@ -11,7 +11,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>首页</title>
+<title>Beautiful&Excellence</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
@@ -57,10 +57,10 @@
 			<div class="tit_nav">
 				<div class="title_owl">
 					<div class="item">
-						<a href="" class="on">风景</a>
+						<a href="" class="on">推荐</a>
 					</div>
 					<div class="item">
-						<a href="">人物</a>
+						<a href="">热点</a>
 					</div>
 					<div class="item">
 						<a href="">萌宠</a>
@@ -252,5 +252,6 @@
 					src="//static.tfeie.com/images/go.png" /></a></span>
 		</div>
 	</section>
+
 </body>
 </html>

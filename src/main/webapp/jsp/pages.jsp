@@ -29,7 +29,7 @@
 				<span>APP</span><label></label>
 			</p>
 			<p class="on1">
-				<span>APP主页</span><label><a href="../be/index.html">Go</a></label>
+				<span>APP主页</span><label>be/index.jsp <a href="../be/index.html">Go</a></label>
 			</p> 
 		</section>
 		<section class="shouji">
@@ -37,33 +37,33 @@
 				<span>用户相关</span><label></label>
 			</p>
 			<p class="on1">
-				<span>注册</span><label><a href="../user/toUserRegister.html">Go</a></label>
+				<span>海友注册</span><label>toUserRegister.jsp-开发中 <a href="../user/toUserRegister.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>申请认证</span><label><a
+				<span>申请认证</span>toApplyCertficate.jsp <label><a
 					href="../user/toApplyCertficate.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>个人信息</span><label><a href="../user/userInfo.html">Go</a></label>
+				<span>个人信息</span><label>userInfo.jsp <a href="../user/userInfo.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>会员中心</span><label><a href="../user/memberCenter.html">Go</a></label>
+				<span>会员中心</span><label>memberCenter.jsp<a href="../user/memberCenter.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>个人中心</span><label><a href="../user/userCenter.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>编辑个人信息</span><label><a
+				<span>编辑个人信息</span><label>editUserInfo.jsp <a
 					href="../user/editUserInfo.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>名片</span><label><a href="../user/getUserCard.html">Go</a></label>
+				<span>名片</span><label>userCard.jsp<a href="../user/getUserCard.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>我的财富</span><label><a href="../user/userWealth.html">Go</a></label>
+				<span>我的财富</span><label>userWealth.jsp <a href="../user/userWealth.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>兴趣技能</span><label><a href="../user/setUserSkills.html">Go</a></label>
+				<span>兴趣技能</span><label>setUserSkills.jsp<a href="../user/setUserSkills.html">Go</a></label>
 			</p>
 		</section>
 
@@ -72,22 +72,22 @@
 				<span>G&O相关</span><label></label>
 			</p>
 			<p class="on1">
-				<span>发布G&O</span><label><a href="../go/publishGo.html">Go</a></label>
+				<span>发布G&O2-2</span><label>publishgo.jsp<a href="../go/publishGo.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>预约</span><label><a href="../go/toOrder.html">Go</a></label>
+				<span>预约</span><label>order.jsp <a href="../go/toOrder.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>支付费用</span><label><a href="../go/toPay.html">Go</a></label>
+				<span>支付费用</span><label>pay.jsp-开发中 <a href="../go/toPay.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>海牛确认</span><label><a href="../go/toConfirm.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>约见</span><label><a href="../go/toAppointment.html">Go</a></label>
+				<span>约见</span><label>appointment.jsp <a href="../go/toAppointment.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>评价</span><label><a href="../go/toFeedback.html">Go</a></label>
+				<span>评价</span><label>feedback.jsp  <a href="../go/toFeedback.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>审核信息</span><label><a href="../go/confirmlist.html">Go</a></label>

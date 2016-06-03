@@ -54,7 +54,7 @@
 			</section>
 			<section class="text-info">
 				<p>
-					<i>Martin</i><span>英国</span><label>已认证</label>
+					<i>Martin</i><label class="lbl2">英国</label><span>已认证</span>
 				</p>
 				<p class="on">金融/合伙人/北京</p>
 			</section>
@@ -67,14 +67,12 @@
 				<p class="on">2016-5-16 18:00 海淀区附近</p>
 			</section>
 			<section class="yuejian-but">
-				<p>
-					<a href="#">确认时间地点</a>
-				</p>
+				<button>确认时间地点</button>
 			</section>
 		</section>
 
-		<section class="sec_btn2">
-			<a href="#">确认服务结束</a>
+		<section class="sec_btn2 yuejian">
+			<input type="button" value="确认服务结束">
 		</section>
 	</section>
 </body>

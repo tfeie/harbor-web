@@ -29,7 +29,7 @@
 	<section class="tab">
 		<section class="tab_title">
 			<p>
-				兴趣标签<span>(1/6)</span>
+				兴趣标签<span>(1/5)</span>
 			</p>
 		</section>
 		<section class="tab_con">
@@ -49,6 +49,18 @@
 				<a href="#">公益</a>
 			</section>
 			<section class="tab_location6">
+				<a href="#">新媒体</a>
+			</section>
+			<section class="tab_location7">
+				<a href="#">艺术</a>
+			</section>
+			<section class="tab_location8">
+				<a href="#">水上运动</a>
+			</section>
+			<section class="tab_location9">
+				<a href="#">公益</a>
+			</section>
+			<section class="tab_location10">
 				<a href="#">新媒体</a>
 			</section>
 		</section>
@@ -56,7 +68,7 @@
 	<section class="tab in">
 		<section class="tab_title">
 			<p>
-				兴趣标签<span>(4/6)</span>
+				兴趣标签<span>(4/5)</span>
 			</p>
 		</section>
 		<section class="tab_con">
@@ -78,11 +90,23 @@
 			<section class="tab_location6">
 				<a href="#">新媒体</a>
 			</section>
+			<section class="tab_location7">
+				<a href="#">艺术</a>
+			</section>
+			<section class="tab_location8">
+				<a href="#">水上运动</a>
+			</section>
+			<section class="tab_location9">
+				<a href="#">公益</a>
+			</section>
+			<section class="tab_location10">
+				<a href="#">新媒体</a>
+			</section>
 		</section>
 	</section>
-	<section class="but_baoc on in">
+	<section class="but_baoc">
 		<p>
-			<a href="#">确认</a>
+			<input type="button" value="确认" />
 		</p>
 	</section>
 </body>

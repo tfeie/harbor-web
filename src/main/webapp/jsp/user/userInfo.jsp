@@ -23,10 +23,10 @@
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
 </head>
 <body class="body">
-	<section class="ip_info">
+	<section class="ip_info oc">
 		<section class="top_info">
 			<p>
-				<img src="//static.tfeie.com/images/banner3.png">
+				<img src="//static.tfeie.com/images/aimg2.png">
 			</p>
 			<section class="ip_logo">
 				<p>
@@ -37,7 +37,7 @@
 
 		<section class="ip_name">
 			<p>
-				<span>Martin</span><label>英国</label>已认证
+				<span>Martin</span><label class="lbl2">英国</label>已认证
 			</p>
 		</section>
 		<section class="ip_shengf">
@@ -73,9 +73,9 @@
 			<p>业务经理</p>
 		</section>
 
-		<section class="but_baoc on">
+		<section class="but_baoc">
 			<p>
-				<a href="#">申请认证</a>
+				<input type="button" value="申请认证" />
 			</p>
 		</section>
 		<section class="zhangdemei">
@@ -88,5 +88,39 @@
 			</p>
 		</section>
 	</section>
+	<footer class="footer">
+		<ul>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f1.png" />
+					</div>
+					<div class="text">Be</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f2.png" />
+					</div>
+					<div class="text">Go</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f3.png" />
+					</div>
+					<div class="text">Frd</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
+					</div>
+					<div class="text">Msg</div>
+			</a></li>
+			<li class="on"><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f5.png" />
+					</div>
+					<div class="text">Me</div>
+			</a></li>
+		</ul>
+	</footer>
 </body>
 </html>

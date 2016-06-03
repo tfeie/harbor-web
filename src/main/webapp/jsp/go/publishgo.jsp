@@ -21,45 +21,98 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
-    <script>
-        $(function () {
-            $(".act_info p span").click(function () {
-                $(this).parents("p").find("span").removeClass("on")
-                $(this).addClass("on")
-            })
-            $(".me_qingke p").click(function () {
-                $(this).parents(".me_qingke").find("p").removeClass("on")
-                $(this).addClass("on")
-            })
-            $(".online_no p span").click(function () {
-                $(this).parents("p").find("span").removeClass("on")
-                $(this).addClass("on")
-            })
-            $(".quxiao img").click(function () {
-                $(this).parents("li").hide()
-            })
+<script>
+	$(function() {
+		$(".act_info p span").click(function() {
+			$(this).parents("p").find("span").removeClass("on")
+			$(this).addClass("on")
+		})
+		$(".me_qingke p").click(function() {
+			$(this).parents(".me_qingke").find("p").removeClass("on")
+			$(this).addClass("on")
+		})
+		$(".online_no p span").click(function() {
+			$(this).parents("p").find("span").removeClass("on")
+			$(this).addClass("on")
+		})
+		$(".quxiao img").click(function() {
+			$(this).parents("li").hide()
+		})
 
-            $(".yingchang img").click(function () {
-                $(this).parents(".zhuti_hanhua").addClass("on")
+		$(".yingchang img").click(function() {
+			$(this).parents(".zhuti_hanhua").addClass("on")
 
-            })
-            
-            $(".yingchang img").click(function () {
-                $(this).parents(".jia_img").addClass("on")
+		})
 
-            })
-               var a = 0;
-            $(".fabu_but p span.in").click(function () {
-                $(this).parents(".fabu_go").find(".zhuti_hanhua.on").eq(a).removeClass("on")
-            })
+		$(".yingchang img").click(function() {
+			$(this).parents(".jia_img").addClass("on")
 
-            var b = 0;
-            $(".fabu_but p span.on").click(function () {
-                $(this).parents(".fabu_go").find(".jia_img.on").eq(b).removeClass("on")
-                
-            })
-        })
-    </script>
+		})
+		var a = 0;
+		$(".fabu_but p span.in").click(
+				function() {
+					$(this).parents(".fabu_go").find(".zhuti_hanhua.on").eq(a)
+							.removeClass("on")
+				})
+
+		var b = 0;
+		$(".fabu_but p span.on").click(
+				function() {
+					$(this).parents(".fabu_go").find(".jia_img.on").eq(b)
+							.removeClass("on")
+
+				})
+
+		$(".chooes_2 ul li a").click(function() {
+			if ($(this).parent("li").hasClass("on")) {
+			} else {
+				var str = $(this).html();
+			}
+		})
+
+		$(".chooes_2 ul li a").click(function() {
+			if ($(this).parent("li").hasClass("on")) {
+			} else {
+				var str = $(this).html();
+			}
+		})
+
+		$(".chooes_2 ul li a")
+				.click(
+						function() {
+							if ($(this).parents(".lat_xuanz").find(
+									".fabu_biaoqian").find("li").length >= 6
+									|| $(this).parent("li").hasClass("on")) {
+							} else {
+								var li = $(".fabu_biaoqian ul li").first()
+										.clone(true);
+								li.find("a").html($(this).html());
+								$(this).parents(".lat_xuanz").find(
+										".fabu_biaoqian ul").append(li);
+								$(this).parents(".lat_xuanz").find(
+										".fabu_biaoqian").find("em")
+										.html(
+												$(this).parents(".lat_xuanz")
+														.find(".fabu_biaoqian")
+														.find("li").length - 1)
+								$(this).parent("li").remove();
+							}
+						})
+
+	})
+	function FB_none(obg) {
+		var str = $(obg).parents("li").find("a").html();
+		var li = $(obg).parents(".lat_xuanz").find(".chooes_2").find("li")
+				.first().clone(true);
+
+		$(".lat_xuanz").find(".fabu_biaoqian").find("p").find("em").html(
+				$(".lat_xuanz").find(".fabu_biaoqian").find("li").length - 2);
+
+		li.find("a").html(str);
+		$(obg).parents(".lat_xuanz").find(".chooes_2").find("ul").prepend(li);
+		$(obg).parents("li").remove();
+	}
+</script>
 
 </head>
 <body class="body">
@@ -198,37 +251,46 @@
 			<p>标签</p>
 		</section>
 
-		<section class="fabu_biaoqian">
-			<p>已选标签（3/5）</p>
-			<ul>
-				<li><a>营销</a>
-					<section class="quxiao">
-						<img src="//static.tfeie.com/images/img50.png" />
-					</section></li>
-				<li><a>品牌</a>
-					<section class="quxiao">
-						<img src="//static.tfeie.com/images/img50.png" />
-					</section></li>
-				<li><a>渠道</a>
-					<section class="quxiao">
-						<img src="//static.tfeie.com/images/img50.png" />
-					</section></li>
-			</ul>
-		</section>
-		<section class="chooes_2 fabu">
-			<p>可选标签</p>
-			<ul>
-				<li><a>品牌</a></li>
-				<li><a>渠道</a></li>
-				<li><a>营销</a></li>
-				<li><a>战略</a></li>
-				<li><a>创意</a></li>
-				<li><a>管理</a></li>
-				<li><a>运动</a></li>
-				<li><a>设计</a></li>
-				<li><a>编程</a></li>
-				<li class="on"><a><img src="//static.tfeie.com/images/img54.png"></a></li>
-			</ul>
+		<section class="lat_xuanz">
+			<section class="fabu_biaoqian">
+				<p>
+					已选标签（<em>3</em>/5）
+				</p>
+				<ul>
+					<li><a>营销</a>
+						<section class="quxiao" onclick="FB_none($(this));">
+							<img src="//static.tfeie.com/images/img50.png" />
+						</section></li>
+					<li><a>营销</a>
+						<section class="quxiao" onclick="FB_none($(this));">
+							<img src="//static.tfeie.com/images/img50.png" />
+						</section></li>
+					<li><a>品牌</a>
+						<section class="quxiao" onclick="FB_none($(this));">
+							<img src="//static.tfeie.com/images/img50.png" />
+						</section></li>
+					<li><a>渠道</a>
+						<section class="quxiao" onclick="FB_none($(this));">
+							<img src="//static.tfeie.com/images/img50.png" />
+						</section></li>
+				</ul>
+			</section>
+			<section class="chooes_2 fabu">
+				<p>可选标签</p>
+				<ul>
+					<li><a>品牌</a></li>
+					<li><a>渠道</a></li>
+					<li><a>营销</a></li>
+					<li><a>战略</a></li>
+					<li><a>创意</a></li>
+					<li><a>管理</a></li>
+					<li><a>运动</a></li>
+					<li><a>设计</a></li>
+					<li><a>编程</a></li>
+					<li class="on"><a><img
+							src="//static.tfeie.com/images/img54.png"></a></li>
+				</ul>
+			</section>
 		</section>
 
 		<section class="fabu_zhuti diwu">
