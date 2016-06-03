@@ -105,6 +105,12 @@
 			<p class="on1">
 				<span>group评价</span><label>go/comments.jsp <a href="../go/comments.html">Go</a></label>
 			</p>
+			<p class="on1">
+				<span>邀约详细</span><label>页面效果有问题，没连接 <a href="#">Go</a></label>
+			</p>
+			<p class="on1">
+				<span>邀约详细2</span><label>页面效果有问题，没连接 <a href="#">Go</a></label>
+			</p>
 		</section>
 	</section>
 </body>
