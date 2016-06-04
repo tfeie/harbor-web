@@ -208,6 +208,7 @@
 		messages: {
 			moneyRule:"{0}格式不正确",
 			required: "{0}不能为空", 
+			numberlength: "{0}必须是{1}位数字", 
 			email: "{0}不是有效的E-MAIL地址",
 			url: "{0}不是有效的URL地址",
 			date: "{0}不是有效的日期格式(yyyy-MM-dd)", 
@@ -275,6 +276,24 @@
 				arr = typeof value == "string"?arr.push(arr):arr; 
 				var valid = arr.length>=paramters;
 				return valid;
+			},
+			/**
+			* 校验是否是几位数字
+			* @param value:元素取值
+			* @param parameters: 长度
+			* @return true/false:校验不通过为false
+			**/
+			numberlength: function(value,paramters){
+				var v=$.trim(value);
+				var empty = v.length?false:true;
+				if(empty)return false;
+				if(isNaN(v)) {
+					return false;
+				}
+				if(v.match(/\d/g).length!=paramters){
+					return false;
+				} 
+				return true;
 			},
 			/**
 			* 校验某个字段的长度

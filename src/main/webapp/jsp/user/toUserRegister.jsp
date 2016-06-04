@@ -44,9 +44,9 @@
 
 
 	<section class="zhuce">
-		<div class="div_six">
-			<span><i class="on"><img src="//static.tfeie.com/images/boy.png" /></i></span> <span><i><img
-					src="//static.tfeie.com/images/girl.png" /></i></span> <span><i><img src="//static.tfeie.com/images/other.png" /></i></span>
+		<div class="div_six" id="DIV_SEX">
+			<span><i class="on"><input type="hidden" value="1"/><img src="//static.tfeie.com/images/boy.png" /></i></span> <span><i><input type="hidden" value="2"/><img
+					src="//static.tfeie.com/images/girl.png" /></i></span> <span><i><input type="hidden" value="0"/><img src="//static.tfeie.com/images/other.png" /></i></span>
 		</div>
 		<div class="div_input">
 			<div class="item">
@@ -67,10 +67,10 @@
 			</section>
 			<div class="item">
 				<span><input type="text" id="phoneNumber"
-					placeholder="请输入手机号码/Email(国外)" /></span>
+					placeholder="请输入手机号码" /></span>
 			</div>
 			<div class="item">
-				<span><input type="text" name="" placeholder="请输入验证码" /></span><a
+				<span><input type="text" id="randomCode" placeholder="请输入6位数字验证码" /></span><a
 					href="javascript:void(0)" class="send_yzm" id="HREF_SEND_CODE">发送验证码</a>
 			</div>
 			<div class="message-err"> 
@@ -107,6 +107,19 @@
 				bindRules: function(){
 					var valueValidator = new $.ValueValidator();
 					valueValidator.addRule({
+						labelName: "性别",
+						fieldName: "sex",
+						getValue: function(){
+							var sex = $("#DIV_SEX").find(".on").find("input:hidden").val();
+							return sex;
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择性别"
+						}
+					}).addRule({
 						labelName: "英文名",
 						fieldName: "enName",
 						getValue: function(){
@@ -160,6 +173,20 @@
 							required: "请输入手机号码",
 							phonenumber:"手机号码格式不正确"
 						}
+					}).addRule({
+						labelName: "验证码",
+						fieldName: "randomCode",
+						getValue: function(){
+							return $("#randomCode").val();
+						},
+						fieldRules: {
+							required: true, 
+							numberlength:6
+						},
+						ruleMessages: {
+							required: "请输入验证码",
+							numberlength:"验证码必须是六位数字"
+						}
 					});
 					this.valueValidator =valueValidator;
 				},
@@ -173,7 +200,7 @@
 							return;
 						}
 						_this.hideMessage();
-						alert("注册")
+						_this.submit();
 						
 					});
 					_this.bindYZMEvent();
@@ -188,6 +215,11 @@
 				
 				unBindYZMEvent: function(){
 					$("#HREF_SEND_CODE").removeClass("send_yzm").addClass("off_send_yzm").unbind("click");
+				},
+				
+				submit: function(){
+					var sex = $("#DIV_SEX").find(".on").find("input:hidden").val();
+					alert(sex);
 				},
 				
 				
