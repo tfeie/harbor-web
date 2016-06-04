@@ -172,7 +172,7 @@
 							_this.showError(res);
 							return;
 						}
-						_this.hideError();
+						_this.hideMessage();
 						alert("注册")
 						
 					});
@@ -242,7 +242,7 @@
 						_this.showError(result);
 						return ;
 					}else{
-						_this.hideError();
+						_this.hideMessage();
 					} 
 					this.waitSeconds=60; 
 					this.unBindYZMEvent();
@@ -259,8 +259,7 @@
 							phoneNumber: phoneNumber
 						},
 						success: function(transport){
-							alert("验证码获取成功");
-							_this.hideError();
+							_this.showSuccess("验证码获取成功");
 							_this.unBindYZMEvent();
 							
 						},
@@ -288,7 +287,11 @@
 					$(".message-err").show().html("<p><span>X</span>"+message+"</p>");
 				},
 				
-				hideError: function(){
+				showSuccess: function(message){
+					$(".message-err").show().html("<p><span></span>"+message+"</p>");
+				},
+				
+				hideMessage: function(){
 					$(".message-err").html("").hide();
 				}
 			}
