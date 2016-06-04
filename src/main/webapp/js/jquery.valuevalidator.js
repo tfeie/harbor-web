@@ -71,6 +71,21 @@
 				}
 				return message;
 			},
+			
+			fireFieldRule:function(fieldName){
+				var _this = this;
+				var es=$.grep(_this.settings.elements,function(e,i){
+					return e.fieldName==fieldName;
+				});
+				if(!es || es.length==0){
+					return false;
+				}
+				var ele= es[0];
+				_this.validElement(ele);
+				var validerrors = ele.validerrors;
+				return (!validerrors || validerrors.length==0)?false:validerrors[0];
+			},
+			
 			/*获取绑定的规则*/
 			getRules: function(){
 				return this.settings.elements;

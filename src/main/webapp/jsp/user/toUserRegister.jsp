@@ -24,6 +24,9 @@
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/json2.js"></script>
+<style>
+.off_send_yzm{ white-space: nowrap; display: block; text-align: center; line-height: 2.5em;background: #D1D1D1; color:#fff; border-radius: 5px; margin-left:0.8em; width:10em;}
+</style>
 </head>
 
 <body css="body_css"
@@ -68,7 +71,7 @@
 			</div>
 			<div class="item">
 				<span><input type="text" name="" placeholder="请输入验证码" /></span><a
-					href="javascript:void(0)" class="send_yzm">发送验证码</a>
+					href="javascript:void(0)" class="send_yzm" id="HREF_SEND_CODE">发送验证码</a>
 			</div>
 			<div class="message-err"> 
 			</div>
@@ -111,11 +114,13 @@
 						},
 						fieldRules: {
 							required: true,
-							notContainCN:true
+							notContainCN:true,
+							cnlength:10
 						},
 						ruleMessages: {
 							required: "请输入英文名",
-							notContainCN:"英文名不能包含中文"
+							notContainCN:"英文名不能包含中文",
+							cnlength:"英文名长度不能超过10个字符"
 						}
 					}).addRule({
 						labelName: "留学国家",
@@ -171,10 +176,20 @@
 						alert("注册")
 						
 					});
-					$(".send_yzm").bind("click",function(){
+					_this.bindYZMEvent();
+				},
+				
+				bindYZMEvent: function(){
+					var _this = this;
+					$("#HREF_SEND_CODE").removeClass("off_send_yzm").addClass("send_yzm").unbind("click").bind("click",function(){
 						_this.sendRandomCode();
 					})
 				},
+				
+				unBindYZMEvent: function(){
+					$("#HREF_SEND_CODE").removeClass("send_yzm").addClass("off_send_yzm").unbind("click");
+				},
+				
 				
 				getAllHyCountries: function(){
 					var _this = this;
@@ -221,12 +236,22 @@
 				},
 				
 				sendRandomCode: function(){
-					var _this = this;
-					var phoneNumber = $.trim($("#phoneNumber").val());
-					if(phoneNumber==""){
-						_this.showError("请输入手机号码");
+					var _this = this; 
+					var result = _this.valueValidator.fireFieldRule("phoneNumber");
+					if(result){
+						_this.showError(result);
 						return ;
-					}
+					}else{
+						_this.hideError();
+					} 
+					this.waitSeconds=60; 
+					this.unBindYZMEvent();
+				    $("#HREF_SEND_CODE").text("重新发送(" + this.waitSeconds + "秒)");
+				    InterValObj = window.setInterval(function(){
+				    	_this.randomCodeInterval(InterValObj);
+				    }, 1000);
+				     
+				    var phoneNumber =  $.trim($("#phoneNumber").val());
 					ajaxController.ajax({
 						url: "../user/getRandomCode",
 						type: "post",
@@ -236,12 +261,27 @@
 						success: function(transport){
 							alert("验证码获取成功");
 							_this.hideError();
+							_this.unBindYZMEvent();
+							
 						},
 						failure: function(transport){
 							_this.showError(transport.statusInfo);
 						}
 						
 					});
+				},
+				
+				randomCodeInterval: function(InterValObj){
+					console.log(this.waitSeconds);
+			        if (this.waitSeconds == 0) {                
+			            window.clearInterval(InterValObj);//停止计时器
+			            $("#HREF_SEND_CODE").text("发送验证码");
+			            this.bindYZMEvent();
+			        }
+			        else {
+			        	this.waitSeconds--;
+			        	$("#HREF_SEND_CODE").text("重新发送(" + this.waitSeconds + "秒)");
+			        }
 				},
 				
 				showError: function(message){
@@ -254,8 +294,8 @@
 			}
 		})
 	})(jQuery);
-		
 	
+
 	$(document).ready(function(){
 		var p = new $.UserRegisterPage();
 		p.init();
