@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +56,7 @@
 			</div>
 			<section class="sel_con zhuche">
 				<p class="boss">
-					<select id="countryCode"><option value="">请选择留学国家</option>
+					<select id="abroadCountry"><option value="">请选择留学国家</option>
 					</select>
 				</p>
 			</section>
@@ -66,7 +67,7 @@
 				</p>
 			</section>
 			<div class="item">
-				<span><input type="text" id="phoneNumber"
+				<span><input type="text" id="mobilePhone"
 					placeholder="请输入手机号码" /></span>
 			</div>
 			<div class="item">
@@ -77,6 +78,9 @@
 			</div>
 			<section class="but_baoc on zhuc">
 				<p>
+					<input type="hidden" id="wxOpenid" value="<c:out value="${wxUserInfo.openid}"/>"/>
+					<input type="hidden" id="wxHeadimg" value="<c:out value="${wxUserInfo.headimgurl}"/>"/>
+					<input type="hidden" id="wxNickname" value="<c:out value="${wxUserInfo.nickname}"/>"/>
 					<a href="javascript:void(0)" id="HREF_CONFIRM">确认注册</a>
 				</p>
 			</section>
@@ -127,19 +131,19 @@
 						},
 						fieldRules: {
 							required: true,
-							notContainCN:true,
-							cnlength:10
+							regexp: /^[A-Za-z][A-Za-z\s]*[A-Za-z]$/,
+							cnlength: 10
 						},
 						ruleMessages: {
 							required: "请输入英文名",
-							notContainCN:"英文名不能包含中文",
+							regexp:"英文名只能是字母",
 							cnlength:"英文名长度不能超过10个字符"
 						}
 					}).addRule({
 						labelName: "留学国家",
-						fieldName: "countryCode",
+						fieldName: "abroadCountry",
 						getValue: function(){
-							return $("#countryCode").val();
+							return $("#abroadCountry").val();
 						},
 						fieldRules: {
 							required: true
@@ -161,9 +165,9 @@
 						}
 					}).addRule({
 						labelName: "手机号码",
-						fieldName: "phoneNumber",
+						fieldName: "mobilePhone",
 						getValue: function(){
-							return $("#phoneNumber").val();
+							return $("#mobilePhone").val();
 						},
 						fieldRules: {
 							required: true,
@@ -218,8 +222,41 @@
 				},
 				
 				submit: function(){
+					var _this=this;
 					var sex = $("#DIV_SEX").find(".on").find("input:hidden").val();
-					alert(sex);
+					var enName= $.trim($("#enName").val());
+					var abroadCountry= $.trim($("#abroadCountry").val());
+					var industryCode= $.trim($("#industryCode").val());
+					var mobilePhone= $.trim($("#mobilePhone").val());
+					var randomCode= $.trim($("#randomCode").val());
+					var wxOpenid= $.trim($("#wxOpenid").val());
+					var wxHeadimg= $.trim($("#wxHeadimg").val());
+					var wxNickname= $.trim($("#wxNickname").val());
+					var userData = {
+						sex: sex,
+						enName: enName,
+						abroadCountry: abroadCountry,
+						industry: industryCode,
+						mobilePhone: mobilePhone,
+						wxOpenid: wxOpenid,
+						wxNickname: wxNickname,
+						wxHeadimg: wxHeadimg
+					};
+					ajaxController.ajax({
+						url: "../user/submitUserRegister",
+						type: "post",
+						data: {
+							randomCode: randomCode,
+							userData: JSON.stringify(userData)
+						},
+						success: function(transport){
+							_this.showSuccess("注册成功"); 
+						},
+						failure: function(transport){
+							_this.showError(transport.statusInfo);
+						}
+						
+					});
 				},
 				
 				
@@ -241,7 +278,7 @@
 				
 				fillCountriesSelelct: function(data){
 					$.each(data,function(i,d){
-						$("#countryCode").append("<option value='"+ d.countryCode+"'>"+d.countryCode+"-"+d.countryName+"</option>");
+						$("#abroadCountry").append("<option value='"+ d.countryCode+"'>"+d.countryCode+"-"+d.countryName+"</option>");
 					}) 
 				},
 				
@@ -269,7 +306,7 @@
 				
 				sendRandomCode: function(){
 					var _this = this; 
-					var result = _this.valueValidator.fireFieldRule("phoneNumber");
+					var result = _this.valueValidator.fireFieldRule("mobilePhone");
 					if(result){
 						_this.showError(result);
 						return ;
@@ -283,12 +320,12 @@
 				    	_this.randomCodeInterval(InterValObj);
 				    }, 1000);
 				     
-				    var phoneNumber =  $.trim($("#phoneNumber").val());
+				    var mobilePhone =  $.trim($("#mobilePhone").val());
 					ajaxController.ajax({
 						url: "../user/getRandomCode",
 						type: "post",
 						data: {
-							phoneNumber: phoneNumber
+							mobilePhone: mobilePhone
 						},
 						success: function(transport){
 							_this.showSuccess("验证码获取成功");

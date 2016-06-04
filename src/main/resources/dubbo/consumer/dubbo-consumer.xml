@@ -23,7 +23,6 @@
 	<dubbo:registry protocol="zookeeper" address="${harbor.registry.address}" />
 	<dubbo:monitor protocol="registry" />
 
-	<dubbo:reference id="IUserManagerSV"
-		interface="com.the.harbor.service.interfaces.IUserManagerSV" />
+	<dubbo:reference id="IUserSV" interface="com.the.harbor.api.user.IUserSV" />
 
 </beans>

@@ -13,12 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.api.user.IUserSV;
+import com.the.harbor.api.user.param.UserRegReq;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.exception.BusinessException;
+import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
 import com.the.harbor.commons.components.aliyuncs.sms.param.SMSSendRequest;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
+import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
+import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
@@ -74,7 +79,7 @@ public class UserController {
 					response.sendRedirect(authorURL);
 					return null;
 				} else {
-					request.setAttribute("userInfo", wxUserInfo);
+					request.setAttribute("wxUserInfo", wxUserInfo);
 					ModelAndView view = new ModelAndView("user/toUserRegister");
 					return view;
 				}
@@ -84,13 +89,13 @@ public class UserController {
 	}
 
 	@RequestMapping("/getRandomCode")
-	public ResponseData<String> getRandomCode(String phoneNumber) {
+	public ResponseData<String> getRandomCode(String mobilePhone) {
 		ResponseData<String> responseData = null;
 		try {
-			if (StringUtil.isBlank(phoneNumber)) {
+			if (StringUtil.isBlank(mobilePhone)) {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请输入您的手机号码");
 			}
-			String randomCode = SMSRandomCodeUtil.getSmsRandomCode(phoneNumber);
+			String randomCode = SMSRandomCodeUtil.getSmsRandomCode(mobilePhone);
 			if (!StringUtil.isBlank(randomCode)) {
 				throw new BusinessException("SMS-10000", "验证码已经发送，一分钟内不要重复获取");
 			}
@@ -99,7 +104,7 @@ public class UserController {
 			/* 调用API发送短信 */
 			SMSSendRequest req = new SMSSendRequest();
 			List<String> recNumbers = new ArrayList<String>();
-			recNumbers.add(phoneNumber);
+			recNumbers.add(mobilePhone);
 			JSONObject smsParams = new JSONObject();
 			smsParams.put("randomCode", randomCode);
 			req.setRecNumbers(recNumbers);
@@ -107,7 +112,7 @@ public class UserController {
 			req.setSmsParams(smsParams);
 			req.setSmsTemplateCode(GlobalSettings.getSMSUserRandomCodeTemplate());
 			SMSSender.send(req);
-			SMSRandomCodeUtil.setSmsRandomCode(phoneNumber, randomCode);
+			SMSRandomCodeUtil.setSmsRandomCode(mobilePhone, randomCode);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
 		} catch (BusinessException e) {
 			LOG.error(e);
@@ -115,6 +120,44 @@ public class UserController {
 		} catch (Exception e) {
 			LOG.error(e);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/submitUserRegister")
+	public ResponseData<String> submitUserRegister(String userData, String randomCode) {
+		ResponseData<String> responseData = null;
+		try {
+			if (StringUtil.isBlank(userData)) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户信息格式不正确");
+			}
+			if (StringUtil.isBlank(randomCode)) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请输入验证码");
+			}
+			UserRegReq userRegReq = JSONObject.parseObject(userData, UserRegReq.class);
+			if (userRegReq == null) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户信息格式不正确");
+			}
+			if (StringUtil.isBlank(userRegReq.getMobilePhone())) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请输入手机号码");
+			}
+			String code = SMSRandomCodeUtil.getSmsRandomCode(userRegReq.getMobilePhone());
+			if (StringUtil.isBlank(code)) {
+				throw new BusinessException("SMS-10000", "验证码已经过期，请重新获取");
+			}
+			if (!randomCode.equals(code)) {
+				throw new BusinessException("SMS-10000", "输入的验证码不正确");
+			}
+			Response rep = DubboConsumerFactory.getService(IUserSV.class).userRegister(userRegReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage(), "");
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "注册成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}
