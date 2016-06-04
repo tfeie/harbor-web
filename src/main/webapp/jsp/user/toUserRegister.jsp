@@ -246,7 +246,7 @@
 					} 
 					this.waitSeconds=60; 
 					this.unBindYZMEvent();
-				    $("#HREF_SEND_CODE").text("重新发送(" + this.waitSeconds + "秒)");
+				    $("#HREF_SEND_CODE").text("重发(" + this.waitSeconds + "秒)");
 				    InterValObj = window.setInterval(function(){
 				    	_this.randomCodeInterval(InterValObj);
 				    }, 1000);
@@ -280,7 +280,7 @@
 			        }
 			        else {
 			        	this.waitSeconds--;
-			        	$("#HREF_SEND_CODE").text("重新发送(" + this.waitSeconds + "秒)");
+			        	$("#HREF_SEND_CODE").text("重发(" + this.waitSeconds + "秒)");
 			        }
 				},
 				
