@@ -239,7 +239,6 @@
 						industry: industryCode,
 						mobilePhone: mobilePhone,
 						wxOpenid: wxOpenid,
-						wxNickname: wxNickname,
 						wxHeadimg: wxHeadimg
 					};
 					ajaxController.ajax({
