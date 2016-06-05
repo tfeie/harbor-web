@@ -40,7 +40,7 @@
 
 		<section class="feiyong">
 			<p>
-				<img src="img/img23.png">
+				<img src="//static.tfeie.com/images/img23.png">
 			</p>
 			<section class="monry-info">
 				<p>
