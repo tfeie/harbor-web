@@ -196,11 +196,11 @@
 						},
 						fieldRules: {
 							required: true, 
-							numberlength:6
+							numberlength:4
 						},
 						ruleMessages: {
 							required: "请输入验证码",
-							numberlength:"验证码必须是六位数字"
+							numberlength:"验证码必须是4位数字"
 						}
 					});
 					this.valueValidator =valueValidator;
