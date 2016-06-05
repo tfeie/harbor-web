@@ -37,7 +37,7 @@
 				<span>用户相关</span><label></label>
 			</p>
 			<p class="on1">
-				<span>海友注册</span> <label>user/toUserRegister.jsp-ING <a
+				<span>海友注册</span> <label>user/toUserRegister.jsp-DONE <a
 					href="../user/toUserRegister.html">Go</a></label>
 			</p> 
 			<p class="on1">
@@ -79,7 +79,7 @@
 				<span>预约</span><label>go/order.jsp <a href="../go/toOrder.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>支付费用</span><label>go/pay.jsp-开发中 <a href="../go/toPay.html">Go</a></label>
+				<span>支付费用</span><label>go/pay.jsp-ING <a href="../go/toPay.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>海牛确认</span><label>go/confirm.jsp <a href="../go/toConfirm.html">Go</a></label>

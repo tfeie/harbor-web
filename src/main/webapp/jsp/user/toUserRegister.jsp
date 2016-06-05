@@ -46,8 +46,8 @@
 
 	<section class="zhuce">
 		<div class="div_six" id="DIV_SEX">
-			<span><i class="on"><input type="hidden" value="1"/><img src="//static.tfeie.com/images/boy.png" /></i></span> <span><i><input type="hidden" value="2"/><img
-					src="//static.tfeie.com/images/girl.png" /></i></span> <span><i><input type="hidden" value="0"/><img src="//static.tfeie.com/images/other.png" /></i></span>
+			<span><i class="on" id="I_SEX_1"><input type="hidden" value="1"/><img src="//static.tfeie.com/images/boy.png" /></i></span> <span><i id="I_SEX_2"><input type="hidden" value="2"/><img
+					src="//static.tfeie.com/images/girl.png" /></i></span> <span><i id="I_SEX_0"><input type="hidden" value="0"/><img src="//static.tfeie.com/images/other.png" /></i></span>
 		</div>
 		<div class="div_input">
 			<div class="item">
@@ -106,6 +106,17 @@
 					this.getAllHyCountries();
 					this.getAllHyIndustries();
 					this.bindRules();
+					this.initWXSexTag();
+				},
+				
+				initWXSexTag: function(){
+					var obj=$("#I_SEX_<c:out value="${wxUserInfo.sex}"/>");
+					$("#DIV_SEX").find(".on").removeClass("on");
+					if(obj.length){
+						obj.addClass("on");
+					}else{
+						$("#I_SEX_1").addClass("on");
+					}
 				},
 				
 				bindRules: function(){
