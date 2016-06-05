@@ -34,10 +34,10 @@
 		</section>
 		<section class="shouji">
 			<p class="title">
-				<span>用户相关</span><label></label>
+				<span>用户相关user</span><label></label>
 			</p>
 			<p class="on1">
-				<span>海友注册</span> <label>user/toUserRegister.jsp-DONE <a
+				<span>海友注册</span> <label>toUserRegister.jsp-ok <a
 					href="../user/toUserRegister.html">Go</a></label>
 			</p> 
 			<p class="on1">
