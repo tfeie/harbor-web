@@ -71,7 +71,7 @@
 					placeholder="请输入手机号码" /></span>
 			</div>
 			<div class="item">
-				<span><input type="text" id="randomCode" placeholder="请输入6位数字验证码" /></span><a
+				<span><input type="text" id="randomCode" placeholder="请输入4位数字验证码" /></span><a
 					href="javascript:void(0)" class="send_yzm" id="HREF_SEND_CODE">发送验证码</a>
 			</div>
 			<div class="message-err"> 
