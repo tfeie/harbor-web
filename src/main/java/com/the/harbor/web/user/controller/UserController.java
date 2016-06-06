@@ -194,6 +194,12 @@ public class UserController {
 		return view;
 	}
 	
+	@RequestMapping("/toApplyCertficate2.html")
+	public ModelAndView toApplyCertficate2(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("user/toApplyCertficate2");
+		return view;
+	}
+	
 	@RequestMapping("/submitCertficate")
 	public ResponseData<String> submitCertficate(HttpServletRequest request) {
 		ResponseData<String> responseData = null;
