@@ -106,7 +106,7 @@ $(function(){
 		var _front=$("#frontagefileid").val();
 		var _cert=$("#certfileid").val();
 		if(_front==""||_cert==""){
-			alert("请选择要上传的照片");	
+			showError("请选择要上传的照片");	
 		}else {
 			ajaxController.ajax({
 				url: "../user/submitCertficate",
@@ -116,16 +116,24 @@ $(function(){
 					_cert: _cert
 				},
 				success: function(transport){
-					alert("认证成功"); 
+					showSuccess("认证成功"); 
 				},
 				failure: function(transport){
-					alert(transport.statusInfo);
+					showError(transport.statusInfo);
 				}
 				
 			});
 		}
 	})
 });
+
+function showError(message){
+	$(".message-err").show().html("<p><span>X</span>"+message+"</p>");
+}
+
+function showSuccess(message){
+	$(".message-err").show().html("<p><span></span>"+message+"</p>");
+}
 
 function isTouchInBody(touch,jq_obj){//判是否落在目标中
 	var pis_x=0,pis_y=0;//点坐标
@@ -215,6 +223,8 @@ function compressImg(imgData,onCompress){//图片压缩工具
 		<div class="img" name="certfileid">
 			<img src="//static.tfeie.com/images/img5.png" />
 		</div>
+	</div>
+	<div class="message-err"> 
 	</div>
 	<section class="but_baoc">
 		<p>
