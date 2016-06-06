@@ -79,4 +79,16 @@ public class GoController {
 		ModelAndView view = new ModelAndView("go/comments");
 		return view;
 	}
+	
+	@RequestMapping("/invite.html")
+	public ModelAndView invite(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/invite");
+		return view;
+	}
+	
+	@RequestMapping("/invite2.html")
+	public ModelAndView invite2(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/invite2");
+		return view;
+	}
 }
