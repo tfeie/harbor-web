@@ -54,6 +54,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import sun.misc.BASE64Decoder;
+
 import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.commons.util.MD5Util;
 import com.the.harbor.web.constants.WXConstants;
@@ -587,5 +589,25 @@ public class CommonUtil {
 		String s = new String(tempArr);
 		return s;
 	}
+	
+	//base64编码转换为图片
+    public static byte [] generateImage(String base64){
+        if (base64 == null)
+            return null;
+        BASE64Decoder decoder = new BASE64Decoder();
+        try {
+            // Base64解码
+            byte[] bytes = decoder.decodeBuffer(base64);
+            for (int i = 0; i < bytes.length; ++i) {
+                if (bytes[i] < 0) {// 调整异常数据
+                    bytes[i] += 256;
+                }
+            }
+            return bytes;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

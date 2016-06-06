@@ -26,6 +26,7 @@ import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
+import com.the.harbor.web.system.utils.CommonUtil;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
@@ -191,6 +192,20 @@ public class UserController {
 	public ModelAndView toApplyCertficate(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("user/toApplyCertficate");
 		return view;
+	}
+	
+	@RequestMapping("/submitCertficate")
+	public ResponseData<String> submitCertficate(HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		String _front = request.getParameter("_front");
+		String _cert = request.getParameter("_cert");
+		if (StringUtil.isBlank(_front) || StringUtil.isBlank(_cert)) {
+			throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请选择要上传的照片");
+		}
+		byte[] byteFront = CommonUtil.generateImage(_front);
+        byte[] byteCert = CommonUtil.generateImage(_cert);
+
+		return responseData;
 	}
 
 	@RequestMapping("/userInfo.html")
