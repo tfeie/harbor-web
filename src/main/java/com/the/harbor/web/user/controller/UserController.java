@@ -198,7 +198,7 @@ public class UserController {
 
 	@RequestMapping("/toApplyCertficate2.html")
 	public ModelAndView toApplyCertficate2(HttpServletRequest request) {
-		String timestamp = DateUtil.getCurrentTime();
+		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
 		String url = "http://harbor.tfeie.com/user/toApplyCertficate2.html";
