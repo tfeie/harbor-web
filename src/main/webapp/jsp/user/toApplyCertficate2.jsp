@@ -74,7 +74,7 @@
 		src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 	<script type="text/javascript">
 	wx.config({
-	      debug: true,
+	      debug: false,
 	      appId: '<c:out value="${appId}"/>',
 	      timestamp: <c:out value="${timestamp}"/>,
 	      nonceStr: '<c:out value="${nonceStr}"/>',
@@ -92,7 +92,6 @@
 			wx.chooseImage({
 				count: 1,
 			    success: function (res) {
-		        	//alert(res.localIds);
 		        	var localId = res.localIds[0];
 		        	$("#img_oversea").attr("src",localId);
 		        	wx.uploadImage({
@@ -100,7 +99,6 @@
 		        	    isShowProgressTips: 1, // 默认为1，显示进度提示
 		        	    success: function (r) {
 		        	        var serverId = r.serverId; // 返回图片的服务器端ID
-		        	        alert("hi:"+serverId);
 		        	    }, 
 		                fail: function (res) {
 		                  alert(JSON.stringify(res));
