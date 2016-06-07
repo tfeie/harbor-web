@@ -81,7 +81,6 @@
 	      signature: '<c:out value="${signature}"/>',
 	      jsApiList: [
 	        'checkJsApi',
-	        'downloadVoice',
 	        'chooseImage',
 	        'previewImage',
 	        'uploadImage',
@@ -91,6 +90,7 @@
 	wx.ready(function(){
 		$("#filePicker").bind("click",function(){
 			wx.chooseImage({
+				count: 1,
 			    success: function (res) {
 		        	alert(res.localIds);
 		      	}
