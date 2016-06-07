@@ -117,7 +117,7 @@
 				count : 1,
 				success : function(res) {
 					var localId = res.localIds[0];
-					$("#img_oversea").attr("src", localId).css({"width":"420px","height":"260px"}); 
+					$("#img_oversea").attr("src", localId).css({"width":"193.84px","height":"120px"}); 
 					wx.uploadImage({
 						localId : localId, // 需要上传的图片的本地ID，由chooseImage接口获得
 						isShowProgressTips : 1, // 默认为1，显示进度提示
