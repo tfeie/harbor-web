@@ -69,14 +69,12 @@
 <body class="body">
 	<section class="top_info">
 		<p class="span_file">
-			<img src="//static.tfeie.com/images/aimg2.png"><input
-				type="file" class="input_file" />
+			<img src="//static.tfeie.com/images/aimg2.png">
 		</p>
 		<section class="ip_logo">
 			<p>
 				<span class="span_file"><img
-					src="//static.tfeie.com/images/icon18.png"><input type="file"
-					class="input_file"></span>
+					src="//static.tfeie.com/images/icon18.png"></span>
 			</p>
 		</section>
 	</section>

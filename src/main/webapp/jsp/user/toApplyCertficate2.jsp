@@ -45,8 +45,7 @@
 			</h3>
 		</div>
 		<div class="img">
-			<img src="//static.tfeie.com/images/img4.jpg" /><input type="file"
-				class="file_btn" />
+			<img src="//static.tfeie.com/images/img4.jpg" />
 		</div>
 	</section>
 	<section class="sec_item sec_item_img">
@@ -56,8 +55,7 @@
 			</h3>
 		</div>
 		<div class="img" id="filePicker">
-			<img src="//static.tfeie.com/images/img5.png" id="img_oversea"/><input type="file"
-				class="file_btn" />
+			<img src="//static.tfeie.com/images/img5.png" id="img_oversea"/>
 		</div>
 	</section>
 	<section class="but_baoc">
@@ -119,7 +117,7 @@
 				count : 1,
 				success : function(res) {
 					var localId = res.localIds[0];
-					$("#img_oversea").attr("src", localId);
+					$("#img_oversea").attr("src", localId).css({"width":"420px","height":"260px"}); 
 					wx.uploadImage({
 						localId : localId, // 需要上传的图片的本地ID，由chooseImage接口获得
 						isShowProgressTips : 1, // 默认为1，显示进度提示

@@ -30,8 +30,7 @@
 			</p>
 			<section class="ip_logo">
 				<p>
-					<span class="span_file"><img src="//static.tfeie.com/images/icon18.png" /><input
-						type="file" class="input_file" /></span>
+					<span class="span_file"><img src="//static.tfeie.com/images/icon18.png" /></span>
 				</p>
 			</section>
 		</section>
