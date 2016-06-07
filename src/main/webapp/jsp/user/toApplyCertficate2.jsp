@@ -59,7 +59,7 @@
 		<div class="img" id="certfileid">
 			<div id="fileList" class="uploader-list"></div>
 			<div id="filePicker">
-				<img src="//static.tfeie.com/images/img5.png" />
+				<img id="img_oversea" src="//static.tfeie.com/images/img5.png" />
 			</div>
 		</div>
 	</div>
@@ -93,13 +93,18 @@
 				count: 1,
 			    success: function (res) {
 		        	//alert(res.localIds);
+		        	var localId = res.localIds[0];
+		        	$("#img_oversea").attr("src",localId);
 		        	wx.uploadImage({
-		        	    localId: res.localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
+		        	    localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
 		        	    isShowProgressTips: 1, // 默认为1，显示进度提示
 		        	    success: function (r) {
 		        	        var serverId = r.serverId; // 返回图片的服务器端ID
 		        	        alert("hi:"+serverId);
-		        	    }
+		        	    }, 
+		                fail: function (res) {
+		                  alert(JSON.stringify(res));
+		                }
 		        	});
 		      	}
 		    });
