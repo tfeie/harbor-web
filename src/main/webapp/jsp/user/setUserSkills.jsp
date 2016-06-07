@@ -34,79 +34,79 @@
 		</section>
 		<section class="tab_con">
 			<section class="tab_location1">
-				<a href="#">水上运动</a>
+				<button>水上运动</button>
 			</section>
 			<section class="tab_location2">
-				<a href="#">健身</a>
+				<button>健身</button>
 			</section>
 			<section class="tab_location3">
-				<a href="#">艺术</a>
+				<button>艺术</button>
 			</section>
 			<section class="tab_location4">
-				<a href="#">旅游</a>
+				<button>旅游</button>
 			</section>
 			<section class="tab_location5">
-				<a href="#">公益</a>
+				<button>公益</button>
 			</section>
 			<section class="tab_location6">
-				<a href="#">新媒体</a>
+				<button>新媒体</button>
 			</section>
 			<section class="tab_location7">
-				<a href="#">艺术</a>
+				<button>艺术</button>
 			</section>
 			<section class="tab_location8">
-				<a href="#">水上运动</a>
+				<button>水上运动</button>
 			</section>
 			<section class="tab_location9">
-				<a href="#">公益</a>
+				<button>公益</button>
 			</section>
 			<section class="tab_location10">
-				<a href="#">新媒体</a>
+				<button>新媒体</button>
 			</section>
 		</section>
 	</section>
 	<section class="tab in">
 		<section class="tab_title">
 			<p>
-				兴趣标签<span>(4/5)</span>
+				技能标签<span>(4/5)</span>
 			</p>
 		</section>
 		<section class="tab_con">
 			<section class="tab_location1">
-				<a href="#">水上运动</a>
+				<button>水上运动</button>
 			</section>
 			<section class="tab_location2">
-				<a href="#">健身</a>
+				<button>健身</button>
 			</section>
 			<section class="tab_location3">
-				<a href="#">艺术</a>
+				<button>艺术</button>
 			</section>
 			<section class="tab_location4">
-				<a href="#">旅游</a>
+				<button>旅游</button>
 			</section>
 			<section class="tab_location5">
-				<a href="#">公益</a>
+				<button>公益</button>
 			</section>
 			<section class="tab_location6">
-				<a href="#">新媒体</a>
+				<button>新媒体</button>
 			</section>
 			<section class="tab_location7">
-				<a href="#">艺术</a>
+				<button>艺术</button>
 			</section>
 			<section class="tab_location8">
-				<a href="#">水上运动</a>
+				<button>水上运动</button>
 			</section>
 			<section class="tab_location9">
-				<a href="#">公益</a>
+				<button>公益</button>
 			</section>
 			<section class="tab_location10">
-				<a href="#">新媒体</a>
+				<button>新媒体</button>
 			</section>
 		</section>
 	</section>
 	<section class="but_baoc">
 		<p>
-			<input type="button" value="确认" />
+			<input type="button" value="确 认" />
 		</p>
 	</section>
 </body>

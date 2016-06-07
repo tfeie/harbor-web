@@ -47,8 +47,8 @@
 				<p class="aihao">金融 / 设计 / 新媒体 / 人才管理</p>
 			</section>
 			<p class="but">
-				<input type="button" value="分享"><input type="button"
-					value="应邀" class="on">
+				<input type="button" value="分 享"><input type="button"
+					value="应 邀" class="on">
 			</p>
 
 			<div class="clear"></div>

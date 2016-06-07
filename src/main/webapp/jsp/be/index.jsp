@@ -79,7 +79,6 @@
 					</div>
 				</div>
 			</div>
-			<div class="more"></div>
 			<div class="search"></div>
 		</section>
 
@@ -245,13 +244,12 @@
 	<div class="mask"></div>
 	<section class="sec_menu">
 		<div class="wrap">
-			<span class="span1"><a><img
-					src="//static.tfeie.com/images/circle.png" /></a></span> <span class="span2"><a
-				href=""><img src="//static.tfeie.com/images/be.png" /></a></span> <span
-				class="span3"><a href=""><img
-					src="//static.tfeie.com/images/go.png" /></a></span>
+			<span class="span1"><a><img src="//static.tfeie.com/images/circle.png" /></a></span> <span
+				class="span2"><a href=""><img src="//static.tfeie.com/images/be.png" /></a></span> <span
+				class="span3"><a href=""><img src="//static.tfeie.com/images/go.png" /></a></span>
 		</div>
 	</section>
+
 
 </body>
 </html>

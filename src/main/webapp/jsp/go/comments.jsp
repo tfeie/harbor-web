@@ -77,7 +77,7 @@
 			</section>
 			<section class="yes_no num">
 				<p>
-					<span class="on">10</span><span>50</span><span>100</span><span>0</span>
+					<span>10</span><span>50</span><span>100</span><span class="on">0</span>
 				</p>
 			</section>
 			<div class="clear"></div>
@@ -132,4 +132,5 @@
 				<div class="clear"></div>
 			</section>
 		</section>
-	</section></html>
+	</section>
+</html>

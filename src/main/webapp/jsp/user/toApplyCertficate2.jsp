@@ -25,9 +25,6 @@
 </head>
 
 <body>
-	<input type="file" accept="image/*" name="pic" id="pic"
-		style="display: none;" />
-
 	<section class="sec_item">
 		<div class="div_title">
 			<h3>
@@ -38,76 +35,102 @@
 			<li>身份证照片</li>
 			<li>海外学历认证文件或留学签证扫描件或<br />学生证扫描件
 			</li>
+			<li>认证通过之后，将点亮头像旁边的“已认证”字样，并可享受更多权限哦。</li>
 		</ul>
 	</section>
-	<div class="sec_item sec_item_img" id="">
+	<section class="sec_item sec_item_img">
 		<div class="div_title">
 			<h3>
 				<span>上传身份证（正）</span>
 			</h3>
 		</div>
-		<div class="img" id="frontagefileid">
-			<img src="//static.tfeie.com/images/img4.png" />
+		<div class="img">
+			<img src="//static.tfeie.com/images/img4.jpg" /><input type="file" class="file_btn" />
 		</div>
-	</div>
-	<div class="sec_item sec_item_img">
+	</section>
+	<section class="sec_item sec_item_img">
 		<div class="div_title">
 			<h3>
 				<span>上传海外学历认证/签证/学生证</span>
 			</h3>
 		</div>
-		<div class="img" id="certfileid">
-			<div id="fileList" class="uploader-list"></div>
-			<div id="filePicker">
-				<img id="img_oversea" src="//static.tfeie.com/images/img5.png" />
-			</div>
+		<div class="img" id="filePicker">
+			<img src="//static.tfeie.com/images/img5.png" id="img_oversea"/>
 		</div>
-	</div>
-	<div class="message-err"></div>
+	</section>
 	<section class="but_baoc">
 		<p>
-			<input type="button" id='upimage' value="提交认证" />
+			<input type="button" value="提交认证" />
 		</p>
 	</section>
+	<footer class="footer">
+		<ul>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f1.png" />
+					</div>
+					<div class="text">Be</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f2.png" />
+					</div>
+					<div class="text">Go</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f3.png" />
+					</div>
+					<div class="text">Frd</div>
+			</a></li>
+			<li><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
+					</div>
+					<div class="text">Msg</div>
+			</a></li>
+			<li class="on"><a href="">
+					<div class="img">
+						<img src="//static.tfeie.com/images/f5.png" />
+					</div>
+					<div class="text">Me</div>
+			</a></li>
+		</ul>
+	</footer>
+
 </body>
 	<script type="text/javascript"
 		src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 	<script type="text/javascript">
-	wx.config({
-	      debug: false,
-	      appId: '<c:out value="${appId}"/>',
-	      timestamp: <c:out value="${timestamp}"/>,
-	      nonceStr: '<c:out value="${nonceStr}"/>',
-	      signature: '<c:out value="${signature}"/>',
-	      jsApiList: [
-	        'checkJsApi',
-	        'chooseImage',
-	        'previewImage',
-	        'uploadImage',
-	        'downloadImage'
-	      ]
-	});
-	wx.ready(function(){
-		$("#filePicker").bind("click",function(){
-			wx.chooseImage({
-				count: 1,
-			    success: function (res) {
-		        	var localId = res.localIds[0];
-		        	$("#img_oversea").attr("src",localId);
-		        	wx.uploadImage({
-		        	    localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
-		        	    isShowProgressTips: 1, // 默认为1，显示进度提示
-		        	    success: function (r) {
-		        	        var serverId = r.serverId; // 返回图片的服务器端ID
-		        	    }, 
-		                fail: function (res) {
-		                  alert(JSON.stringify(res));
-		                }
-		        	});
-		      	}
-		    });
-		})
-	});
-	
+		wx.config({
+			debug : false,
+			appId : '<c:out value="${appId}"/>',
+			timestamp : <c:out value="${timestamp}"/>,
+			nonceStr : '<c:out value="${nonceStr}"/>',
+			signature : '<c:out value="${signature}"/>',
+			jsApiList : [ 'checkJsApi', 'chooseImage', 'previewImage',
+					'uploadImage', 'downloadImage' ]
+		});
+		wx.ready(function() {
+			$("#filePicker").bind("click", function() {
+				wx.chooseImage({
+					count : 1,
+					success : function(res) {
+						var localId = res.localIds[0];
+						$("#img_oversea").attr("src", localId);
+						wx.uploadImage({
+							localId : localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+							isShowProgressTips : 1, // 默认为1，显示进度提示
+							success : function(r) {
+								var serverId = r.serverId; // 返回图片的服务器端ID
+							},
+							fail : function(res) {
+								alert(JSON.stringify(res));
+							}
+						});
+					}
+				});
+			})
+		});
 	</script>
 </html>

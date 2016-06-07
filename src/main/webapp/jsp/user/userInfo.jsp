@@ -25,12 +25,13 @@
 <body class="body">
 	<section class="ip_info oc">
 		<section class="top_info">
-			<p>
-				<img src="//static.tfeie.com/images/aimg2.png">
+			<p class="span_file">
+				<img src="//static.tfeie.com/images/aimg2.png"><input type="file" class="input_file" />
 			</p>
 			<section class="ip_logo">
 				<p>
-					<span><img src="//static.tfeie.com/images/icon18.png" /></span>
+					<span class="span_file"><img src="//static.tfeie.com/images/icon18.png" /><input
+						type="file" class="input_file" /></span>
 				</p>
 			</section>
 		</section>
@@ -51,7 +52,7 @@
 
 		<section class="ip_aihao">
 			<p>
-				<span>健身</span><span>游泳</span><span>高尔夫</span><span>健身</span><span>游泳</span><span>高尔夫</span>
+				<span>健身</span><span>游泳</span><span>高尔夫</span><span>健身</span><span>游泳</span>
 			</p>
 		</section>
 		<section class="ip_smone">
@@ -73,7 +74,7 @@
 			<p>业务经理</p>
 		</section>
 
-		<section class="but_baoc">
+		<section class="but_baoc but_baoc1">
 			<p>
 				<input type="button" value="申请认证" />
 			</p>

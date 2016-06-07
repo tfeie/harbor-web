@@ -47,7 +47,7 @@
 			<span>应付金额</span><label><em>30</em>元</label>
 		</div>
 		<div class="item">
-			<span>支付方式</span><label><i class="i_weixin"></i></label>
+			<span>支付方式</span><label><i class="i_weixin"></i>微信支付</label>
 		</div>
 	</section>
 

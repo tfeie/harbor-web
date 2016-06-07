@@ -67,7 +67,21 @@
 </script>
 </head>
 <body class="body">
-	<section class="per_info">
+	<section class="top_info">
+		<p class="span_file">
+			<img src="//static.tfeie.com/images/aimg2.png"><input
+				type="file" class="input_file" />
+		</p>
+		<section class="ip_logo">
+			<p>
+				<span class="span_file"><img
+					src="//static.tfeie.com/images/icon18.png"><input type="file"
+					class="input_file"></span>
+			</p>
+		</section>
+	</section>
+	<section class="sec_title"></section>
+	<section class="per_info padding-bottom">
 		<section class="par_name">
 			<p>
 				<input type="text" value="Martin">
@@ -175,7 +189,8 @@
 					<li><a>摄影</a></li>
 					<li><a>睡觉</a></li>
 					<li><a>旅游</a></li>
-					<li class="on"><a><img src="//static.tfeie.com/images/icon15.png" /></a></li>
+					<li class="on"><a><img
+							src="//static.tfeie.com/images/icon15.png" /></a></li>
 				</ul>
 			</section>
 		</section>
@@ -205,7 +220,7 @@
 		<section class="check_item">
 			<section class="xinqi">
 				<p class="left_t">
-					技能标签 <i><em>3</em>/5</i>
+					已选技能标签<i><em>3</em>/5</i>
 				</p>
 				<ul>
 					<li>
@@ -264,7 +279,8 @@
 					<li><a>摄影</a></li>
 					<li><a>睡觉</a></li>
 					<li><a>旅游</a></li>
-					<li class="on"><a><img src="//static.tfeie.com/images/icon15.png" /></a></li>
+					<li class="on"><a><img
+							src="//static.tfeie.com/images/icon15.png" /></a></li>
 				</ul>
 			</section>
 		</section>
@@ -308,5 +324,6 @@
 			</a></li>
 		</ul>
 	</footer>
+
 </body>
 </html>

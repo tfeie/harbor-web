@@ -31,7 +31,7 @@
 </head>
 
 <body css="body_css"
-	style="background: url(//static.tfeie.com/images/aimg1.png) no-repeat center center; background-size: cover; padding-bottom: 2em;">
+	style="background: url(//static.tfeie.com/images/aimg1.png) no-repeat center center; background-size: cover; padding-bottom: 2em;padding-bottom:2em;">
 	<div class="mask1"></div>
 	<section class="sec_top">
 		<div class="img">

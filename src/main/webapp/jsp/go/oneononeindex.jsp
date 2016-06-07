@@ -96,7 +96,6 @@
 					</div>
 				</div>
 			</div>
-			<div class="more"></div>
 			<div class="search"></div>
 		</section>
 
@@ -213,7 +212,7 @@
 							</section>
 							<section class="ip_text">
 								<p>
-									<span>Martin</span><label class="lbl1">美国</label><i>已认证</i><em
+									<span>Martin</span><label class="lbl2">英国</label><i>已认证</i><em
 										class="online"><a href="#">线下服务</a></em>
 								</p>
 								<p>
@@ -315,6 +314,5 @@
 				class="span3"><a href=""><img src="//static.tfeie.com/images/go.png" /></a></span>
 		</div>
 	</section>
-
 </body>
 </html>

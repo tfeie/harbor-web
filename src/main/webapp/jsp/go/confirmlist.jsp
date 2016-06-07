@@ -21,7 +21,18 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
+<script>
+	$(function() {
 
+		$(".but_queren input.inpbut").click(function() {
+			var item = $(this).parents(".daique_info").clone(true);
+			$(this).parents(".daique_info").remove();
+			$(".queren_back.in").append(item);
+
+		})
+
+	})
+</script>
 </head>
 <body>
 	<section class="mainer in">
@@ -96,7 +107,7 @@
 				</section>
 				<section class="ip_text oz">
 					<p>
-						<span>Martin</span><label class="lbl2">英国</label><i>已认证</i>
+						<span>Martin</span><label class="lbl1">美国</label><i>已认证</i>
 					</p>
 					<p>金融/合伙人/北京</p>
 				</section>
@@ -112,21 +123,18 @@
 		<section class="daiqueren">
 			<p>已确认</p>
 		</section>
-		<section class="queren_back">
+		<section class="queren_back in">
 			<section class="daique_info">
 				<section class="info_img">
 					<span><img src="//static.tfeie.com/images/img29.png"></span>
 				</section>
 				<section class="ip_text oz">
 					<p>
-						<span>Martin</span><label class="lbl2">英国</label><i>已认证</i>
+						<span>Martin</span><label class="lbl5">香港</label><i>已认证</i>
 					</p>
 					<p>金融/合伙人/北京</p>
 				</section>
-				<section class="but_queren">
-					<input type="button" value="拒绝" /><input type="button" value="通过"
-						class="inpbut" />
-				</section>
+
 				<div class="clear"></div>
 
 			</section>
@@ -136,15 +144,17 @@
 				</section>
 				<section class="ip_text oz">
 					<p>
-						<span>Martin</span><label class="lbl2">英国</label><i>已认证</i>
+						<span>Martin</span><label class="lbl6">日本</label><i>已认证</i>
 					</p>
 					<p>金融/合伙人/北京</p>
 				</section>
-				<section class="but_queren">
-					<input type="button" value="拒绝" /><input type="button" value="通过"
-						class="inpbut" />
-				</section>
+
 				<div class="clear"></div>
 			</section>
 		</section>
-	</section></html>
+	</section>
+</body>
+
+
+
+</html>

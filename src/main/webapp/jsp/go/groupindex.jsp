@@ -97,7 +97,6 @@
 					</div>
 				</div>
 			</div>
-			<div class="more"></div>
 			<div class="search"></div>
 		</section>
 
