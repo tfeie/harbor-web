@@ -39,10 +39,6 @@
 			<p class="on1">
 				<span>海友注册</span> <label>toUserRegister.jsp-ok <a
 					href="../user/toUserRegister.html">Go</a></label>
-			</p> 
-			<p class="on1">
-				<span>申请认证</span> <label>user/toApplyCertficate.jsp <a
-					href="../user/toApplyCertficate.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>申请认证</span> <label>user/toApplyCertficate2.jsp <a
