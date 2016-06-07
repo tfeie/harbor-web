@@ -21,8 +21,10 @@ import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
 import com.the.harbor.commons.components.aliyuncs.sms.param.SMSSendRequest;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
+import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
+import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
@@ -193,13 +195,22 @@ public class UserController {
 		ModelAndView view = new ModelAndView("user/toApplyCertficate");
 		return view;
 	}
-	
+
 	@RequestMapping("/toApplyCertficate2.html")
 	public ModelAndView toApplyCertficate2(HttpServletRequest request) {
+		String timestamp = DateUtil.getCurrentTime();
+		String nonceStr = WXHelpUtil.createNoncestr();
+		String jsapiTicket = WXHelpUtil.getJSAPITicket();
+		String url = "http://harbor.tfeie.com/user/toApplyCertficate2.html";
+		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
 		ModelAndView view = new ModelAndView("user/toApplyCertficate2");
 		return view;
 	}
-	
+
 	@RequestMapping("/submitCertficate")
 	public ResponseData<String> submitCertficate(HttpServletRequest request) {
 		ResponseData<String> responseData = null;
@@ -209,7 +220,7 @@ public class UserController {
 			throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请选择要上传的照片");
 		}
 		byte[] byteFront = CommonUtil.generateImage(_front);
-        byte[] byteCert = CommonUtil.generateImage(_cert);
+		byte[] byteCert = CommonUtil.generateImage(_cert);
 
 		return responseData;
 	}
