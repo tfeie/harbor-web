@@ -92,7 +92,15 @@
 			wx.chooseImage({
 				count: 1,
 			    success: function (res) {
-		        	alert(res.localIds);
+		        	//alert(res.localIds);
+		        	wx.uploadImage({
+		        	    localId: res.localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
+		        	    isShowProgressTips: 1, // 默认为1，显示进度提示
+		        	    success: function (r) {
+		        	        var serverId = r.serverId; // 返回图片的服务器端ID
+		        	        alert("hi:"+serverId);
+		        	    }
+		        	});
 		      	}
 		    });
 		})
