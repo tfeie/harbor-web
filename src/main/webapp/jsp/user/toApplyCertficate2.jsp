@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -45,7 +45,8 @@
 			</h3>
 		</div>
 		<div class="img">
-			<img src="//static.tfeie.com/images/img4.jpg" /><input type="file" class="file_btn" />
+			<img src="//static.tfeie.com/images/img4.jpg" /><input type="file"
+				class="file_btn" />
 		</div>
 	</section>
 	<section class="sec_item sec_item_img">
@@ -55,7 +56,8 @@
 			</h3>
 		</div>
 		<div class="img" id="filePicker">
-			<img src="//static.tfeie.com/images/img5.png" id="img_oversea"/>
+			<img src="//static.tfeie.com/images/img5.png" id="img_oversea"/><input type="file"
+				class="file_btn" />
 		</div>
 	</section>
 	<section class="but_baoc">
@@ -99,38 +101,38 @@
 	</footer>
 
 </body>
-	<script type="text/javascript"
-		src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-	<script type="text/javascript">
-		wx.config({
-			debug : false,
-			appId : '<c:out value="${appId}"/>',
-			timestamp : <c:out value="${timestamp}"/>,
-			nonceStr : '<c:out value="${nonceStr}"/>',
-			signature : '<c:out value="${signature}"/>',
-			jsApiList : [ 'checkJsApi', 'chooseImage', 'previewImage',
-					'uploadImage', 'downloadImage' ]
-		});
-		wx.ready(function() {
-			$("#filePicker").bind("click", function() {
-				wx.chooseImage({
-					count : 1,
-					success : function(res) {
-						var localId = res.localIds[0];
-						$("#img_oversea").attr("src", localId);
-						wx.uploadImage({
-							localId : localId, // 需要上传的图片的本地ID，由chooseImage接口获得
-							isShowProgressTips : 1, // 默认为1，显示进度提示
-							success : function(r) {
-								var serverId = r.serverId; // 返回图片的服务器端ID
-							},
-							fail : function(res) {
-								alert(JSON.stringify(res));
-							}
-						});
-					}
-				});
-			})
-		});
-	</script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+	wx.config({
+		debug : false,
+		appId : '<c:out value="${appId}"/>',
+		timestamp : <c:out value="${timestamp}"/>,
+		nonceStr : '<c:out value="${nonceStr}"/>',
+		signature : '<c:out value="${signature}"/>',
+		jsApiList : [ 'checkJsApi', 'chooseImage', 'previewImage',
+				'uploadImage', 'downloadImage' ]
+	});
+	wx.ready(function() {
+		$("#filePicker").bind("click", function() {
+			wx.chooseImage({
+				count : 1,
+				success : function(res) {
+					var localId = res.localIds[0];
+					$("#img_oversea").attr("src", localId);
+					wx.uploadImage({
+						localId : localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+						isShowProgressTips : 1, // 默认为1，显示进度提示
+						success : function(r) {
+							var serverId = r.serverId; // 返回图片的服务器端ID
+						},
+						fail : function(res) {
+							alert(JSON.stringify(res));
+						}
+					});
+				}
+			});
+		})
+	});
+</script>
 </html>
