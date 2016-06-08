@@ -233,7 +233,7 @@ public class HttpUtil {
 				putOSS(in);
 			} catch (Throwable e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new SystemException(e.getMessage());
 			}
 		} catch (IOException e) {
 			throw new SystemException(e);
