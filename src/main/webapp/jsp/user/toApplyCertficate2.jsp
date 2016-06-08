@@ -117,6 +117,7 @@
 		$("#filePicker").bind("click", function() {
 			wx.chooseImage({
 				count : 1,
+				sizeType: ['original', 'compressed'],
 				success : function(res) {
 					var localId = res.localIds[0];
 					$("#img_oversea").attr("src", localId).css({"width":"193.8px","height":"120px"});
