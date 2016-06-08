@@ -54,6 +54,7 @@
 		<div class="div_title">
 			<h3>
 				<span>上传海外学历认证/签证/学生证</span>
+				<input type="text" id="MEDIA_ID">
 			</h3>
 		</div>
 		<div class="img" id="filePicker">
@@ -127,7 +128,7 @@
 						isShowProgressTips : 1, // 默认为1，显示进度提示
 						success : function(r) {
 							var serverId = r.serverId; // 返回图片的服务器端ID
-							alert(serverId);
+							$("#MEDIA_ID").val(serverId);
 							ajaxController.ajax({
 								url: "../user/submitCertficate",
 								type: "post",
