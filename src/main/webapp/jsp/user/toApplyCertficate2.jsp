@@ -22,6 +22,8 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
+	<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 </head>
 
 <body>
@@ -117,12 +119,28 @@
 				count : 1,
 				success : function(res) {
 					var localId = res.localIds[0];
-					$("#img_oversea").attr("src", localId).css({"width":"193.84px","height":"120px"}); 
+					$("#img_oversea").attr("src", localId).css({"width":"193.8px","height":"120px"});
+					alert(localId);
 					wx.uploadImage({
 						localId : localId, // 需要上传的图片的本地ID，由chooseImage接口获得
 						isShowProgressTips : 1, // 默认为1，显示进度提示
 						success : function(r) {
 							var serverId = r.serverId; // 返回图片的服务器端ID
+							alert(serverId);
+							ajaxController.ajax({
+								url: "../user/submitCertficate",
+								type: "post",
+								data: {
+									_front: serverId,
+								},
+								success: function(transport){
+									alert("认证成功"); 
+								},
+								failure: function(transport){
+									alert(transport.statusInfo);
+								}
+								
+							});
 						},
 						fail : function(res) {
 							alert(JSON.stringify(res));
