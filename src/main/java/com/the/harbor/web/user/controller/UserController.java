@@ -2,7 +2,9 @@ package com.the.harbor.web.user.controller;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +31,7 @@ import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.CommonUtil;
+import com.the.harbor.web.system.utils.HttpUtil;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
@@ -224,7 +227,11 @@ public class UserController {
 		String access_token = WXHelpUtil.getCommonAccessToken();
 		String url="http://file.api.weixin.qq.com/cgi-bin/media/get?"
 				+ "access_token=" + access_token + "&media_id=" + _front;
-		System.out.println(url);
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("access_token", access_token);
+		map.put("media_id", _front);
+		String da = HttpUtil.http(url,map);
+		System.out.println("图片数据:" + da);
 		return responseData;
 	}
 
