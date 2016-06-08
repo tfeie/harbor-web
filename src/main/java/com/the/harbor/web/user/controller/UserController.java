@@ -215,13 +215,16 @@ public class UserController {
 	public ResponseData<String> submitCertficate(HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		String _front = request.getParameter("_front");
-		String _cert = request.getParameter("_cert");
+		/*String _cert = request.getParameter("_cert");
 		if (StringUtil.isBlank(_front) || StringUtil.isBlank(_cert)) {
 			throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请选择要上传的照片");
 		}
 		byte[] byteFront = CommonUtil.generateImage(_front);
-		byte[] byteCert = CommonUtil.generateImage(_cert);
-
+		byte[] byteCert = CommonUtil.generateImage(_cert);*/
+		String access_token = WXHelpUtil.getCommonAccessToken();
+		String url="http://file.api.weixin.qq.com/cgi-bin/media/get?"
+				+ "access_token=" + access_token + "&media_id=" + _front;
+		System.out.println(url);
 		return responseData;
 	}
 
