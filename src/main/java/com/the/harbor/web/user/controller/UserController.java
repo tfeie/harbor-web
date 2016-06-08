@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.UserRegReq;
 import com.the.harbor.base.constants.ExceptCodeConstants;
@@ -231,7 +232,7 @@ public class UserController {
 		map.put("access_token", access_token);
 		map.put("media_id", _front);
 		String da = HttpUtil.http(url,map);
-		System.out.println("图片数据:" + da);
+		System.out.println("图片数据:" +Base64.encode(da.getBytes()));
 		return responseData;
 	}
 
