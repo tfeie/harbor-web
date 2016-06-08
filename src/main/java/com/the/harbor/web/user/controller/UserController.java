@@ -2,9 +2,7 @@ package com.the.harbor.web.user.controller;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.UserRegReq;
 import com.the.harbor.base.constants.ExceptCodeConstants;
@@ -31,7 +28,6 @@ import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
-import com.the.harbor.web.system.utils.CommonUtil;
 import com.the.harbor.web.system.utils.HttpUtil;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
@@ -219,20 +215,16 @@ public class UserController {
 	public ResponseData<String> submitCertficate(HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		String _front = request.getParameter("_front");
-		/*String _cert = request.getParameter("_cert");
-		if (StringUtil.isBlank(_front) || StringUtil.isBlank(_cert)) {
-			throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请选择要上传的照片");
+		try {
+			String access_token = WXHelpUtil.getCommonAccessToken();
+			String url = "http://file.api.weixin.qq.com/cgi-bin/media/get?" + "access_token=" + access_token
+					+ "&media_id=" + _front;
+			HttpUtil.uploadFile2OSS(url);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", "");
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
-		byte[] byteFront = CommonUtil.generateImage(_front);
-		byte[] byteCert = CommonUtil.generateImage(_cert);*/
-		String access_token = WXHelpUtil.getCommonAccessToken();
-		String url="http://file.api.weixin.qq.com/cgi-bin/media/get?"
-				+ "access_token=" + access_token + "&media_id=" + _front;
-		Map<String,String> map = new HashMap<String,String>();
-		map.put("access_token", access_token);
-		map.put("media_id", _front);
-		String da = HttpUtil.http(url,map);
-		System.out.println("图片数据:" +Base64.encode(da.getBytes()));
 		return responseData;
 	}
 
