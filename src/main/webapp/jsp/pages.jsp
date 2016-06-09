@@ -29,7 +29,7 @@
 				<span>APP</span><label></label>
 			</p>
 			<p class="on1">
-				<span>APP主页</span><label>be/index.jsp <a href="../be/index.html">Go</a></label>
+				<span>Beauty & Excellence</span><label>be/index.jsp <a href="../be/index.html">Go</a></label>
 			</p> 
 		</section>
 		<section class="shouji">

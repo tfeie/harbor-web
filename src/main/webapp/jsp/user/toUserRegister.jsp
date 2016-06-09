@@ -29,9 +29,8 @@
 .off_send_yzm{ white-space: nowrap; display: block; text-align: center; line-height: 2.5em;background: #D1D1D1; color:#fff; border-radius: 5px; margin-left:0.8em; width:10em;}
 </style>
 </head>
-
 <body css="body_css"
-	style="background: url(//static.tfeie.com/images/aimg1.png) no-repeat center center; background-size: cover; padding-bottom: 2em;padding-bottom:2em;">
+	style="background: url(//static.tfeie.com/images/aimg1.png) no-repeat center center; background-size: cover; padding-bottom: 2em; padding-bottom: 2em;">
 	<div class="mask1"></div>
 	<section class="sec_top">
 		<div class="img">
@@ -46,8 +45,12 @@
 
 	<section class="zhuce">
 		<div class="div_six" id="DIV_SEX">
-			<span><i class="on" id="I_SEX_1"><input type="hidden" value="1"/><img src="//static.tfeie.com/images/boy.png" /></i></span> <span><i id="I_SEX_2"><input type="hidden" value="2"/><img
-					src="//static.tfeie.com/images/girl.png" /></i></span> <span><i id="I_SEX_0"><input type="hidden" value="0"/><img src="//static.tfeie.com/images/other.png" /></i></span>
+			<span><i class="on" id="I_SEX_1"><input type="hidden"
+					value="1" /><img src="//static.tfeie.com/images/boy.png" /></i></span> <span><i
+				id="I_SEX_2"><input type="hidden" value="2" /><img
+					src="//static.tfeie.com/images/girl.png" /></i></span> <span><i
+				id="I_SEX_0"><input type="hidden" value="0" /><img
+					src="//static.tfeie.com/images/other.png" /></i></span>
 		</div>
 		<div class="div_input">
 			<div class="item">
@@ -68,29 +71,32 @@
 			</section>
 			<div class="item">
 				<span><input type="text" id="mobilePhone"
-					placeholder="请输入手机号码" /></span>
+					placeholder="请输入手机号码/Email(国外)" /></span>
 			</div>
 			<div class="item">
-				<span><input type="text" id="randomCode" placeholder="请输入4位数字验证码" /></span><a
-					href="javascript:void(0)" class="send_yzm" id="HREF_SEND_CODE">发送验证码</a>
+				<span><input type="text" id="randomCode" placeholder="请输入验证码" /></span><input
+					type="button" value="发送验证码" class="send_yzm" id="HREF_SEND_CODE" />
+				<a href="javascript:void(0)"></a>
 			</div>
-			<div class="message-err"> 
-			</div>
+			<div class="message-err"></div>
 			<section class="but_baoc on zhuc">
 				<p>
-					<input type="hidden" id="wxOpenid" value="<c:out value="${wxUserInfo.openid}"/>"/>
-					<input type="hidden" id="wxHeadimg" value="<c:out value="${wxUserInfo.headimgurl}"/>"/>
-					<input type="hidden" id="wxNickname" value="<c:out value="${wxUserInfo.nickname}"/>"/>
-					<a href="javascript:void(0)" id="HREF_CONFIRM">确认注册</a>
+					<input type="hidden" id="wxOpenid"
+						value="<c:out value="${wxUserInfo.openid}"/>" /> <input
+						type="hidden" id="wxHeadimg"
+						value="<c:out value="${wxUserInfo.headimgurl}"/>" /> <input
+						type="hidden" id="wxNickname"
+						value="<c:out value="${wxUserInfo.nickname}"/>" /> <input
+						type="button" value="确认注册" id="HREF_CONFIRM" />
 				</p>
 			</section>
 		</div>
 
 	</section>
-	
+
 
 	<script type="text/javascript"
-	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
 	<script type="text/javascript">
 	(function($){
 		$.UserRegisterPage = function(){
@@ -223,13 +229,13 @@
 				
 				bindYZMEvent: function(){
 					var _this = this;
-					$("#HREF_SEND_CODE").removeClass("off_send_yzm").addClass("send_yzm").unbind("click").bind("click",function(){
+					$("#HREF_SEND_CODE").addClass("send_yzm").unbind("click").bind("click",function(){
 						_this.sendRandomCode();
 					})
 				},
 				
 				unBindYZMEvent: function(){
-					$("#HREF_SEND_CODE").removeClass("send_yzm").addClass("off_send_yzm").unbind("click");
+					$("#HREF_SEND_CODE").addClass("off_send_yzm").unbind("click");
 				},
 				
 				submit: function(){
@@ -325,7 +331,7 @@
 					} 
 					this.waitSeconds=60; 
 					this.unBindYZMEvent();
-				    $("#HREF_SEND_CODE").text("重发(" + this.waitSeconds + "秒)");
+				    $("#HREF_SEND_CODE").val("重发(" + this.waitSeconds + "秒)");
 				    InterValObj = window.setInterval(function(){
 				    	_this.randomCodeInterval(InterValObj);
 				    }, 1000);
@@ -353,12 +359,12 @@
 					console.log(this.waitSeconds);
 			        if (this.waitSeconds == 0) {                
 			            window.clearInterval(InterValObj);//停止计时器
-			            $("#HREF_SEND_CODE").text("发送验证码");
+			            $("#HREF_SEND_CODE").val("发送验证码");
 			            this.bindYZMEvent();
 			        }
 			        else {
 			        	this.waitSeconds--;
-			        	$("#HREF_SEND_CODE").text("重发(" + this.waitSeconds + "秒)");
+			        	$("#HREF_SEND_CODE").val("重发(" + this.waitSeconds + "秒)");
 			        }
 				},
 				
