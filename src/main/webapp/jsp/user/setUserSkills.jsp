@@ -29,7 +29,7 @@
 	<section class="tab">
 		<section class="tab_title">
 			<p>
-				兴趣标签<span>(1/5)</span>
+				兴趣标签<span id="SPAN_TOTAL_INTEREST_TAG_SELECTED">(0/5)</span>
 			</p>
 		</section>
 		<section class="tab_con" id="SELECTION_INTEREST_TAGS">
@@ -39,7 +39,7 @@
 	<section class="tab in">
 		<section class="tab_title">
 			<p>
-				技能标签<span>(4/5)</span>
+				技能标签<span id="SPAN_TOTAL_SKILL_TAG_SELECTED">(0/5)</span>
 			</p>
 		</section>
 		<section class="tab_con" id="SELECTION_SKILLS_TAGS">
@@ -74,6 +74,8 @@
 					this.bindEvents();
 					this.getAllBaseInterestTags();
 					this.getAllBaseSkillTags();
+					this.interestSelectedTags =[];
+					this.skillSelectedTags =[];
 				},
 
 				bindEvents : function() {
@@ -89,16 +91,42 @@
 						type : "post",
 						success : function(transport) {
 							var d = transport.data; 
-							//alert(JSON.stringify(d));
 							var template = $.templates("#InterestTagsImpl");
 		                    var htmlOutput = template.render(d?d:[]);
 		                    $("#SELECTION_INTEREST_TAGS").html(htmlOutput);
+		                    _this.renderInterestTagsBtn();
 						},
 						failure : function(transport) {
 						}
 
 					});
 
+				},
+				
+				renderInterestTagsBtn: function(){
+					var _this = this;
+					$("[name='BTN_INTEREST_TAG']").bind("click",function(){
+						var tagId = $(this).attr("tagId");
+						var tagName = $(this).text();
+						var selected =_this.checkTagSelected(_this.interestSelectedTags,tagId);
+						if(selected){
+							//如果已经选择，则取消
+							_this.deleteTagSelected(_this.interestSelectedTags,tagId);
+							$(this).css("background","#ffe0d6");
+						}else{
+							//如果没有选择，则选择
+							if(_this.interestSelectedTags.length>=5){
+								alert("兴趣标签最多只能选择5个");
+								return ;
+							}
+							_this.interestSelectedTags.push({
+								tagId: tagId,
+								tagName: tagName
+							});
+							$(this).css("background","#f96b3e");
+						}
+						$("#SPAN_TOTAL_INTEREST_TAG_SELECTED").html("("+_this.interestSelectedTags.length+"/5)");
+					});
 				},
 				
 				getAllBaseSkillTags : function() {
@@ -112,12 +140,56 @@
 							var template = $.templates("#SkillTagsImpl");
 		                    var htmlOutput = template.render(d?d:[]);
 		                    $("#SELECTION_SKILLS_TAGS").html(htmlOutput);
+		                    _this.renderSkillTagsBtn();
 						},
 						failure : function(transport) {
 						}
 
 					});
 
+				},
+				
+				renderSkillTagsBtn: function(){
+					var _this = this;
+					$("[name='BTN_SKILL_TAG']").bind("click",function(){
+						var tagId = $(this).attr("tagId");
+						var tagName = $(this).text();
+						var selected =_this.checkTagSelected(_this.skillSelectedTags,tagId);
+						if(selected){
+							//如果已经选择，则取消
+							_this.deleteTagSelected(_this.skillSelectedTags,tagId);
+							$(this).css("background","#ffecb2");
+						}else{
+							//如果没有选择，则选择
+							if(_this.skillSelectedTags.length>=5){
+								alert("技能标签最多只能选择5个");
+								return ;
+							}
+							_this.skillSelectedTags.push({
+								tagId: tagId,
+								tagName: tagName
+							});
+							$(this).css("background","#f96b3e");
+						}
+						$("#SPAN_TOTAL_SKILL_TAG_SELECTED").html("("+_this.skillSelectedTags.length+"/5)");
+					});
+				},
+				
+				checkTagSelected: function(selecteddata,tagId){
+					var arr = $.grep(selecteddata,function(n,i){
+						return n.tagId==tagId;
+					});
+					return arr.length?true:false;
+				},
+				
+				deleteTagSelected: function(selecteddata,tagId){
+					var arr = $.grep(selecteddata,function(n,i){
+						return n.tagId==tagId;
+					});
+					if(arr.length){
+						var e = arr[0];
+						selecteddata.splice($.inArray(e,selecteddata),1);
+					}
 				},
 
 				showError : function(message) {
@@ -145,13 +217,13 @@
 
 <script id="InterestTagsImpl" type="text/x-jsrender">
 <section class="tab_location{{: #index+1}}">
-	<button>{{:tagName}}</button>
+	<button name="BTN_INTEREST_TAG" tagId="{{:tagId}}">{{:tagName}}</button>
 </section> 
 </script>
 
 <script id="SkillTagsImpl" type="text/x-jsrender">
 <section class="tab_location{{: #index+1}}">
-	<button>{{:tagName}}</button>
+	<button name="BTN_SKILL_TAG" tagId="{{:tagId}}">{{:tagName}}</button>
 </section> 
 </script>
 </html>
