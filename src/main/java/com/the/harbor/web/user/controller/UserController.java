@@ -13,10 +13,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.UserCertificationReq;
 import com.the.harbor.api.user.param.UserRegReq;
+import com.the.harbor.api.user.param.UserSystemTagQueryReq;
+import com.the.harbor.api.user.param.UserSystemTagQueryResp;
+import com.the.harbor.api.user.param.UserSystemTagSubmitReq;
+import com.the.harbor.api.user.param.UserTag;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.Response;
@@ -25,7 +30,10 @@ import com.the.harbor.commons.components.aliyuncs.sms.param.SMSSendRequest;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
+import com.the.harbor.commons.redisdata.def.HyTagVo;
+import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
+import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
@@ -259,6 +267,92 @@ public class UserController {
 	public ModelAndView setUserSkills(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("user/setUserSkills");
 		return view;
+	}
+
+	@RequestMapping("/getSystemTags")
+	@ResponseBody
+	public ResponseData<JSONObject> getSystemTags() {
+		ResponseData<JSONObject> responseData = null;
+		JSONObject data = new JSONObject();
+
+		// 获取用户选择的标签
+		UserSystemTagQueryReq userSystemTagQueryReq = new UserSystemTagQueryReq();
+		userSystemTagQueryReq.setUserId("hy00000032");
+		UserSystemTagQueryResp resp = null;
+		try {
+			resp = DubboConsumerFactory.getService(IUserSV.class).queryUserSystemTags(userSystemTagQueryReq);
+		} catch (Exception ex) {
+			LOG.error("加载用户已经选择的系统标签出错", ex);
+		}
+
+		try {
+			// 获取面板上的系统内置标签
+			List<HyTagVo> skillAllTags = HyTagUtil.getAllBaseSkillTags();
+			List<HyTagVo> interestAllTags = HyTagUtil.getAllBaseInterestTags();
+			// 根据用户选择的标签给面板上的总标签打标记
+			this.markTags(skillAllTags, resp.getSystemSkillTags());
+			this.markTags(interestAllTags, resp.getSystemInterestTags());
+			data.put("interestSelectedTags", this.getSelectedTags(interestAllTags));
+			data.put("skillSelectedTags", this.getSelectedTags(skillAllTags));
+			data.put("skillAllTags", skillAllTags);
+			data.put("interestAllTags", interestAllTags);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", data);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/submitUserSelectedSystemTags")
+	@ResponseBody
+	public ResponseData<String> submitUserSelectedSystemTags(String submitString) {
+		ResponseData<String> responseData = null;
+		try {
+			UserSystemTagSubmitReq request = JSON.parseObject(submitString, UserSystemTagSubmitReq.class);
+			Response rep =DubboConsumerFactory.getService(IUserSV.class).submitUserSelectedSystemTags(request);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage(), "");
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	private List<HyTagVo> getSelectedTags(List<HyTagVo> allTags) {
+		List<HyTagVo> l = new ArrayList<HyTagVo>();
+		if (!CollectionUtil.isEmpty(allTags)) {
+			for (HyTagVo t : allTags) {
+				if (t.isSelected()) {
+					l.add(t);
+				}
+			}
+		}
+		return l;
+	}
+
+	private void markTags(List<HyTagVo> allTags, List<UserTag> selectedTags) {
+		if (CollectionUtil.isEmpty(allTags)) {
+			return;
+		}
+		if (CollectionUtil.isEmpty(selectedTags)) {
+			return;
+		}
+		for (HyTagVo tag : allTags) {
+			for (UserTag ut : selectedTags) {
+				if (tag.getTagId().equals(ut.getTagId())) {
+					tag.setSelected(true);
+					break;
+				}
+			}
+		}
+
 	}
 
 }
