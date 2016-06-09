@@ -46,8 +46,8 @@
 				<span>上传身份证（正）</span>
 			</h3>
 		</div>
-		<div class="img">
-			<img src="//static.tfeie.com/images/img4.jpg" />
+		<div class="img" id="IMGIDCardPicker">
+			<img src="//static.tfeie.com/images/img4.jpg" id="img_idcard"/>
 		</div>
 	</section>
 	<section class="sec_item sec_item_img">
@@ -56,7 +56,7 @@
 				<span>上传海外学历认证/签证/学生证</span>
 			</h3>
 		</div>
-		<div class="img" id="filePicker">
+		<div class="img" id="IMGOverSeaPicker">
 			<img src="//static.tfeie.com/images/img5.png" id="img_oversea"/>
 		</div>
 	</section>
@@ -114,18 +114,17 @@
 				'uploadImage', 'downloadImage' ]
 	});
 	wx.ready(function() {
-		$("#filePicker").bind("click", function() {
+		$("#IMGOverSeaPicker").bind("click", function() {
 			wx.chooseImage({
 				count : 1,
 				sizeType: ['original', 'compressed'],
 				success : function(res) {
 					var localId = res.localIds[0]; 
 					wx.uploadImage({
-						localId : localId, // 需要上传的图片的本地ID，由chooseImage接口获得
-						isShowProgressTips : 1, // 默认为1，显示进度提示
+						localId : localId,
+						isShowProgressTips : 1,
 						success : function(r) {
-							var mediaId = r.serverId; // 返回图片的服务器端ID
-							$("#MEDIA_ID").val(mediaId);
+							var mediaId = r.serverId;
 							ajaxController.ajax({
 								url: "../user/uploadUserAuthFileToOSS",
 								type: "post",
@@ -134,22 +133,60 @@
 								},
 								success: function(transport){
 									var imgURL  = transport.data;
-									alert("阿里OSS的图片地址:"+imgURL); 
 									$("#img_oversea").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
 								},
 								failure: function(transport){
-									alert(transport.statusInfo);
+									alert("上传失败");
+									$("#img_oversea").attr("src", "//static.tfeie.com/images/img5.png");
 								}
 								
 							});
 						},
 						fail : function(res) {
-							alert(JSON.stringify(res));
+							alert("上传失败");
+							$("#img_oversea").attr("src", "//static.tfeie.com/images/img5.png");
 						}
 					});
 				}
 			});
-		})
+		});
+		
+		$("#IMGIDCardPicker").bind("click", function() {
+			wx.chooseImage({
+				count : 1,
+				sizeType: ['original', 'compressed'],
+				success : function(res) {
+					var localId = res.localIds[0]; 
+					wx.uploadImage({
+						localId : localId,
+						isShowProgressTips : 1,
+						success : function(r) {
+							var mediaId = r.serverId;
+							ajaxController.ajax({
+								url: "../user/uploadUserAuthFileToOSS",
+								type: "post",
+								data: {
+									mediaId: mediaId,
+								},
+								success: function(transport){
+									var imgURL  = transport.data;
+									$("#img_idcard").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
+								},
+								failure: function(transport){
+									alert("上传失败");
+									$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.png");
+								}
+								
+							});
+						},
+						fail : function(res) {
+							alert("上传失败");
+							$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.png");
+						}
+					});
+				}
+			});
+		});
 	});
 </script>
 </html>
