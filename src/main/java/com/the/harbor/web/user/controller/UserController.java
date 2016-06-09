@@ -217,7 +217,7 @@ public class UserController {
 		try {
 			String userId = "zhangchao";
 			String fileName = WXHelpUtil.uploadUserAuthFileToOSS(mediaId, userId);
-			String fileURL = GlobalSettings.getHarborImagesBucketName() + "/" + fileName + "@!pipe1";
+			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
 		} catch (Exception e) {
 			LOG.error(e);
