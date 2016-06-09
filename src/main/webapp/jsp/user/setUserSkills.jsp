@@ -144,13 +144,13 @@
 </script>
 
 <script id="InterestTagsImpl" type="text/x-jsrender">
-<section class="tab_location{{: #index}}">
+<section class="tab_location{{: #index+1}}">
 	<button>{{:tagName}}</button>
 </section> 
 </script>
 
 <script id="SkillTagsImpl" type="text/x-jsrender">
-<section class="tab_location{{: #index}}">
+<section class="tab_location{{: #index+1}}">
 	<button>{{:tagName}}</button>
 </section> 
 </script>
