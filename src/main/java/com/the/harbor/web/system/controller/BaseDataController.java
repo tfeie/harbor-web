@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.the.harbor.commons.redisdata.def.HyCountryVo;
 import com.the.harbor.commons.redisdata.def.HyIndustryVo;
+import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyCountryUtil;
 import com.the.harbor.commons.redisdata.util.HyIndustryUtil;
+import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 
 @RestController
@@ -41,6 +44,34 @@ public class BaseDataController {
 		} catch (Exception e) {
 			LOG.error(e);
 			responseData = new ResponseData<List<HyIndustryVo>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getAllBaseInterestTags")
+	@ResponseBody
+	public ResponseData<List<HyTagVo>> getAllBaseInterestTags() {
+		ResponseData<List<HyTagVo>> responseData = null;
+		try {
+			List<HyTagVo> tags = HyTagUtil.getAllBaseInterestTags();
+			responseData = new ResponseData<List<HyTagVo>>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", tags);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = new ResponseData<List<HyTagVo>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+	
+	@RequestMapping("/getAllBaseSkillTags")
+	@ResponseBody
+	public ResponseData<List<HyTagVo>> getAllBaseSkillTags() {
+		ResponseData<List<HyTagVo>> responseData = null;
+		try {
+			List<HyTagVo> tags = HyTagUtil.getAllBaseSkillTags();
+			responseData = new ResponseData<List<HyTagVo>>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", tags);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = new ResponseData<List<HyTagVo>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
