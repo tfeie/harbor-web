@@ -9,11 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.api.user.IUserSV;
+import com.the.harbor.api.user.param.UserCertificationReq;
 import com.the.harbor.api.user.param.UserRegReq;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.exception.BusinessException;
@@ -164,50 +166,41 @@ public class UserController {
 		return responseData;
 	}
 
-	@RequestMapping("/toRegister")
-	public ModelAndView toRegister(HttpServletRequest request) {
-		String code = request.getParameter("code");
-		request.setAttribute("userInfo1", null);
-		WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
-		if (wtoken == null) {
-			LOG.error("获取token失败");
-			ModelAndView view = new ModelAndView("user/toUserRegister");
-			return view;
-		}
-		LOG.info("注册openid=" + JSONObject.toJSONString(wtoken));
-		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
-		if (wxUserInfo == null) {
-			LOG.error("获取微信用户信息失败");
-			ModelAndView view = new ModelAndView("user/toUserRegister");
-			return view;
-		}
-		request.setAttribute("userInfo", wxUserInfo);
-		LOG.info("微信用户信息：" + JSONObject.toJSONString(wxUserInfo));
-		request.setAttribute("userInfo2", new WeixinUserInfo());
-
-		ModelAndView view = new ModelAndView("user/toUserRegister");
-		return view;
-	}
-
 	@RequestMapping("/toApplyCertficate.html")
 	public ModelAndView toApplyCertficate(HttpServletRequest request) {
-		ModelAndView view = new ModelAndView("user/toApplyCertficate");
-		return view;
-	}
-
-	@RequestMapping("/toApplyCertficate2.html")
-	public ModelAndView toApplyCertficate2(HttpServletRequest request) {
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
-		String url = "http://harbor.tfeie.com/user/toApplyCertficate2.html";
+		String url = "http://harbor.tfeie.com/user/toApplyCertficate.html";
 		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
-		ModelAndView view = new ModelAndView("user/toApplyCertficate2");
+		ModelAndView view = new ModelAndView("user/toApplyCertficate");
 		return view;
+	}
+
+	@RequestMapping("/submitUserCertficate")
+	@ResponseBody
+	public ResponseData<String> submitUserCertficate(UserCertificationReq req) {
+		ResponseData<String> responseData = null;
+		try {
+			if (req == null) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "认证材料信息不正确");
+			}
+			Response rep = DubboConsumerFactory.getService(IUserSV.class).submitUserCertification(req);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage(), "");
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "认证信息提交成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
 	}
 
 	@RequestMapping("/uploadUserAuthFileToOSS")

@@ -41,8 +41,8 @@
 					href="../user/toUserRegister.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>申请认证</span> <label>user/toApplyCertficate2.jsp <a
-					href="../user/toApplyCertficate2.html">Go</a></label>
+				<span>申请认证</span> <label>user/toApplyCertficate.jsp-ok<a
+					href="../user/toApplyCertficate.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>个人信息</span><label>user/userInfo.jsp <a href="../user/userInfo.html">Go</a></label>
