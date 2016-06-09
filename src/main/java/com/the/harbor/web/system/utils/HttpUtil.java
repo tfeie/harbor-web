@@ -2,20 +2,27 @@ package com.the.harbor.web.system.utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.log4j.Logger;
 
+import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.event.ProgressEvent;
 import com.aliyun.oss.event.ProgressEventType;
@@ -23,6 +30,9 @@ import com.aliyun.oss.event.ProgressListener;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.exception.SystemException;
+import com.the.harbor.commons.components.weixin.WXHelpUtil;
+import com.the.harbor.commons.exception.SDKException;
+import com.the.harbor.commons.ssl.MyX509TrustManager;
 import com.the.harbor.commons.util.RandomUtil;
 
 public class HttpUtil {
@@ -213,7 +223,7 @@ public class HttpUtil {
 		}
 	}
 
-	public static void uploadFile2OSS(String url) {
+	public static void uploadFile2OSS1(String url) {
 		HttpURLConnection conn = null;
 		try {
 			URL url1 = new URL(url);
@@ -237,12 +247,50 @@ public class HttpUtil {
 			}
 		} catch (IOException e) {
 			throw new SystemException(e);
-		}finally {
+		} finally {
 			conn.disconnect();
 		}
 	}
 
-	public static  void putOSS(InputStream inputStream) throws Throwable {
+	public static JSONObject uploadFile2OSS(String requestUrl) {
+		JSONObject jsonObject = null;
+		try {
+			// 创建SSLContext对象，并使用我们制定的新人管理器初始化
+			TrustManager[] tm = { new MyX509TrustManager() };
+			SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
+			sslContext.init(null, tm, new SecureRandom());
+			// 从上述SSLContext对象中得到SSLSockedFactory对象
+			SSLSocketFactory ssf = sslContext.getSocketFactory();
+
+			URL url = new URL(requestUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setUseCaches(false);
+
+			// 设置请求方式（GET/POST）
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Connection", "Keep-Alive");
+			conn.setRequestProperty("Cache-Control", "no-cache");
+			String boundary = "-----------------------------" + System.currentTimeMillis();
+			conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+			InputStream in = conn.getInputStream();
+			try {
+				TrustStrategy a = null;
+				putOSS(in);
+			} catch (Throwable e) {
+				e.printStackTrace();
+				throw new SystemException(e.getMessage());
+			}
+		} catch (ConnectException ce) {
+			throw new SDKException("连接异常", ce);
+		} catch (Exception e) {
+			throw new SDKException("请求异常", e);
+		}
+		return jsonObject;
+	}
+
+	public static void putOSS(InputStream inputStream) throws Throwable {
 		// endpoint以杭州为例，其它region请按实际情况填写
 		String endpoint = "oss-cn-beijing.aliyuncs.com";
 		// accessKey请登录https://ak-console.aliyun.com/#/查看
@@ -252,17 +300,15 @@ public class HttpUtil {
 		OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 
 		long time1 = System.currentTimeMillis();
-		ossClient.putObject(
-				new PutObjectRequest("harbor-images", RandomUtil.generateNumber(6)+".png", inputStream)
-						.<PutObjectRequest> withProgressListener(new PutObjectProgressListener()));
+		ossClient.putObject(new PutObjectRequest("harbor-images", RandomUtil.generateNumber(6) + ".png", inputStream)
+				.<PutObjectRequest> withProgressListener(new PutObjectProgressListener()));
 
 		long time2 = System.currentTimeMillis();
 		System.out.println(time2 - time1);
 		// 关闭client
 		ossClient.shutdown();
 	}
-	
-	
+
 	/**
 	 * 获取上传进度回调
 	 *
@@ -317,7 +363,14 @@ public class HttpUtil {
 			return succeed;
 		}
 	}
-	
+
+	public static void main(String[] agrs) {
+		String media_id = "ag9uZlrPMq_OEfgBbhEHoX9GKhFeh3f8Ej2WlsGa8JPBVA-596Aw7TXavYVtPy9d";
+		String access_token = WXHelpUtil.getCommonAccessToken();
+		String url = "http://file.api.weixin.qq.com/cgi-bin/media/get?" + "access_token=" + access_token + "&media_id="
+				+ media_id;
+		HttpUtil.uploadFile2OSS(url);
+	}
 
 	public static class HTTPReqMethod {
 		public final static String METHOD_GET = "GET";
