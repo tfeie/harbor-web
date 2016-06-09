@@ -54,7 +54,6 @@
 		<div class="div_title">
 			<h3>
 				<span>上传海外学历认证/签证/学生证</span>
-				<input type="text" id="MEDIA_ID">
 			</h3>
 		</div>
 		<div class="img" id="filePicker">
@@ -120,23 +119,23 @@
 				count : 1,
 				sizeType: ['original', 'compressed'],
 				success : function(res) {
-					var localId = res.localIds[0];
-					$("#img_oversea").attr("src", localId).css({"width":"193.8px","height":"120px"});
-					alert(localId);
+					var localId = res.localIds[0]; 
 					wx.uploadImage({
 						localId : localId, // 需要上传的图片的本地ID，由chooseImage接口获得
 						isShowProgressTips : 1, // 默认为1，显示进度提示
 						success : function(r) {
-							var serverId = r.serverId; // 返回图片的服务器端ID
-							$("#MEDIA_ID").val(serverId);
+							var mediaId = r.serverId; // 返回图片的服务器端ID
+							$("#MEDIA_ID").val(mediaId);
 							ajaxController.ajax({
-								url: "../user/submitCertficate",
+								url: "../user/uploadUserAuthFileToOSS",
 								type: "post",
 								data: {
-									_front: serverId,
+									mediaId: mediaId,
 								},
 								success: function(transport){
-									alert("认证成功"); 
+									var imgURL  = transport.data;
+									alert("阿里OSS的图片地址:"+imgURL); 
+									$("#img_oversea").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
 								},
 								failure: function(transport){
 									alert(transport.statusInfo);

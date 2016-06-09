@@ -28,7 +28,6 @@ import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
-import com.the.harbor.web.system.utils.HttpUtil;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
@@ -211,16 +210,15 @@ public class UserController {
 		return view;
 	}
 
-	@RequestMapping("/submitCertficate")
-	public ResponseData<String> submitCertficate(HttpServletRequest request) {
+	@RequestMapping("/uploadUserAuthFileToOSS")
+	public ResponseData<String> uploadUserAuthFileToOSS(HttpServletRequest request) {
 		ResponseData<String> responseData = null;
-		String _front = request.getParameter("_front");
+		String mediaId = request.getParameter("mediaId");
 		try {
-			String access_token = WXHelpUtil.getCommonAccessToken();
-			String url = "http://file.api.weixin.qq.com/cgi-bin/media/get?" + "access_token=" + access_token
-					+ "&media_id=" + _front;
-			HttpUtil.uploadFile2OSS(url);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", "");
+			String userId = "zhangchao";
+			String fileName = WXHelpUtil.uploadUserAuthFileToOSS(mediaId, userId);
+			String fileURL = GlobalSettings.getHarborImagesBucketName() + "/" + fileName + "@!pipe1";
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
 		} catch (Exception e) {
 			LOG.error(e);
 			responseData = ExceptionUtil.convert(e, String.class);
