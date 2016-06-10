@@ -38,6 +38,7 @@ import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
 import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
+import com.the.harbor.commons.util.RandomUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
@@ -247,8 +248,46 @@ public class UserController {
 					userMember.getResponseHeader().getResultMessage());
 		}
 		request.setAttribute("userMember", userMember);
+
+		long timestamp = DateUtil.getCurrentTimeMillis();
+		String nonceStr = WXHelpUtil.createNoncestr();
+		String jsapiTicket = WXHelpUtil.getJSAPITicket();
+		String url = "http://harbor.tfeie.com/user/memberCenter.html";
+		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
+
 		ModelAndView view = new ModelAndView("user/memberCenter");
 		return view;
+	}
+
+	@RequestMapping("/createMemberPayOrder")
+	@ResponseBody
+	public ResponseData<JSONObject> createMemberPayOrder(HttpServletRequest request) {
+		ResponseData<JSONObject> responseData = null;
+		try {
+			String payMonth = request.getParameter("payMonth");
+			String price = request.getParameter("price");
+			String nonceStr = request.getParameter("nonceStr");
+			String timeStamp = request.getParameter("timeStamp");
+			String orderId = RandomUtil.generateNumber(32);
+			String host ="192.168.1.1";
+			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI("海归海湾" + payMonth + "个月会员", orderId,
+					Integer.parseInt(price), host, "oztCUs_Ci25lT7IEMeDLtbK6nr1M",
+					"http://localhost:8080/u/p", nonceStr);
+			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
+
+			JSONObject d = new JSONObject();
+			d.put("package", pkg);
+			d.put("paySign", paySign);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
 	}
 
 	@RequestMapping("/userCenter.html")

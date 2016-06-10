@@ -105,7 +105,18 @@
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
+wx.config({
+	debug : true,
+	appId : '<c:out value="${appId}"/>',
+	timestamp : <c:out value="${timestamp}"/>,
+	nonceStr : '<c:out value="${nonceStr}"/>',
+	signature : '<c:out value="${signature}"/>',
+	jsApiList : [ 'checkJsApi', 'chooseWXPay' ]
+});
+
 	(function($) {
 		$.MemberCenterPage = function() {
 			this.settings = $.extend(true, {}, $.MemberCenterPage.defaults);
@@ -127,6 +138,7 @@
 				},
 				
 				gotoPay: function(){
+					var _this = this;
 					var jq=$("[name='RADIO_MONTH'].on");
 					if(!jq){
 						this.showError("请选择购买月份");
@@ -134,9 +146,36 @@
 					}else{
 						this.hideMessage();
 					}
-					var buyMonth = jq.attr("months");
-					var price = jq.attr("prices");
-					alert(price+"/"+buyMonth);
+					var payMonth = jq.attr("months");
+					var price = jq.attr("prices"); 
+					ajaxController.ajax({
+						url : "../user/createMemberPayOrder",
+						type : "post",
+						data: {
+							payMonth: payMonth,
+							price: price,
+							nonceStr: "<c:out value="${nonceStr}"/>",
+							timeStamp: <c:out value="${timestamp}"/>
+						},
+						success : function(transport) {
+							var d = transport.data; 
+							
+							wx.chooseWXPay({
+							    timestamp: <c:out value="${timestamp}"/>, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+							    nonceStr: '<c:out value="${nonceStr}"/>', // 支付签名随机串，不长于 32 位
+							    package: d.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+							    paySign: d.paySign, // 支付签名
+							    success: function (res) {
+							        _this.showSuccess("支付成功")
+							    }
+							});
+						},
+						failure : function(transport) {
+							_this.showError(transport.statusInfo);
+						}
+
+					});
 				},
 				
 				getMemberCanByMonths : function() {
