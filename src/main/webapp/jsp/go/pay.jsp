@@ -72,7 +72,7 @@
 								.bind(
 										"click",
 										function() {
-											var orderId = new Date().getTime();
+											var orderId = "11112341231212";
 											var orderAmount = "0.01";
 											location.href = "../payment/getAuthorizeCode?orderId="
 													+ orderId
