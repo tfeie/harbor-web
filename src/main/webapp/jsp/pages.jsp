@@ -48,7 +48,7 @@
 				<span>个人信息</span><label>user/userInfo.jsp <a href="../user/userInfo.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>会员中心</span><label>user/memberCenter.jsp <a href="../user/memberCenter.html">Go</a></label>
+				<span>会员中心</span><label>user/memberCenter.jsp-ing <a href="../user/memberCenter.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>个人中心2</span><label>user/userCenter.jsp <a href="../user/userCenter.html">Go</a></label>
@@ -64,7 +64,7 @@
 				<span>我的财富</span><label>user/userWealth.jsp <a href="../user/userWealth.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>兴趣技能</span><label>user/setUserSkills.jsp<a href="../user/setUserSkills.html">Go</a></label>
+				<span>兴趣技能</span><label>user/setUserSkills.jsp-ok<a href="../user/setUserSkills.html">Go</a></label>
 			</p>
 		</section>
 
