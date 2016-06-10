@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -38,22 +40,22 @@
 	</section>
 	<section class="sec_item">
 		<div class="item">
-			<span>会员到期时间</span><label>2016-05-29</label>
+			<span>会员到期时间</span><label><c:out value="${userMember.desc}"/></label>
 		</div>
 		<div class="item">
-			<span>购买月份</span><label><a class="on">1个月</a><a>3个月</a><a>12个月</a></label>
+			<span>购买月份</span><label id="LABEL_BUY_MONTHS"></label>
 		</div>
 		<div class="item">
-			<span>应付金额</span><label><em>30</em>元</label>
+			<span>应付金额</span><label><em  id="EM_BUY_PRICE"></em>元</label>
 		</div>
 		<div class="item">
 			<span>支付方式</span><label><i class="i_weixin"></i>微信支付</label>
 		</div>
 	</section>
-
+	<div class="message-err" id="DIV_TIPS"></div>
 	<section class="but_baoc">
 		<p>
-			<input type="button" value="立即购买" />
+			<input type="button" value="立即购买" id="BTN_BUY"/>
 		</p>
 	</section>
 
@@ -95,4 +97,123 @@
 </footer>
 
 </body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/json2.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript">
+	(function($) {
+		$.MemberCenterPage = function() {
+			this.settings = $.extend(true, {}, $.MemberCenterPage.defaults);
+		}
+		$.extend($.MemberCenterPage, {
+			defaults : {},
+
+			prototype : {
+				init : function() {
+					this.bindEvents(); 
+					this.getMemberCanByMonths();
+				},
+
+				bindEvents : function() {
+					var _this = this;
+					$("#BTN_BUY").bind("click", function() {
+						_this.gotoPay();
+					});
+				},
+				
+				gotoPay: function(){
+					var jq=$("[name='RADIO_MONTH'].on");
+					if(!jq){
+						this.showError("请选择购买月份");
+						return ;
+					}else{
+						this.hideMessage();
+					}
+					var buyMonth = jq.attr("months");
+					var price = jq.attr("prices");
+					alert(price+"/"+buyMonth);
+				},
+				
+				getMemberCanByMonths : function() {
+					var _this = this;
+					ajaxController.ajax({
+						url : "../sys/getMemberCanByMonths",
+						type : "post",
+						success : function(transport) {
+							var d = transport.data; 
+							_this.memberprices =d?d:[]; 
+							_this.renderMemberPrices(); 
+						},
+						failure : function(transport) {
+						}
+
+					});
+
+				},
+				
+				renderMemberPrices: function(){
+					var _this = this;
+					var template = $.templates("#BuyMonthsImpl");
+                    var htmlOutput = template.render(this.memberprices?this.memberprices:[]);
+                    $("#LABEL_BUY_MONTHS").html(htmlOutput);
+                    
+                    //初始化第一条月份费用显示 
+                    if(this.memberprices && this.memberprices.length>0){
+                    	var firstmonth =this.memberprices[0].months; 
+                    	var p = this.getMonthsPrice(firstmonth);
+                    	$("#EM_BUY_PRICE").text(p?p.priceYuan:"");
+                    }
+                    
+                    $("[name='RADIO_MONTH']").bind("click",function(){
+                    	var months = $(this).attr("months");
+                    	var p = _this.getMonthsPrice(months);
+                    	$("[name='RADIO_MONTH']").removeClass("on");
+                    	$(this).addClass("on");
+                    	//切换需要支付的金额
+                    	$("#EM_BUY_PRICE").text(p?p.priceYuan:"");
+                    });
+				},
+				
+				getMonthsPrice: function(months){
+					var pa=$.grep(this.memberprices,function(d,i){
+						return d.months==months;
+					});
+					if(!pa || pa.length==0){
+						alert("会员定价信息出错，请刷新页面重试");
+						return ;
+					}
+					return pa[0];
+				},
+				
+				showError : function(message) {
+					$(".message-err").show().html(
+							"<p><span>X</span>" + message + "</p>");
+				},
+
+				showSuccess : function(message) {
+					$(".message-err").show().html(
+							"<p><span></span>" + message + "</p>");
+				},
+
+				hideMessage : function() {
+					$(".message-err").html("").hide();
+				}
+			}
+		})
+	})(jQuery);
+
+	$(document).ready(function() {
+		var p = new $.MemberCenterPage();
+		p.init();
+	});
+</script>
+
+<script id="BuyMonthsImpl" type="text/x-jsrender">
+<a {{if #index==0}} class="on" {{/if}} name="RADIO_MONTH" prices="{{:prices}}" months="{{:months}}">{{:months}}个月</a>
+</script>
 </html>

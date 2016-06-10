@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.the.harbor.commons.components.globalconfig.GlobalSettings;
+import com.the.harbor.commons.components.globalconfig.MemeberPrice;
 import com.the.harbor.commons.redisdata.def.HyCountryVo;
 import com.the.harbor.commons.redisdata.def.HyIndustryVo;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
@@ -61,7 +63,7 @@ public class BaseDataController {
 		}
 		return responseData;
 	}
-	
+
 	@RequestMapping("/getAllBaseSkillTags")
 	@ResponseBody
 	public ResponseData<List<HyTagVo>> getAllBaseSkillTags() {
@@ -72,6 +74,20 @@ public class BaseDataController {
 		} catch (Exception e) {
 			LOG.error(e);
 			responseData = new ResponseData<List<HyTagVo>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getMemberCanByMonths")
+	@ResponseBody
+	public ResponseData<List<MemeberPrice>> getMemberCanByMonths() {
+		ResponseData<List<MemeberPrice>> responseData = null;
+		try {
+			List<MemeberPrice> tags = GlobalSettings.getMemeberPrices();
+			responseData = new ResponseData<List<MemeberPrice>>(ResponseData.AJAX_STATUS_SUCCESS, "获取会员购买价格成功", tags);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = new ResponseData<List<MemeberPrice>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
 	}

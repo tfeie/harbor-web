@@ -17,6 +17,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.UserCertificationReq;
+import com.the.harbor.api.user.param.UserMemberInfo;
+import com.the.harbor.api.user.param.UserMemberQuery;
 import com.the.harbor.api.user.param.UserRegReq;
 import com.the.harbor.api.user.param.UserSystemTagQueryReq;
 import com.the.harbor.api.user.param.UserSystemTagQueryResp;
@@ -47,6 +49,8 @@ import com.the.harbor.web.weixin.param.WeixinUserInfo;
 public class UserController {
 
 	private static final Logger LOG = Logger.getLogger(UserController.class);
+
+	private static final String USER_ID = "hy00000032";
 
 	@RequestMapping("/pages.html")
 	public ModelAndView pages(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -235,12 +239,21 @@ public class UserController {
 
 	@RequestMapping("/memberCenter.html")
 	public ModelAndView memberCenter(HttpServletRequest request) {
+		UserMemberQuery query = new UserMemberQuery();
+		query.setUserId(USER_ID);
+		UserMemberInfo userMember = DubboConsumerFactory.getService(IUserSV.class).queryUserMemberInfo(query);
+		if (!ExceptCodeConstants.SUCCESS.equals(userMember.getResponseHeader().getResultCode())) {
+			throw new BusinessException(userMember.getResponseHeader().getResultCode(),
+					userMember.getResponseHeader().getResultMessage());
+		}
+		request.setAttribute("userMember", userMember);
 		ModelAndView view = new ModelAndView("user/memberCenter");
 		return view;
 	}
 
 	@RequestMapping("/userCenter.html")
 	public ModelAndView userCenter(HttpServletRequest request) {
+
 		ModelAndView view = new ModelAndView("user/userCenter");
 		return view;
 	}
@@ -310,7 +323,7 @@ public class UserController {
 		ResponseData<String> responseData = null;
 		try {
 			UserSystemTagSubmitReq request = JSON.parseObject(submitString, UserSystemTagSubmitReq.class);
-			Response rep =DubboConsumerFactory.getService(IUserSV.class).submitUserSelectedSystemTags(request);
+			Response rep = DubboConsumerFactory.getService(IUserSV.class).submitUserSelectedSystemTags(request);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
 						rep.getResponseHeader().getResultMessage(), "");
