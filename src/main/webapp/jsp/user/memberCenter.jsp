@@ -168,6 +168,18 @@ wx.config({
 							    paySign: d.paySign, // 支付签名
 							    success: function (res) {
 							        _this.showSuccess("支付成功")
+							    },
+							    fail: function(res){
+							    	alert("fali");
+							    	alert(JSON.stringify(res));
+							    },
+							    complete: function(res){
+							    	alert("complete");
+							    	alert(JSON.stringify(res));
+							    },
+							    cancel: function(res){
+							    	alert("cancel");
+							    	alert(JSON.stringify(res));
 							    }
 							});
 						},
