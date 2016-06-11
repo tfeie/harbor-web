@@ -170,16 +170,10 @@ wx.config({
 							        _this.showSuccess("支付成功")
 							    },
 							    fail: function(res){
-							    	alert("fali");
-							    	alert(JSON.stringify(res));
-							    },
-							    complete: function(res){
-							    	alert("complete");
-							    	alert(JSON.stringify(res));
-							    },
+							    	 _this.showError("支付失败")
+							    }, 
 							    cancel: function(res){
-							    	alert("cancel");
-							    	alert(JSON.stringify(res));
+							    	 _this.showError("支付取消")
 							    }
 							});
 						},
