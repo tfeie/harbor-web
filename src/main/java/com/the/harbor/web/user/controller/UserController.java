@@ -7,7 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.UserCertificationReq;
 import com.the.harbor.api.user.param.UserMemberInfo;
 import com.the.harbor.api.user.param.UserMemberQuery;
+import com.the.harbor.api.user.param.UserQueryResp;
 import com.the.harbor.api.user.param.UserRegReq;
 import com.the.harbor.api.user.param.UserSystemTagQueryReq;
 import com.the.harbor.api.user.param.UserSystemTagQueryResp;
@@ -43,7 +45,6 @@ import com.the.harbor.commons.util.RandomUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
-import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
 
@@ -51,7 +52,7 @@ import com.the.harbor.web.weixin.param.WeixinUserInfo;
 @RequestMapping("/user")
 public class UserController {
 
-	private static final Logger LOG = Logger.getLogger(UserController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 	private static final String USER_ID = "hy00000032";
 
@@ -71,8 +72,9 @@ public class UserController {
 		if (wtoken == null) {
 			throw new SystemException("微信授权不通过");
 		}
-		boolean exists = WXUserUtil.checkWXOpenIdBindUser(wtoken.getOpenId());
-		if (exists) {
+		UserQueryResp userResp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfo(wtoken.getOpenId());
+		if (userResp.getUserInfo() != null) {
+			LOG.debug("您的微信号[" + wtoken.getOpenId() + "]已经注册");
 			throw new BusinessException("USER-100001", "您的微信已经注册");
 		}
 		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
@@ -148,10 +150,10 @@ public class UserController {
 			SMSRandomCodeUtil.setSmsRandomCode(mobilePhone, randomCode);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
 		} catch (BusinessException e) {
-			LOG.error(e);
+			LOG.error(e.getErrorMessage(), e);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, e.getMessage());
 		} catch (Exception e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
@@ -189,7 +191,7 @@ public class UserController {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "注册成功", "");
 			}
 		} catch (Exception e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
@@ -226,7 +228,7 @@ public class UserController {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "认证信息提交成功", "");
 			}
 		} catch (Exception e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
@@ -242,7 +244,7 @@ public class UserController {
 			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
 		} catch (Exception e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
@@ -300,7 +302,7 @@ public class UserController {
 			d.put("paySign", paySign);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
 		} catch (Exception e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
 		}
 		return responseData;
@@ -366,7 +368,7 @@ public class UserController {
 			data.put("interestAllTags", interestAllTags);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", data);
 		} catch (Exception e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
@@ -387,7 +389,7 @@ public class UserController {
 			}
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
 		} catch (Exception e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
