@@ -274,7 +274,7 @@ public class UserController {
 			String timeStamp = request.getParameter("timeStamp");
 			String orderId = RandomUtil.generateNumber(32);
 			String host ="192.168.1.1";
-			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI("海归海湾" + payMonth + "个月会员", orderId,
+			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(GlobalSettings.getWeiXinMerchantName() + payMonth + "个月会员", orderId,
 					Integer.parseInt(price), host, "oztCUs_Ci25lT7IEMeDLtbK6nr1M",
 					"http://localhost:8080/u/p", nonceStr);
 			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
