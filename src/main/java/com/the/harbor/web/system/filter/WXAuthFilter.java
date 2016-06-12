@@ -39,7 +39,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				break;
 			}
 		}
-		if (doFilter && !!isAjaxRequest(request)) {
+		if (doFilter && !isAjaxRequest(request)) {
 			String redirectURL = URLEncoder.encode(GlobalSettings.getHarborDomain() + actionURL, "utf-8");
 			String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid="
 					+ GlobalSettings.getWeiXinAppId()
