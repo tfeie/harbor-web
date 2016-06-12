@@ -4,8 +4,17 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.commons.components.globalconfig.GlobalSettings;
+import com.the.harbor.commons.components.weixin.WXHelpUtil;
+import com.the.harbor.commons.util.DateUtil;
+import com.the.harbor.commons.util.ExceptionUtil;
+import com.the.harbor.commons.util.RandomUtil;
+import com.the.harbor.commons.web.model.ResponseData;
 
 @RestController
 @RequestMapping("/go")
@@ -33,8 +42,47 @@ public class GoController {
 	
 	@RequestMapping("/toPay.html")
 	public ModelAndView toPay(HttpServletRequest request) {
+		String payamount = "0.01";
+		long timestamp = DateUtil.getCurrentTimeMillis();
+		String nonceStr = WXHelpUtil.createNoncestr();
+		String jsapiTicket = WXHelpUtil.getJSAPITicket();
+		String url = "http://harbor.tfeie.com/go/toPay.html";
+		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
+		request.setAttribute("payamount", payamount);
 		ModelAndView view = new ModelAndView("go/pay");
 		return view;
+	}
+	
+	@RequestMapping("/createPayOrder")
+	@ResponseBody
+	public ResponseData<JSONObject> createPayOrder(HttpServletRequest request){
+		ResponseData<JSONObject> responseData = null;
+		LOG.info("预约支付===============开始=====================");
+		try{
+			String price = request.getParameter("price");
+			String nonceStr = request.getParameter("nonceStr");
+			long timestamp = DateUtil.getCurrentTimeMillis();
+			String orderId = RandomUtil.generateNumber(32);			
+			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI("购买", orderId,
+					Integer.parseInt(price), request.getRemoteAddr(), "oztCUs_Ci25lT7IEMeDLtbK6nr1M",
+					"http://localhost:8080/u/p", nonceStr);
+			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(String.valueOf(timestamp), nonceStr, pkg);
+			JSONObject d = new JSONObject();
+			d.put("package", pkg);
+			d.put("paySign", paySign);
+			d.put("timestamp", timestamp);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
+
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		
+		return responseData;
 	}
 	
 	@RequestMapping("/publishGo.html")
