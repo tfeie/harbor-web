@@ -59,14 +59,17 @@ public class UserController {
 		return view;
 	}
 
-	@RequestMapping("/toUserRegisterTest.html")
-	public ModelAndView toUserRegisterTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping("/toUserRegister.html")
+	public ModelAndView toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		WeixinOauth2Token wtoken = (WeixinOauth2Token)request.getSession().getAttribute("wtoken");
+		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
+		request.setAttribute("wxUserInfo", wxUserInfo);
 		ModelAndView view = new ModelAndView("user/toUserRegister");
 		return view;
 	}
 
 	@RequestMapping("/toUserRegister.html")
-	public ModelAndView toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView toUserRegister1(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		LOG.debug("用户注册授权==========开始===========");
 		String redirectURL = URLEncoder.encode(GlobalSettings.getHarborDomain() + "/user/toUserRegister.html", "utf-8");
 		String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid=" + GlobalSettings.getWeiXinAppId()
