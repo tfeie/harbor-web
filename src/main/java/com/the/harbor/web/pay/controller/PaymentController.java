@@ -1,8 +1,11 @@
 package com.the.harbor.web.pay.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -20,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.util.RandomUtil;
@@ -108,36 +112,63 @@ public class PaymentController {
 	public void notifyUrl(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		log.info("==================订单支付 开始调用后台通知=======================================");
 		String notityXml = "";
-		String resXml = "";
 		String inputLine;
+        PrintWriter printWriter = null;
+        HashMap<String,String> remap = new HashMap<String,String>();
+        remap.put("return_code", "SUCCESS");
+		remap.put("return_msg", "OK");
 		try {
-			while ((inputLine = request.getReader().readLine()) != null) 
-			{
-				notityXml += inputLine;
+			try {
+				while ((inputLine = request.getReader().readLine()) != null) 
+				{
+					notityXml += inputLine;
+				}
+				request.getReader().close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				request.getReader().close();
 			}
-			request.getReader().close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			request.getReader().close();
+			
+			log.error("订单支付返回：" + notityXml);
+            printWriter = response.getWriter();
+			String jsonStr = new XMLSerializer().read(notityXml).toString();
+			JSONObject data = JSON.parseObject(jsonStr);
+		    // 遍历jsonObject数据，添加到Map对象  
+			SortedMap<String, Object> map = new TreeMap<String, Object>();
+			for(java.util.Map.Entry<String,Object> entry:data.entrySet()){
+				map.put(entry.getKey(), entry.getValue());  
+	        }
+			// 判断订单是否处理过
+			
+			//校验签名
+			String sign = map.get("sign").toString();
+			map.remove("sign");
+			String paysecret = GlobalSettings.getWeiXinPaySecret();
+			String signcheck = WXHelpUtil.createSign(map, paysecret);
+			if(!sign.equals(signcheck)) {
+				log.info("支付回调签名错误");
+				throw new BusinessException("","签名错误");
+			}
+			
+			// 业务逻辑处理
+			
+			String rexml = CommonUtil.ArrayToXml(remap);
+			log.info("支付回调返回xml:" + rexml);
+			printWriter.write(rexml);
+			printWriter.flush();
+			printWriter.close();
+		} catch(Exception e) {
+			remap.put("return_code", "FAIL");
+			remap.put("return_msg", e.getMessage());
+			String rexml = CommonUtil.ArrayToXml(remap);
+			printWriter.write(rexml);
+			printWriter.flush();
+			printWriter.close();
+		}finally{
+			if(printWriter != null){
+				printWriter.close();
+			}
 		}
-		log.error("订单支付返回：" + notityXml);
-		String jsonStr = new XMLSerializer().read(notityXml).toString();
-		JSONObject data = JSON.parseObject(jsonStr);
-	    // 遍历jsonObject数据，添加到Map对象  
-		SortedMap<String, Object> map = new TreeMap<String, Object>();
-		for(java.util.Map.Entry<String,Object> entry:data.entrySet()){
-			map.put(entry.getKey(), entry.getValue());  
-        } 
-		//校验签名
-		String sign = map.get("sign").toString();
-		map.remove("sign");
-		String paysecret = GlobalSettings.getWeiXinPaySecret();
-		String signcheck = WXHelpUtil.createSign(map, paysecret);
-		if(!sign.equals(signcheck)) {
-			log.info("支付回调签名错误");
-		}
-		// response.getWriter().print("error");
-		return;
 	}
 
 }
