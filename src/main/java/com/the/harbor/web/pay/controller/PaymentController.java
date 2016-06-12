@@ -138,6 +138,10 @@ public class PaymentController {
 			for(java.util.Map.Entry<String,Object> entry:data.entrySet()){
 				map.put(entry.getKey(), entry.getValue());  
 	        }
+			if("FAIL".equals(map.get("return_code")) || 
+					(map.containsKey("result_code") && "FAIL".equals(map.get("result_code")))) {
+				// 交易失败处理
+			}
 			// 判断订单是否处理过
 			
 			//校验签名
