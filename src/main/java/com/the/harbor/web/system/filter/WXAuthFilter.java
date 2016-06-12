@@ -12,15 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.alibaba.fastjson.JSON;
-import com.the.harbor.api.user.IUserSV;
-import com.the.harbor.api.user.param.UserInfo;
-import com.the.harbor.api.user.param.UserQueryResp;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
-import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.web.system.utils.WXRequestUtil;
-import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 
 public class WXAuthFilter extends OncePerRequestFilter {
@@ -72,22 +66,6 @@ public class WXAuthFilter extends OncePerRequestFilter {
 					LOG.debug("根据传入的CODE=" + code + "没有获取access_token和openId，执行重定向授权");
 					response.sendRedirect(authorURL);
 					return;
-				} else {
-					LOG.debug("根据传入的CODE=" + code + "获取access_token和openId，存入SESSION" + JSON.toJSONString(wtoken));
-					/* 根据openId判断用户是否注册 */
-					UserQueryResp userResp = DubboConsumerFactory.getService(IUserSV.class)
-							.queryUserInfo(wtoken.getOpenId());
-					UserInfo userInfo = userResp.getUserInfo();
-					if (userInfo == null) {
-						LOG.debug("当前微信号open_id=" + wtoken.getOpenId() + "没有注册，跳转到注册页面");
-						String registerURL = URLEncoder
-								.encode(GlobalSettings.getHarborDomain() + "/user/toUserRegister.html", "utf-8");
-						response.sendRedirect(registerURL);
-						return;
-					} else {
-						LOG.debug("当前微信号open_id=" + wtoken.getOpenId() + "已经注册成用户[" + userInfo.getUserId() + "]");
-						WXUserUtil.bindWXOpenIdUserInfo(wtoken.getOpenId(), userInfo);
-					}
 				}
 			}
 
