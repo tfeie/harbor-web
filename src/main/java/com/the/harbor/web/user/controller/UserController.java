@@ -26,6 +26,7 @@ import com.the.harbor.api.user.param.UserSystemTagSubmitReq;
 import com.the.harbor.api.user.param.UserTag;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.exception.BusinessException;
+import com.the.harbor.base.exception.SystemException;
 import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
 import com.the.harbor.commons.components.aliyuncs.sms.param.SMSSendRequest;
@@ -42,6 +43,7 @@ import com.the.harbor.commons.util.RandomUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
+import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
 
@@ -61,7 +63,18 @@ public class UserController {
 
 	@RequestMapping("/toUserRegister.html")
 	public ModelAndView toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		WeixinOauth2Token wtoken = (WeixinOauth2Token)request.getSession().getAttribute("wtoken");
+		String code = request.getParameter("code");
+		if (StringUtil.isBlank(code)) {
+			throw new SystemException("未经过微信网页授权的访问");
+		}
+		WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
+		if (wtoken == null) {
+			throw new SystemException("微信授权不通过");
+		}
+		boolean exists = WXUserUtil.checkWXOpenIdBindUser(wtoken.getOpenId());
+		if (exists) {
+			throw new BusinessException("USER-100001", "您的微信已经注册");
+		}
 		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
 		request.setAttribute("wxUserInfo", wxUserInfo);
 		ModelAndView view = new ModelAndView("user/toUserRegister");
@@ -276,10 +289,10 @@ public class UserController {
 			String nonceStr = request.getParameter("nonceStr");
 			String timeStamp = request.getParameter("timeStamp");
 			String orderId = RandomUtil.generateNumber(32);
-			String host ="192.168.1.1";
-			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(GlobalSettings.getWeiXinMerchantName() + payMonth + "个月会员", orderId,
-					Integer.parseInt(price), host, "oztCUs_Ci25lT7IEMeDLtbK6nr1M",
-					"http://localhost:8080/u/p", nonceStr);
+			String host = "192.168.1.1";
+			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(
+					GlobalSettings.getWeiXinMerchantName() + payMonth + "个月会员", orderId, Integer.parseInt(price), host,
+					"oztCUs_Ci25lT7IEMeDLtbK6nr1M", "http://localhost:8080/u/p", nonceStr);
 			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
 
 			JSONObject d = new JSONObject();

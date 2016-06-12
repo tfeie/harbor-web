@@ -13,9 +13,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.alibaba.fastjson.JSON;
+import com.the.harbor.api.user.IUserSV;
+import com.the.harbor.api.user.param.UserInfo;
+import com.the.harbor.api.user.param.UserQueryResp;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
+import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.web.system.utils.WXRequestUtil;
+import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 
 public class WXAuthFilter extends OncePerRequestFilter {
@@ -40,8 +45,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				break;
 			}
 		}
-		
-		
+
 		if (doFilter && !isAjaxRequest(request)) {
 			LOG.debug("当前请求的地址需要处理");
 			String redirectURL = URLEncoder.encode(GlobalSettings.getHarborDomain() + actionURL, "utf-8");
@@ -49,31 +53,43 @@ public class WXAuthFilter extends OncePerRequestFilter {
 					+ GlobalSettings.getWeiXinAppId()
 					+ "&response_type=code&scope=snsapi_userinfo&state=haigui&redirect_uri=" + redirectURL
 					+ "#wechat_redirect";
-			if(request.getSession().getAttribute("wtoken")==null){
-				LOG.debug("没有获取从SESSION获取到WTOKEN");
-				/* 1.获取地址中传递的微信用户网页授权CODE */
-				String code = request.getParameter("code");
-				/* 2.根据是否有网页授权码来处理 */
-				if (StringUtil.isBlank(code)) {
-					LOG.debug("没有从请求地址中获取授权CODE，执行重定向授权");
-					/* 2.1 如果没有传入网页授权CODE，则表示没有经过网页授权，需要跳转到授权页面 */
+			/* 1.获取地址中传递的微信用户网页授权CODE */
+			String code = request.getParameter("code");
+			/* 2.根据是否有网页授权码来处理 */
+			if (StringUtil.isBlank(code)) {
+				LOG.debug("没有从请求地址中获取授权CODE，执行重定向授权");
+				/* 2.1 如果没有传入网页授权CODE，则表示没有经过网页授权，需要跳转到授权页面 */
+				response.sendRedirect(authorURL);
+				return;
+			} else {
+				LOG.debug("根据传入的CODE=" + code + "获取access_token和openId");
+				/*
+				 * 2.2
+				 * 如果传入了code，则根据code获取特殊的网页授权access_code。如果不能获取，则表示CODE不正确或者已经过期
+				 */
+				WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
+				if (wtoken == null) {
+					LOG.debug("根据传入的CODE=" + code + "没有获取access_token和openId，执行重定向授权");
 					response.sendRedirect(authorURL);
 					return;
-				}else{
-					LOG.debug("根据传入的CODE="+code+"获取ACCESS_TOKEN");
-					/*2.2 如果传入了code，则根据code获取特殊的网页授权access_code。如果不能获取，则表示CODE不正确或者已经过期*/
-					WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
-					if(wtoken==null){
-						LOG.debug("根据传入的CODE="+code+"没有获取ACCESS_TOKEN，执行重定向授权");
-						response.sendRedirect(authorURL);
+				} else {
+					LOG.debug("根据传入的CODE=" + code + "获取access_token和openId，存入SESSION" + JSON.toJSONString(wtoken));
+					/* 根据openId判断用户是否注册 */
+					UserQueryResp userResp = DubboConsumerFactory.getService(IUserSV.class)
+							.queryUserInfo(wtoken.getOpenId());
+					UserInfo userInfo = userResp.getUserInfo();
+					if (userInfo == null) {
+						LOG.debug("当前微信号open_id=" + wtoken.getOpenId() + "没有注册，跳转到注册页面");
+						String registerURL = URLEncoder
+								.encode(GlobalSettings.getHarborDomain() + "/user/toUserRegister.html", "utf-8");
+						response.sendRedirect(registerURL);
 						return;
-					}else{
-						LOG.debug("根据传入的CODE="+code+"获取ACCESS_TOKEN，存入SESSION"+JSON.toJSONString(wtoken));
-						request.getSession().setAttribute("wtoken", wtoken);
+					} else {
+						LOG.debug("当前微信号open_id=" + wtoken.getOpenId() + "已经注册成用户[" + userInfo.getUserId() + "]");
+						WXUserUtil.bindWXOpenIdUserInfo(wtoken.getOpenId(), userInfo);
 					}
 				}
 			}
-			
 
 			filterChain.doFilter(request, response);
 		} else {
