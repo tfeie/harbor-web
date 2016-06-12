@@ -62,6 +62,8 @@
 						<a href="javascript:void(0)" id="HREF_GO_PAY">立即支付</a>
 					</p>
 				</section>
+				<div class="message-err" id="DIV_TIPS"></div>
+				
 				<p class="tishi">
 				<img src="//static.tfeie.com/images/img24.png">海牛3个工作日没有确认，自动退款
 				</p>
@@ -108,7 +110,6 @@ wx.config({
 						nonceStr: "<c:out value="${nonceStr}"/>"					},
 					success : function(transport) {
 						var d = transport.data; 
-						
 						wx.chooseWXPay({
 						    timestamp: d.timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
 						    nonceStr: '<c:out value="${nonceStr}"/>', // 支付签名随机串，不长于 32 位

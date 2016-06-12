@@ -100,26 +100,18 @@ public class PaymentController {
 	@RequestMapping(value = "/notifyUrl")
 	public void notifyUrl(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		log.info("==================订单支付 开始调用后台通知=======================================");
-		/************************************** 从返回报文中获取数据 ****************************************/
-		String outOrderId_ = request.getParameter("outOrderId"); // 第三方支付平台交易流水号
-		String orderId_ = request.getParameter("orderId"); // 订单号
-		String subject_ = request.getParameter("subject"); // 订单名称
-		String orderAmount_ = request.getParameter("orderAmount"); // 订单金额
-		String payStates_ = request.getParameter("payStates"); // 交易状态
-		String notifyTime_ = request.getParameter("notifyTime"); // 交易时间
-		String payType_ = request.getParameter("payType"); // 交易类型
-		String infoMd5_ = request.getParameter("infoMd5"); // 加密信息
-
-		log.info("第三方支付平台交易流水号：" + outOrderId_);
-		log.info("订单号：" + orderId_);
-		log.info("订单名称：" + subject_);
-		log.info("订单金额：" + orderAmount_);
-		log.info("交易状态：" + payStates_);
-		log.info("交易时间：" + notifyTime_);
-		log.info("交易类型：" + payType_);
-		log.info("加密信息：" + infoMd5_);
-
-		log.error("加密信息不匹配：orderId=" + orderId_);
+		String notityXml = "";
+		String resXml = "";
+		String inputLine;
+		try {
+		while ((inputLine = request.getReader().readLine()) != null) {
+		notityXml += inputLine;
+		}
+		request.getReader().close();
+		} catch (Exception e) {
+		e.printStackTrace();
+		}
+		log.error("订单支付返回：" + notityXml);
 		// response.getWriter().print("error");
 		return;
 	}
