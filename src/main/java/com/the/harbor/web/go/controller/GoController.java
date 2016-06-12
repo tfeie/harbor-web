@@ -76,6 +76,7 @@ public class GoController {
 			d.put("package", pkg);
 			d.put("paySign", paySign);
 			d.put("timestamp", timestamp);
+			LOG.info("支付参数：" + d.toJSONString());
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
 
 		} catch (Exception e) {

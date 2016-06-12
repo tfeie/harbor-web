@@ -54,7 +54,7 @@
 				</p>
 				<p>待支付</p>
 				<p>
-					<span id="price">${payamount}</span>元
+					<span>${payamount}</span>元
 				</p>
 
 				<section class="but_baoc on">
@@ -100,12 +100,11 @@ wx.config({
 			
 			gotoPay: function(){
 				var _this = this;
-				var price = $("#price").val(); 
 				ajaxController.ajax({
 					url : "../go/createPayOrder",
 					type : "post",
 					data: {
-						price: price,
+						price: "<c:out value="${payamount}"/>",
 						nonceStr: "<c:out value="${nonceStr}"/>"					},
 					success : function(transport) {
 						var d = transport.data; 
