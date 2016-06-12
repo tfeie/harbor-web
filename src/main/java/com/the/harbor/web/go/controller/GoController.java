@@ -71,6 +71,8 @@ public class GoController {
 			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI("购买", orderId,
 					Integer.parseInt(price), request.getRemoteAddr(), "oztCUs7prwrkXp4tWsntCfg5fWpw",
 					notifyUrl, nonceStr);
+			LOG.info("支付订单：" + pkg);
+
 			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(String.valueOf(timestamp), nonceStr, pkg);
 			JSONObject d = new JSONObject();
 			d.put("package", pkg);
@@ -81,6 +83,7 @@ public class GoController {
 
 		} catch (Exception e) {
 			LOG.error(e);
+			LOG.info("支付失败：" + e.getMessage() +"e:" + e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
 		}
 		
