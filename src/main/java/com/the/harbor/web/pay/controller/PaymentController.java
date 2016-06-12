@@ -133,16 +133,16 @@ public class PaymentController {
             printWriter = response.getWriter();
 			String jsonStr = new XMLSerializer().read(notityXml).toString();
 			JSONObject data = JSON.parseObject(jsonStr);
+			String returnCode = data.getString("return_code");
+			String resultCode = data.getString("result_code");
+			if ("SUCCESS".equals(resultCode) && "SUCCESS".equals(returnCode)) {
+				// 交易失败处理
+			}
 		    // 遍历jsonObject数据，添加到Map对象  
 			SortedMap<String, Object> map = new TreeMap<String, Object>();
 			for(java.util.Map.Entry<String,Object> entry:data.entrySet()){
 				map.put(entry.getKey(), entry.getValue());  
 	        }
-			if("FAIL".equals(map.get("return_code")) || 
-					(map.containsKey("result_code") && "FAIL".equals(map.get("result_code")))) {
-				// 交易失败处理
-			}
-			// 判断订单是否处理过
 			
 			//校验签名
 			String sign = map.get("sign").toString();
@@ -153,6 +153,8 @@ public class PaymentController {
 				log.info("支付回调签名错误");
 				throw new BusinessException("","签名错误");
 			}
+			
+			// 判断订单是否处理过
 			
 			// 业务逻辑处理
 			
