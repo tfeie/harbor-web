@@ -66,10 +66,11 @@ public class GoController {
 			String price = request.getParameter("price");
 			String nonceStr = request.getParameter("nonceStr");
 			long timestamp = DateUtil.getCurrentTimeMillis();
-			String orderId = RandomUtil.generateNumber(32);			
+			String orderId = RandomUtil.generateNumber(32);	
+			String notifyUrl = "http://harbor.tfeie.com/payment/notifyUrl";
 			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI("购买", orderId,
-					Integer.parseInt(price), request.getRemoteAddr(), "oztCUs_Ci25lT7IEMeDLtbK6nr1M",
-					"http://localhost:8080/u/p", nonceStr);
+					Integer.parseInt(price), request.getRemoteAddr(), "oztCUs7prwrkXp4tWsntCfg5fWpw",
+					notifyUrl, nonceStr);
 			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(String.valueOf(timestamp), nonceStr, pkg);
 			JSONObject d = new JSONObject();
 			d.put("package", pkg);

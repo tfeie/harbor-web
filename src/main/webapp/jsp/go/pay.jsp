@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -52,7 +54,7 @@
 				</p>
 				<p>待支付</p>
 				<p>
-					<span>${payamount}</span>元
+					<span id="price">${payamount}</span>元
 				</p>
 
 				<section class="but_baoc on">
@@ -98,10 +100,9 @@ wx.config({
 			
 			gotoPay: function(){
 				var _this = this;
-				var payMonth = jq.attr("months");
-				var price = jq.attr("prices"); 
+				var price = $("#price").val(); 
 				ajaxController.ajax({
-					url : "../user/createPayOrder",
+					url : "../go/createPayOrder",
 					type : "post",
 					data: {
 						price: price,
