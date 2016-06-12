@@ -2,11 +2,15 @@ package com.the.harbor.web.pay.controller;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.xml.XMLSerializer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.commons.components.globalconfig.GlobalSettings;
+import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.util.RandomUtil;
 import com.the.harbor.web.system.utils.CommonUtil;
 import com.the.harbor.web.system.utils.WXRequestUtil;
@@ -104,14 +111,31 @@ public class PaymentController {
 		String resXml = "";
 		String inputLine;
 		try {
-		while ((inputLine = request.getReader().readLine()) != null) {
-		notityXml += inputLine;
-		}
-		request.getReader().close();
+			while ((inputLine = request.getReader().readLine()) != null) 
+			{
+				notityXml += inputLine;
+			}
+			request.getReader().close();
 		} catch (Exception e) {
-		e.printStackTrace();
+			e.printStackTrace();
+			request.getReader().close();
 		}
 		log.error("订单支付返回：" + notityXml);
+		String jsonStr = new XMLSerializer().read(notityXml).toString();
+		JSONObject data = JSON.parseObject(jsonStr);
+	    // 遍历jsonObject数据，添加到Map对象  
+		SortedMap<String, Object> map = new TreeMap<String, Object>();
+		for(java.util.Map.Entry<String,Object> entry:data.entrySet()){
+			map.put(entry.getKey(), entry.getValue());  
+        } 
+		//校验签名
+		String sign = map.get("sign").toString();
+		map.remove("sign");
+		String paysecret = GlobalSettings.getWeiXinPaySecret();
+		String signcheck = WXHelpUtil.createSign(map, paysecret);
+		if(!sign.equals(signcheck)) {
+			log.info("支付回调签名错误");
+		}
 		// response.getWriter().print("error");
 		return;
 	}
