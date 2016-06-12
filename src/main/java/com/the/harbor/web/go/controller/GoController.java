@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
+import com.the.harbor.commons.util.AmountUtils;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.RandomUtil;
@@ -64,12 +65,13 @@ public class GoController {
 		LOG.info("预约支付===============开始=====================");
 		try{
 			String price = request.getParameter("price");
+			String total = AmountUtils.changeY2F(price);
 			String nonceStr = request.getParameter("nonceStr");
 			long timestamp = DateUtil.getCurrentTimeMillis();
 			String orderId = RandomUtil.generateNumber(32);	
 			String notifyUrl = "http://harbor.tfeie.com/payment/notifyUrl";
 			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI("购买", orderId,
-					Integer.parseInt(price), request.getRemoteAddr(), "oztCUs7prwrkXp4tWsntCfg5fWpw",
+					Integer.parseInt(total), request.getRemoteAddr(), "oztCUs7prwrkXp4tWsntCfg5fWpw",
 					notifyUrl, nonceStr);
 			LOG.info("支付订单：" + pkg);
 
