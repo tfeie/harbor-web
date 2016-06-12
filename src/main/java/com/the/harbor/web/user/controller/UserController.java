@@ -68,7 +68,7 @@ public class UserController {
 		return view;
 	}
 
-	@RequestMapping("/toUserRegister.html")
+	@RequestMapping("/toUserRegister1.html")
 	public ModelAndView toUserRegister1(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		LOG.debug("用户注册授权==========开始===========");
 		String redirectURL = URLEncoder.encode(GlobalSettings.getHarborDomain() + "/user/toUserRegister.html", "utf-8");
