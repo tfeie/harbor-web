@@ -1,5 +1,6 @@
 package com.the.harbor.web.go.controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -43,9 +44,10 @@ public class GoController {
 	
 	@RequestMapping("/toPay.html")
 	public ModelAndView toPay(HttpServletRequest request) {
-		Object obj = request.getSession().getAttribute("wxopendid");
-		if(obj != null){
-		LOG.info("获取用户openid:" + obj.toString());
+		Cookie[] cooks = request.getCookies();
+		if(cooks != null && cooks.length > 0){
+		
+		LOG.info("获取用户openid:" + cooks[0].getValue());
 		}else {
 			LOG.info("获取用户openid为空");
 		}

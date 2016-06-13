@@ -4,6 +4,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -90,7 +91,8 @@ public class UserController {
 					return null;
 				} else {
 					LOG.info("保存opendid===============");
-					request.getSession().setAttribute("wxopendid", wxUserInfo.getOpenid());
+					 Cookie cookieid = new Cookie("wxopendid",wxUserInfo.getOpenid());
+			         response.addCookie(cookieid);
 					request.setAttribute("wxUserInfo", wxUserInfo);
 					ModelAndView view = new ModelAndView("pages");
 					return view;
