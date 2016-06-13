@@ -44,13 +44,6 @@ public class GoController {
 	
 	@RequestMapping("/toPay.html")
 	public ModelAndView toPay(HttpServletRequest request) {
-		Cookie[] cooks = request.getCookies();
-		if(cooks != null && cooks.length > 0){
-		
-		LOG.info("获取用户openid:" + cooks[0].getValue());
-		}else {
-			LOG.info("获取用户openid为空");
-		}
 		String payamount = "0.01";
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
