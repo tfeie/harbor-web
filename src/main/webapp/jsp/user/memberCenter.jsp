@@ -154,6 +154,8 @@ wx.config({
 						data: {
 							payMonth: payMonth,
 							price: price,
+							userId:"<c:out value="${userInfo.userId}"/>",
+							openId:"<c:out value="${userInfo.openId}"/>",
 							nonceStr: "<c:out value="${nonceStr}"/>",
 							timeStamp: <c:out value="${timestamp}"/>
 						},
@@ -167,7 +169,7 @@ wx.config({
 							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 							    paySign: d.paySign, // 支付签名
 							    success: function (res) {
-							        _this.showSuccess("支付成功")
+							        _this.userMemberRenewal(payMonth,d.payOrderId);
 							    },
 							    fail: function(res){
 							    	 _this.showError("支付失败")
@@ -182,6 +184,29 @@ wx.config({
 						}
 
 					});
+				},
+				
+				userMemberRenewal : function(payMonth,payOrderId) {
+					var _this = this;
+					ajaxController.ajax({
+						url : "../user/userMemberRenewal",
+						type : "post",
+						data: {
+							userId:"<c:out value="${userInfo.userId}"/>",
+							openId:"<c:out value="${userInfo.openId}"/>",
+							payMonth: payMonth,
+							payOrderId: payOrderId
+						},
+						success : function(transport) {
+							var d = transport.data; 
+							alert(d.enName+",您成功购买"+payMonth+"个月会员,有效期["+d.expDate+"]")
+						},
+						failure : function(transport) {
+							_this.showError("会员支付成功，但是处理失败");
+						}
+
+					});
+
 				},
 				
 				getMemberCanByMonths : function() {

@@ -68,6 +68,7 @@ dependencies {
 	compile "com.thoughtworks.xstream:xstream:1.4.7"
     
     compile "com.the.harbor.api:user:1.0-SNAPSHOT"
+    compile "com.the.harbor.api:pay:1.0-SNAPSHOT"
     
     
 }

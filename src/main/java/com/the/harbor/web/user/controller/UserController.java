@@ -16,17 +16,24 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.api.pay.IPaymentSV;
+import com.the.harbor.api.pay.param.CreatePaymentOrderReq;
+import com.the.harbor.api.pay.param.CreatePaymentOrderResp;
 import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.UserCertificationReq;
 import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.api.user.param.UserMemberInfo;
 import com.the.harbor.api.user.param.UserMemberQuery;
+import com.the.harbor.api.user.param.UserMemberRenewalReq;
+import com.the.harbor.api.user.param.UserMemberRenewalResp;
 import com.the.harbor.api.user.param.UserRegReq;
 import com.the.harbor.api.user.param.UserSystemTagQueryReq;
 import com.the.harbor.api.user.param.UserSystemTagQueryResp;
 import com.the.harbor.api.user.param.UserSystemTagSubmitReq;
 import com.the.harbor.api.user.param.UserTag;
 import com.the.harbor.base.constants.ExceptCodeConstants;
+import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
+import com.the.harbor.base.enumeration.hypaymentorder.PayType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
@@ -40,7 +47,6 @@ import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
 import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
-import com.the.harbor.commons.util.RandomUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
@@ -291,7 +297,7 @@ public class UserController {
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
-		String url = "http://harbor.tfeie.com/user/memberCenter.html";
+		String url = WXRequestUtil.getFullURL(request);
 		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
@@ -311,20 +317,62 @@ public class UserController {
 			String price = request.getParameter("price");
 			String nonceStr = request.getParameter("nonceStr");
 			String timeStamp = request.getParameter("timeStamp");
-			String orderId = RandomUtil.generateNumber(32);
+			String openId = request.getParameter("openId");
+			String userId = request.getParameter("userId");
+			if (StringUtil.isBlank(openId)) {
+				throw new BusinessException("USER-100001", "生成支付流水失败:没有微信绑定信息");
+			}
+			if (StringUtil.isBlank(userId)) {
+				throw new BusinessException("USER-100001", "生成支付流水失败:用户标识不存在");
+			}
+			String summary = GlobalSettings.getWeiXinMerchantName() + payMonth + "个月会员";
+			// 调用服务生成支付流水
+			CreatePaymentOrderReq createPaymentOrderReq = new CreatePaymentOrderReq();
+			createPaymentOrderReq.setBusiType(BusiType.PAY_FOR_MEMBER.getValue());
+			createPaymentOrderReq.setPayAmount(Long.parseLong(price));
+			createPaymentOrderReq.setPayType(PayType.WEIXIN.getValue());
+			createPaymentOrderReq.setSummary(summary);
+			createPaymentOrderReq.setUserId(userId);
+			CreatePaymentOrderResp resp = DubboConsumerFactory.getService(IPaymentSV.class)
+					.createPaymentOrder(createPaymentOrderReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
+						resp.getResponseHeader().getResultMessage());
+			}
+			// 组织支付认证信息
+			String payOrderId = resp.getPayOrderId();
 			String host = "192.168.1.1";
-			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(
-					GlobalSettings.getWeiXinMerchantName() + payMonth + "个月会员", orderId, Integer.parseInt(price), host,
-					"oztCUs_Ci25lT7IEMeDLtbK6nr1M", "http://localhost:8080/u/p", nonceStr);
+			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId, Integer.parseInt(price), host,
+					openId, GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
 			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
 
 			JSONObject d = new JSONObject();
 			d.put("package", pkg);
 			d.put("paySign", paySign);
+			d.put("payOrderId", payOrderId);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/userMemberRenewal")
+	@ResponseBody
+	public ResponseData<String> userMemberRenewal(UserMemberRenewalReq request) {
+		ResponseData<String> responseData = null;
+		try {
+			UserMemberRenewalResp resp = DubboConsumerFactory.getService(IUserSV.class).userMemberRenewal(request);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
+						resp.getResponseHeader().getResultMessage());
+			}
+
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "会员续期成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}
@@ -359,14 +407,7 @@ public class UserController {
 
 	@RequestMapping("/getUserCard.html")
 	public ModelAndView getUserCard(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
-		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
-		}
-		request.setAttribute("userInfo", userInfo);
+
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}
