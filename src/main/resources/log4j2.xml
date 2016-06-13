@@ -21,9 +21,13 @@
     </Async>
   </Appenders>
   <Loggers>
+    <logger name="com.the.harbor.web" level="info" additivity="false">
+         <AppenderRef ref="RollingFile" />
+         <AppenderRef ref="STDOUT" />
+    </logger> 
     <Root level="debug">
-      <AppenderRef ref="RollingFile" level="debug"/>
-      <AppenderRef ref="STDOUT" level="debug"/>
+      <AppenderRef ref="RollingFile" />
+      <AppenderRef ref="STDOUT" />
     </Root>
   </Loggers>
 </Configuration>
