@@ -67,6 +67,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 					response.sendRedirect(authorURL);
 					return;
 				}
+				request.setAttribute("wtoken", wtoken);
 			}
 
 			filterChain.doFilter(request, response);
