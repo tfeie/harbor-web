@@ -20,6 +20,15 @@ import com.the.harbor.web.weixin.param.WeixinUserInfo;
 public class WXRequestUtil {
 	private static Log log = LogFactory.getLog(WXRequestUtil.class);
 
+	public static String getFullURL(HttpServletRequest request) {
+		StringBuffer url = request.getRequestURL();
+		if (request.getQueryString() != null) {
+			url.append("?");
+			url.append(request.getQueryString());
+		}
+		return url.toString();
+	}
+
 	public static WeixinOauth2Token getWeixinOauth2TokenFromReqAttr(HttpServletRequest request) {
 		Object o = request.getAttribute(WXConstants.WX_WEB_AUTH);
 		if (o == null) {

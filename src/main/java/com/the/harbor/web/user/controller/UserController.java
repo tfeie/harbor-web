@@ -203,12 +203,13 @@ public class UserController {
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
-		String url = "http://harbor.tfeie.com/user/toApplyCertficate.html";
+		String url = WXRequestUtil.getFullURL(request);
 		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
+		request.setAttribute("url", url);
 		ModelAndView view = new ModelAndView("user/toApplyCertficate");
 		return view;
 	}
