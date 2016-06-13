@@ -13,7 +13,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>您访问的页面不存在</title>
+<title>系统繁忙，请稍候再试</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
@@ -33,7 +33,18 @@
 			</p>
 			<section class="monry-info">
 				<p>
-					<label>您访问的网页不存在</label>
+					<label>
+					<%
+					if(pageContext.getException() instanceof com.the.harbor.base.exception.BusinessException){
+						com.the.harbor.base.exception.BusinessException ex = (com.the.harbor.base.exception.BusinessException)pageContext.getException();
+						response.getWriter().println(ex.getMessage());
+					}else {
+						response.getWriter().println("系统繁忙，请稍候再试..");
+					} 
+					%>
+					
+					
+					</label>
 				</p> 
 			</section>
 		</section>
