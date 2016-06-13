@@ -360,8 +360,8 @@ public class UserController {
 
 	@RequestMapping("/userMemberRenewal")
 	@ResponseBody
-	public ResponseData<String> userMemberRenewal(UserMemberRenewalReq request) {
-		ResponseData<String> responseData = null;
+	public ResponseData<UserMemberRenewalResp> userMemberRenewal(UserMemberRenewalReq request) {
+		ResponseData<UserMemberRenewalResp> responseData = null;
 		try {
 			UserMemberRenewalResp resp = DubboConsumerFactory.getService(IUserSV.class).userMemberRenewal(request);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
@@ -369,10 +369,10 @@ public class UserController {
 						resp.getResponseHeader().getResultMessage());
 			}
 
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "会员续期成功", "");
+			responseData = new ResponseData<UserMemberRenewalResp>(ResponseData.AJAX_STATUS_SUCCESS, "会员续期成功", resp);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = ExceptionUtil.convert(e, String.class);
+			responseData = ExceptionUtil.convert(e, UserMemberRenewalResp.class);
 		}
 		return responseData;
 	}
