@@ -24,6 +24,6 @@
 	<dubbo:monitor protocol="registry" />
 
 	<dubbo:reference id="IUserSV" interface="com.the.harbor.api.user.IUserSV" />
-	<dubbo:reference id="IUserSV" interface="com.the.harbor.api.pay.IPaymentSV" />
+	<dubbo:reference id="IPaymentSV" interface="com.the.harbor.api.pay.IPaymentSV" />
 
 </beans>
