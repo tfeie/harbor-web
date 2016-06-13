@@ -29,7 +29,8 @@ public class WXAuthFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		LOG.info("开始执行微信网页认证拦截器...");
 		String[] shouldFilter = new String[] { "/user/toUserRegister.html", "/user/toApplyCertficate.html",
-				"/user/userInfo.html", "/user/memberCenter.html", "/user/userCenter.html","/user/setUserSkills.html"};
+				"/user/userInfo.html", "/user/memberCenter.html", "/user/userCenter.html", "/user/setUserSkills.html",
+				"/user/editUserInfo.html", "/user/getUserCard.html", "/user/userWealth.html" };
 		String uri = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		String actionURL = uri.substring(contextPath.length());
