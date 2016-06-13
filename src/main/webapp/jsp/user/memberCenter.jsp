@@ -154,8 +154,8 @@ wx.config({
 						data: {
 							payMonth: payMonth,
 							price: price,
-							userId:"<c:out value="${userInfo.userId}"/>",
-							openId:"<c:out value="${userInfo.openId}"/>",
+							userId:"<c:out value="${userMember.userId}"/>",
+							openId:"<c:out value="${userMember.openId}"/>",
 							nonceStr: "<c:out value="${nonceStr}"/>",
 							timeStamp: <c:out value="${timestamp}"/>
 						},
@@ -192,8 +192,8 @@ wx.config({
 						url : "../user/userMemberRenewal",
 						type : "post",
 						data: {
-							userId:"<c:out value="${userInfo.userId}"/>",
-							openId:"<c:out value="${userInfo.openId}"/>",
+							userId:"<c:out value="${userMember.userId}"/>",
+							openId:"<c:out value="${userMember.openId}"/>",
 							payMonth: payMonth,
 							payOrderId: payOrderId
 						},
