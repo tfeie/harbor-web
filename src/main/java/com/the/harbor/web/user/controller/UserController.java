@@ -4,7 +4,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -65,14 +64,12 @@ public class UserController {
 
 	@RequestMapping("/toUserRegister.html")
 	public ModelAndView toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String code = request.getParameter("code");
-		if (StringUtil.isBlank(code)) {
-			throw new SystemException("未经过微信网页授权的访问");
+		Object o = request.getAttribute("wtoken");
+		if (o == null) {
+			throw new SystemException("获取不到网页授权token");
 		}
-		WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
-		if (wtoken == null) {
-			throw new SystemException("微信授权不通过");
-		}
+		LOG.debug("获取到的认证token=" + JSON.toJSONString(o));
+		WeixinOauth2Token wtoken = (WeixinOauth2Token) o;
 		UserQueryResp userResp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfo(wtoken.getOpenId());
 		if (userResp.getUserInfo() != null) {
 			LOG.debug("您的微信号[" + wtoken.getOpenId() + "]已经注册");
