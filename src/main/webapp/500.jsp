@@ -5,6 +5,17 @@
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
 %>
+
+<%
+if(pageContext.getException() instanceof com.the.harbor.base.exception.BusinessException){
+	com.the.harbor.base.exception.BusinessException ex = (com.the.harbor.base.exception.BusinessException)pageContext.getException();
+	request.setAttribute("title", "页面访问失败");
+	request.setAttribute("error", ex.getMessage());
+}else {
+	request.setAttribute("title", "系统繁忙，请稍候再试..");
+	request.setAttribute("error", "系统繁忙，请稍候再试..");
+} 
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +24,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>系统繁忙，请稍候再试</title>
+<title><c:out value="${title}"/> </title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
@@ -34,15 +45,8 @@
 			<section class="monry-info">
 				<p>
 					<label>
-					<%
-					if(pageContext.getException() instanceof com.the.harbor.base.exception.BusinessException){
-						com.the.harbor.base.exception.BusinessException ex = (com.the.harbor.base.exception.BusinessException)pageContext.getException();
-						response.getWriter().println(ex.getMessage());
-					}else {
-						response.getWriter().println("系统繁忙，请稍候再试..");
-					} 
-					%>
 					
+					<c:out value="${error}"/>
 					
 					</label>
 				</p> 
