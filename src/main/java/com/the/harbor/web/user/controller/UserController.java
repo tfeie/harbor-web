@@ -70,7 +70,9 @@ public class UserController {
 		}
 		LOG.debug("获取到的认证token=" + JSON.toJSONString(o));
 		WeixinOauth2Token wtoken = (WeixinOauth2Token) o;
+		System.out.println("获取到的微信认证token="+JSON.toJSONString(wtoken));
 		UserQueryResp userResp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfo(wtoken.getOpenId());
+		System.out.println("获取到的用户信息="+JSON.toJSONString(userResp));
 		if (userResp.getUserInfo() != null) {
 			LOG.debug("您的微信号[" + wtoken.getOpenId() + "]已经注册");
 			throw new BusinessException("USER-100001", "您的微信已经注册");
