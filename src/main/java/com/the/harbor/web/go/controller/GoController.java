@@ -43,6 +43,8 @@ public class GoController {
 	
 	@RequestMapping("/toPay.html")
 	public ModelAndView toPay(HttpServletRequest request) {
+		String openid = request.getSession().getAttribute("wxopendid").toString();
+		LOG.info("获取用户openid:" + openid);
 		String payamount = "0.01";
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
