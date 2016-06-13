@@ -135,6 +135,7 @@
 								type: "post",
 								data: {
 									mediaId: mediaId,
+									userId:"<c:out value="${userInfo.userId}"/>"
 								},
 								success: function(transport){
 									var imgURL  = transport.data;
@@ -173,6 +174,7 @@
 								type: "post",
 								data: {
 									mediaId: mediaId,
+									userId:"<c:out value="${userInfo.userId}"/>"
 								},
 								success: function(transport){
 									var imgURL  = transport.data;
@@ -262,7 +264,7 @@
 						url: "../user/submitUserCertficate",
 						type: "post",
 						data: {
-							userId: "hy00000032",
+							userId:"<c:out value="${userInfo.userId}"/>",
 							overseasPhoto: $("#overseasPhoto").val(),
 							idcardPhoto: $("#idcardPhoto").val()
 						},

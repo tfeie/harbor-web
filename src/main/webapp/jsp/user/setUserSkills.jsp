@@ -90,6 +90,9 @@
 					ajaxController.ajax({
 						url : "../user/getSystemTags",
 						type : "post",
+						data: {
+							userId:"<c:out value="${userInfo.userId}"/>"
+						},
 						success : function(transport) {
 							var d = transport.data; 
 							_this.interestSelectedTags =d.interestSelectedTags;
@@ -124,7 +127,7 @@
 						return;
 					} 
 					var d =  {
-						userId: "hy00000032",
+						userId: "<c:out value="${userInfo.userId}"/>",
 						skillSelectedTags: _this.skillSelectedTags,
 						interestSelectedTags: _this.interestSelectedTags
 					}

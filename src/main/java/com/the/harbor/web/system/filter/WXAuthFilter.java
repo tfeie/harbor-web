@@ -14,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.util.StringUtil;
+import com.the.harbor.web.constants.WXConstants;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 
@@ -26,22 +27,22 @@ public class WXAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		LOG.info("开始执行微信认证拦截器...");
-		String[] notFilter = new String[] { "/images", "/js", "/css", "/login/tologin", "/login/mainframe",
-				"/user/pages", "/user/checkPassword", "/signcode" };
+		LOG.info("开始执行微信网页认证拦截器...");
+		String[] shouldFilter = new String[] { "/user/toUserRegister.html", "/user/toApplyCertficate.html",
+				"/user/userInfo.html", "/user/memberCenter.html", "/user/userCenter.html","/user/setUserSkills.html"};
 		String uri = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		String actionURL = uri.substring(contextPath.length());
-		boolean doFilter = true;
-		for (String s : notFilter) {
+		boolean doFilter = false;
+		for (String s : shouldFilter) {
 			if (uri.indexOf(s) != -1) {
-				doFilter = false;
+				doFilter = true;
 				break;
 			}
 		}
 
-		if (doFilter && !isAjaxRequest(request)) {
-			LOG.debug("当前请求的地址需要处理");
+		if (doFilter) {
+			LOG.debug("当前请求的地址需要进行网页授权认证");
 			String redirectURL = URLEncoder.encode(GlobalSettings.getHarborDomain() + actionURL, "utf-8");
 			String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid="
 					+ GlobalSettings.getWeiXinAppId()
@@ -67,7 +68,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 					response.sendRedirect(authorURL);
 					return;
 				}
-				request.setAttribute("wtoken", wtoken);
+				request.setAttribute(WXConstants.WX_WEB_AUTH, wtoken);
 			}
 
 			filterChain.doFilter(request, response);
@@ -83,16 +84,6 @@ public class WXAuthFilter extends OncePerRequestFilter {
 			return true;
 		else
 			return false;
-	}
-
-	public static void main(String[] agrs) {
-		String url = "/harbor-web/be/index.html";
-		String contextPath = "/harbor-web";
-		if (url.startsWith(contextPath)) {
-			url.substring(contextPath.length() - 1);
-		}
-		System.out.println(url.substring(contextPath.length()));
-
 	}
 
 }

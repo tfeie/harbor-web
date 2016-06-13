@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.base.exception.SystemException;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.util.AmountUtils;
 import com.the.harbor.commons.util.RandomUtil;
@@ -18,6 +19,15 @@ import com.the.harbor.web.weixin.param.WeixinUserInfo;
 
 public class WXRequestUtil {
 	private static Log log = LogFactory.getLog(WXRequestUtil.class);
+
+	public static WeixinOauth2Token getWeixinOauth2TokenFromReqAttr(HttpServletRequest request) {
+		Object o = request.getAttribute(WXConstants.WX_WEB_AUTH);
+		if (o == null) {
+			throw new SystemException("获取不到网页授权token");
+		}
+		WeixinOauth2Token wtoken = (WeixinOauth2Token) o;
+		return wtoken;
+	}
 
 	/**
 	 * 统一下单处理
