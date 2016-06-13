@@ -20,8 +20,18 @@ import com.the.harbor.web.weixin.param.WeixinUserInfo;
 public class WXRequestUtil {
 	private static Log log = LogFactory.getLog(WXRequestUtil.class);
 
+	/**
+	 * 得到的地址为http://harbor.tfeie.com/user/xx.html?p1=1&... 不包含harbor-app名称
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public static String getFullURL(HttpServletRequest request) {
-		StringBuffer url = request.getRequestURL();
+		String uri = request.getRequestURI();
+		String contextPath = request.getContextPath();
+		String actionURL = uri.substring(contextPath.length());
+		String domainURL = GlobalSettings.getHarborDomain() + actionURL;
+		StringBuffer url = new StringBuffer(domainURL);
 		if (request.getQueryString() != null) {
 			url.append("?");
 			url.append(request.getQueryString());
