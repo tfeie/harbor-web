@@ -62,7 +62,6 @@ public class UserController {
 
 	@RequestMapping("/pages.html")
 	public ModelAndView pages(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		request.getSession().setAttribute("wxopendid", "111");
 		ModelAndView view = new ModelAndView("pages");
 		return view;
 	}
