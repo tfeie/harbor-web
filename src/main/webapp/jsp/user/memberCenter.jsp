@@ -155,7 +155,7 @@ wx.config({
 							payMonth: payMonth,
 							price: price,
 							userId:"<c:out value="${userMember.userId}"/>",
-							openId:"<c:out value="${userMember.openId}"/>",
+							openId:"<c:out value="${openId}"/>",
 							nonceStr: "<c:out value="${nonceStr}"/>",
 							timeStamp: <c:out value="${timestamp}"/>
 						},
@@ -193,7 +193,7 @@ wx.config({
 						type : "post",
 						data: {
 							userId:"<c:out value="${userMember.userId}"/>",
-							openId:"<c:out value="${userMember.openId}"/>",
+							openId:"<c:out value="${openId}"/>",
 							payMonth: payMonth,
 							payOrderId: payOrderId
 						},
