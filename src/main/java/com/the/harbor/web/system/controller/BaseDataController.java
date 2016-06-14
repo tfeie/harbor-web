@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.globalconfig.MemeberPrice;
+import com.the.harbor.commons.indices.hyuniversity.UniversityHandler;
 import com.the.harbor.commons.redisdata.def.HyCountryVo;
 import com.the.harbor.commons.redisdata.def.HyIndustryVo;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
@@ -88,6 +89,20 @@ public class BaseDataController {
 		} catch (Exception e) {
 			LOG.error(e);
 			responseData = new ResponseData<List<MemeberPrice>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/querySuggestByUniversityName")
+	@ResponseBody
+	public ResponseData<List<String>> querySuggestByUniversityName(String universityName) {
+		ResponseData<List<String>> responseData = null;
+		try {
+			List<String> list = UniversityHandler.querySuggestByUniversityName(universityName);
+			responseData = new ResponseData<List<String>>(ResponseData.AJAX_STATUS_SUCCESS, "获取搜索建议成功", list);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = new ResponseData<List<String>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
