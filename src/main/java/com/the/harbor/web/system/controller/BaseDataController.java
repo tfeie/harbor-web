@@ -1,10 +1,6 @@
 package com.the.harbor.web.system.controller;
 
-import java.io.PrintWriter;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,17 +8,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.globalconfig.MemeberPrice;
 import com.the.harbor.commons.indices.hyuniversity.UniversityHandler;
 import com.the.harbor.commons.redisdata.def.HyCountryVo;
+import com.the.harbor.commons.redisdata.def.HyDictsVo;
 import com.the.harbor.commons.redisdata.def.HyIndustryVo;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyCountryUtil;
+import com.the.harbor.commons.redisdata.util.HyDictUtil;
 import com.the.harbor.commons.redisdata.util.HyIndustryUtil;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
+import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 
 @RestController
@@ -100,9 +98,9 @@ public class BaseDataController {
 		return responseData;
 	}
 
-	@RequestMapping("/querySuggestByUniversityName1")
+	@RequestMapping("/querySuggestByUniversityName")
 	@ResponseBody
-	public ResponseData<List<String>> querySuggestByUniversityName1(String universityName) {
+	public ResponseData<List<String>> querySuggestByUniversityName(String universityName) {
 		ResponseData<List<String>> responseData = null;
 		try {
 			List<String> list = UniversityHandler.querySuggestByUniversityName(universityName);
@@ -114,23 +112,25 @@ public class BaseDataController {
 		return responseData;
 	}
 
-	@RequestMapping("/querySuggestByUniversityName")
+	@RequestMapping("/getHyDicts")
 	@ResponseBody
-	public void querySuggestByUniversityName(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		PrintWriter printWriter = response.getWriter();
-		String universityName = request.getParameter("universityName");
-		List<String> list = UniversityHandler.querySuggestByUniversityName(universityName);
-		JSONArray d= new JSONArray();
-		for(String n:list){
-			JSONObject o = new JSONObject();
-			o.put("id", n);
-			o.put("data", n);
-			d.add(o);
+	public ResponseData<JSONObject> getHyDicts(String queryDictKeys) {
+		ResponseData<JSONObject> responseData = null;
+		try {
+			List<String> keys = JSON.parseArray(queryDictKeys, String.class);
+			JSONObject d = new JSONObject();
+			if (!CollectionUtil.isEmpty(keys)) {
+				for (String key : keys) {
+					List<HyDictsVo> list = HyDictUtil.getHyDicts(key);
+					d.put(key, list);
+				}
+			}
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "获取字典参数成功", d);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
-		printWriter.write(JSON.toJSONString(d));
-		printWriter.flush();
-		printWriter.close();
+		return responseData;
 	}
 
 }

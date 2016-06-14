@@ -99,7 +99,8 @@
 		</section>
 		<section class="sel_con">
 			<p class="boss">
-				<select><option>UK-英国</option></select>
+				<select id="abroadCountry"><option value="">请选择留学国家</option>
+				</select>
 			</p>
 		</section>
 		<section class="par_name">
@@ -109,12 +110,12 @@
 		</section>
 		<section class="sel_con">
 			<p class="boss">
-				<select><option>单身</option></select>
+				<select id="maritalStatus"></select>
 			</p>
 		</section>
 		<section class="sel_con">
 			<p class="boss">
-				<select><option>狮子座</option></select>
+				<select id="constellation"></select>
 			</p>
 		</section>
 		<section class="par_textare">
@@ -205,7 +206,8 @@
 
 		<section class="sel_con">
 			<p class="boss">
-				<select><option>狮子座</option></select>
+				<select id="industryCode"><option value="">请选择所在行业</option>
+				</select>
 			</p>
 		</section>
 
@@ -323,12 +325,11 @@
 		</ul>
 	</footer>
 
-</body>
-	<script type="text/javascript"
-		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
-	<script type="text/javascript"
-		src="${_base}/js/jquery.coolautosuggest.js"></script>
-	<link rel="stylesheet" type="text/css" href="${_base}/js/jquery.coolautosuggest.css">
+</body> 
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 	<script type="text/javascript">
 	(function($){
 		$.UserEditPage = function(data){
@@ -341,21 +342,64 @@
 		
 			prototype: {
 				init: function(){
-					this.bindEvents();
-					this.getAllHyCountries();
-					this.getAllHyIndustries();
-					this.bindRules(); 
+					this.bindEvents(); 
+					this.initData(); 
 				},
 				
-				bindEvents: function(){
+				initData: function(){
+					this.getAllHyCountries();
+					this.getAllHyIndustries();
+					this.getAllDicts();
+				},
+				
+				bindEvents: function(){ 
 					
-					$("#abroadUniversity").coolautosuggest({
-					  url:"../sys/querySuggestByUniversityName?universityName="+$("#abroadUniversity").val(),
-					  showThumbnail:true,
-					  showDescription:true,
-					  submitOnSelect:true
+				},
+				
+				getAllDicts: function(){
+					var _this = this;
+					var keydata = ["HY_USER.CONSTELLATION","HY_USER.MARITAL_STATUS"];
+					ajaxController.ajax({
+						url: "../sys/getHyDicts",
+						type: "post", 
+						data:{
+							queryDictKeys:  JSON.stringify(keydata)
+						},
+						success: function(transport){
+							var data =transport.data;
+							_this.renderConstellationSelect(data["HY_USER.CONSTELLATION"]);
+							_this.renderMaritalStatusSelect(data["HY_USER.MARITAL_STATUS"]);
+						},
+						failure: function(transport){
+							_this.renderConstellationSelect();
+							_this.renderMaritalStatusSelect();
+						}
+						
 					});
-					
+				},
+				
+				renderConstellationSelect: function(options){
+					var d  = {
+						defaultValue:"",
+						showAll: true,
+						allValue: "",
+						allDesc: "请选择星座",
+						options: options?options:[]
+					};
+					var opt=$("#SelectOptionImpl").render(d);
+					$("#constellation").append(opt);
+				},
+				
+				renderMaritalStatusSelect: function(options){
+					var d  = {
+						defaultValue:"",
+						showAll: true,
+						allValue: "",
+						allDesc: "请选择婚姻情况",
+						options: options?options:[]
+					};
+					var opt=$("#SelectOptionImpl").render(d);
+					$("#maritalStatus").append(opt);
 				},
 
 				getAllHyCountries: function(){
@@ -425,5 +469,14 @@
 		});
 		p.init();
 	});
+	</script>
+	
+	<script id="SelectOptionImpl" type="text/x-jsrender"> 
+	{{if showAll==true}}
+    <option value="{{:allValue}}">{{:allDesc}}</option>
+	{{/if}}
+    {{for options ~defaultValue=defaultValue}}
+        <option value="{{:paramValue}}"  {{if ~defaultValue==paramValue}} selected {{/if}}>{{:paramDesc}}</option>
+    {{/for}}
 	</script>
 </html>
