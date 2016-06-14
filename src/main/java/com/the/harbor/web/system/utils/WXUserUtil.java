@@ -24,7 +24,7 @@ public final class WXUserUtil {
 	}
 
 	public static UserInfo getUserInfo(String openId) {
-		UserQueryResp userResp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfo(openId);
+		UserQueryResp userResp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfoByOpenId(openId);
 		return userResp.getUserInfo();
 	}
 
