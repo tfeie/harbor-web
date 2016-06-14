@@ -49,6 +49,8 @@ public class GoController {
 			LOG.info("获取session为空");
 		} else {
 			LOG.info("获取session:" + obj.toString());
+			request.setAttribute("wxopenid", obj.toString());
+
 		}
 		String payamount = "0.01";
 		long timestamp = DateUtil.getCurrentTimeMillis();
@@ -61,6 +63,7 @@ public class GoController {
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
 		request.setAttribute("payamount", payamount);
+
 		ModelAndView view = new ModelAndView("go/pay");
 		return view;
 	}
