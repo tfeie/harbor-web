@@ -54,7 +54,7 @@
 				<span>个人中心2</span><label>user/userCenter.jsp <a href="../user/userCenter.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>编辑个人信息</span><label>user/editUserInfo.jsp <a
+				<span>编辑个人信息</span><label>user/editUserInfo.jsp -ing <a
 					href="../user/editUserInfo.html">Go</a></label>
 			</p>
 			<p class="on1">

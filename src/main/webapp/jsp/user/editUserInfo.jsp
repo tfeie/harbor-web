@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -21,6 +22,10 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/json2.js"></script>
 <script>
 	$(function() {
 
@@ -69,12 +74,12 @@
 <body class="body">
 	<section class="top_info">
 		<p class="span_file">
-			<img src="//static.tfeie.com/images/aimg2.png">
+			<img src="<c:out value="${userInfo.homePageBg}"/>">
 		</p>
 		<section class="ip_logo">
 			<p>
 				<span class="span_file"><img
-					src="//static.tfeie.com/images/icon18.png"></span>
+					src="<c:out value="${userInfo.wxHeadimg}"/>"></span>
 			</p>
 		</section>
 	</section>
@@ -99,7 +104,7 @@
 		</section>
 		<section class="par_name">
 			<p class="boss">
-				<input type="text" value="Cambridge College">
+				<input type="text" value="" id="abroadUniversity">
 			</p>
 		</section>
 		<section class="sel_con">
@@ -257,11 +262,6 @@
 							</div>
 						</div>
 					</li>
-					<!--<li class="on">
-                        <div class="xinqi_1">
-                            <p><a href="#"><img src="//static.tfeie.com/images/icon15.png" /></a></p>
-                        </div>
-                    </li>-->
 				</ul>
 				<div class="clear"></div>
 			</section>
@@ -324,4 +324,106 @@
 	</footer>
 
 </body>
+	<script type="text/javascript"
+		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+	<script type="text/javascript"
+		src="${_base}/js/jquery.coolautosuggest.js"></script>
+	<link rel="stylesheet" type="text/css" href="${_base}/js/jquery.coolautosuggest.css">
+	<script type="text/javascript">
+	(function($){
+		$.UserEditPage = function(data){
+			this.settings = $.extend(true,{},$.UserEditPage.defaults);
+			this.params= data?data:{}
+		}
+		$.extend($.UserEditPage,{
+			defaults: { 
+			},
+		
+			prototype: {
+				init: function(){
+					this.bindEvents();
+					this.getAllHyCountries();
+					this.getAllHyIndustries();
+					this.bindRules(); 
+				},
+				
+				bindEvents: function(){
+					
+					$("#abroadUniversity").coolautosuggest({
+					  url:"../sys/querySuggestByUniversityName?universityName="+$("#abroadUniversity").val(),
+					  showThumbnail:true,
+					  showDescription:true,
+					  submitOnSelect:true
+					});
+					
+				},
+
+				getAllHyCountries: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../sys/getAllHyCountries",
+						type: "post", 
+						success: function(transport){
+							var data =transport.data;
+							_this.fillCountriesSelelct(data);
+						},
+						failure: function(transport){
+							_this.fillCountriesSelelct([]);
+						}
+						
+					});
+				},
+				
+				fillCountriesSelelct: function(data){
+					$.each(data,function(i,d){
+						$("#abroadCountry").append("<option value='"+ d.countryCode+"'>"+d.countryCode+"-"+d.countryName+"</option>");
+					}) 
+				},
+				
+				getAllHyIndustries: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../sys/getAllHyIndustries",
+						type: "post", 
+						success: function(transport){
+							var data =transport.data;
+							_this.fillIndustriesSelelct(data);
+						},
+						failure: function(transport){
+							_this.fillIndustriesSelelct([]);
+						}
+						
+					});
+				},
+				
+				fillIndustriesSelelct: function(data){
+					$.each(data,function(i,d){
+						$("#industryCode").append("<option value='"+ d.industryCode+"'>"+d.industryName+"</option>");
+					}) 
+				},
+
+				
+				showError: function(message){
+					$(".message-err").show().html("<p><span>X</span>"+message+"</p>");
+				},
+				
+				showSuccess: function(message){
+					$(".message-err").show().html("<p><span></span>"+message+"</p>");
+				},
+				
+				hideMessage: function(){
+					$(".message-err").html("").hide();
+				}
+			}
+		})
+	})(jQuery);
+	
+
+	$(document).ready(function(){
+		var p = new $.UserEditPage({
+			userId: "<c:out value="${userInfo.userId}"/>"
+		});
+		p.init();
+	});
+	</script>
 </html>

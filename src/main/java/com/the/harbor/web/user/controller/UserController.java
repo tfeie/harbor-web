@@ -395,13 +395,10 @@ public class UserController {
 
 	@RequestMapping("/editUserInfo.html")
 	public ModelAndView editUserInfo(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
-		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
-		}
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUserId("11");
+		userInfo.setWxHeadimg(GlobalSettings.getHarborUserDefaultHeadICONURL());
+		userInfo.setHomePageBg(GlobalSettings.getHarborUserDefaultHomePageBGURL());
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/editUserInfo");
 		return view;
