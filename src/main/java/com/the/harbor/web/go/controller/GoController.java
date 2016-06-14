@@ -63,7 +63,6 @@ public class GoController {
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
 		request.setAttribute("payamount", payamount);
-
 		ModelAndView view = new ModelAndView("go/pay");
 		return view;
 	}
