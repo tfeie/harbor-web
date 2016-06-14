@@ -44,14 +44,6 @@ public class GoController {
 	
 	@RequestMapping("/toPay.html")
 	public ModelAndView toPay(HttpServletRequest request) {
-		Object obj = request.getSession().getAttribute("wxopendid");
-		if(obj == null) {
-			LOG.info("获取session为空");
-		} else {
-			LOG.info("获取session:" + obj.toString());
-			request.setAttribute("wxopenid", obj.toString());
-
-		}
 		String payamount = "0.01";
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
