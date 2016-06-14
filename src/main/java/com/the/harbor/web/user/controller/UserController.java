@@ -62,6 +62,7 @@ public class UserController {
 
 	@RequestMapping("/pages.html")
 	public ModelAndView pages(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.getSession().setAttribute("wxopendid", "111");
 		ModelAndView view = new ModelAndView("pages");
 		return view;
 	}
@@ -292,6 +293,7 @@ public class UserController {
 			throw new BusinessException(userMember.getResponseHeader().getResultCode(),
 					userMember.getResponseHeader().getResultMessage());
 		}
+		request.setAttribute("openId", wtoken.getOpenId());
 		request.setAttribute("userMember", userMember);
 
 		long timestamp = DateUtil.getCurrentTimeMillis();
