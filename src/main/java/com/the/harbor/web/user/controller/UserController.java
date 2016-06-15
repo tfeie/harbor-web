@@ -31,6 +31,8 @@ import com.the.harbor.api.user.param.UserSystemTagQueryReq;
 import com.the.harbor.api.user.param.UserSystemTagQueryResp;
 import com.the.harbor.api.user.param.UserSystemTagSubmitReq;
 import com.the.harbor.api.user.param.UserTag;
+import com.the.harbor.api.user.param.UserTagQueryReq;
+import com.the.harbor.api.user.param.UserTagQueryResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
@@ -394,10 +396,7 @@ public class UserController {
 
 	@RequestMapping("/editUserInfo.html")
 	public ModelAndView editUserInfo(HttpServletRequest request) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setUserId("11");
-		userInfo.setWxHeadimg(GlobalSettings.getHarborUserDefaultHeadICONURL());
-		userInfo.setHomePageBg(GlobalSettings.getHarborUserDefaultHomePageBGURL());
+		UserInfo userInfo = WXUserUtil.getUserInfo("oztCUs_Ci25lT7IEMeDLtbK6nr1M");
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/editUserInfo");
 		return view;
@@ -492,6 +491,55 @@ public class UserController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getUserTags")
+	@ResponseBody
+	public ResponseData<JSONObject> getUserTags(String userId) {
+		ResponseData<JSONObject> responseData = null;
+		JSONObject data = new JSONObject();
+		/* 获取用户已经选择的所有标签 */
+		UserTagQueryResp resp = null;
+		try {
+			if (StringUtil.isBlank(userId)) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户标识不存在");
+			}
+			// 获取用户选择的标签
+			UserTagQueryReq userTagQueryReq = new UserTagQueryReq();
+			userTagQueryReq.setUserId(userId);
+			resp = DubboConsumerFactory.getService(IUserSV.class).queryUserTags(userTagQueryReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
+						resp.getResponseHeader().getResultMessage());
+			}
+		} catch (Exception ex) {
+			LOG.error("加载用户已经选择的系统标签出错", ex);
+		}
+
+		try {
+			/* 已经选择的兴趣标签 */
+			List<UserTag> selectedInterestTags = resp.getInterestTags();
+			/* 已经选择的技能标签 */
+			List<UserTag> selectedSkillTags = resp.getSkillTags();
+			/* 系统提供的技能标签 */
+			List<HyTagVo> skillAllTags = HyTagUtil.getAllBaseSkillTags();
+			/* 系统提供的兴趣标签 */
+			List<HyTagVo> interestAllTags = HyTagUtil.getAllBaseInterestTags();
+
+			/* 标记系统级别的兴趣和性能标签被选择了 */
+			this.markTags(interestAllTags, selectedInterestTags);
+			this.markTags(skillAllTags, selectedSkillTags);
+
+			data.put("selectedInterestTags", selectedInterestTags);
+			data.put("selectedSkillTags", selectedSkillTags);
+			data.put("skillAllTags", skillAllTags);
+			data.put("interestAllTags", interestAllTags);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", data);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
 	}

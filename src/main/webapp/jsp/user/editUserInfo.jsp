@@ -235,14 +235,161 @@
 				},
 				
 				bindEvents: function(){ 
+					var _this = this;
 					//性别选择事件代理
 					$("#SEX_SELECT").delegate("span","click",function(){
 						$(this).parents("p").find("span").removeClass("on")
 						$(this).addClass("on")
 					});
 					
+					//已选兴趣标签的删除事件代理
+					$("#SELECTED_INTEREST_TAGS").delegate("[name='IMG_DEL']","click",function(){
+						var tagName = $(this).attr("tagName");
+						//从已经选择的兴趣标签列表中删除此标签
+						_this.deleteSelectedInterestTags(tagName);
+					});
+					
+					//可选择兴趣标签的选择添加事件代理
+					$("#UI_CAN_SELECT_INTEREST_TAGS").delegate("[name='LI_ADD_TAG']","click",function(){
+						var tagName = $(this).attr("tagName");
+						_this.addNewSelectInterestTag(tagName);
+					});
+					
+					//已选技能标签的删除事件代理
+					$("#SELECTED_SKILL_TAGS").delegate("[name='IMG_DEL']","click",function(){
+						var tagName = $(this).attr("tagName");
+						//从已经选择的兴趣标签列表中删除此标签
+						_this.deleteSelectedSkillTags(tagName);
+					});
+					
+					//可选择技能标签的选择添加事件代理
+					$("#UI_CAN_SELECT_SKILL_TAGS").delegate("[name='LI_ADD_TAG']","click",function(){
+						var tagName = $(this).attr("tagName");
+						_this.addNewSelectSkillTag(tagName);
+					});
 					
 				},
+				
+				//选择兴趣标签
+				addNewSelectInterestTag: function(tagName){
+					var _this = this;
+					if(_this.selectedInterestTags.length>=5){
+						alert("最多只能选择五个技能标签");
+						return ;
+					}
+					//从待选列表中标记已经被选
+					var queryTags=$.grep(_this.interestAllTags,function(o,i){
+						return o.tagName==tagName;
+					});
+					if(queryTags && queryTags.length>0){
+						var currentTag = queryTags[0];
+						currentTag.selected = true;
+						
+						//追加到已选列表
+						var newTag = {
+							tagId: currentTag.tagId,
+							tagType: currentTag.tagType,
+							tagName: currentTag.tagName,
+							tagCat: currentTag.tagCat
+						};
+						_this.selectedInterestTags.push(newTag);
+					}
+					//渲染可选与备选区
+					_this.renderSelectedInterestTags(_this.selectedInterestTags);
+					_this.renderCanSelecteInterestTags(_this.interestAllTags);
+				},
+				
+				//删除已经选择的兴趣标签
+				deleteSelectedInterestTags: function(tagName){
+					var _this = this;
+					var datas=_this.selectedInterestTags;
+					if(datas.length-1==0){
+						alert("请至少保留一个兴趣标签");
+						return ;
+					}
+					var tags=$.grep(datas,function(o,i){
+						return o.tagName==tagName;
+					});
+					if(!tags || tags.length==0)return;
+					var tag = tags[0];
+					datas.splice($.inArray(tag,datas),1);
+					
+					//将所选择的系统级的兴趣标签回退到可选标签库
+					var alltags = _this.interestAllTags;
+					var tags2=$.grep(alltags,function(o,i){
+						return o.tagName==tagName;
+					});
+					if(tags2 && tags2.length>0){
+						//如果删除的标签是系统内置标签，则修改选择状态
+						var t = tags2[0];
+						t.selected = false;
+					}
+					//渲染页面
+					_this.renderSelectedInterestTags(datas);
+					_this.renderCanSelecteInterestTags(alltags);
+				},
+				
+				
+				//选择添加技能标签
+				addNewSelectSkillTag: function(tagName){
+					var _this = this;
+					if(_this.selectedSkillTags.length>=5){
+						alert("最多只能选择五个技能标签");
+						return ;
+					}
+					//从待选列表中标记已经被选
+					var queryTags=$.grep(_this.skillAllTags,function(o,i){
+						return o.tagName==tagName;
+					});
+					if(queryTags && queryTags.length>0){
+						var currentTag = queryTags[0];
+						currentTag.selected = true;
+						
+						//追加到已选列表
+						var newTag = {
+							tagId: currentTag.tagId,
+							tagType: currentTag.tagType,
+							tagName: currentTag.tagName,
+							tagCat: currentTag.tagCat
+						};
+						_this.selectedSkillTags.push(newTag);
+					}
+					//渲染可选与备选区
+					_this.renderSelectedSkillTags(_this.selectedSkillTags);
+					_this.renderCanSelecteSkillTags(_this.skillAllTags);
+				},
+				
+				//删除已经选择的技能标签
+				deleteSelectedSkillTags: function(tagName){
+					var _this = this;
+					var datas=_this.selectedSkillTags;
+					if(datas.length-1==0){
+						alert("请至少保留一个技能标签");
+						return ;
+					}
+					var tags=$.grep(datas,function(o,i){
+						return o.tagName==tagName;
+					});
+					if(!tags || tags.length==0)return;
+					var tag = tags[0];
+					datas.splice($.inArray(tag,datas),1);
+					
+					//将所选择的系统级的技能标签回退到可选标签库
+					var alltags = _this.skillAllTags;
+					var tags2=$.grep(alltags,function(o,i){
+						return o.tagName==tagName;
+					});
+					if(tags2 && tags2.length>0){
+						//如果删除的标签是系统内置标签，则修改选择状态
+						var t = tags2[0];
+						t.selected = false;
+					}
+					//渲染页面
+					_this.renderSelectedSkillTags(datas);
+					_this.renderCanSelecteSkillTags(alltags);
+				},
+				
+				
 				
 				renderSex: function(){
 					var sex = this.getPropertyValue("sex");
@@ -260,13 +407,18 @@
 						},
 						success: function(transport){
 							var data =transport.data;
-							_this.renderCanSelecteSKILLTags(data["skillAllTags"]);
+							_this.skillAllTags=data["skillAllTags"]?data["skillAllTags"]:[];
+							_this.interestAllTags=data["interestAllTags"]?data["interestAllTags"]:[];
+							_this.selectedSkillTags=data["selectedSkillTags"]?data["selectedSkillTags"]:[];
+							_this.selectedInterestTags=data["selectedInterestTags"]?data["selectedInterestTags"]:[];
+							
+							_this.renderCanSelecteSkillTags(data["skillAllTags"]);
 							_this.renderCanSelecteInterestTags(data["interestAllTags"]);
 							_this.renderSelectedSkillTags(data["selectedSkillTags"]);
 							_this.renderSelectedInterestTags(data["selectedInterestTags"]);
 						},
 						failure: function(transport){ 
-							_this.renderCanSelecteSKILLTags([]);
+							_this.renderCanSelecteSkillTags([]);
 							_this.renderCanSelecteInterestTags([]);
 							_this.renderSelectedSkillTags([]);
 							_this.renderSelectedInterestTags([]);
@@ -279,15 +431,15 @@
 						tags: tags?tags:[]
 					}
 					var opt=$("#CanSelectSysTagImpl").render(d);
-					$("#UI_CAN_SELECT_INTEREST_TAGS").append(opt);
+					$("#UI_CAN_SELECT_INTEREST_TAGS").html(opt);
 				},
 				
-				renderCanSelecteSKILLTags: function(tags){
+				renderCanSelecteSkillTags: function(tags){
 					var d = {
 						tags: tags?tags:[]
 					}
 					var opt=$("#CanSelectSysTagImpl").render(d);
-					$("#UI_CAN_SELECT_SKILL_TAGS").append(opt);
+					$("#UI_CAN_SELECT_SKILL_TAGS").html(opt);
 				},
 				
 				renderSelectedSkillTags: function(tags){
@@ -297,7 +449,7 @@
 						tags: tags?tags:[]
 					}
 					var opt=$("#SelectedTagImpl").render(d);
-					$("#SELECTED_SKILL_TAGS").append(opt);
+					$("#SELECTED_SKILL_TAGS").html(opt);
 				},
 				
 				renderSelectedInterestTags: function(tags){
@@ -307,7 +459,7 @@
 						tags: tags?tags:[]
 					}
 					var opt=$("#SelectedTagImpl").render(d);
-					$("#SELECTED_INTEREST_TAGS").append(opt);
+					$("#SELECTED_INTEREST_TAGS").html(opt);
 				},
 				
 				getAllDicts: function(){
@@ -491,7 +643,7 @@
 	<script id="CanSelectSysTagImpl" type="text/x-jsrender"> 
 	{{for tags}}
 	{{if selected==false}}
-	<li><a>{{:tagName}}</a></li> 
+	<li name="LI_ADD_TAG" tagName="{{:tagName}}"><a>{{:tagName}}</a></li> 
 	{{/if}}
 	{{/for}}
 	<li class="on">
@@ -511,8 +663,8 @@
 					<a>{{:tagName}}</a>
 				</p>
 				<div class="det">
-					<p onclick=" KX_list($(this));">
-						<img src="//static.tfeie.com/images/icon16.png" />
+					<p>
+						<img name="IMG_DEL" src="//static.tfeie.com/images/icon16.png" tagName="{{:tagName}}"/>
 					</p>
 				</div>
 			</div>
