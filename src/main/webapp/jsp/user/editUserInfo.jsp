@@ -87,25 +87,20 @@
 	<section class="per_info padding-bottom">
 		<section class="par_name">
 			<p>
-				<input type="text" value="Martin">
+				<input type="text" id="enName" placeholder="您的英文名称" value="<c:out value="${userInfo.enName}"/>">
 			</p>
 		</section>
-		<section class="info_sex">
-			<p>
-				<span><img src="//static.tfeie.com/images/boy.png" /></span><span><img
-					src="//static.tfeie.com/images/girl.png" /></span><span class="in"><img
-					src="//static.tfeie.com/images/other.png" /></span>
-			</p>
+		<section class="info_sex" id="SEX_SELECT"> 
 		</section>
 		<section class="sel_con">
 			<p class="boss">
-				<select id="abroadCountry"><option value="">请选择留学国家</option>
+				<select id="abroadCountry">
 				</select>
 			</p>
 		</section>
 		<section class="par_name">
 			<p class="boss">
-				<input type="text" value="" id="abroadUniversity">
+				<input type="text" placeholder="您留学的学校名称" value="<c:out value="${userInfo.abroadUniversity}"/>" id="abroadUniversity">
 			</p>
 		</section>
 		<section class="sel_con">
@@ -120,7 +115,7 @@
 		</section>
 		<section class="par_textare">
 			<p>
-				<textarea>个性签名....</textarea>
+				<textarea id="signature" placeholder="您的个性签名..."><c:out value="${userInfo.signature}"/></textarea>
 			</p>
 		</section>
 		<section class="check_item">
@@ -200,26 +195,26 @@
 		</section>
 		<section class="par_name">
 			<p class="boss">
-				<input type="text" value="185****2516">
+				<input type="text" id="mobilePhone" value="<c:out value="${userInfo.mobilePhone}"/>" placeholder="您的移动电话号码">
 			</p>
 		</section>
 
 		<section class="sel_con">
 			<p class="boss">
-				<select id="industryCode"><option value="">请选择所在行业</option>
+				<select id="industry">
 				</select>
 			</p>
 		</section>
 
 		<section class="par_name">
 			<p class="boss">
-				<input type="text" value="XX公司">
+				<input type="text" id="company" value="<c:out value="${userInfo.company}"/>" placeholder="您就职的公司">
 			</p>
 		</section>
 
 		<section class="par_name">
 			<p class="boss">
-				<input type="text" value="CXO">
+				<input type="text" id="title" value="<c:out value="${userInfo.title}"/>" placeholder="您的职位头衔,如:CTO">
 			</p>
 		</section>
 		<section class="check_item">
@@ -350,10 +345,23 @@
 					this.getAllHyCountries();
 					this.getAllHyIndustries();
 					this.getAllDicts();
+					this.renderSex();
 				},
 				
 				bindEvents: function(){ 
+					//性别选择事件代理
+					$("#SEX_SELECT").delegate("span","click",function(){
+						$(this).parents("p").find("span").removeClass("on")
+						$(this).addClass("on")
+					});
 					
+					
+				},
+				
+				renderSex: function(){
+					var sex = this.getPropertyValue("sex");
+					var opt=$("#SexImpl").render({sex:sex});
+					$("#SEX_SELECT").append(opt);
 				},
 				
 				getAllDicts: function(){
@@ -378,9 +386,14 @@
 					});
 				},
 				
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
+				},
+				
 				renderConstellationSelect: function(options){
 					var d  = {
-						defaultValue:"",
+						defaultValue: this.getPropertyValue("constellation"),
 						showAll: true,
 						allValue: "",
 						allDesc: "请选择星座",
@@ -392,7 +405,7 @@
 				
 				renderMaritalStatusSelect: function(options){
 					var d  = {
-						defaultValue:"",
+						defaultValue: this.getPropertyValue("maritalStatus"),
 						showAll: true,
 						allValue: "",
 						allDesc: "请选择婚姻情况",
@@ -418,10 +431,16 @@
 					});
 				},
 				
-				fillCountriesSelelct: function(data){
-					$.each(data,function(i,d){
-						$("#abroadCountry").append("<option value='"+ d.countryCode+"'>"+d.countryCode+"-"+d.countryName+"</option>");
-					}) 
+				fillCountriesSelelct: function(options){ 
+					var d  = {
+						defaultValue: this.getPropertyValue("abroadCountry"),
+						showAll: true,
+						allValue: "",
+						allDesc: "请选择留学国家",
+						options: options?options:[]
+					};
+					var opt=$("#AbroadCountrySelectOptionImpl").render(d);
+					$("#abroadCountry").append(opt);
 				},
 				
 				getAllHyIndustries: function(){
@@ -440,10 +459,16 @@
 					});
 				},
 				
-				fillIndustriesSelelct: function(data){
-					$.each(data,function(i,d){
-						$("#industryCode").append("<option value='"+ d.industryCode+"'>"+d.industryName+"</option>");
-					}) 
+				fillIndustriesSelelct: function(options){
+					var d  = {
+						defaultValue: this.getPropertyValue("industry"),
+						showAll: true,
+						allValue: "",
+						allDesc: "请选择行业",
+						options: options?options:[]
+					};
+					var opt=$("#IndustrySelectOptionImpl").render(d);
+					$("#industry").append(opt);
 				},
 
 				
@@ -465,7 +490,12 @@
 
 	$(document).ready(function(){
 		var p = new $.UserEditPage({
-			userId: "<c:out value="${userInfo.userId}"/>"
+			userId: "<c:out value="${userInfo.userId}"/>",
+			sex: "<c:out value="${userInfo.sex}"/>",
+			abroadCountry: "<c:out value="${userInfo.abroadCountry}"/>",
+			industry: "<c:out value="${userInfo.industry}"/>",
+			maritalStatus: "<c:out value="${userInfo.maritalStatus}"/>",
+			constellation: "<c:out value="${userInfo.constellation}"/>"
 		});
 		p.init();
 	});
@@ -478,5 +508,37 @@
     {{for options ~defaultValue=defaultValue}}
         <option value="{{:paramValue}}"  {{if ~defaultValue==paramValue}} selected {{/if}}>{{:paramDesc}}</option>
     {{/for}}
+	</script>
+	
+	<script id="IndustrySelectOptionImpl" type="text/x-jsrender"> 
+	{{if showAll==true}}
+    <option value="{{:allValue}}">{{:allDesc}}</option>
+	{{/if}}
+    {{for options ~defaultValue=defaultValue}}
+        <option value="{{:industryCode}}"  {{if ~defaultValue==industryCode}} selected {{/if}}>{{:industryName}}</option>
+    {{/for}}
+	</script>
+	
+	<script id="AbroadCountrySelectOptionImpl" type="text/x-jsrender"> 
+	{{if showAll==true}}
+    <option value="{{:allValue}}">{{:allDesc}}</option>
+	{{/if}}
+    {{for options ~defaultValue=defaultValue}}
+        <option value="{{:countryCode}}"  {{if ~defaultValue==countryCode}} selected {{/if}}>{{:countryCode}}-{{:countryName}}</option>
+    {{/for}}
+	</script>
+	
+	<script id="SexImpl" type="text/x-jsrender"> 
+	<p>
+		<span sex="1" class="{{if sex==1}}on{{/if}}">
+			<img src="//static.tfeie.com/images/boy.png" />
+		</span>
+		<span sex="2" class="{{if sex==2}}on{{/if}}">
+			<img src="//static.tfeie.com/images/girl.png" />
+		</span>
+		<span class="in {{if sex==0}}on{{/if}}" sex="0">
+			<img src="//static.tfeie.com/images/other.png" />
+		</span>
+	</p>
 	</script>
 </html>
