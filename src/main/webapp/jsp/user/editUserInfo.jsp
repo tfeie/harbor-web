@@ -646,7 +646,9 @@
 	<li name="LI_ADD_TAG" tagName="{{:tagName}}"><a>{{:tagName}}</a></li> 
 	{{/if}}
 	{{/for}}
+<input type="text" size="10">
 	<li class="on">
+		
 		<a><img src="//static.tfeie.com/images/icon15.png" /></a>
 	</li>
 	</script>
