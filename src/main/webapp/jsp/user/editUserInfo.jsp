@@ -17,6 +17,8 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -204,7 +206,20 @@
 			</a></li>
 		</ul>
 	</footer>
-
+	
+	<!-- 自定义标签添加窗口 开始 -->
+	<div class="weui_dialog_confirm" id="CustomizeTagDialog" style="display:none">
+	   <div class="weui_mask"></div>
+	   <div class="weui_dialog">
+	       <div class="weui_dialog_hd"><strong class="weui_dialog_title">添加自定义标签</strong></div>
+	       <div class="weui_dialog_bd"><input type="text" id="custmoizeTag"/></div>
+	       <div class="weui_dialog_ft">
+	           <a href="javascript:void(0)" class="weui_btn_dialog default">取消</a>
+	           <a href="javascript:void(0)" class="weui_btn_dialog primary">确定</a>
+	       </div>
+	   </div>
+	</div>
+	<!-- 自定义标签添加窗口 结束 -->
 </body> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
@@ -255,6 +270,12 @@
 						_this.addNewSelectInterestTag(tagName);
 					});
 					
+					//自定义兴趣标签绑定事件
+					$("#UI_CAN_SELECT_INTEREST_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
+						_this.showCustomizeTagDialog();
+					});
+					
+					
 					//已选技能标签的删除事件代理
 					$("#SELECTED_SKILL_TAGS").delegate("[name='IMG_DEL']","click",function(){
 						var tagName = $(this).attr("tagName");
@@ -267,6 +288,7 @@
 						var tagName = $(this).attr("tagName");
 						_this.addNewSelectSkillTag(tagName);
 					});
+					
 					
 				},
 				
@@ -462,6 +484,12 @@
 					$("#SELECTED_INTEREST_TAGS").html(opt);
 				},
 				
+				showCustomizeTagDialog: function(){
+					$("#CustomizeTagDialog").show();
+					
+					//
+				},
+				
 				getAllDicts: function(){
 					var _this = this;
 					var keydata = ["HY_USER.CONSTELLATION","HY_USER.MARITAL_STATUS"];
@@ -646,10 +674,8 @@
 	<li name="LI_ADD_TAG" tagName="{{:tagName}}"><a>{{:tagName}}</a></li> 
 	{{/if}}
 	{{/for}}
-<input type="text" size="10">
 	<li class="on">
-		
-		<a><img src="//static.tfeie.com/images/icon15.png" /></a>
+		<a><img name="IMG_CUSTOMIZE_TAG_ADD" src="//static.tfeie.com/images/icon15.png" /></a>
 	</li>
 	</script>
 	
