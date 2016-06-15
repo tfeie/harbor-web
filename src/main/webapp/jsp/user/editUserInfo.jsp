@@ -303,6 +303,12 @@
 										cnlength:"标签名称不能超过4个汉字"
 									}
 								});
+								if(_this.selectedInterestTags.length==5){
+									$("#_customized_interest_tag_error").html("<p><span>X</span>最多只能选择5个兴趣标签</p>").show();
+									return;
+								}else{
+									$("#_customized_interest_tag_error").hide();
+								}
 								var exists=_this.existsTagName(tagName,_this.selectedInterestTags,_this.interestAllTags);
 								if(exists){
 									$("#_customized_interest_tag_error").html("<p><span>X</span>标签名称重复</p>").show();
@@ -310,6 +316,7 @@
 								}else{
 									$("#_customized_interest_tag_error").hide();
 								}
+								
 								var res=valueValidator.fireRulesAndReturnFirstError();
 								if(res){
 									$("#_customized_interest_tag_error").html("<p><span>X</span>"+res+"</p>").show();
@@ -365,6 +372,12 @@
 										cnlength:"标签名称不能超过4个汉字"
 									}
 								});
+								if(_this.selectedSkillTags.length==5){
+									$("#_customized_skill_tag_error").html("<p><span>X</span>最多只能选择5个技能标签</p>").show();
+									return;
+								}else{
+									$("#_customized_skill_tag_error").hide();
+								}
 								var exists=_this.existsTagName(tagName,_this.selectedSkillTags,_this.skillAllTags);
 								if(exists){
 									$("#_customized_skill_tag_error").html("<p><span>X</span>标签名称重复</p>").show();
