@@ -222,9 +222,13 @@
 	<!-- 自定义标签添加窗口 结束 -->
 </body> 
 <script type="text/javascript"
+		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="${_base}/js/jquery.weui.js"></script>
 	<script type="text/javascript">
 	(function($){
 		$.UserEditPage = function(data){
@@ -272,7 +276,126 @@
 					
 					//自定义兴趣标签绑定事件
 					$("#UI_CAN_SELECT_INTEREST_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
-						_this.showCustomizeTagDialog();
+						var content = "<section class=\"par_name\">";
+						content +="<p class=\"boss\">";
+						content +="<input type=\"text\" id=\"CUSTOMIZE_INTEREST_TAGS\" placeholder=\"请输入一个标签:4个字符以内\">";
+						content +="</p>";
+						content +="</section>";
+						content +="<div class=\"message-err\" id=\"_customized_interest_tag_error\"></div>";
+						weUI.confirm({
+							title: "请自定义一个标签",
+							content: content,
+							ok: function(){
+								var tagName =$.trim($("#CUSTOMIZE_INTEREST_TAGS").val());
+								var valueValidator = new $.ValueValidator();
+								valueValidator.addRule({
+									labelName: "标签名称",
+									fieldName: "tagName",
+									getValue: function(){
+										return tagName;
+									},
+									fieldRules: {
+										required: true, 
+										cnlength: 8
+									},
+									ruleMessages: {
+										required: "请输入标签名称", 
+										cnlength:"标签名称不能超过4个汉字"
+									}
+								});
+								var exists=_this.existsTagName(tagName,_this.selectedInterestTags,_this.interestAllTags);
+								if(exists){
+									$("#_customized_interest_tag_error").html("<p><span>X</span>标签名称重复</p>").show();
+									return;
+								}else{
+									$("#_customized_interest_tag_error").hide();
+								}
+								var res=valueValidator.fireRulesAndReturnFirstError();
+								if(res){
+									$("#_customized_interest_tag_error").html("<p><span>X</span>"+res+"</p>").show();
+									return;
+								} else{
+									$("#_customized_interest_tag_error").hide();
+								}
+								//添加到待选标签库
+								var newTag = {
+									tagId: "",
+									tagType: "10",//20-技能标签
+									tagName: tagName,
+									tagCat: "11" //11为自定义标签
+								};
+								_this.selectedInterestTags.push(newTag);
+								
+								//渲染已选技能标签
+								_this.renderSelectedInterestTags(_this.selectedInterestTags);
+								
+								//关闭窗口
+								weUI.closeConfirm();
+							}
+						
+						}); 
+					});
+					
+					//自定义技能标签绑定事件
+					$("#UI_CAN_SELECT_SKILL_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
+						var content = "<section class=\"par_name\">";
+						content +="<p class=\"boss\">";
+						content +="<input type=\"text\" id=\"CUSTOMIZE_SKILL_TAGS\" placeholder=\"请输入一个标签:4个字符以内\">";
+						content +="</p>";
+						content +="</section>";
+						content +="<div class=\"message-err\" id=\"_customized_skill_tag_error\"></div>";
+						weUI.confirm({
+							title: "请自定义一个标签",
+							content: content,
+							ok: function(){
+								var tagName =$.trim($("#CUSTOMIZE_SKILL_TAGS").val());
+								var valueValidator = new $.ValueValidator();
+								valueValidator.addRule({
+									labelName: "标签名称",
+									fieldName: "tagName",
+									getValue: function(){
+										return tagName;
+									},
+									fieldRules: {
+										required: true, 
+										cnlength: 8
+									},
+									ruleMessages: {
+										required: "请输入标签名称", 
+										cnlength:"标签名称不能超过4个汉字"
+									}
+								});
+								var exists=_this.existsTagName(tagName,_this.selectedSkillTags,_this.skillAllTags);
+								if(exists){
+									$("#_customized_skill_tag_error").html("<p><span>X</span>标签名称重复</p>").show();
+									return;
+								}else{
+									$("#_customized_skill_tag_error").hide();
+								}
+								var res=valueValidator.fireRulesAndReturnFirstError();
+								if(res){
+									$("#_customized_skill_tag_error").html("<p><span>X</span>"+res+"</p>").show();
+									return;
+								} else{
+									$("#_customized_skill_tag_error").hide();
+								}
+								//添加到待选标签库
+								var newTag = {
+									tagId: "",
+									tagType: "20",//20-技能标签
+									tagName: tagName,
+									tagCat: "11" //11为自定义标签
+								};
+								_this.selectedSkillTags.push(newTag);
+								
+								//渲染已选技能标签
+								_this.renderSelectedSkillTags(_this.selectedSkillTags);
+								
+								//关闭窗口
+								weUI.closeConfirm();
+							}
+						
+						}); 
 					});
 					
 					
@@ -290,6 +413,23 @@
 					});
 					
 					
+				},
+				
+				//判断标签是否存在已选和备选
+				existsTagName: function(tagName,selectedtags,alltags){
+					var queryTags=$.grep(selectedtags,function(o,i){
+						return o.tagName==tagName;
+					});
+					if(queryTags && queryTags.length>0){
+						return true;
+					}
+					queryTags=$.grep(alltags,function(o,i){
+						return o.tagName==tagName;
+					});
+					if(queryTags && queryTags.length>0){
+						return true;
+					}
+					return false;
 				},
 				
 				//选择兴趣标签
@@ -675,7 +815,7 @@
 	{{/if}}
 	{{/for}}
 	<li class="on">
-		<a><img name="IMG_CUSTOMIZE_TAG_ADD" src="//static.tfeie.com/images/icon15.png" /></a>
+		<a name="IMG_CUSTOMIZE_TAG_ADD"><img src="//static.tfeie.com/images/icon15.png" /></a>
 	</li>
 	</script>
 	
