@@ -206,20 +206,6 @@
 			</a></li>
 		</ul>
 	</footer>
-	
-	<!-- 自定义标签添加窗口 开始 -->
-	<div class="weui_dialog_confirm" id="CustomizeTagDialog" style="display:none">
-	   <div class="weui_mask"></div>
-	   <div class="weui_dialog">
-	       <div class="weui_dialog_hd"><strong class="weui_dialog_title">添加自定义标签</strong></div>
-	       <div class="weui_dialog_bd"><input type="text" id="custmoizeTag"/></div>
-	       <div class="weui_dialog_ft">
-	           <a href="javascript:void(0)" class="weui_btn_dialog default">取消</a>
-	           <a href="javascript:void(0)" class="weui_btn_dialog primary">确定</a>
-	       </div>
-	   </div>
-	</div>
-	<!-- 自定义标签添加窗口 结束 -->
 </body> 
 <script type="text/javascript"
 		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
@@ -643,12 +629,6 @@
 					}
 					var opt=$("#SelectedTagImpl").render(d);
 					$("#SELECTED_INTEREST_TAGS").html(opt);
-				},
-				
-				showCustomizeTagDialog: function(){
-					$("#CustomizeTagDialog").show();
-					
-					//
 				},
 				
 				getAllDicts: function(){
