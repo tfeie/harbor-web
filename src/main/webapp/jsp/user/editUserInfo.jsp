@@ -228,7 +228,7 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
-	src="${_base}/js/jquery.weui.js"></script>
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
 	<script type="text/javascript">
 	(function($){
 		$.UserEditPage = function(data){
@@ -449,7 +449,7 @@
 				addNewSelectInterestTag: function(tagName){
 					var _this = this;
 					if(_this.selectedInterestTags.length>=5){
-						alert("最多只能选择五个技能标签");
+						weUI.alert({content:"最多只能选择5个兴趣标签"});
 						return ;
 					}
 					//从待选列表中标记已经被选
@@ -478,8 +478,8 @@
 				deleteSelectedInterestTags: function(tagName){
 					var _this = this;
 					var datas=_this.selectedInterestTags;
-					if(datas.length-1==0){
-						alert("请至少保留一个兴趣标签");
+					if(datas.length-1==0){ 
+						weUI.alert({content:"请至少保留1个兴趣标签"});
 						return ;
 					}
 					var tags=$.grep(datas,function(o,i){
@@ -508,8 +508,8 @@
 				//选择添加技能标签
 				addNewSelectSkillTag: function(tagName){
 					var _this = this;
-					if(_this.selectedSkillTags.length>=5){
-						alert("最多只能选择五个技能标签");
+					if(_this.selectedSkillTags.length>=5){ 
+						weUI.alert({content:"最多只能选择5个技能标签"});
 						return ;
 					}
 					//从待选列表中标记已经被选
@@ -539,7 +539,7 @@
 					var _this = this;
 					var datas=_this.selectedSkillTags;
 					if(datas.length-1==0){
-						alert("请至少保留一个技能标签");
+						weUI.alert({content:"请至少保留1个技能标签"});
 						return ;
 					}
 					var tags=$.grep(datas,function(o,i){
