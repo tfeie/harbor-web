@@ -119,77 +119,13 @@
 			</p>
 		</section>
 		<section class="check_item">
-			<section class="xinqi left_t">
-				<p class="left_t">
-					已选兴趣标签<i><em>4</em>/5</i>
-				</p>
-				<ul>
-					<li>
-						<div class="xinqi_1">
-							<p>
-								<a>摄影</a>
-							</p>
-							<div class="det">
-								<p onclick=" KX_list($(this));">
-									<img src="//static.tfeie.com/images/icon16.png" />
-								</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="xinqi_1">
-							<p>
-								<a>水上运动</a>
-							</p>
-							<div class="det">
-								<p onclick="  KX_list($(this));">
-									<img src="//static.tfeie.com/images/icon16.png" />
-								</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="xinqi_1">
-							<p>
-								<a>健身</a>
-							</p>
-							<div class="det">
-								<p onclick="  KX_list($(this));">
-									<img src="//static.tfeie.com/images/icon16.png" />
-								</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="xinqi_1">
-							<p>
-								<a>旅游</a>
-							</p>
-							<div class="det">
-								<p onclick="  KX_list($(this));">
-									<img src="//static.tfeie.com/images/icon16.png" />
-								</p>
-							</div>
-						</div>
-					</li>
+			<section class="xinqi left_t" id="SELECTED_INTEREST_TAGS">
 
-				</ul>
-				<div class="clear"></div>
 			</section>
 
 			<section class="chooes_2">
 				<p class="left_t">可选兴趣标签</p>
-				<ul>
-					<li><a>摄影</a></li>
-					<li><a>打篮球</a></li>
-					<li><a>水上运动</a></li>
-					<li><a>打篮球</a></li>
-					<li><a>看电影</a></li>
-					<li><a>摄影</a></li>
-					<li><a>睡觉</a></li>
-					<li><a>旅游</a></li>
-					<li class="on"><a><img
-							src="//static.tfeie.com/images/icon15.png" /></a></li>
+				<ul id="UI_CAN_SELECT_INTEREST_TAGS"> 
 				</ul>
 			</section>
 		</section>
@@ -218,64 +154,13 @@
 			</p>
 		</section>
 		<section class="check_item">
-			<section class="xinqi">
-				<p class="left_t">
-					已选技能标签<i><em>3</em>/5</i>
-				</p>
-				<ul>
-					<li>
-						<div class="xinqi_1">
-							<p>
-								<a>摄影</a>
-							</p>
-							<div class="det">
-								<p onclick=" KX_list($(this));">
-									<img src="//static.tfeie.com/images/icon16.png" />
-								</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="xinqi_1">
-							<p>
-								<a>水上运动</a>
-							</p>
-							<div class="det">
-								<p onclick=" KX_list($(this));">
-									<img src="//static.tfeie.com/images/icon16.png" />
-								</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="xinqi_1">
-							<p>
-								<a>健身</a>
-							</p>
-							<div class="det">
-								<p onclick=" KX_list($(this));">
-									<img src="//static.tfeie.com/images/icon16.png" />
-								</p>
-							</div>
-						</div>
-					</li>
-				</ul>
-				<div class="clear"></div>
+			<section class="xinqi" id="SELECTED_SKILL_TAGS">
+				
 			</section>
 
 			<section class="chooes_2">
 				<p class="left_t">可选技能标签</p>
-				<ul>
-					<li><a>摄影</a></li>
-					<li><a>打篮球</a></li>
-					<li><a>水上运动</a></li>
-					<li><a>打篮球</a></li>
-					<li><a>看电影</a></li>
-					<li><a>摄影</a></li>
-					<li><a>睡觉</a></li>
-					<li><a>旅游</a></li>
-					<li class="on"><a><img
-							src="//static.tfeie.com/images/icon15.png" /></a></li>
+				<ul id="UI_CAN_SELECT_SKILL_TAGS">
 				</ul>
 			</section>
 		</section>
@@ -345,6 +230,7 @@
 					this.getAllHyCountries();
 					this.getAllHyIndustries();
 					this.getAllDicts();
+					this.getAllTags();
 					this.renderSex();
 				},
 				
@@ -362,6 +248,66 @@
 					var sex = this.getPropertyValue("sex");
 					var opt=$("#SexImpl").render({sex:sex});
 					$("#SEX_SELECT").append(opt);
+				},
+				
+				getAllTags: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/getUserTags",
+						type: "post", 
+						data: {
+							userId: this.getPropertyValue("userId")
+						},
+						success: function(transport){
+							var data =transport.data;
+							_this.renderCanSelecteSKILLTags(data["skillAllTags"]);
+							_this.renderCanSelecteInterestTags(data["interestAllTags"]);
+							_this.renderSelectedSkillTags(data["selectedSkillTags"]);
+							_this.renderSelectedInterestTags(data["selectedInterestTags"]);
+						},
+						failure: function(transport){ 
+							_this.renderCanSelecteSKILLTags([]);
+							_this.renderCanSelecteInterestTags([]);
+							_this.renderSelectedSkillTags([]);
+							_this.renderSelectedInterestTags([]);
+						}
+					});
+				},
+				
+				renderCanSelecteInterestTags: function(tags){
+					var d = {
+						tags: tags?tags:[]
+					}
+					var opt=$("#CanSelectSysTagImpl").render(d);
+					$("#UI_CAN_SELECT_INTEREST_TAGS").append(opt);
+				},
+				
+				renderCanSelecteSKILLTags: function(tags){
+					var d = {
+						tags: tags?tags:[]
+					}
+					var opt=$("#CanSelectSysTagImpl").render(d);
+					$("#UI_CAN_SELECT_SKILL_TAGS").append(opt);
+				},
+				
+				renderSelectedSkillTags: function(tags){
+					var d = {
+						title: "已选技能标签",
+						count: tags?tags.length:0,
+						tags: tags?tags:[]
+					}
+					var opt=$("#SelectedTagImpl").render(d);
+					$("#SELECTED_SKILL_TAGS").append(opt);
+				},
+				
+				renderSelectedInterestTags: function(tags){
+					var d = {
+						title: "已选兴趣标签",
+						count: tags?tags.length:0,
+						tags: tags?tags:[]
+					}
+					var opt=$("#SelectedTagImpl").render(d);
+					$("#SELECTED_INTEREST_TAGS").append(opt);
 				},
 				
 				getAllDicts: function(){
@@ -540,5 +486,39 @@
 			<img src="//static.tfeie.com/images/other.png" />
 		</span>
 	</p>
+	</script>
+	
+	<script id="CanSelectSysTagImpl" type="text/x-jsrender"> 
+	{{for tags}}
+	{{if selected==false}}
+	<li><a>{{:tagName}}</a></li> 
+	{{/if}}
+	{{/for}}
+	<li class="on">
+		<a><img src="//static.tfeie.com/images/icon15.png" /></a>
+	</li>
+	</script>
+	
+	<script id="SelectedTagImpl" type="text/x-jsrender"> 	
+	<p class="left_t">
+		{{:title}}<i><em>{{:count}}</em>/5</i>
+	</p>
+	<ul>
+		{{for tags}}
+		<li>
+			<div class="xinqi_1">
+				<p>
+					<a>{{:tagName}}</a>
+				</p>
+				<div class="det">
+					<p onclick=" KX_list($(this));">
+						<img src="//static.tfeie.com/images/icon16.png" />
+					</p>
+				</div>
+			</div>
+		</li>
+		{{/for}}
+	</ul>
+	<div class="clear"></div>
 	</script>
 </html>
