@@ -276,6 +276,10 @@
 					
 					//自定义兴趣标签绑定事件
 					$("#UI_CAN_SELECT_INTEREST_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
+						if(_this.selectedInterestTags.length==5){
+							weUI.alert({content:"最多只能选择5个兴趣标签"});
+							return ;
+						}
 						var content = "<section class=\"par_name\">";
 						content +="<p class=\"boss\">";
 						content +="<input type=\"text\" id=\"CUSTOMIZE_INTEREST_TAGS\" placeholder=\"请输入一个标签:4个字符以内\">";
@@ -345,6 +349,10 @@
 					
 					//自定义技能标签绑定事件
 					$("#UI_CAN_SELECT_SKILL_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
+						if(_this.selectedSkillTags.length==5){
+							weUI.alert({content:"最多只能选择5个技能标签"});
+							return ;
+						}
 						var content = "<section class=\"par_name\">";
 						content +="<p class=\"boss\">";
 						content +="<input type=\"text\" id=\"CUSTOMIZE_SKILL_TAGS\" placeholder=\"请输入一个标签:4个字符以内\">";
