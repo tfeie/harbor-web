@@ -503,7 +503,38 @@ public class UserController {
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
-		String url = WXRequestUtil.getFullURL(request);
+		String url = GlobalSettings.getHarborDomain()+"/user/getUserCardDetail.html?userId="+userInfo.getUserId();
+		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
+		request.setAttribute("url", url);
+		request.setAttribute("userInfo", userInfo); 
+		ModelAndView view = new ModelAndView("user/userCard");
+		return view;
+	}
+	
+	@RequestMapping("/getUserCardDetail.html")
+	public ModelAndView getUserCardDetail(HttpServletRequest request) {
+		String userId= request.getParameter("userId");
+		if(StringUtil.isBlank(userId)){
+			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
+		}
+		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByUserId(userId);
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultCode(),
+					resp.getResponseHeader().getResultMessage());
+		}
+		UserViewInfo userInfo = resp.getUserInfo();
+		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
+		if (userInfo == null) {
+			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
+		}
+		long timestamp = DateUtil.getCurrentTimeMillis();
+		String nonceStr = WXHelpUtil.createNoncestr();
+		String jsapiTicket = WXHelpUtil.getJSAPITicket();
+		String url = GlobalSettings.getHarborDomain()+"/user/getUserCardDetail.html?userId="+userInfo.getUserId();
 		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
