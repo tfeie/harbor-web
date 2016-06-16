@@ -79,7 +79,22 @@
 		timestamp : <c:out value="${timestamp}"/>,
 		nonceStr : '<c:out value="${nonceStr}"/>',
 		signature : '<c:out value="${signature}"/>',
-		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline' ]
+		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline']
+	});
+	
+	wx.ready(function() {
+		$("#BTN_SHARE").bind("click", function() {
+			wx.onMenuShareTimeline({
+			    title: "<c:out value="${userInfo.enName}"/>的名片",
+			    link:  "<c:out value="${url}"/>", 
+			    imgUrl: "<c:out value="${userInfo.wxHeadimg}"/>", 
+			    success: function () {  
+			    	weUI.alert({content:"分享成功"});
+			    },
+			    cancel: function () {  
+			    }
+			});	
+		});
 	});
 	
 	(function($){
@@ -103,7 +118,7 @@
 				
 				bindEvents: function(){
 					var _this=this;
-					$("#BTN_SHARE").on("click",function(){
+					$("#BTN_SHARE1").on("click",function(){
 						alert(1);
 						wx.onMenuShareTimeline({
 						    title: _this.getPropertyValue("enName")+"的名片",
