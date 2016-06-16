@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -21,30 +22,34 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/json2.js"></script>
 </head>
 <body class="barn">
 	<section class="mingpian">
 		<section class="uk">
-			<p>UK-000001</p>
+			<p><c:out value="${userInfo.hyId}"/></p>
 		</section>
 		<section class="touxing_logo">
 			<p>
-				<span><img src="//static.tfeie.com/images/img6.png"></span>
+				<span><img src="<c:out value="${userInfo.wxHeadimg}"/>"></span>
 			</p>
 		</section>
 		<section class="per_info">
 			<p class="name">
-				<span>Candy</span><label class="lbl2">英国</label><i>已认证</i>
+				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2"><c:out value="${userInfo.abroadCountryName}"/></label><i><c:out value="${userInfo.userStatusName}"/></i>
 			</p>
 			<p class="pengyou">
 				<a href="#">益友 10</a><a href="#" class="on">助人 10</a><a href="#">公益贝
 					100</a>
 			</p>
-			<p class="aihao">健身 / 游泳 / 水上运动 / 旅游 / 摄影 / 马术</p>
+			<p class="aihao" id="SELECTED_INTEREST_TAGS"></p>
 			<section class="jinrong">
-				<p>金融</p>
-				<p>北京</p>
-				<p class="aihao">金融 / 设计 / 新媒体 / 人才管理</p>
+				<p><c:out value="${userInfo.industryName}"/></p>
+				<p><c:out value="${userInfo.atCity}"/></p>
+				<p class="aihao" id="SELECTED_SKILL_TAGS"></p>
 			</section>
 			<p class="but">
 				<input type="button" value="分 享"><input type="button"
@@ -52,9 +57,96 @@
 			</p>
 
 			<div class="clear"></div>
-			<p>（Cindy还剩 3 个邀请名额）</p>
+			<p>（<c:out value="${userInfo.enName}"/>还剩 3 个邀请名额）</p>
 			<p>海湾，我们的舞台...</p>
 		</section>
 	</section>
 </body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+
+	<script type="text/javascript">
+	(function($){
+		$.UserCardPage = function(data){
+			this.settings = $.extend(true,{},$.UserCardPage.defaults);
+			this.params= data?data:{}
+		}
+		$.extend($.UserCardPage,{
+			defaults: { 
+			},
+		
+			prototype: {
+				init: function(){
+					this.initData(); 
+					this.bindEvents();
+				},
+				
+				initData: function(){ 
+					this.getAllTags(); 
+				},
+				
+				bindEvents: function(){
+					$(document.body).delegate("#BTN_APPLY_CERT","click",function(){
+						window.location.href="../user/toApplyCertficate.html"						
+					});
+				},
+				
+				getAllTags: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/getUserTags",
+						type: "post", 
+						data: {
+							userId: this.getPropertyValue("userId")
+						},
+						success: function(transport){
+							var data =transport.data;
+							_this.selectedSkillTags=data["selectedSkillTags"]?data["selectedSkillTags"]:[];
+							_this.selectedInterestTags=data["selectedInterestTags"]?data["selectedInterestTags"]:[];
+
+							_this.renderSelectedSkillTags(data["selectedSkillTags"]);
+							_this.renderSelectedInterestTags(data["selectedInterestTags"]);
+						},
+						failure: function(transport){  
+							_this.renderSelectedSkillTags([]);
+							_this.renderSelectedInterestTags([]);
+						}
+					});
+				},
+
+				
+				renderSelectedSkillTags: function(tags){ 
+					var opt=$("#SelectedTagImpl").render(tags);
+					$("#SELECTED_SKILL_TAGS").html(opt);
+				},
+				
+				renderSelectedInterestTags: function(tags){
+					var opt=$("#SelectedTagImpl").render(tags);
+					$("#SELECTED_INTEREST_TAGS").html(opt);
+				},
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
+				}
+			}
+		})
+	})(jQuery);
+	
+
+	$(document).ready(function(){
+		var p = new $.UserCardPage({
+			userId: "<c:out value="${userInfo.userId}"/>"
+		});
+		p.init();
+	});	
+	
+	</script>
+	
+	<script id="SelectedTagImpl" type="text/x-jsrender"> 
+		{{:tagName}} / 
+	</script>
 </html>

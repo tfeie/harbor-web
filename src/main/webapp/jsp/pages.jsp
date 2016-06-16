@@ -51,7 +51,7 @@
 				<span>个人信息访客</span><label>user/userInfo.jsp-ok <a href="../user/userInfo.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>会员中心</span><label>user/memberCenter.jsp-ing <a href="../user/memberCenter.html">Go</a></label>
+				<span>会员中心</span><label>user/memberCenter.jsp-ok <a href="../user/memberCenter.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>个人中心2</span><label>user/userCenter.jsp <a href="../user/userCenter.html">Go</a></label>
@@ -61,7 +61,7 @@
 					href="../user/editUserInfo.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>名片</span><label>user/userCard.jsp <a href="../user/getUserCard.html">Go</a></label>
+				<span>名片</span><label>user/userCard.jsp-ok <a href="../user/getUserCard.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>我的财富</span><label>user/userWealth.jsp <a href="../user/userWealth.html">Go</a></label>

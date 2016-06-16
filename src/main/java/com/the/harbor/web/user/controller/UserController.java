@@ -488,7 +488,19 @@ public class UserController {
 
 	@RequestMapping("/getUserCard.html")
 	public ModelAndView getUserCard(HttpServletRequest request) {
-
+		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
+		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
+		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByOpenId(wtoken.getOpenId());
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultCode(),
+					resp.getResponseHeader().getResultMessage());
+		}
+		UserViewInfo userInfo = resp.getUserInfo();
+		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
+		if (userInfo == null) {
+			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
+		}
+		request.setAttribute("userInfo", userInfo); 
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}
