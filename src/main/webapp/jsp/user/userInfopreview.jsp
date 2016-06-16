@@ -143,7 +143,6 @@
 		
 			prototype: {
 				init: function(){
-					this.bindEvents(); 
 					this.initData(); 
 				},
 				
