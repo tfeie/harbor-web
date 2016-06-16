@@ -74,7 +74,7 @@
 	<script type="text/javascript">
 	//微信API配置
 	wx.config({
-		debug : false,
+		debug : true,
 		appId : '<c:out value="${appId}"/>',
 		timestamp : <c:out value="${timestamp}"/>,
 		nonceStr : '<c:out value="${nonceStr}"/>',
@@ -104,6 +104,7 @@
 				bindEvents: function(){
 					var _this=this;
 					$("#BTN_SHARE").on("click",function(){
+						alert(1);
 						wx.onMenuShareTimeline({
 						    title: _this.getPropertyValue("enName")+"的名片",
 						    link:  _this.getPropertyValue("url"), 
