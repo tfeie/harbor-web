@@ -79,7 +79,7 @@
 		timestamp : <c:out value="${timestamp}"/>,
 		nonceStr : '<c:out value="${nonceStr}"/>',
 		signature : '<c:out value="${signature}"/>',
-		jsApiList : [ 'checkJsApi', 'showOptionMenu' ]
+		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline' ]
 	});
 	
 	(function($){
@@ -102,8 +102,18 @@
 				},
 				
 				bindEvents: function(){
+					var _this=this;
 					$("#BTN_SHARE").on("click",function(){
-						wx.showOptionMenu();				
+						wx.onMenuShareTimeline({
+						    title: _this.getPropertyValue("enName")+"的名片",
+						    link:  _this.getPropertyValue("url"), 
+						    imgUrl: _this.getPropertyValue("shareImg"), 
+						    success: function () {  
+						    	weUI.alert({content:"分享成功"});
+						    },
+						    cancel: function () {  
+						    }
+						});			
 					});
 				},
 				
@@ -151,7 +161,10 @@
 
 	$(document).ready(function(){
 		var p = new $.UserCardPage({
-			userId: "<c:out value="${userInfo.userId}"/>"
+			userId: "<c:out value="${userInfo.userId}"/>",
+			enName: "<c:out value="${userInfo.enName}"/>",
+			shareImg: "<c:out value="${userInfo.wxHeadimg}"/>",
+			url: "<c:out value="${url}"/>"
 		});
 		p.init();
 	});	

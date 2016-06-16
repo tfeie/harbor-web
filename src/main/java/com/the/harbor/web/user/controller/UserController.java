@@ -509,6 +509,7 @@ public class UserController {
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
+		request.setAttribute("url", url);
 		request.setAttribute("userInfo", userInfo); 
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
