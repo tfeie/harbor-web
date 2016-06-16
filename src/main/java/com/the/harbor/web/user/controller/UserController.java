@@ -293,7 +293,7 @@ public class UserController {
 			if (StringUtil.isBlank(userId)) {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户标识不存在");
 			}
-			String fileName = WXHelpUtil.uploadUserHomeBgToOSS(mediaId, userId);
+			String fileName = WXHelpUtil.uploadUserHeadIconToOSS(mediaId, userId);
 			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
 		} catch (Exception e) {
