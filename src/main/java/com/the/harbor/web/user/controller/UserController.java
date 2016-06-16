@@ -503,22 +503,23 @@ public class UserController {
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
-		String url = GlobalSettings.getHarborDomain()+"/user/getUserCardDetail.html?userId="+userInfo.getUserId();
+		String url = WXRequestUtil.getFullURL(request);
 		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
-		request.setAttribute("url", url);
-		request.setAttribute("userInfo", userInfo); 
+		request.setAttribute("url",
+				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?userId=" + userInfo.getUserId());
+		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}
-	
+
 	@RequestMapping("/getUserCardDetail.html")
 	public ModelAndView getUserCardDetail(HttpServletRequest request) {
-		String userId= request.getParameter("userId");
-		if(StringUtil.isBlank(userId)){
+		String userId = request.getParameter("userId");
+		if (StringUtil.isBlank(userId)) {
 			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
 		}
 		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByUserId(userId);
@@ -534,14 +535,15 @@ public class UserController {
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
-		String url = GlobalSettings.getHarborDomain()+"/user/getUserCardDetail.html?userId="+userInfo.getUserId();
+		String url = WXRequestUtil.getFullURL(request);
 		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
-		request.setAttribute("url", url);
-		request.setAttribute("userInfo", userInfo); 
+		request.setAttribute("url",
+				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?userId=" + userInfo.getUserId());
+		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}

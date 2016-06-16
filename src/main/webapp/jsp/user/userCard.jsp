@@ -111,7 +111,7 @@
 	<script type="text/javascript">
 	//微信API配置
 	wx.config({
-		debug : true,
+		debug : false,
 		appId : '<c:out value="${appId}"/>',
 		timestamp : <c:out value="${timestamp}"/>,
 		nonceStr : '<c:out value="${nonceStr}"/>',
@@ -146,9 +146,12 @@
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
-						    	weUI.alert({content:"分享成功"});
+						    	weUI.alert({content:"分享成功",ok: function(){
+						    		$("#shareit").hide(); 
+						    	}});
 						    },
 						    cancel: function () {  
+						    	$("#shareit").hide(); 
 						    }
 						});	
 						wx.onMenuShareAppMessage({
@@ -156,9 +159,12 @@
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
-						    	weUI.alert({content:"分享成功"});
+						    	weUI.alert({content:"分享成功",ok: function(){
+						    		$("#shareit").hide(); 
+						    	}});
 						    },
 						    cancel: function () {  
+						    	$("#shareit").hide(); 
 						    }
 						});	
 						
