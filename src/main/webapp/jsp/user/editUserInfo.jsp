@@ -28,50 +28,6 @@
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/json2.js"></script>
-<script>
-	$(function() {
-
-		$(".chooes_2 ul li a").click(function() {
-			if ($(this).parent("li").hasClass("on")) {
-			} else {
-				var str = $(this).html();
-			}
-		})
-
-		$(".chooes_2 ul li a").click(
-				function() {
-
-					if ($(this).parents(".check_item").find(".xinqi")
-							.find("li").length >= 5
-							|| $(this).parent("li").hasClass("on")) {
-					} else {
-						var li = $(".xinqi ul li").first().clone(true);
-						li.find("p").find("a").html($(this).html());
-						$(this).parents(".check_item").find(".xinqi ul")
-								.append(li);
-						$(this).parents(".check_item").find(".xinqi")
-								.find("em").html(
-										$(this).parents(".check_item").find(
-												".xinqi").find("li").length)
-						$(this).parent("li").remove();
-					}
-				})
-
-	})
-	function KX_list(obg) {
-		var str = $(obg).parents("li").find("p").find("a").html();
-
-		var li = $(obg).parents(".check_item").find(".chooes_2").find("li")
-				.first().clone(true);
-
-		$(obg).parents(".check_item").find("em").html(
-				$(obg).parents(".check_item").find("em").html() - 1)
-
-		li.find("a").html(str);
-		$(obg).parents(".check_item").find(".chooes_2").find("ul").prepend(li);
-		$(obg).parents("li").remove();
-	}
-</script>
 </head>
 <body class="body">
 	<section class="top_info">
@@ -168,7 +124,7 @@
 		</section>
 		<section class="but_baoc">
 			<p>
-				<input type="button" value="保存" />
+				<input type="button" value="保存" id="BTN_SUBMIT"/>
 			</p>
 		</section>
 	</section>
@@ -241,6 +197,12 @@
 				
 				bindEvents: function(){ 
 					var _this = this;
+					
+					//提交事件绑定
+					$("#BTN_SUBMIT").on("click",function(){
+						_this.submit();
+					});
+					
 					//性别选择事件代理
 					$("#SEX_SELECT").delegate("span","click",function(){
 						$(this).parents("p").find("span").removeClass("on")
@@ -736,6 +698,148 @@
 					};
 					var opt=$("#IndustrySelectOptionImpl").render(d);
 					$("#industry").append(opt);
+				},
+				
+				submit: function(){
+					var _this=this;
+					//取值
+					var enName = $.trim($("#enName").val());
+					var sex = $("#SEX_SELECT").find("span.on").attr("sex");
+					var abroadCountry=$("#abroadCountry").val();
+					var abroadUniversity = $.trim($("#abroadUniversity").val());
+					var signature=$.trim($("#signature").val());
+					var industry= $("#industry").val();
+					var mobilePhone = $.trim($("#mobilePhone").val());
+					var company= $.trim($("#company").val());
+					var title= $.trim($("#title").val());
+					
+					
+					var valueValidator = new $.ValueValidator();
+					valueValidator.addRule({
+						labelName: "英文名",
+						fieldName: "enName",
+						getValue: function(){
+							return enName;
+						},
+						fieldRules: {
+							required: true,
+							regexp: /^[A-Za-z][A-Za-z\s]*[A-Za-z]$/,
+							cnlength: 10
+						},
+						ruleMessages: {
+							required: "请输入英文名",
+							regexp:"英文名只能是字母",
+							cnlength:"英文名长度不能超过10个字符"
+						}
+					}).addRule({
+						labelName: "性别",
+						fieldName: "sex",
+						getValue: function(){
+							return sex;
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择性别"
+						}
+					}).addRule({
+						labelName: "留学学校",
+						fieldName: "abroadUniversity",
+						getValue: function(){
+							return abroadUniversity;
+						},
+						fieldRules: {
+							required: true,
+							cnlength: 120
+						},
+						ruleMessages: {
+							required: "请输入留学学校",
+							cnlength:"留学学校长度不能超过120个字符"
+						}
+					}).addRule({
+						labelName: "留学国家",
+						fieldName: "abroadCountry",
+						getValue: function(){
+							return abroadCountry;
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择留学国家"
+						}
+					}).addRule({
+						labelName: "个性签名",
+						fieldName: "signature",
+						getValue: function(){
+							return signature;
+						},
+						fieldRules: {
+							required: true,
+							cnlength: 50
+						},
+						ruleMessages: {
+							required: "请填写个性签名",
+							cnlength:"个性签名长度不能超过50个字符"
+						}
+					}).addRule({
+						labelName: "所在行业",
+						fieldName: "industry",
+						getValue: function(){
+							return industry;
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择所在行业"
+						}
+					}).addRule({
+						labelName: "手机号码",
+						fieldName: "mobilePhone",
+						getValue: function(){
+							return mobilePhone;
+						},
+						fieldRules: {
+							required: true,
+							phonenumber:true
+						},
+						ruleMessages: {
+							required: "请输入手机号码",
+							phonenumber:"手机号码格式不正确"
+						}
+					}).addRule({
+						labelName: "就职公司",
+						fieldName: "company",
+						getValue: function(){
+							return company;
+						},
+						fieldRules: { 
+							cnlength: 60
+						},
+						ruleMessages: {
+							cnlength:"公司名不能超过60个字符或30个汉字"
+						}
+					}).addRule({
+						labelName: "职位",
+						fieldName: "title",
+						getValue: function(){
+							return title;
+						},
+						fieldRules: { 
+							cnlength: 40
+						},
+						ruleMessages: {
+							cnlength:"头衔不能超过40个字符或20个汉字"
+						}
+					});
+					
+					var res=valueValidator.fireRulesAndReturnFirstError();
+					if(res){
+						weUI.alert({content:res});
+						return;
+					}
 				},
 
 				
