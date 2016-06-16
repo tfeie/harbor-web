@@ -45,7 +45,10 @@
 					href="../user/toApplyCertficate.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>个人信息</span><label>user/userInfo.jsp <a href="../user/userInfo.html">Go</a></label>
+				<span>个人信息(自己看)</span><label>user/userInfopreview.jsp --ing <a href="../user/previewUserInfo.html">Go</a></label>
+			</p>
+			<p class="on1">
+				<span>个人信息(别人看)</span><label>user/userInfo.jsp --ing <a href="../user/userInfo.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>会员中心</span><label>user/memberCenter.jsp-ing <a href="../user/memberCenter.html">Go</a></label>
@@ -54,7 +57,7 @@
 				<span>个人中心2</span><label>user/userCenter.jsp <a href="../user/userCenter.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>编辑个人信息</span><label>user/editUserInfo.jsp -ing <a
+				<span>编辑个人信息</span><label>user/editUserInfo.jsp -ok <a
 					href="../user/editUserInfo.html">Go</a></label>
 			</p>
 			<p class="on1">

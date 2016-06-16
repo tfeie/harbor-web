@@ -34,6 +34,8 @@ import com.the.harbor.api.user.param.UserSystemTagSubmitReq;
 import com.the.harbor.api.user.param.UserTag;
 import com.the.harbor.api.user.param.UserTagQueryReq;
 import com.the.harbor.api.user.param.UserTagQueryResp;
+import com.the.harbor.api.user.param.UserViewInfo;
+import com.the.harbor.api.user.param.UserViewResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
@@ -263,8 +265,7 @@ public class UserController {
 		}
 		return responseData;
 	}
-	
-	
+
 	@RequestMapping("/uploadUserHomeBgToOSS")
 	public ResponseData<String> uploadUserHomeBgToOSS(HttpServletRequest request) {
 		ResponseData<String> responseData = null;
@@ -283,7 +284,7 @@ public class UserController {
 		}
 		return responseData;
 	}
-	
+
 	@RequestMapping("/uploadUserHeadIconToOSS")
 	public ResponseData<String> uploadUserHeadIconToOSS(HttpServletRequest request) {
 		ResponseData<String> responseData = null;
@@ -305,15 +306,40 @@ public class UserController {
 
 	@RequestMapping("/userInfo.html")
 	public ModelAndView userInfo(HttpServletRequest request) {
+		String userId = request.getParameter("userId");
+		if (StringUtil.isBlank(userId)) {
+			throw new BusinessException("USER-100001", "查看的用户不存在");
+		}
+		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByUserId(userId);
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultCode(),
+					resp.getResponseHeader().getResultMessage());
+		}
+		UserViewInfo userInfo = resp.getUserInfo();
+		if (userInfo == null) {
+			throw new BusinessException("USER-100001", "您访问的用户不存在");
+		}
+		request.setAttribute("userInfo", userInfo);
+		ModelAndView view = new ModelAndView("user/userInfo");
+		return view;
+	}
+
+	@RequestMapping("/previewUserInfo.html")
+	public ModelAndView previewUserInfo(HttpServletRequest request) {
 		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
 		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
+		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByOpenId(wtoken.getOpenId());
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultCode(),
+					resp.getResponseHeader().getResultMessage());
+		}
+		UserViewInfo userInfo = resp.getUserInfo();
 		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
 		if (userInfo == null) {
 			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
 		}
 		request.setAttribute("userInfo", userInfo);
-		ModelAndView view = new ModelAndView("user/userInfo");
+		ModelAndView view = new ModelAndView("user/userInfopreview");
 		return view;
 	}
 
