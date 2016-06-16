@@ -397,7 +397,25 @@ public class UserController {
 
 	@RequestMapping("/editUserInfo.html")
 	public ModelAndView editUserInfo(HttpServletRequest request) {
-		UserInfo userInfo = WXUserUtil.getUserInfo("oztCUs_Ci25lT7IEMeDLtbK6nr1M");
+		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
+		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
+		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
+		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
+		if (userInfo == null) {
+			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
+		}
+		request.setAttribute("userInfo", userInfo);
+		long timestamp = DateUtil.getCurrentTimeMillis();
+		String nonceStr = WXHelpUtil.createNoncestr();
+		String jsapiTicket = WXHelpUtil.getJSAPITicket();
+		String url = WXRequestUtil.getFullURL(request);
+		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
+		request.setAttribute("url", url);
+		request.setAttribute("openId", wtoken.getOpenId());
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/editUserInfo");
 		return view;

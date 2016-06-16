@@ -31,14 +31,14 @@
 </head>
 <body class="body">
 	<section class="top_info">
-		<p class="span_file">
-			<img src="<c:out value="${userInfo.homePageBg}"/>">
+		<p class="span_file" id="P_HOMEPAGEBG">
+			<img src="<c:out value="${userInfo.homePageBg}"/>" id="IMG_HOMEPAGEBG">
 			<input type="hidden" id="homePageBg" value="<c:out value="${userInfo.homePageBg}"/>">
 		</p>
 		<section class="ip_logo">
-			<p>
+			<p id="P_HEADICON">
 				<span class="span_file"><img
-					src="<c:out value="${userInfo.wxHeadimg}"/>"></span>
+					src="<c:out value="${userInfo.wxHeadimg}"/>" id="IMG_HEADICON"></span>
 					<input type="hidden" id="wxHeadimg" value="<c:out value="${userInfo.wxHeadimg}"/>">
 			</p>
 		</section>
@@ -173,7 +173,22 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	
 	<script type="text/javascript">
+	//微信API配置
+	wx.config({
+		debug : false,
+		appId : '<c:out value="${appId}"/>',
+		timestamp : <c:out value="${timestamp}"/>,
+		nonceStr : '<c:out value="${nonceStr}"/>',
+		signature : '<c:out value="${signature}"/>',
+		jsApiList : [ 'checkJsApi', 'chooseImage', 'previewImage',
+				'uploadImage', 'downloadImage' ]
+	});
+	
+	
 	(function($){
 		$.UserEditPage = function(data){
 			this.settings = $.extend(true,{},$.UserEditPage.defaults);
@@ -199,6 +214,16 @@
 				
 				bindEvents: function(){ 
 					var _this = this;
+					
+					//主页背景图片上传事件绑定
+					$("#P_HOMEPAGEBG").on("click",function(){
+						weUI.alert({content:"主页背景修改"});
+					});
+					
+					//头像图片上传事件绑定
+					$("#P_HEADICON").on("click",function(){
+						weUI.alert({content:"头像修改"});
+					});
 					
 					//提交事件绑定
 					$("#BTN_SUBMIT").on("click",function(){
@@ -907,7 +932,7 @@
 	$(document).ready(function(){
 		var p = new $.UserEditPage({
 			userId: "<c:out value="${userInfo.userId}"/>",
-			wxOpenid: "oztCUs_Ci25lT7IEMeDLtbK6nr1M",
+			wxOpenid: "<c:out value="${openId}"/>",
 			sex: "<c:out value="${userInfo.sex}"/>",
 			abroadCountry: "<c:out value="${userInfo.abroadCountry}"/>",
 			industry: "<c:out value="${userInfo.industry}"/>",
