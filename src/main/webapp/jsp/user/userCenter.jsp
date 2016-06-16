@@ -86,10 +86,10 @@
 					<a href="#">我的时间线</a>
 				</p>
 				<p class="ip2_5">
-					<a href="#">我的名片</a>
+					<a href="../user/getUserCard.html">我的名片</a>
 				</p>
 				<p class="ip2_6">
-					<a href="#">财富</a>
+					<a href="../user/userWealth.html">财富</a>
 				</p>
 			</section>
 		</section>
@@ -97,7 +97,7 @@
 		<section class="ip2_my">
 			<section class="ip2_wid">
 				<p class="ip2_7">
-					<a href="#">会员中心</a>
+					<a href="../user/memberCenter.html">会员中心</a>
 				</p>
 				<p class="ip2_8">
 					<a href="#">设置</a>

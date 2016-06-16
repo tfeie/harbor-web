@@ -45,7 +45,7 @@
 					href="../user/toApplyCertficate.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>个人信息(自己看)</span><label>user/userInfopreview.jsp --ing <a href="../user/previewUserInfo.html">Go</a></label>
+				<span>个人信息(自己看)</span><label>userInfopreview.jsp --ing <a href="../user/previewUserInfo.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>个人信息(别人看)</span><label>user/userInfo.jsp --ing <a href="../user/userInfo.html">Go</a></label>

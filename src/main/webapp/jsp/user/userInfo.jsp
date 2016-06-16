@@ -54,8 +54,9 @@
 			<p><c:out value="${userInfo.signature}"/></p>
 		</section>
 
-		<section class="ip_aihao" id="SELECTED_INTEREST_TAGS">
-			
+		<section class="ip_aihao">
+			<p id="SELECTED_INTEREST_TAGS">
+			</p>
 		</section>
 		<section class="ip_smone">
 			<p><c:out value="${userInfo.abroadUniversity}"/></p>
@@ -63,8 +64,9 @@
 			<p><c:out value="${userInfo.constellationName}"/></p>
 		</section>
 
-		<section class="ip_jineng" id="SELECTED_SKILL_TAGS">
-			
+		<section class="ip_jineng">
+			<p id="SELECTED_SKILL_TAGS">
+			</p>
 		</section>
 
 		<section class="ip_zhiwei">
@@ -74,20 +76,6 @@
 			<p><c:out value="${userInfo.title}"/></p>
 		</section>
 
-		<section class="but_baoc but_baoc1">
-			<p>
-				<input type="button" value="申请认证" />
-			</p>
-		</section>
-		<section class="zhangdemei">
-			<p>(据说长得美的都认证了....)</p>
-		</section>
-
-		<section class="ip_bianji">
-			<p>
-				<a href="#">编辑信息</a>
-			</p>
-		</section>
 	</section>
 	<footer class="footer">
 		<ul>
@@ -202,9 +190,7 @@
 	</script>
 	
 	<script id="SelectedTagImpl" type="text/x-jsrender"> 
-		<p>
 				<span>{{:tagName}}</span>
-		</p>
 	</script>
 
 </html>
