@@ -47,7 +47,7 @@
 			</p>
 		</section>
 		<section class="ip_shengf">
-			<p><c:out value="${userInfo.industryName}"/>/<c:out value="${userInfo.title}"/>/<c:out value="${userInfo.abroadCountryName}"/></p>
+			<p><c:out value="${userInfo.industryName}"/>/<c:out value="${userInfo.title}"/>/<c:out value="${userInfo.atCity}"/></p>
 		</section>
 
 		<section class="ip_eng">
