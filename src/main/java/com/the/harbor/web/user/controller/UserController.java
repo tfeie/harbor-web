@@ -263,6 +263,45 @@ public class UserController {
 		}
 		return responseData;
 	}
+	
+	
+	@RequestMapping("/uploadUserHomeBgToOSS")
+	public ResponseData<String> uploadUserHomeBgToOSS(HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		String mediaId = request.getParameter("mediaId");
+		String userId = request.getParameter("userId");
+		try {
+			if (StringUtil.isBlank(userId)) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户标识不存在");
+			}
+			String fileName = WXHelpUtil.uploadUserHomeBgToOSS(mediaId, userId);
+			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+	
+	@RequestMapping("/uploadUserHeadIconToOSS")
+	public ResponseData<String> uploadUserHeadIconToOSS(HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		String mediaId = request.getParameter("mediaId");
+		String userId = request.getParameter("userId");
+		try {
+			if (StringUtil.isBlank(userId)) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户标识不存在");
+			}
+			String fileName = WXHelpUtil.uploadUserHomeBgToOSS(mediaId, userId);
+			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
 
 	@RequestMapping("/userInfo.html")
 	public ModelAndView userInfo(HttpServletRequest request) {

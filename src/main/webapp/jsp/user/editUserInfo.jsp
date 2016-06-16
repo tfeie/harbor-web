@@ -217,12 +217,78 @@
 					
 					//主页背景图片上传事件绑定
 					$("#P_HOMEPAGEBG").on("click",function(){
-						weUI.alert({content:"主页背景修改"});
+						wx.chooseImage({
+							count : 1,
+							sizeType: ['compressed'],
+							success : function(res) {
+								var localId = res.localIds[0]; 
+								wx.uploadImage({
+									localId : localId,
+									isShowProgressTips : 1,
+									success : function(r) {
+										var mediaId = r.serverId;
+										ajaxController.ajax({
+											url: "../user/uploadUserHomeBgToOSS",
+											type: "post",
+											data: {
+												mediaId: mediaId,
+												userId: _this.getPropertyValue("userId")
+											},
+											success: function(transport){
+												var imgURL  = transport.data;
+												$("#homePageBg").val(imgURL);
+												$("#IMG_HOMEPAGEBG").attr("src", imgURL);
+											},
+											failure: function(transport){
+												weUI.alert({content:"主页背景修改失败"});
+											}
+											
+										});
+									},
+									fail : function(res) {
+										weUI.alert({content:"主页背景修改失败"});
+									}
+								});
+							}
+						});
 					});
 					
 					//头像图片上传事件绑定
 					$("#P_HEADICON").on("click",function(){
-						weUI.alert({content:"头像修改"});
+						wx.chooseImage({
+							count : 1,
+							sizeType: ['compressed'],
+							success : function(res) {
+								var localId = res.localIds[0]; 
+								wx.uploadImage({
+									localId : localId,
+									isShowProgressTips : 1,
+									success : function(r) {
+										var mediaId = r.serverId;
+										ajaxController.ajax({
+											url: "../user/uploadUserHeadIconToOSS",
+											type: "post",
+											data: {
+												mediaId: mediaId,
+												userId: _this.getPropertyValue("userId")
+											},
+											success: function(transport){
+												var imgURL  = transport.data;
+												$("#wxHeadimg").val(imgURL);
+												$("#IMG_HEADICON").attr("src", imgURL);
+											},
+											failure: function(transport){
+												weUI.alert({content:"头像修改失败"});
+											}
+											
+										});
+									},
+									fail : function(res) {
+										weUI.alert({content:"头像修改失败"});
+									}
+								});
+							}
+						});
 					});
 					
 					//提交事件绑定
