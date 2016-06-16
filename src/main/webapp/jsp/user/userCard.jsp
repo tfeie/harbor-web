@@ -26,6 +26,35 @@
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/json2.js"></script>
+<style>
+#shareit {
+	-webkit-user-select: none;
+	display: none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.85);
+	text-align: center;
+	top: 0;
+	left: 0;
+	z-index: 105;
+}
+
+#shareit img {
+	max-width: 100%;
+}
+
+.arrow {
+	position: absolute;
+	right: 10%;
+	top: 5%;
+}
+
+#share-text {
+	margin-top: 400px;
+}
+</style>
+
 </head>
 <body class="barn">
 	<section class="mingpian">
@@ -61,6 +90,14 @@
 			<p>海湾，我们的舞台...</p>
 		</section>
 	</section>
+	
+	<div id="shareit">
+	 <img class="arrow" src="http://dev.vxtong.com/cases/nuannan/imgs/share-it.png">
+	  <a href="#" id="follow">
+	    <img id="share-text" src="http://dev.vxtong.com/cases/nuannan/imgs/share-text.png">
+	  </a>
+	</div>
+	
 </body>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
@@ -80,21 +117,6 @@
 		nonceStr : '<c:out value="${nonceStr}"/>',
 		signature : '<c:out value="${signature}"/>',
 		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline']
-	});
-	
-	wx.ready(function() {
-		$("#BTN_SHARE").bind("click", function() {
-			wx.onMenuShareTimeline({
-			    title: "<c:out value="${userInfo.enName}"/>的名片",
-			    link:  "<c:out value="${url}"/>", 
-			    imgUrl: "<c:out value="${userInfo.wxHeadimg}"/>", 
-			    success: function () {  
-			    	weUI.alert({content:"分享成功"});
-			    },
-			    cancel: function () {  
-			    }
-			});	
-		});
 	});
 	
 	(function($){
@@ -118,8 +140,7 @@
 				
 				bindEvents: function(){
 					var _this=this;
-					$("#BTN_SHARE1").on("click",function(){
-						alert(1);
+					$("#BTN_SHARE").on("click",function(){
 						wx.onMenuShareTimeline({
 						    title: _this.getPropertyValue("enName")+"的名片",
 						    link:  _this.getPropertyValue("url"), 
@@ -129,8 +150,13 @@
 						    },
 						    cancel: function () {  
 						    }
-						});			
+						});	
+						$("#shareit").show();
 					});
+					
+					$("#shareit").on("click", function(){
+					    $("#shareit").hide(); 
+					 })
 				},
 				
 				getAllTags: function(){
