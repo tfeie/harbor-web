@@ -33,11 +33,13 @@
 	<section class="top_info">
 		<p class="span_file">
 			<img src="<c:out value="${userInfo.homePageBg}"/>">
+			<input type="hidden" id="homePageBg" value="<c:out value="${userInfo.homePageBg}"/>">
 		</p>
 		<section class="ip_logo">
 			<p>
 				<span class="span_file"><img
 					src="<c:out value="${userInfo.wxHeadimg}"/>"></span>
+					<input type="hidden" id="wxHeadimg" value="<c:out value="${userInfo.wxHeadimg}"/>">
 			</p>
 		</section>
 	</section>
@@ -703,16 +705,19 @@
 				submit: function(){
 					var _this=this;
 					//取值
+					var homePageBg = $("#homePageBg").val();
+					var wxHeadimg = $("#wxHeadimg").val();
 					var enName = $.trim($("#enName").val());
 					var sex = $("#SEX_SELECT").find("span.on").attr("sex");
 					var abroadCountry=$("#abroadCountry").val();
 					var abroadUniversity = $.trim($("#abroadUniversity").val());
 					var signature=$.trim($("#signature").val());
+					var maritalStatus = $("#maritalStatus").val();
+					var constellation = $("#constellation").val();
 					var industry= $("#industry").val();
 					var mobilePhone = $.trim($("#mobilePhone").val());
 					var company= $.trim($("#company").val());
 					var title= $.trim($("#title").val());
-					
 					
 					var valueValidator = new $.ValueValidator();
 					valueValidator.addRule({
@@ -840,6 +845,46 @@
 						weUI.alert({content:res});
 						return;
 					}
+					
+					var data={
+						userId: _this.getPropertyValue("userId"),
+						wxOpenid: _this.getPropertyValue("wxOpenid"),
+						wxHeadimg: wxHeadimg,
+						homePageBg: homePageBg,
+						enName: enName,
+						sex: sex,
+						abroadCountry: abroadCountry,
+						abroadUniversity: abroadUniversity,
+						maritalStatus: maritalStatus,
+						constellation: constellation,
+						signature: signature,
+						mobilePhone: mobilePhone,
+						company: company,
+						industry: industry,
+						title: title,  
+						interestSelectedTags: _this.selectedInterestTags,
+						skillSelectedTags: _this.selectedSkillTags
+					}
+					
+					ajaxController.ajax({
+						url: "../user/submitUserEdit",
+						type: "post", 
+						data: {
+							userData: JSON.stringify(data)
+						},
+						success: function(transport){
+							weUI.alert({
+								content: "资料修改成功"
+							})
+						},
+						failure: function(transport){
+							weUI.alert({
+								content: "资料修改失败"
+							})
+						}
+						
+					});
+					
 				},
 
 				
@@ -862,6 +907,7 @@
 	$(document).ready(function(){
 		var p = new $.UserEditPage({
 			userId: "<c:out value="${userInfo.userId}"/>",
+			wxOpenid: "oztCUs_Ci25lT7IEMeDLtbK6nr1M",
 			sex: "<c:out value="${userInfo.sex}"/>",
 			abroadCountry: "<c:out value="${userInfo.abroadCountry}"/>",
 			industry: "<c:out value="${userInfo.industry}"/>",
