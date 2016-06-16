@@ -116,7 +116,7 @@
 		timestamp : <c:out value="${timestamp}"/>,
 		nonceStr : '<c:out value="${nonceStr}"/>',
 		signature : '<c:out value="${signature}"/>',
-		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline']
+		jsApiList : [ 'checkJsApi', 'onMenuShareTimeline','onMenuShareAppMessage']
 	});
 	
 	(function($){
@@ -142,7 +142,7 @@
 					var _this=this;
 					$("#BTN_SHARE").on("click",function(){
 						wx.onMenuShareTimeline({
-						    title: _this.getPropertyValue("enName")+"的名片",
+						    title: _this.getPropertyValue("enName")+"在海归海湾的名片",
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
@@ -151,6 +151,17 @@
 						    cancel: function () {  
 						    }
 						});	
+						wx.onMenuShareAppMessage({
+						    title: _this.getPropertyValue("enName")+"在海归海湾的名片",
+						    link:  _this.getPropertyValue("url"), 
+						    imgUrl: _this.getPropertyValue("shareImg"), 
+						    success: function () {  
+						    	weUI.alert({content:"分享成功"});
+						    },
+						    cancel: function () {  
+						    }
+						});	
+						
 						$("#shareit").show();
 					});
 					
