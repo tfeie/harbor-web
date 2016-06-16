@@ -52,7 +52,7 @@
 				<p class="aihao" id="SELECTED_SKILL_TAGS"></p>
 			</section>
 			<p class="but">
-				<input type="button" value="分 享"><input type="button"
+				<input type="button" value="分 享" id="BTN_SHARE"><input type="button"
 					value="应 邀" class="on">
 			</p>
 
@@ -68,8 +68,20 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	
 	<script type="text/javascript">
+	//微信API配置
+	wx.config({
+		debug : false,
+		appId : '<c:out value="${appId}"/>',
+		timestamp : <c:out value="${timestamp}"/>,
+		nonceStr : '<c:out value="${nonceStr}"/>',
+		signature : '<c:out value="${signature}"/>',
+		jsApiList : [ 'checkJsApi', 'showOptionMenu' ]
+	});
+	
 	(function($){
 		$.UserCardPage = function(data){
 			this.settings = $.extend(true,{},$.UserCardPage.defaults);
@@ -90,8 +102,8 @@
 				},
 				
 				bindEvents: function(){
-					$(document.body).delegate("#BTN_APPLY_CERT","click",function(){
-						window.location.href="../user/toApplyCertficate.html"						
+					$("#BTN_SHARE").on("click",function(){
+						wx.showOptionMenu();				
 					});
 				},
 				
