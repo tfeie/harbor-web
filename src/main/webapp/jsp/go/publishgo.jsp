@@ -33,7 +33,7 @@
 		</section>
 		<section class="geizhuti">
 			<p>
-				<input type="text" value="请给个Sexy的主题">
+				<input type="text" placeholder="请给个Sexy的主题" id="topic">
 			</p>
 		</section>
 		<section class="fabu_zhuti dier">
@@ -57,7 +57,7 @@
 			<p name="payMode" payMode="10">
 				固定费用<input type="text" id="fixedPrice" placeholder="150">/人
 			</p>
-			<p name="payMode" payMode="30">
+			<p name="payMode" payMode="20">
 				A A 预付<input type="text" id="fixedPrice" placeholder="150">/人<span>多退少补</span>
 			</p>
 			<p name="payMode" payMode="30">我请客</p>
@@ -106,12 +106,12 @@
 		</section>
 		<section class="my_gushi">
 			<p>
-				<textarea>请说说关于这个主题你的故事…</textarea>
+				<textarea placeholder="请说说关于这个主题你的故事…" id="myStory"></textarea>
 			</p>
 		</section>
 
 		<section class="sec_btn2 fabu">
-			<input type="button" value="发布">
+			<input type="button" value="发布" id="BTN_SUBMIT">
 		</section>
 
 	</section>
@@ -210,12 +210,19 @@
 					$("#SECTION_GO_DETAILS").delegate("[name='SECTION_DEL_GO_DETAIL']","click",function(){
 						var _id =$(this).attr("_id");
 						_this.deleteGoDetail(_id);
-					})
+					});
 					
+					//活动明细文本框失去焦点事件代理
+					$("#SECTION_GO_DETAILS").delegate("[name='GO_DETAIL_TEXTAREA']","blur",function(){
+						var _id =$(this).attr("_id");
+						var val = $(this).val();
+						_this.modifyGoDetail(_id,val,"");
+					}); 
 					
-					
-					
-
+					//提交按钮
+					$("#BTN_SUBMIT").on("click",function(){
+						_this.submit();
+					}); 
 					//已选标签的删除事件代理
 					$("#SELECTED_GO_TAGS").delegate("[name='TAG_DEL']","click",function(){
 						var tagName = $(this).attr("tagName");
@@ -433,8 +440,28 @@
 					
 				},
 				
+				modifyGoDetail: function(_id,val,url){
+					var _this = this;
+					var queryDetails = $.grep(_this.godetails,function(o,i){
+						return o._id==_id;
+					});
+					if(queryDetails.length==0){
+						return;
+					}
+					var d = queryDetails[0];
+					if(d.type=="text"){
+						d.detail = val;
+					}else {
+						d.imageUrl = url;
+					}
+				},
+				
 				deleteGoDetail: function(_id){
 					var _this = this;
+					if(_this.godetails.length==1){
+						weUI.alert({content:"请至少保留一项活动详情"});
+						return;
+					}
 					var queryDetails = $.grep(_this.godetails,function(o,i){
 						return o._id==_id;
 					});
@@ -453,6 +480,212 @@
 					}
 					var opt=$("#GoDetailsImpl").render(d);
 					$("#SECTION_GO_DETAILS").html(opt);
+				},
+				
+				submit: function(){
+					var _this = this;
+					var topic = $.trim($("#topic").val());
+					var goType = $.trim($("[name='goType'].on").attr("goType"));
+					var inviteMembers = $.trim($("#inviteMembers").val());
+					
+					var expectedStartTime = $.trim($("#expectedStartTime").val());
+					var expectedDuration = $.trim($("#expectedDuration").val());
+					var payMode = $.trim($("[name='payMode'].on").attr("payMode"));
+					var fixedPrice =  $.trim($("[name='payMode'].on").find("#fixedPrice").val());
+					var orgMode = $.trim($("[name='orgMode'].on").attr("orgMode"));
+					var location = $.trim($("#location").val());
+					var myStory = $.trim($("#myStory").val()); 
+					//绑定规则
+					var valueValidator = new $.ValueValidator();
+					valueValidator.addRule({
+						labelName: "发布主题",
+						fieldName: "topic",
+						getValue: function(){
+							return topic;
+						},
+						fieldRules: {
+							required: true, 
+							cnlength: 120
+						},
+						ruleMessages: {
+							required: "请填写发布主题",
+							cnlength:"发布主题不能超过60个汉字"
+						}
+					}).addRule({
+						labelName: "活动类型",
+						fieldName: "goType",
+						getValue: function(){
+							return goType;
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择活动类型"
+						}
+					});
+					if(goType=="group"){
+						valueValidator.addRule({
+							labelName: "邀请人数",
+							fieldName: "inviteMembers",
+							getValue: function(){
+								return inviteMembers;
+							},
+							fieldRules: {
+								required: true,
+								cnlength: 50
+							},
+							ruleMessages: {
+								required: "请输入邀请人数(5-8)",
+								cnlength: "邀请人数不操作25个汉字"
+							}
+						}).addRule({
+							labelName: "预计开始时间",
+							fieldName: "expectedStartTime",
+							getValue: function(){
+								return expectedStartTime;
+							},
+							fieldRules: {
+								required: true, 
+								datetime: true
+							},
+							ruleMessages: {
+								required: "请选择预期开始时间",
+								datetime:"预期开始时间格式必须是yyyy-MM-dd hh:mm:ss"
+							}
+						});
+					}
+					valueValidator.addRule({
+						labelName: "预期持续时间",
+						fieldName: "expectedDuration",
+						getValue: function(){
+							return expectedDuration;
+						},
+						fieldRules: {
+							required: true, 
+							cnlength: 10
+						},
+						ruleMessages: {
+							required: "请填写预期持续时间",
+							cnlength:"长度约为5个汉字。如:约1.5小时"
+						}
+					}).addRule({
+						labelName: "付费方式",
+						fieldName: "payMode",
+						getValue: function(){
+							return payMode;
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择付费方式"
+						}
+					});
+					if(payMode=="10" || payMode=="20"){
+						valueValidator.addRule({
+							labelName: "费用",
+							fieldName: "fixedPrice",
+							getValue: function(){
+								return fixedPrice;
+							},
+							fieldRules: {
+								required: true, 
+								moneyNumber: true
+							},
+							ruleMessages: {
+								required: "请填写费用",
+								moneyNumber:"费用(单位:元)格式不正确。如:100.00"
+							}
+						});
+					}
+					valueValidator.addRule({
+						labelName: "活动组织形式",
+						fieldName: "orgMode",
+						getValue: function(){
+							return orgMode;
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择线上或线下"
+						}
+					});
+					
+					if(orgMode=="offline"){
+						valueValidator.addRule({
+							labelName: "活动地址",
+							fieldName: "location",
+							getValue: function(){
+								return location;
+							},
+							fieldRules: {
+								required: true, 
+								cnlength: 300
+							},
+							ruleMessages: {
+								required: "请填写活动线下举办地址",
+								cnlength:"活动地址最多输入150个汉字"
+							}
+						});
+					}
+					valueValidator.addRule({
+						labelName: "活动明细",
+						fieldName: "godetails",
+						getValue: function(){
+							return _this.godetails;
+						},
+						fieldRules: {
+							minlength: 1
+						},
+						ruleMessages: {
+							minlength: "活动明细至少填写一个"
+						}
+					}).addRule({
+						labelName: "标签",
+						fieldName: "tags",
+						getValue: function(){
+							return _this.selectedGoTags;
+						},
+						fieldRules: {
+							rangelength: [1,5]
+						},
+						ruleMessages: {
+							rangelength: "活动标签至少选择1个，最多选择5个"
+						}
+					}).addRule({
+						labelName: "我的故事",
+						fieldName: "myStory",
+						getValue: function(){
+							return myStory;
+						},
+						fieldRules: {
+							required: true, 
+							cnlength: 300
+						},
+						ruleMessages: {
+							required: "请填写我的故事",
+							cnlength:"我的故事最多输入150个汉字"
+						}
+					});
+					
+					var res=valueValidator.fireRulesAndReturnFirstError();
+					if(res){
+						weUI.alert({content:res});
+						return;
+					}
+					//校验活动明细 
+					var queryDetails = $.grep(_this.godetails,function(o,i){
+						return (o.type=="text" && o.detail=="") || (o.type=="image" && o.imageUrl=="");
+					});
+					if(queryDetails.length>0){
+						weUI.alert({content:"您还有没有填写完成的活动内容或者要上传的活动图片"});
+						return ;
+					}
+					
+					
+					
 				}
 			}
 		})
@@ -504,7 +737,7 @@
 		{{if type=="text"}}
 			<section class="zhuti_hanhua add_mask items">
 				<p>
-					<textarea placeholder="请说说这个主题能掏些什么干货…
+					<textarea name="GO_DETAIL_TEXTAREA"  _id="{{:_id}}" placeholder="请说说这个主题能掏些什么干货…
 一.主题
 二.内容
 三.说明
