@@ -19,11 +19,13 @@
 	href="//static.tfeie.com/css/owl.carousel.min.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css">
+<link href="//static.tfeie.com/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css"/> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
+<script src="//static.tfeie.com/js/jquery-ui/jquery-ui.min.js"></script>
 
 </head>
 <body class="body">
@@ -198,7 +200,11 @@
 				},
 				
 				bindEvents: function(){
-					var _this = this; 
+					var _this = this;
+					$(".datepicker").datepicker({
+						showOtherMonths: true,
+						selectOtherMonths: true
+					});
 
 					//已选标签的删除事件代理
 					$("#SELECTED_GO_TAGS").delegate("[name='TAG_DEL']","click",function(){
