@@ -22,98 +22,90 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
 <script>
-	$(function() {
-		$(".act_info p span").click(function() {
-			$(this).parents("p").find("span").removeClass("on")
-			$(this).addClass("on")
-		})
-		$(".me_qingke p").click(function() {
-			$(this).parents(".me_qingke").find("p").removeClass("on")
-			$(this).addClass("on")
-		})
-		$(".online_no p span").click(function() {
-			$(this).parents("p").find("span").removeClass("on")
-			$(this).addClass("on")
-		})
-		$(".quxiao img").click(function() {
-			$(this).parents("li").hide()
-		})
+        $(function () {
+            $(".act_info p span").click(function () {
+                $(this).parents("p").find("span").removeClass("on")
+                $(this).addClass("on")
+            })
+            $(".me_qingke p").click(function () {
+                $(this).parents(".me_qingke").find("p").removeClass("on")
+                $(this).addClass("on")
+            })
+            $(".online_no p span").click(function () {
+                $(this).parents("p").find("span").removeClass("on")
+                $(this).addClass("on")
+            })
+            $(".quxiao img").click(function () {
+                $(this).parents("li").hide()
+            })
+            $(".yingchang img").click(function () {
+                $(this).parents(".items").remove();
+            }) 
+               $(".fabu_but p span.on").click(function () {
+                   var obj = $(".add_edit").find(".zhuti_hanhua.add_mask").clone(true);
+                   $(".add_edit").append(obj.removeClass("add_mask"));
+            })
+            $(".fabu_but p span.in").click(function () {
+                var obj = $(".add_edit").find(".jia_img.add_mask").clone(true);
+                $(".add_edit").append(obj.removeClass("add_mask"));
+            })
+            $(".chooes_2 ul li a").click(function () {
+                if ($(this).parent("li").hasClass("on")) { }
+                else {
+                    var str = $(this).html();
+                }
+            })
+            $(".chooes_2 ul li a").click(function () {
+                if ($(this).parent("li").hasClass("on")) { }
+                else {
+                    var str = $(this).html();
+                }
+            })
+            $(".chooes_2 ul li a").click(function () {
+                if ($(this).parents(".lat_xuanz").find(".fabu_biaoqian").find("li").length >= 6 || $(this).parent("li").hasClass("on")) { }
+                else {
+                    var li = $(".fabu_biaoqian ul li").first().clone(true);
+                    li.find("a").html($(this).html());
+                    $(this).parents(".lat_xuanz").find(".fabu_biaoqian ul").append(li);
+                    $(this).parents(".lat_xuanz").find(".fabu_biaoqian").find("em").html($(this).parents(".lat_xuanz").find(".fabu_biaoqian").find("li").length-1)
+                    $(this).parent("li").remove();
+                }
+            })
+			
+			
+			$(".datepicker").datepicker({
+				showOtherMonths: true,
+				selectOtherMonths: true
+			});
+	 
+ 
+        })
+		function pkFunc(){
+		 
+		}
+		function week(wk){
+		var week="";
+		switch(wk){
+		case 0:week="星期日";break;
+		case 1:week="星期一";break;
+		case 2:week="星期二";break;
+		case 3:week="星期三";break;
+		case 4:week="星期四";break;
+		case 5:week="星期五";break;
+		case 6:week="星期六";break; 
+		}
+		}
+        function FB_none(obg) {
+            var str = $(obg).parents("li").find("a").html();
+            var li = $(obg).parents(".lat_xuanz").find(".chooes_2").find("li").first().clone(true);
 
-		$(".yingchang img").click(function() {
-			$(this).parents(".zhuti_hanhua").addClass("on")
+            $(".lat_xuanz").find(".fabu_biaoqian").find("p").find("em").html($(".lat_xuanz").find(".fabu_biaoqian").find("li").length - 2);
 
-		})
-
-		$(".yingchang img").click(function() {
-			$(this).parents(".jia_img").addClass("on")
-
-		})
-		var a = 0;
-		$(".fabu_but p span.in").click(
-				function() {
-					$(this).parents(".fabu_go").find(".zhuti_hanhua.on").eq(a)
-							.removeClass("on")
-				})
-
-		var b = 0;
-		$(".fabu_but p span.on").click(
-				function() {
-					$(this).parents(".fabu_go").find(".jia_img.on").eq(b)
-							.removeClass("on")
-
-				})
-
-		$(".chooes_2 ul li a").click(function() {
-			if ($(this).parent("li").hasClass("on")) {
-			} else {
-				var str = $(this).html();
-			}
-		})
-
-		$(".chooes_2 ul li a").click(function() {
-			if ($(this).parent("li").hasClass("on")) {
-			} else {
-				var str = $(this).html();
-			}
-		})
-
-		$(".chooes_2 ul li a")
-				.click(
-						function() {
-							if ($(this).parents(".lat_xuanz").find(
-									".fabu_biaoqian").find("li").length >= 6
-									|| $(this).parent("li").hasClass("on")) {
-							} else {
-								var li = $(".fabu_biaoqian ul li").first()
-										.clone(true);
-								li.find("a").html($(this).html());
-								$(this).parents(".lat_xuanz").find(
-										".fabu_biaoqian ul").append(li);
-								$(this).parents(".lat_xuanz").find(
-										".fabu_biaoqian").find("em")
-										.html(
-												$(this).parents(".lat_xuanz")
-														.find(".fabu_biaoqian")
-														.find("li").length - 1)
-								$(this).parent("li").remove();
-							}
-						})
-
-	})
-	function FB_none(obg) {
-		var str = $(obg).parents("li").find("a").html();
-		var li = $(obg).parents(".lat_xuanz").find(".chooes_2").find("li")
-				.first().clone(true);
-
-		$(".lat_xuanz").find(".fabu_biaoqian").find("p").find("em").html(
-				$(".lat_xuanz").find(".fabu_biaoqian").find("li").length - 2);
-
-		li.find("a").html(str);
-		$(obg).parents(".lat_xuanz").find(".chooes_2").find("ul").prepend(li);
-		$(obg).parents("li").remove();
-	}
-</script>
-
+            li.find("a").html(str);
+            $(obg).parents(".lat_xuanz").find(".chooes_2").find("ul").prepend(li);
+            $(obg).parents("li").remove();
+        }
+    </script>
 </head>
 <body class="body">
 	<section class="fabu_go">
@@ -136,8 +128,9 @@
 		</section>
 		<section class="inp_time">
 			<p>
-				<span><input type="text" value="2016-5-25 星期三 10:41 " /></span><label><input
-					type="text" value="约一个小时" /></label>
+				<span><input type="text" value="2016-5-25 星期三 10:41 "
+					class="datepicker" /></span><label><input type="text"
+					value="约一个小时" /></label>
 			</p>
 		</section>
 		<section class="me_qingke">
@@ -160,89 +153,57 @@
 		<section class="fabu_zhuti disan">
 			<p>活动详情</p>
 		</section>
-		<section class="zhuti_hanhua">
-			<p>
-				<textarea>请说说这个主题能掏些什么干货…
+
+		<section class="add_edit">
+			<section class="zhuti_hanhua add_mask items">
+				<p>
+					<textarea>
+请说说这个主题能掏些什么干货…
 一.主题
 二.内容
 三.说明
-四.注意</textarea>
-			</p>
-		</section>
+四.注意
+                    </textarea>
+				</p>
+				<section class="yingchang">
+					<img src="//static.tfeie.com/images/img50.png" />
+				</section>
+			</section>
 
-		<section class="zhuti_hanhua on">
-			<p>
-				<textarea>请说说这个主题能掏些什么干货…
+			<section class="zhuti_hanhua items">
+				<p>
+					<textarea>
+请说说这个主题能掏些什么干货…
 一.主题
 二.内容
 三.说明
-四.注意</textarea>
-			</p>
-			<section class="yingchang">
-				<img src="//static.tfeie.com/images/img50.png" />
+四.注意
+                    </textarea>
+				</p>
 			</section>
-		</section>
-
-		<section class="zhuti_hanhua on">
-			<p>
-				<textarea>请说说这个主题能掏些什么干货…
-一.主题
-二.内容
-三.说明
-四.注意</textarea>
-			</p>
-			<section class="yingchang">
-				<img src="//static.tfeie.com/images/img50.png" />
-			</section>
-		</section>
-
-		<section class="zhuti_hanhua on">
-			<p>
-				<textarea>请说说这个主题能掏些什么干货…
-一.主题
-二.内容
-三.说明
-四.注意</textarea>
-			</p>
-			<section class="yingchang">
-				<img src="//static.tfeie.com/images/img50.png" />
-			</section>
-		</section>
 
 
-		<section class="jia_img on">
-			<p>
-				<img src="//static.tfeie.com/images/img51.png">
-			</p>
-			<p>上传图片</p>
-			<section class="yingchang on">
-				<img src="//static.tfeie.com/images/img50.png" />
-			</section>
-		</section>
 
-		<section class="jia_img on">
-			<p>
-				<img src="//static.tfeie.com/images/img51.png">
-			</p>
-			<p>上传图片</p>
-			<section class="yingchang on">
-				<img src="//static.tfeie.com/images/img50.png" />
-			</section>
-		</section>
 
-		<section class="jia_img on">
-			<p>
-				<img src="//static.tfeie.com/images/img51.png">
-			</p>
-			<p>上传图片</p>
-			<section class="yingchang on">
-				<img src="//static.tfeie.com/images/img50.png" />
+
+
+			<section class="jia_img add_mask items">
+				<p>
+					<img src="//static.tfeie.com/images/img51.png">
+				</p>
+				<p>上传图片</p>
+				<section class="yingchang on">
+					<img src="//static.tfeie.com/images/img50.png" />
+				</section>
 			</section>
+
+
+
 		</section>
 
 		<section class="fabu_but">
 			<p>
-				<span class="in"><a>添加文本</a></span><span class="on"><a>添加图片</a></span>
+				<span class="in"><a>添加图片</a></span><span class="on"><a>添加文本</a></span>
 			</p>
 		</section>
 		<div class="clear"></div>

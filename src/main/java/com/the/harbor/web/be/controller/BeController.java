@@ -21,4 +21,10 @@ public class BeController {
 		return view;
 	}
 
+	@RequestMapping("/detail.html")
+	public ModelAndView detail(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("be/detail");
+		return view;
+	}
+
 }

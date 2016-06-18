@@ -70,6 +70,18 @@ public class UserController {
 		ModelAndView view = new ModelAndView("pages");
 		return view;
 	}
+	
+	@RequestMapping("/tuijian.html")
+	public ModelAndView tuijian(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView view = new ModelAndView("user/haiyoutuijian");
+		return view;
+	}
+	
+	@RequestMapping("/myhaiyou.html")
+	public ModelAndView myhaiyou(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView view = new ModelAndView("user/myhaiyou");
+		return view;
+	}
 
 	@RequestMapping("/toUserRegister.html")
 	public ModelAndView toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -31,6 +31,17 @@
 			<p class="on1">
 				<span>Beauty & Excellence</span><label>be/index.jsp <a href="../be/index.html">Go</a></label>
 			</p> 
+			<p class="on1">
+				<span>Be详情</span><label>be/detail.jsp <a href="../be/detail.html">Go</a></label>
+			</p> 
+		</section>
+		<section class="shouji">
+			<p class="title">
+				<span>中间页</span><label></label>
+			</p>
+			<p class="on1">
+				<span>支付成功页</span><label>pay/success.jsp <a href="../payment/success.html">Go</a></label>
+			</p> 
 		</section>
 		<section class="shouji">
 			<p class="title">
@@ -41,33 +52,39 @@
 					href="../user/toUserRegister.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>申请认证</span> <label>user/toApplyCertficate.jsp-ok<a
+				<span>申请认证</span> <label>toApplyCertficate.jsp-ok<a
 					href="../user/toApplyCertficate.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>个人信息预览</span><label>userInfopreview.jsp-ok <a href="../user/previewUserInfo.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>个人信息访客</span><label>user/userInfo.jsp-ok <a href="../user/userInfo.html">Go</a></label>
+				<span>个人信息访客</span><label>userInfo.jsp-ok <a href="../user/userInfo.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>会员中心</span><label>user/memberCenter.jsp-ok <a href="../user/memberCenter.html">Go</a></label>
+				<span>会员中心</span><label>memberCenter.jsp-ok <a href="../user/memberCenter.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>个人中心2</span><label>user/userCenter.jsp <a href="../user/userCenter.html">Go</a></label>
+				<span>个人中心2</span><label>userCenter.jsp <a href="../user/userCenter.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>编辑个人信息</span><label>user/editUserInfo.jsp -ok <a
+				<span>编辑个人信息</span><label>editUserInfo.jsp -ok <a
 					href="../user/editUserInfo.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>名片</span><label>user/userCard.jsp-ok <a href="../user/getUserCard.html">Go</a></label>
+				<span>名片</span><label>userCard.jsp-ok <a href="../user/getUserCard.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>我的财富</span><label>user/userWealth.jsp <a href="../user/userWealth.html">Go</a></label>
+				<span>我的财富</span><label>userWealth.jsp <a href="../user/userWealth.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>兴趣技能</span><label>user/setUserSkills.jsp-ok<a href="../user/setUserSkills.html">Go</a></label>
+				<span>兴趣技能</span><label>setUserSkills.jsp-ok<a href="../user/setUserSkills.html">Go</a></label>
+			</p>
+			<p class="on1">
+				<span>海友新-01</span><label>haiyoutuijian.jsp <a href="../user/tuijian.html">Go</a></label>
+			</p>
+			<p class="on1">
+				<span>我的海友</span><label>myhaiyou.jsp <a href="../user/myhaiyou.html">Go</a></label>
 			</p>
 		</section>
 

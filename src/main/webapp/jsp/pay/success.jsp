@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>您访问的页面不存在或已被删除</title>
+<title>支付成功</title>
 <link rel="dns-prefetch" href="//static.tfeie.com" />
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
 	type="text/css" />
@@ -22,15 +22,20 @@
 	type="text/css" />
 </head>
 <body class="bg-eeeeee">
-	<section>
-		<img src="//static.tfeie.com/v2/images/bg-404.png" width="100%" class="tio">
-		<p class="te-cen pad-10-0 fs-15">Sorry,您访问的页面不存在或已被删除...</p>
-		<a href="javascript:window.location.reload();"
-			class="dis-block te-cen fs-15 fc-fe6847">刷新</a>
+	<section class="zfcg_main pad-10">
 
-		<div class="btn-main">
-			<a href="javascript:history.back(-1);" class="btn">返回上一页</a>
+		<div class="te-cen mar-top-50">
+			<img src="//static.tfeie.com/v2/images/btn-qr.png" width="100"
+				height="100">
 		</div>
+		<p class="te-cen fs-15 fc-fe6847 mar-top-10">支付成功</p>
+		<p class="te-cen fs-30 line-30 pad-10-0">￥3200</p>
+		<a href="#"><img src="//static.tfeie.com/v2/images/zf-img.jpg"
+			width="100%" class="br-5 mar-top-20"></a>
+		<div class="btn-main">
+			<a href="#" class="btn">完成</a>
+		</div>
+
 	</section>
 </body>
 </html>

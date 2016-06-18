@@ -241,5 +241,12 @@ public class PaymentController {
 		}
 
 	}
+	
+	
+	@RequestMapping("/success.html")
+	public ModelAndView success(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView view = new ModelAndView("pay/success");
+		return view;
+	}
 
 }
