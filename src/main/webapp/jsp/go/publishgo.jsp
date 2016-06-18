@@ -684,7 +684,7 @@
 						return ;
 					}
 					
-					
+					weUI.alert({content:"一会提交"});
 					
 				}
 			}
