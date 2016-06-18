@@ -47,7 +47,7 @@
 		</section>
 		<section class="inp_time">
 			<p>
-				<span><input type="text" value="2016-5-25 星期三 10:41 "
+				<span><input type="datetime" value="2016-5-25 星期三 10:41 "
 					class="datepicker" /></span><label><input type="text"
 					value="约一个小时" /></label>
 			</p>
@@ -198,7 +198,8 @@
 				},
 				
 				bindEvents: function(){
-					var _this = this;
+					var _this = this; 
+
 					//已选标签的删除事件代理
 					$("#SELECTED_GO_TAGS").delegate("[name='TAG_DEL']","click",function(){
 						var tagName = $(this).attr("tagName");
