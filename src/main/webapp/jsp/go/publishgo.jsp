@@ -18,14 +18,12 @@
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
 <link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/weui.min.css">
-<link href="//static.tfeie.com/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css"/> 
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
-	src="//static.tfeie.com/js/owl.carousel.js"></script>
-<script src="//static.tfeie.com/js/jquery-ui/jquery-ui.min.js"></script>
+	src="//static.tfeie.com/js/owl.carousel.js"></script> 
 
 </head>
 <body class="body">
@@ -43,88 +41,46 @@
 		</section>
 		<section class="act_info">
 			<p>
-				<span>Group邀请<input type="text" value="5-6" />人
-				</span><span class="on">One on One</span>
+				<span class="on" name="goType" goType="group">Group邀请<input
+					type="text" value="5-6" id="inviteMembers" />人
+				</span> <span name="goType" goType="oneonone">One on One</span>
 			</p>
 		</section>
 		<section class="inp_time">
 			<p>
-				<span><input type="datetime" value="2016-5-25 星期三 10:41 "
+				<span><input type="text" placeholder="2016-5-25 星期三 10:41 " id="expectedStartTime"
 					class="datepicker" /></span><label><input type="text"
-					value="约一个小时" /></label>
-			</p>
+					placeholder="约一个小时" id="expectedDuration"/></label>
+			</p> 
 		</section>
 		<section class="me_qingke">
-			<p>
-				固定费用<input type="text" value="150">/人
+			<p name="payMode" payMode="10">
+				固定费用<input type="text" id="fixedPrice" placeholder="150">/人
 			</p>
-			<p>
-				A A 预付<input type="text" value="150">/人<span>多退少补</span>
+			<p name="payMode" payMode="30">
+				A A 预付<input type="text" id="fixedPrice" placeholder="150">/人<span>多退少补</span>
 			</p>
-			<p>我请客</p>
+			<p name="payMode" payMode="30">我请客</p>
 		</section>
 		<section class="online_no">
 			<p>
-				<span class="on">线下服务</span><span>在线服务</span>
+				<span name="orgMode" orgMode="offline" class="on">线下服务</span><span name="orgMode" orgMode="online">在线服务</span>
 			</p>
-			<p>
-				<input type="text" value="北京中关村附近" />
+			<p id="p_location">
+				<input type="text" placeholder="北京中关村附近" id="location"/>
 			</p>
 		</section>
 		<section class="fabu_zhuti disan">
 			<p>活动详情</p>
 		</section>
 
-		<section class="add_edit">
-			<section class="zhuti_hanhua add_mask items">
-				<p>
-					<textarea>
-请说说这个主题能掏些什么干货…
-一.主题
-二.内容
-三.说明
-四.注意
-                    </textarea>
-				</p>
-				<section class="yingchang">
-					<img src="//static.tfeie.com/images/img50.png" />
-				</section>
-			</section>
-
-			<section class="zhuti_hanhua items">
-				<p>
-					<textarea>
-请说说这个主题能掏些什么干货…
-一.主题
-二.内容
-三.说明
-四.注意
-                    </textarea>
-				</p>
-			</section>
-
-
-
-
-
-
-			<section class="jia_img add_mask items">
-				<p>
-					<img src="//static.tfeie.com/images/img51.png">
-				</p>
-				<p>上传图片</p>
-				<section class="yingchang on">
-					<img src="//static.tfeie.com/images/img50.png" />
-				</section>
-			</section>
-
-
+		<section class="add_edit" id="SECTION_GO_DETAILS">
 
 		</section>
 
 		<section class="fabu_but">
 			<p>
-				<span class="in"><a>添加图片</a></span><span class="on"><a>添加文本</a></span>
+				<span class="in" id="SPAN_ADD_IMAGE"><a>添加图片</a></span><span class="on"  id="SPAN_ADD_TEXT"><a>添加文本</a></span>
 			</p>
 		</section>
 		<div class="clear"></div>
@@ -197,14 +153,68 @@
 				init: function(){
 					this.bindEvents(); 
 					this.initData(); 
+					this.initRenders();
 				},
 				
 				bindEvents: function(){
-					var _this = this;
-					$(".datepicker").datepicker({
-						showOtherMonths: true,
-						selectOtherMonths: true
+					var _this = this; 
+					
+					//活动类型选择事件
+					$("[name='goType']").on("click",function(){
+						$("[name='goType']").removeClass("on");
+						$(this).addClass("on");
 					});
+					
+					//付费模式
+					$("[name='payMode']").on("click",function(){
+						$("[name='payMode']").removeClass("on");
+						$(this).addClass("on");
+					});
+					
+					//组织形式
+					$("[name='orgMode']").on("click",function(){
+						$("[name='orgMode']").removeClass("on");
+						$(this).addClass("on");
+						
+						var orgMode = $(this).attr("orgMode");
+						if(orgMode=="offline"){
+							$("#p_location").show();
+						}else{
+							$("#p_location").hide();
+						}
+					});
+					
+					//添加图片按钮事件
+					$("#SPAN_ADD_IMAGE").on("click",function(){
+						_this.godetails.push({
+							_id: new Date().getTime(),
+							type: "image",
+							imageUrl:""
+						});
+						//渲染详情页面
+						_this.renderGoDetails();
+					});
+					
+					//添加文字按钮事件
+					$("#SPAN_ADD_TEXT").on("click",function(){
+						_this.godetails.push({
+							_id: new Date().getTime(),
+							type: "text",
+							detail:""
+						});
+						//渲染详情页面
+						_this.renderGoDetails();
+					});
+					
+					//活动明细图文删除事件代理
+					$("#SECTION_GO_DETAILS").delegate("[name='SECTION_DEL_GO_DETAIL']","click",function(){
+						var _id =$(this).attr("_id");
+						_this.deleteGoDetail(_id);
+					})
+					
+					
+					
+					
 
 					//已选标签的删除事件代理
 					$("#SELECTED_GO_TAGS").delegate("[name='TAG_DEL']","click",function(){
@@ -296,8 +306,17 @@
 				
 				initData: function(){ 
 					this.selectedGoTags=[];
+					this.godetails=[{
+						_id: new Date().getTime(),
+						type: "text",
+						detail:""
+					}];
 					this.getAllTags(); 
+				},
+				
+				initRenders: function(){
 					this.renderSelectedGoTags();
+					this.renderGoDetails();
 				},
 				
 				getAllTags: function(){
@@ -412,6 +431,28 @@
 					_this.renderSelectedGoTags();
 					_this.renderCanSelecteGoTags();
 					
+				},
+				
+				deleteGoDetail: function(_id){
+					var _this = this;
+					var queryDetails = $.grep(_this.godetails,function(o,i){
+						return o._id==_id;
+					});
+					if(queryDetails.length==0){
+						return;
+					}
+					var d = queryDetails[0];
+					_this.godetails.splice($.inArray(d,_this.godetails),1);
+					_this.renderGoDetails();
+				},
+				
+				renderGoDetails: function(){
+					var godetails =this.godetails?this.godetails:[];
+					var d = { 
+						godetails: godetails
+					}
+					var opt=$("#GoDetailsImpl").render(d);
+					$("#SECTION_GO_DETAILS").html(opt);
 				}
 			}
 		})
@@ -457,5 +498,34 @@
 		{{/for}}
 	</ul> 
 </script>
-				
+
+<script id="GoDetailsImpl" type="text/x-jsrender">
+	{{for godetails}} 
+		{{if type=="text"}}
+			<section class="zhuti_hanhua add_mask items">
+				<p>
+					<textarea placeholder="请说说这个主题能掏些什么干货…
+一.主题
+二.内容
+三.说明
+四.注意">{{:detail}}</textarea>
+				</p>
+				<section class="yingchang" name="SECTION_DEL_GO_DETAIL" _id="{{:_id}}">
+					<img src="//static.tfeie.com/images/img50.png" />
+				</section>
+			</section>
+		{{/if}}
+		{{if type=="image"}}
+			<section class="jia_img add_mask items">
+				<p>
+					<img src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/images/img51.png{{else}}{{:imageUrl}}{{/if}}">
+				</p>
+				<p>上传图片</p>
+				<section class="yingchang on" name="SECTION_DEL_GO_DETAIL" _id="{{:_id}}">
+					<img src="//static.tfeie.com/images/img50.png" />
+				</section>
+			</section>
+		{{/if}}
+	{{/for}}
+</script>				
 </html>
