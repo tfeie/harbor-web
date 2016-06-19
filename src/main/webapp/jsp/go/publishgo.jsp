@@ -42,23 +42,23 @@
 		<section class="act_info">
 			<p>
 				<span class="on" name="goType" goType="group">Group邀请<input
-					type="text" value="5-6" id="inviteMembers" />人
+					type="text" placeholder="5-6" id="inviteMembers" />人
 				</span> <span name="goType" goType="oneonone">One on One</span>
 			</p>
 		</section>
 		<section class="inp_time">
 			<p>
-				<span><input type="text" placeholder="2016-5-25 星期三 10:41 " id="expectedStartTime"
+				<span><input type="text" placeholder="2016-5-25 10:00 " id="expectedStartTime"
 					class="datepicker" /></span><label><input type="text"
 					placeholder="约一个小时" id="expectedDuration"/></label>
 			</p> 
 		</section>
 		<section class="me_qingke">
 			<p name="payMode" payMode="10">
-				固定费用<input type="text" id="fixedPrice" placeholder="150">/人
+				固定费用<input type="text" id="price" placeholder="150">/人
 			</p>
 			<p name="payMode" payMode="20">
-				A A 预付<input type="text" id="fixedPrice" placeholder="150">/人<span>多退少补</span>
+				A A 预付<input type="text" id="price" placeholder="150">/人<span>多退少补</span>
 			</p>
 			<p name="payMode" payMode="30">我请客</p>
 		</section>
@@ -232,6 +232,46 @@
 						var _id =$(this).attr("_id");
 						var val = $(this).val();
 						_this.modifyGoDetail(_id,val,"");
+					}); 
+					
+					//图片上传服务
+					$("#SECTION_GO_DETAILS").delegate("[name='P_GO_UPLOAD_IMG']","click",function(){
+						var _id =$(this).attr("_id");
+						var s = this;
+						wx.chooseImage({
+							count : 1,
+							sizeType: ['compressed'],
+							success : function(res) {
+								var localId = res.localIds[0]; 
+								wx.uploadImage({
+									localId : localId,
+									isShowProgressTips : 1,
+									success : function(r) {
+										var mediaId = r.serverId;
+										ajaxController.ajax({
+											url: "../go/uploadGoImgToOSS",
+											type: "post",
+											data: {
+												mediaId: mediaId,
+												userId: _this.getPropertyValue("userId")
+											},
+											success: function(transport){
+												var imgURL  = transport.data;
+												$(s).find("#IMG_GO").attr("src", imgURL);
+												_this.modifyGoDetail(_id,"",imgURL);
+											},
+											failure: function(transport){
+												weUI.alert({content:"图片上传失败"});
+											}
+											
+										});
+									},
+									fail : function(res) {
+										weUI.alert({content:"图片上传失败"});
+									}
+								});
+							}
+						});
 					}); 
 					
 					//提交按钮
@@ -506,7 +546,7 @@
 					var expectedStartTime = $.trim($("#expectedStartTime").val());
 					var expectedDuration = $.trim($("#expectedDuration").val());
 					var payMode = $.trim($("[name='payMode'].on").attr("payMode"));
-					var fixedPrice =  $.trim($("[name='payMode'].on").find("#fixedPrice").val());
+					var price =  $.trim($("[name='payMode'].on").find("#price").val());
 					var orgMode = $.trim($("[name='orgMode'].on").attr("orgMode"));
 					var location = $.trim($("#location").val());
 					var myStory = $.trim($("#myStory").val()); 
@@ -551,7 +591,7 @@
 								cnlength: 50
 							},
 							ruleMessages: {
-								required: "请输入邀请人数(5-8)",
+								required: "请输入邀请人数(如:5-8)",
 								cnlength: "邀请人数不操作25个汉字"
 							}
 						}).addRule({
@@ -600,9 +640,9 @@
 					if(payMode=="10" || payMode=="20"){
 						valueValidator.addRule({
 							labelName: "费用",
-							fieldName: "fixedPrice",
+							fieldName: "price",
 							getValue: function(){
-								return fixedPrice;
+								return price;
 							},
 							fieldRules: {
 								required: true, 
@@ -669,21 +709,25 @@
 						ruleMessages: {
 							rangelength: "活动标签至少选择1个，最多选择5个"
 						}
-					}).addRule({
-						labelName: "我的故事",
-						fieldName: "myStory",
-						getValue: function(){
-							return myStory;
-						},
-						fieldRules: {
-							required: true, 
-							cnlength: 300
-						},
-						ruleMessages: {
-							required: "请填写我的故事",
-							cnlength:"我的故事最多输入150个汉字"
-						}
 					});
+					if(goType=="oneonone"){
+						valueValidator.addRule({
+							labelName: "我的故事",
+							fieldName: "myStory",
+							getValue: function(){
+								return myStory;
+							},
+							fieldRules: {
+								required: true, 
+								cnlength: 300
+							},
+							ruleMessages: {
+								required: "请填写我的故事",
+								cnlength:"我的故事最多输入150个汉字"
+							}
+						});
+					}
+					
 					
 					var res=valueValidator.fireRulesAndReturnFirstError();
 					if(res){
@@ -699,8 +743,46 @@
 						return ;
 					}
 					
-					weUI.alert({content:"一会提交"});
 					
+					var data = {
+						userId: _this.getPropertyValue("userId"),
+						goType: goType,
+						topic: topic,
+						inviteMembers: (goType=="group")?inviteMembers:"",
+						expectedStartTime: (goType=="group")?expectedStartTime:"",
+						expectedDuration: expectedDuration,
+						payMode: payMode,
+						price: (payMode=="30")?"":price,
+						orgMode: orgMode,
+						location: (orgMode=="online")?"":location,
+						myStory: (goType=="oneonone")?myStory:"",
+						goDetails: _this.godetails,
+						goTags: _this.selectedGoTags
+					} 
+					ajaxController.ajax({
+						url: "../go/submitNewGo",
+						type: "post", 
+						data: {
+							goData: JSON.stringify(data)
+						},
+						success: function(transport){
+							weUI.alert({
+								content: "活动提交成功"
+							})
+						},
+						failure: function(transport){
+							weUI.alert({
+								content: "活动提交失败"+transport.statusInfo
+							})
+						}
+						
+					});
+					
+				},
+				
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
 				}
 			}
 		})
@@ -765,8 +847,8 @@
 		{{/if}}
 		{{if type=="image"}}
 			<section class="jia_img add_mask items">
-				<p>
-					<img src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/images/img51.png{{else}}{{:imageUrl}}{{/if}}">
+				<p name="P_GO_UPLOAD_IMG" _id="{{:_id}}">
+					<img id="IMG_GO" src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/images/img51.png{{else}}{{:imageUrl}}{{/if}}">
 				</p>
 				<p>上传图片</p>
 				<section class="yingchang on" name="SECTION_DEL_GO_DETAIL" _id="{{:_id}}">

@@ -711,7 +711,6 @@ public class UserController {
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
 			}
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);

@@ -10,17 +10,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.the.harbor.api.go.IGoSV;
+import com.the.harbor.api.go.param.GoCreateReq;
+import com.the.harbor.api.go.param.GoCreateResp;
 import com.the.harbor.api.user.param.UserInfo;
+import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
+import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.util.AmountUtils;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.RandomUtil;
+import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
@@ -180,6 +187,48 @@ public class GoController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/submitNewGo")
+	@ResponseBody
+	public ResponseData<String> submitNewGo(String goData) {
+		ResponseData<String> responseData = null;
+		try {
+			if (StringUtil.isBlank(goData)) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "活动信息为空");
+			}
+			GoCreateReq request = JSON.parseObject(goData, GoCreateReq.class);
+			GoCreateResp rep = DubboConsumerFactory.getService(IGoSV.class).createGo(request);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage(), "");
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+	
+	@RequestMapping("/uploadGoImgToOSS")
+	public ResponseData<String> uploadGoImgToOSS(HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		String mediaId = request.getParameter("mediaId");
+		String userId = request.getParameter("userId");
+		try {
+			if (StringUtil.isBlank(userId)) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户标识不存在");
+			}
+			String fileName = WXHelpUtil.uploadGoImgToOSS(mediaId, userId);
+			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}
