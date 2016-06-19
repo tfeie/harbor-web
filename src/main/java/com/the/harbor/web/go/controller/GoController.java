@@ -31,6 +31,7 @@ import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
+import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 
 @RestController
 @RequestMapping("/go")
@@ -108,7 +109,10 @@ public class GoController {
 
 	@RequestMapping("/publishGo.html")
 	public ModelAndView publishGo(HttpServletRequest request) {
-		UserInfo userInfo = WXUserUtil.getUserInfo("oztCUs_Ci25lT7IEMeDLtbK6nr1M");
+		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
+		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
+		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
+		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
 		if (userInfo == null) {
 			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
 		}
