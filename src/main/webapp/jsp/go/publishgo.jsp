@@ -101,10 +101,10 @@
 			</section>
 		</section>
 
-		<section class="fabu_zhuti diwu">
+		<section class="fabu_zhuti diwu" name="SELECTION_MYSTORY" style="display:none">
 			<p>我的故事</p>
 		</section>
-		<section class="my_gushi">
+		<section class="my_gushi" name="SELECTION_MYSTORY" style="display:none">
 			<p>
 				<textarea placeholder="请说说关于这个主题你的故事…" id="myStory"></textarea>
 			</p>
@@ -163,6 +163,21 @@
 					$("[name='goType']").on("click",function(){
 						$("[name='goType']").removeClass("on");
 						$(this).addClass("on");
+						var goType = $(this).attr("goType");
+						if(goType=="oneonone"){
+							$("[name='payMode']").each(function(i,o){
+								var payMode =$(this).attr("payMode");
+								if(payMode=="10"){
+									$(this).addClass("on").show();
+								}else{
+									$(this).removeClass("on").hide();
+								}
+							});
+							$("[name='SELECTION_MYSTORY']").show();
+						}else if(goType=="group"){
+							$("[name='payMode']").show();
+							$("[name='SELECTION_MYSTORY']").hide();
+						}
 					});
 					
 					//付费模式
