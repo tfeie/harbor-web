@@ -257,7 +257,7 @@
 											},
 											success: function(transport){
 												var imgURL  = transport.data;
-												$(s).find("#IMG_GO").attr("src", imgURL);
+												$(s).find("#IMG_GO").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
 												_this.modifyGoDetail(_id,"",imgURL);
 											},
 											failure: function(transport){
