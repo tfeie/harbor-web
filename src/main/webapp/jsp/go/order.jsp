@@ -171,7 +171,7 @@
 							content: "活动预约成功",
 							ok: function(){
 								weUI.closeAlert();
-								window.location.href="../go/toPay?goOrderId="+goOrderId;
+								window.location.href="../go/toPay.html?goOrderId="+goOrderId;
 							}
 						});
 						//禁止提交
