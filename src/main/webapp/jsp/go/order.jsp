@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -16,6 +17,8 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -49,11 +52,7 @@
 
 			<section class="jingyan-text">
 				<p>
-					<textarea>希望海牛分享的经验或解答的疑惑...
-1. 
-2. 
-3. 
-</textarea>
+					<textarea id="questions" placeholder="希望海牛分享的经验或解答的疑惑..."></textarea>
 				</p>
 			</section>
 
@@ -63,16 +62,175 @@
 
 			<section class="yuyue-textarea">
 				<p>
-					<textarea>说说你自己吧，让海牛了解你，更好为你服务</textarea>
+					<textarea id="selfIntro" placeholder="说说你自己吧，让海牛了解你，更好为你服务"></textarea>
 				</p>
 			</section>
 
 			<section class="but_baoc">
 				<p>
-					<input type="button" value="预约, 去支付" />
+					<input type="button" id="BTN_SUBMIT" value="预约, 去支付" />
 				</p>
 			</section>
 		</section>
 	</section>
 </body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script type="text/javascript">
+(function($){
+	$.OrderGoPage = function(data){
+		this.settings = $.extend(true,{},$.OrderGoPage.defaults);
+		this.params= data?data:{}
+	}
+	$.extend($.OrderGoPage,{
+		defaults: { 
+		},
+	
+		prototype: {
+			init: function(){
+				this.checkUserJoinGo();
+				this.bindEvents(); 
+			},
+			
+			bindEvents: function(){
+				var _this = this; 
+				//提交事件
+				$("#BTN_SUBMIT").on("click",function(){
+					_this.submit();
+				});
+			},
+			
+			getPropertyValue: function(propertyName){
+				if(!propertyName)return;
+				return this.params[propertyName];
+			},
+			
+			submit: function(){
+				var _this = this;
+				var questions = $.trim($("#questions").val());
+				var selfIntro = $.trim($("#selfIntro").val());
+				var valueValidator = new $.ValueValidator();
+				valueValidator.addRule({
+					labelName: "想请教的问题",
+					fieldName: "questions",
+					getValue: function(){
+						return questions;
+					},
+					fieldRules: {
+						required: true, 
+						cnlength: 200
+					},
+					ruleMessages: {
+						required: "请填写想请教的问题",
+						cnlength:"想请教的问题不能超过100个汉字"
+					}
+				}).addRule({
+					labelName: "自我介绍",
+					fieldName: "selfIntro",
+					getValue: function(){
+						return selfIntro;
+					},
+					fieldRules: {
+						required: true, 
+						cnlength: 200
+					},
+					ruleMessages: {
+						required: "请填写自我介绍",
+						min: "自我介绍不少于20个汉字",
+						cnlength:"自我介绍不能超过100个汉字"
+					}
+				});
+				
+				var res=valueValidator.fireRulesAndReturnFirstError();
+				if(res){
+					weUI.alert({content:res});
+					return;
+				}
+				
+				var data = {
+					userId: _this.getPropertyValue("userId"),
+					goId: _this.getPropertyValue("goId"),
+					selfIntro: selfIntro, 
+					questions: questions
+				} 
+				ajaxController.ajax({
+					url: "../go/orderOneOnOne",
+					type: "post", 
+					data: data ,
+					success: function(transport){
+						var goOrderId = transport.data;
+						weUI.alert({
+							content: "活动预约成功",
+							ok: function(){
+								weUI.closeAlert();
+								window.location.href="../go/toPay?goOrderId="+goOrderId;
+							}
+						});
+						//禁止提交
+						$("#BTN_SUBMIT").attr({"disabled":"disabled"});
+					},
+					failure: function(transport){
+						weUI.alert({
+							content: "活动预约失败"+transport.statusInfo
+						})
+					}
+					
+				});
+				
+			},
+			
+			checkUserJoinGo: function(){
+				var _this = this;
+				ajaxController.ajax({
+					url: "../go/checkUserJoinGo",
+					type: "post", 
+					data: {
+						userId: _this.getPropertyValue("userId"),
+						goId: _this.getPropertyValue("goId")
+					},
+					success: function(transport){
+						var data  = transport.data?transport.data:{};
+						var join = data.join;
+						var remark = data.remark;
+						var orderId = data.orderId;
+						var orderStatus = data.orderStatus;
+						if(join=="1" || join=="2"){
+							//禁止提交
+							$("#BTN_SUBMIT").attr({"disabled":"disabled"});
+							weUI.alert({
+								content: remark
+							});
+						}
+						
+					},
+					failure: function(transport){
+						//禁止提交
+						$("#BTN_SUBMIT").attr({"disabled":"disabled"});
+						weUI.alert({
+							content: "判断是否参与活动失败"+transport.statusInfo
+						})
+					}
+					
+				});
+			}
+		}
+	});
+})(jQuery);
+
+$(document).ready(function(){
+	var p = new $.OrderGoPage({
+		userId: "<c:out value="${userInfo.userId}"/>",
+		goId:  "<c:out value="${goId}"/>"
+	});
+	p.init();
+});
+</script>
 </html>

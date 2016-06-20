@@ -132,7 +132,7 @@ wx.config({
 
 				bindEvents : function() {
 					var _this = this;
-					$("#BTN_BUY").bind("click", function() {
+					$("#BTN_BUY").on("click", function() {
 						_this.gotoPay();
 					});
 				},

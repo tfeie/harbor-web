@@ -93,13 +93,13 @@
 				<span>G&O相关</span><label></label>
 			</p>
 			<p class="on1">
-				<span>发布G&O2-2</span><label>go/publishgo.jsp <a href="../go/publishGo.html">Go</a></label>
+				<span>发布G&O2-2</span><label>go/publishgo.jsp-ok <a href="../go/publishGo.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>预约</span><label>go/order.jsp <a href="../go/toOrder.html">Go</a></label>
+				<span>预约</span><label>go/order.jsp-ok <a href="../go/toOrder.html?goId=DCAFD0E6D1FF4FCA906723B868CBCC95">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>支付费用</span><label>go/pay.jsp-ING <a href="../go/toPay.html">Go</a></label>
+				<span>支付费用</span><label>go/pay.jsp-ok <a href="../go/toPay.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>海牛确认</span><label>go/confirm.jsp <a href="../go/toConfirm.html">Go</a></label>
