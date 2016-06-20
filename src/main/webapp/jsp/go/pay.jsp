@@ -157,7 +157,7 @@ wx.config({
 					},
 					failure : function(transport) {
 						weUI.alert({
-							content: "活动支付失败"
+							content: transport.statusInfo
 						})
 					}
 
