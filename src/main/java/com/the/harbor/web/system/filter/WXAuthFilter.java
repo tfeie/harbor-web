@@ -33,8 +33,6 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				"/user/userCenter.html", "/user/setUserSkills.html", "/user/getUserCard.html", "/user/userWealth.html",
 				"/go/publishGo.html", "/go/toOrder.html", "/go/toPay.html" };
 		String uri = request.getRequestURI();
-		String contextPath = request.getContextPath();
-		String actionURL = uri.substring(contextPath.length());
 		boolean doFilter = false;
 		for (String s : shouldFilter) {
 			if (uri.indexOf(s) != -1) {
@@ -45,7 +43,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 
 		if (doFilter) {
 			LOG.debug("当前请求的地址需要进行网页授权认证");
-			String redirectURL = URLEncoder.encode(GlobalSettings.getHarborDomain() + actionURL, "utf-8");
+			String redirectURL = URLEncoder.encode(WXRequestUtil.getFullURL(request), "utf-8");
 			String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid="
 					+ GlobalSettings.getWeiXinAppId()
 					+ "&response_type=code&scope=snsapi_userinfo&state=haigui&redirect_uri=" + redirectURL
