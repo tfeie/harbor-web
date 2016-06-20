@@ -353,7 +353,7 @@ public class GoController {
 			// 组织支付认证信息
 			String payOrderId = resp.getPayOrderId();
 			String host = "192.168.1.1";
-			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId, Integer.parseInt(price), host,
+			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId, Integer.parseInt(AmountUtils.changeY2F(price)), host,
 					openId, GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
 			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
 
