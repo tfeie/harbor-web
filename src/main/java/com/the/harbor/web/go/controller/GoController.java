@@ -339,7 +339,7 @@ public class GoController {
 			// 调用服务生成支付流水
 			CreateGoPaymentOrderReq createGoPaymentOrderReq = new CreateGoPaymentOrderReq();
 			createGoPaymentOrderReq.setBusiType(BusiType.PAY_FOR_GO.getValue());
-			createGoPaymentOrderReq.setPayAmount(Long.parseLong(price));
+			createGoPaymentOrderReq.setPayAmount(Long.parseLong(AmountUtils.changeY2F("price")));
 			createGoPaymentOrderReq.setPayType(PayType.WEIXIN.getValue());
 			createGoPaymentOrderReq.setSummary(summary);
 			createGoPaymentOrderReq.setUserId(userId);
