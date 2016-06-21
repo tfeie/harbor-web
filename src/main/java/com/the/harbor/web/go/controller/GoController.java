@@ -25,6 +25,7 @@ import com.the.harbor.api.go.param.GoOrderCreateReq;
 import com.the.harbor.api.go.param.GoOrderCreateResp;
 import com.the.harbor.api.go.param.UpdateGoOrderPayReq;
 import com.the.harbor.api.user.param.UserInfo;
+import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hygoorder.OrderStatus;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
@@ -53,6 +54,38 @@ public class GoController {
 
 	@RequestMapping("/toConfirm.html")
 	public ModelAndView toConfirm(HttpServletRequest request) {
+		String goOrderId = request.getParameter("goOrderId");
+		if (StringUtil.isBlank(goOrderId)) {
+			throw new BusinessException("不能查看确认信息:缺少预约单信息");
+		}
+		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
+		if (userInfo == null) {
+			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
+		}
+		// 校验当前用户对于此活动的状态来执行处理
+		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
+		if (goOrder == null) {
+			throw new BusinessException("不能查看确认信息,该预约单不存在。您可以前往预约", true, "../go/oneononeindex.html");
+		}
+		if (!userInfo.getUserId().equals(goOrder.getUserId())) {
+			throw new BusinessException("不能查看确认信息,预约单不是您发起的。请可以前往预约", true,
+					"../go/toOrder.html?goId=" + goOrder.getGoId());
+		}
+		String tips = "";
+		if (OrderStatus.WAIT_CONFIRM.getValue().equals(goOrder.getOrderStatus())) {
+			tips = DateUtil.getDateString(goOrder.getCreateDate(), "yyyy-MM-dd HH:mm") + " 预约已提交，请等待海牛确认";
+		} else if (OrderStatus.REJECT.getValue().equals(goOrder.getOrderStatus())) {
+			tips = DateUtil.getDateString(goOrder.getStsDate(), "yyyy-MM-dd HH:mm") + " 海牛拒绝了您的预约,您支付的费用将在3个工作日内退款";
+		} else if (OrderStatus.WAIT_MEET.getValue().equals(goOrder.getOrderStatus())) {
+			tips = DateUtil.getDateString(goOrder.getStsDate(), "yyyy-MM-dd HH:mm")
+					+ " 海牛已经确认，等待约见。<a href=\"../go/toAppointment.html?goOrderId=" + goOrderId + "\">进入约见</a>";
+		} else if (OrderStatus.FINISH.getValue().equals(goOrder.getOrderStatus())) {
+			tips = DateUtil.getDateString(goOrder.getStsDate(), "yyyy-MM-dd HH:mm")
+					+ " 活动已经结束。<a href=\"../go/toFeedback.html?goOrderId=" + goOrderId + "\">进入点评</a>";
+		}
+		request.setAttribute("tips", tips);
+		request.setAttribute("userInfo", userInfo);
+		request.setAttribute("goOrder", goOrder);
 		ModelAndView view = new ModelAndView("go/confirm");
 		return view;
 	}

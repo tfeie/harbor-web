@@ -102,7 +102,7 @@
 				<span>支付费用</span><label>go/pay.jsp-ok <a href="../go/toPay.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>海牛确认</span><label>go/confirm.jsp <a href="../go/toConfirm.html">Go</a></label>
+				<span>海牛确认</span><label>go/confirm.jsp-ok <a href="../go/toConfirm.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>约见</span><label>go/appointment.jsp <a href="../go/toAppointment.html">Go</a></label>

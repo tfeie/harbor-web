@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -39,38 +40,38 @@
 
 		</section>
 		<section class="tijiao">
-			<p>2016-5-16 18:30 预约已提交，请等待海牛确认</p>
+			<p><c:out value="${tips}" escapeXml="false"/></p>
 		</section>
 		<section class="sexy">
-			<p>海外市场如此Sexy</p>
+			<p><c:out value="${goOrder.topic}" escapeXml="false"/></p>
 		</section>
 		<section class="touxiang-info">
 			<section class="touxiang-img">
 				<p>
-					<span><img src="//static.tfeie.com/images/img21.png"></span>
+					<span><img src="<c:out value="${userInfo.wxHeadimg}" escapeXml="false"/>"></span>
 				</p>
 			</section>
 			<section class="text-info">
 				<p>
-					<i>Martin</i><span>英国</span><label>已认证</label>
+					<i><c:out value="${userInfo.enName}" escapeXml="false"/></i><span><c:out value="${userInfo.abroadCountryName}" escapeXml="false"/></span><label><c:out value="${userInfo.userStatusName}" escapeXml="false"/></label>
 				</p>
-				<p class="on">金融/合伙人/北京</p>
+				<p class="on"><c:out value="${userInfo.industryName}" escapeXml="false"/>/<c:out value="${userInfo.title}" escapeXml="false"/>/<c:out value="${userInfo.atCityName}" escapeXml="false"/></p>
 			</section>
 			<div class="clear"></div>
 		</section>
 		<section class="wenti-jies">
 			<section class="wenti">
 				<p class="on">想请教的问题</p>
-				<p>初来萨省的时候，记得我和两位同学从学校出来路过一个花园，一位老奶奶很开心地和我们打招呼。小小的举动会让你觉得很温暖。</p>
+				<p><c:out value="${goOrder.questions}" escapeXml="false"/></p>
 			</section>
 			<section class="wenti">
 				<p class="on">自我介绍</p>
-				<p>去国外读书，要做好心理准备。出国了绝对没有国内过得舒服。就说生活上的事吧，出国前父母帮忙解决，出国后都要自己打理。</p>
+				<p><c:out value="${goOrder.selfIntro}" escapeXml="false"/></p>
 			</section>
 		</section>
 
 		<section class="sec_btn2">
-			<a href="">给海牛发消息</a>
+			<a href="javascript:void(0)" id="BTN_SEND_MQ">给海牛发消息</a>
 		</section>
 	</section>
 </body>
@@ -97,8 +98,8 @@
 			
 			bindEvents: function(){
 				var _this = this;
-				$("#HREF_GO_PAY").on("click", function() {
-					_this.gotoPay();
+				$("#BTN_SEND_MQ").on("click", function() {
+					weUI.alert({content:"发送消息测试"});
 				}); 
 			},
  
@@ -114,8 +115,8 @@
 $(document).ready(function(){
 	var p = new $.GoWaitConfirmPage({
 		userId: "<c:out value="${userInfo.userId}"/>", 
-		goId:  "<c:out value="${goId}"/>",
-		goOrderId:  "<c:out value="${goOrderId}"/>"
+		goId:  "<c:out value="${goOrder.goId}"/>",
+		goOrderId:  "<c:out value="${goOrder.goOrderId}"/>"
 		
 	});
 	p.init();

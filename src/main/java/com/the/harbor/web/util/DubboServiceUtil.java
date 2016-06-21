@@ -7,6 +7,9 @@ import com.the.harbor.api.go.param.GoOrderQueryReq;
 import com.the.harbor.api.go.param.GoOrderQueryResp;
 import com.the.harbor.api.go.param.GoQueryReq;
 import com.the.harbor.api.go.param.GoQueryResp;
+import com.the.harbor.api.user.IUserSV;
+import com.the.harbor.api.user.param.UserViewInfo;
+import com.the.harbor.api.user.param.UserViewResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.exception.GenericException;
@@ -71,4 +74,19 @@ public final class DubboServiceUtil {
 		}
 		return resp.getGoOrder();
 	}
+
+	public static UserViewInfo queryUserViewInfo(String openId) {
+		UserViewResp resp = null;
+		try {
+			resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByOpenId(openId);
+		} catch (Exception ex) {
+			GenericException ge = ExceptionUtil.convert2GenericException(ex);
+			throw ge;
+		}
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultMessage());
+		}
+		return resp.getUserInfo();
+	}
+
 }
