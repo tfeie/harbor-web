@@ -18,7 +18,7 @@
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
 <link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/weui.min.css">	
+	href="//static.tfeie.com/css/weui.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -73,7 +73,9 @@
 		</section>
 
 		<section class="sec_btn2">
-			<a href="javascript:void(0)" id="BTN_SEND_MQ">给海牛发消息</a>
+			<span><a href="javascript:void(0)" id="BTN_CONFIRM">确认</a></span>
+			<span><a href="javascript:void(0)" id="BTN_REJECT">拒绝</a></span>
+			<span><a href="javascript:void(0)" id="BTN_SEND_MQ">给小白发消息</a></span>
 		</section>
 	</section>
 </body>
@@ -101,10 +103,45 @@
 			bindEvents: function(){
 				var _this = this;
 				$("#BTN_SEND_MQ").on("click", function() {
-					weUI.alert({content:"发送消息测试"});
+					alert("发送消息");
+				}); 
+				$("#BTN_CONFIRM").on("click", function() {
+					_this.submitConfirm("confirm");
+				}); 
+				$("#BTN_REJECT").on("click", function() {
+					_this.submitConfirm("reject");
 				}); 
 			},
- 
+ 			
+			submitConfirm: function(ackFlag){
+				var _this = this;
+				var data = {
+					goOrderId: _this.getPropertyValue("goOrderId"),
+					publishUserId:_this.getPropertyValue("publishUserId"),
+					ackFlag: ackFlag
+				};
+				ajaxController.ajax({
+					url: "../go/confirmGoOrder",
+					type: "post", 
+					data: data ,
+					success: function(transport){
+						var goOrderId = transport.data;
+						weUI.alert({
+							content: "处理成功",
+							ok: function(){
+								weUI.closeAlert();
+								window.location.href="../go/oneononeindex.html";
+							}
+						}); 
+					},
+					failure: function(transport){
+						weUI.alert({
+							content: "处理失败"+transport.statusInfo
+						})
+					}
+					
+				});
+			},
 			
 			getPropertyValue: function(propertyName){
 				if(!propertyName)return;
@@ -116,8 +153,7 @@
 
 $(document).ready(function(){
 	var p = new $.GoWaitConfirmPage({
-		userId: "<c:out value="${userInfo.userId}"/>", 
-		goId:  "<c:out value="${goOrder.goId}"/>",
+		publishUserId: "<c:out value="${publishUserId}"/>", 
 		goOrderId:  "<c:out value="${goOrder.orderId}"/>"
 		
 	});

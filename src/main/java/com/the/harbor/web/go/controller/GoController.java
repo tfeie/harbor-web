@@ -21,12 +21,15 @@ import com.the.harbor.api.go.param.Go;
 import com.the.harbor.api.go.param.GoCreateReq;
 import com.the.harbor.api.go.param.GoCreateResp;
 import com.the.harbor.api.go.param.GoOrder;
+import com.the.harbor.api.go.param.GoOrderConfirmReq;
 import com.the.harbor.api.go.param.GoOrderCreateReq;
 import com.the.harbor.api.go.param.GoOrderCreateResp;
 import com.the.harbor.api.go.param.UpdateGoOrderPayReq;
 import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
+import com.the.harbor.base.enumeration.dict.ParamCode;
+import com.the.harbor.base.enumeration.dict.TypeCode;
 import com.the.harbor.base.enumeration.hygoorder.OrderStatus;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
@@ -36,6 +39,7 @@ import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
+import com.the.harbor.commons.redisdata.util.HyDictUtil;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.util.AmountUtils;
 import com.the.harbor.commons.util.DateUtil;
@@ -52,6 +56,12 @@ public class GoController {
 
 	private static final Logger LOG = Logger.getLogger(GoController.class);
 
+	/**
+	 * OneOnOne活动参与者确认页面
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/toConfirm.html")
 	public ModelAndView toConfirm(HttpServletRequest request) {
 		String goOrderId = request.getParameter("goOrderId");
@@ -71,6 +81,11 @@ public class GoController {
 			throw new BusinessException("不能查看确认信息,预约单不是您发起的。请可以前往预约", true,
 					"../go/toOrder.html?goId=" + goOrder.getGoId());
 		}
+		// 活动发起者用户
+		UserViewInfo publishUserInfo = DubboServiceUtil.queryUserViewInfoByUserId(goOrder.getPublishUserId());
+		if (publishUserInfo == null) {
+			throw new BusinessException("不能查看确认信息:活动发起者信息不存在");
+		}
 		String tips = "";
 		if (OrderStatus.WAIT_CONFIRM.getValue().equals(goOrder.getOrderStatus())) {
 			tips = DateUtil.getDateString(goOrder.getCreateDate(), "yyyy-MM-dd HH:mm") + " 预约已提交，请等待海牛确认";
@@ -78,15 +93,72 @@ public class GoController {
 			tips = DateUtil.getDateString(goOrder.getStsDate(), "yyyy-MM-dd HH:mm") + " 海牛拒绝了您的预约,您支付的费用将在3个工作日内退款";
 		} else if (OrderStatus.WAIT_MEET.getValue().equals(goOrder.getOrderStatus())) {
 			tips = DateUtil.getDateString(goOrder.getStsDate(), "yyyy-MM-dd HH:mm")
-					+ " 海牛已经确认，等待约见。<a href=\"../go/toAppointment.html?goOrderId=" + goOrderId + "\">进入约见</a>";
+					+ " 海牛已经确认，等待约见。<a href=\"../go/toAppointment.html?goOrderId=" + goOrderId
+					+ "\" style=\"color:red\">进入约见</a>";
 		} else if (OrderStatus.FINISH.getValue().equals(goOrder.getOrderStatus())) {
 			tips = DateUtil.getDateString(goOrder.getStsDate(), "yyyy-MM-dd HH:mm")
-					+ " 活动已经结束。<a href=\"../go/toFeedback.html?goOrderId=" + goOrderId + "\">进入点评</a>";
+					+ " 活动已经结束。<a href=\"../go/toFeedback.html?goOrderId=" + goOrderId
+					+ "\" style=\"color:red\">进入点评</a>";
 		}
 		request.setAttribute("tips", tips);
-		request.setAttribute("userInfo", userInfo);
+		request.setAttribute("userInfo", publishUserInfo);
 		request.setAttribute("goOrder", goOrder);
 		ModelAndView view = new ModelAndView("go/confirm");
+		return view;
+	}
+
+	/**
+	 * OneOnOne活动发起者确认页面
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/toHainiuConfirm.html")
+	public ModelAndView toHainiuConfirm(HttpServletRequest request) {
+		String goOrderId = request.getParameter("goOrderId");
+		if (StringUtil.isBlank(goOrderId)) {
+			throw new BusinessException("不能确认活动预约信息:缺少预约单信息");
+		}
+		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
+		if (userInfo == null) {
+			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
+		}
+		// 校验当前用户对于此活动的状态来执行处理
+		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
+		if (goOrder == null) {
+			throw new BusinessException("不能确认活动预约信息:该预约单不存在。");
+		}
+		if (!userInfo.getUserId().equals(goOrder.getPublishUserId())) {
+			throw new BusinessException("不能确认活动预约信息:您不是该活动的发起方");
+		}
+		// 活动参与方
+		UserViewInfo joinUserInfo = DubboServiceUtil.queryUserViewInfoByUserId(goOrder.getUserId());
+		if (joinUserInfo == null) {
+			throw new BusinessException("不能确认活动预约信息:活动预约方信息不存在");
+		}
+		// 如果不是待海牛确认的，则跳转到对应页面
+		if (!OrderStatus.WAIT_CONFIRM.getValue().equals(goOrder.getOrderStatus())) {
+			String statusName = HyDictUtil.getHyDictDesc(TypeCode.HY_GO_ORDER.getValue(),
+					ParamCode.ORDER_STATUS.getValue(), goOrder.getOrderStatus());
+			// 如果状态是待约见，提示跳转到约见
+			if (OrderStatus.WAIT_MEET.getValue().equals(goOrder.getOrderStatus())) {
+				throw new BusinessException("您已经确认。可以进一步设定约见地点", true,
+						"../go/toHainiuAppointment.html?goOrderId=" + goOrderId + "");
+			} else if (OrderStatus.FINISH.getValue().equals(goOrder.getOrderStatus())) {
+				// 如果是完成，则进入评价
+				throw new BusinessException("您已经确认。活动已经结束。您可以进行点评", true,
+						"../go/toFeedback.html?goOrderId=" + goOrderId + "");
+			} else {
+				throw new BusinessException("不能确认活动预约信息:预约单的状态为[" + statusName + "]");
+			}
+
+		}
+		String tips = DateUtil.getDateString(goOrder.getCreateDate(), "yyyy-MM-dd HH:mm") + " 预约已提交，等待您的确认";
+		request.setAttribute("tips", tips);
+		request.setAttribute("userInfo", joinUserInfo);
+		request.setAttribute("goOrder", goOrder);
+		request.setAttribute("publishUserId", userInfo.getUserId());
+		ModelAndView view = new ModelAndView("go/hainiuconfirm");
 		return view;
 	}
 
@@ -113,7 +185,7 @@ public class GoController {
 		if (goOrder != null) {
 			String goOrderId = goOrder.getOrderId();
 			String orderStatus = goOrder.getOrderStatus();
-			Map<String, String> m = this.getJumpURLAndMessage(orderStatus, goOrder.getGoId(), goOrderId);
+			Map<String, String> m = this.getJumpURLAndMessageForJoiner(orderStatus, goOrder.getGoId(), goOrderId);
 			String jumpURL = m.get("jumpURL");
 			String message = m.get("message");
 			throw new BusinessException("您已经预约了此活动," + message, true, jumpURL);
@@ -124,7 +196,7 @@ public class GoController {
 		return view;
 	}
 
-	private Map<String, String> getJumpURLAndMessage(String orderStatus, String goId, String goOrderId) {
+	private Map<String, String> getJumpURLAndMessageForJoiner(String orderStatus, String goId, String goOrderId) {
 		Map<String, String> m = new HashMap<String, String>();
 		String jumpURL = null;
 		String message = null;
@@ -179,7 +251,7 @@ public class GoController {
 		// 判断活动是否属于待支付或者支付失败状态
 		if (!(OrderStatus.PAY_FAILURE.getValue().equals(goOrder.getOrderStatus())
 				|| OrderStatus.WAIT_PAY.getValue().equals(goOrder.getOrderStatus()))) {
-			Map<String, String> m = this.getJumpURLAndMessage(goOrder.getOrderStatus(), goOrder.getGoId(),
+			Map<String, String> m = this.getJumpURLAndMessageForJoiner(goOrder.getOrderStatus(), goOrder.getGoId(),
 					goOrder.getOrderId());
 			String jumpURL = m.get("jumpURL");
 			String message = m.get("message");
@@ -428,6 +500,25 @@ public class GoController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/confirmGoOrder")
+	@ResponseBody
+	public ResponseData<String> confirmGoOrder(GoOrderConfirmReq goOrderConfirmReq) {
+		ResponseData<String> responseData = null;
+		try {
+			Response rep = DubboConsumerFactory.getService(IGoSV.class).confirmGoOrder(goOrderConfirmReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
 	}

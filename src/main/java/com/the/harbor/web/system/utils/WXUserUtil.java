@@ -52,7 +52,16 @@ public final class WXUserUtil {
 	public static UserViewInfo getUserViewInfoByWXAuth(HttpServletRequest request) {
 		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
 		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserViewInfo userInfo = DubboServiceUtil.queryUserViewInfo(wtoken.getOpenId());
+		UserViewInfo userInfo = DubboServiceUtil.queryUserViewByOpenId(wtoken.getOpenId());
+		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
+		if (userInfo == null) {
+			throw new BusinessException("USER-100001", "您的微信没有注册成用户");
+		}
+		return userInfo;
+	}
+	
+	public static UserViewInfo getUserViewInfoByWXAuth1(HttpServletRequest request) { 
+		UserViewInfo userInfo = DubboServiceUtil.queryUserViewByOpenId("oztCUs_Ci25lT7IEMeDLtbK6nr1M");
 		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
 		if (userInfo == null) {
 			throw new BusinessException("USER-100001", "您的微信没有注册成用户");
