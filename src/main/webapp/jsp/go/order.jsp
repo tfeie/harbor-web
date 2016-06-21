@@ -206,7 +206,11 @@
 							//禁止提交
 							$("#BTN_SUBMIT").attr({"disabled":"disabled"});
 							weUI.alert({
-								content: remark
+								content: remark,
+								ok: function(){
+									weUI.closeAlert();
+									window.location.href="../go/toPay.html?goOrderId="+orderId;
+								}
 							});
 						}
 						
