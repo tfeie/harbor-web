@@ -175,9 +175,7 @@ wx.config({
 						payStatus: payStatus
 					},
 					success: function(transport){
-						weUI.alert({
-							content: "更新活动预约支付状态成功"
-						});
+						
 					},
 					failure: function(transport){
 						weUI.alert({
