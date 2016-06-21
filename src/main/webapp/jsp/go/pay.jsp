@@ -201,7 +201,7 @@ $(document).ready(function(){
 		userId: "<c:out value="${userInfo.userId}"/>",
 		price:  "<c:out value="${price}"/>",
 		nonceStr:  "<c:out value="${nonceStr}"/>",
-		timeStamp:  "<c:out value="${timeStamp}"/>",
+		timeStamp:  "<c:out value="${timestamp}"/>",
 		openId:  "<c:out value="${openId}"/>",
 		goId:  "<c:out value="${goId}"/>",
 		goOrderId:  "<c:out value="${goOrderId}"/>"
