@@ -83,7 +83,7 @@
 	
 <script type="text/javascript">
 wx.config({
-	debug : false,
+	debug : true,
 	appId : '<c:out value="${appId}"/>',
 	timestamp : <c:out value="${timestamp}"/>,
 	nonceStr : '<c:out value="${nonceStr}"/>',
