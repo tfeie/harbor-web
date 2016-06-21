@@ -116,7 +116,7 @@ $(document).ready(function(){
 	var p = new $.GoWaitConfirmPage({
 		userId: "<c:out value="${userInfo.userId}"/>", 
 		goId:  "<c:out value="${goOrder.goId}"/>",
-		goOrderId:  "<c:out value="${goOrder.goOrderId}"/>"
+		goOrderId:  "<c:out value="${goOrder.orderId}"/>"
 		
 	});
 	p.init();
