@@ -364,7 +364,7 @@ public class GoController {
 			if (StringUtil.isBlank(goOrderId)) {
 				throw new BusinessException("GO-100001", "生成支付流水失败:活动预约流水不存在");
 			}
-			String summary = "活动[" + goId + "]预约流水[" + goOrderId + "]支付";
+			String summary = "One on One活动预约支付";
 			// 调用服务生成支付流水
 			CreateGoPaymentOrderReq createGoPaymentOrderReq = new CreateGoPaymentOrderReq();
 			createGoPaymentOrderReq.setBusiType(BusiType.PAY_FOR_GO.getValue());
