@@ -50,7 +50,7 @@
 				<p>
 					<label><c:out value="${topic }"/></label>
 				</p>
-				<p>待支付</p>
+				<p><c:out value="${orderStatusName}"/></p>
 				<p>
 					<span><c:out value="${price }"/></span>元
 				</p>
@@ -83,7 +83,7 @@
 	
 <script type="text/javascript">
 wx.config({
-	debug : true,
+	debug : false,
 	appId : '<c:out value="${appId}"/>',
 	timestamp : <c:out value="${timestamp}"/>,
 	nonceStr : '<c:out value="${nonceStr}"/>',
@@ -107,9 +107,16 @@ wx.config({
 			
 			bindEvents: function(){
 				var _this = this;
-				$("#HREF_GO_PAY").on("click", function() {
-					_this.gotoPay();
-				}); 
+				var orderStatus = _this.getPropertyValue("orderStatus");
+				if(orderStatus=="10" || orderStatus=="11"){
+					$("#HREF_GO_PAY").on("click", function() {
+						_this.gotoPay();
+					}); 
+				}else{
+					$("#HREF_GO_PAY").text("不可支付");
+					
+				}
+				
 			},
 			
 			gotoPay: function(){
@@ -202,6 +209,7 @@ $(document).ready(function(){
 		timeStamp:  "<c:out value="${timestamp}"/>",
 		openId:  "<c:out value="${openId}"/>",
 		goId:  "<c:out value="${goId}"/>",
+		orderStatus:  "<c:out value="${orderStatus}"/>",
 		goOrderId:  "<c:out value="${goOrderId}"/>"
 		
 	});

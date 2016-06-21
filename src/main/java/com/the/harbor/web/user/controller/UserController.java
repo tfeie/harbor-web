@@ -1,6 +1,5 @@
 package com.the.harbor.web.user.controller;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,13 +69,13 @@ public class UserController {
 		ModelAndView view = new ModelAndView("pages");
 		return view;
 	}
-	
+
 	@RequestMapping("/tuijian.html")
 	public ModelAndView tuijian(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView view = new ModelAndView("user/haiyoutuijian");
 		return view;
 	}
-	
+
 	@RequestMapping("/myhaiyou.html")
 	public ModelAndView myhaiyou(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView view = new ModelAndView("user/myhaiyou");
@@ -90,8 +89,7 @@ public class UserController {
 		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
 		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
 		if (userInfo != null) {
-			LOG.debug("您的微信号[" + wtoken.getOpenId() + "]已经注册");
-			throw new BusinessException("USER-100001", "您的微信已经注册");
+			throw new BusinessException("您的微信已经注册");
 		}
 		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
 		request.setAttribute("wxUserInfo", wxUserInfo);
@@ -99,56 +97,16 @@ public class UserController {
 		return view;
 	}
 
-	@RequestMapping("/toUserRegister1.html")
-	public ModelAndView toUserRegister1(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		LOG.debug("用户注册授权==========开始===========");
-		String redirectURL = URLEncoder.encode(GlobalSettings.getHarborDomain() + "/user/toUserRegister.html", "utf-8");
-		String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid=" + GlobalSettings.getWeiXinAppId()
-				+ "&response_type=code&scope=snsapi_userinfo&state=haigui&redirect_uri=" + redirectURL
-				+ "#wechat_redirect";
-
-		String code = request.getParameter("code");
-		if (StringUtil.isBlank(code)) {
-			// 如果没有，则说明没有经过授权，进行授权
-			response.sendRedirect(authorURL);
-			return null;
-			// request.setAttribute("authorURL", authorURL);
-		} else {
-			// 如果传入了code，则可能是授权过的，获取access_token
-			WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
-			if (wtoken == null) {
-				// 如果获取不到access_token,说明是非法入侵的，重定向到微信授权
-				LOG.error("获取token失败，可能是认证失效或者token是侵入的");
-				// request.setAttribute("authorURL", authorURL);
-				response.sendRedirect(authorURL);
-				return null;
-			} else {
-				// 如果可以获取到，则获取用户信息
-				WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
-				if (wxUserInfo == null) {
-					// request.setAttribute("authorURL", authorURL);
-					response.sendRedirect(authorURL);
-					return null;
-				} else {
-					request.setAttribute("wxUserInfo", wxUserInfo);
-					ModelAndView view = new ModelAndView("user/toUserRegister");
-					return view;
-				}
-			}
-		}
-
-	}
-
 	@RequestMapping("/getRandomCode")
 	public ResponseData<String> getRandomCode(String mobilePhone) {
 		ResponseData<String> responseData = null;
 		try {
 			if (StringUtil.isBlank(mobilePhone)) {
-				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请输入您的手机号码");
+				throw new BusinessException("请输入您的手机号码");
 			}
 			String randomCode = SMSRandomCodeUtil.getSmsRandomCode(mobilePhone);
 			if (!StringUtil.isBlank(randomCode)) {
-				throw new BusinessException("SMS-10000", "验证码已经发送，一分钟内不要重复获取");
+				throw new BusinessException("验证码已经发送，一分钟内不要重复获取");
 			}
 			// 生成随机验证码，并且存入到缓存中
 			randomCode = SMSRandomCodeUtil.createRandomCode();
@@ -180,24 +138,24 @@ public class UserController {
 		ResponseData<String> responseData = null;
 		try {
 			if (StringUtil.isBlank(userData)) {
-				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户信息格式不正确");
+				throw new BusinessException("用户信息格式不正确");
 			}
 			if (StringUtil.isBlank(randomCode)) {
-				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请输入验证码");
+				throw new BusinessException("请输入验证码");
 			}
 			UserRegReq userRegReq = JSONObject.parseObject(userData, UserRegReq.class);
 			if (userRegReq == null) {
-				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户信息格式不正确");
+				throw new BusinessException("用户信息格式不正确");
 			}
 			if (StringUtil.isBlank(userRegReq.getMobilePhone())) {
-				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "请输入手机号码");
+				throw new BusinessException("请输入手机号码");
 			}
 			String code = SMSRandomCodeUtil.getSmsRandomCode(userRegReq.getMobilePhone());
 			if (StringUtil.isBlank(code)) {
-				throw new BusinessException("SMS-10000", "验证码已经过期，请重新获取");
+				throw new BusinessException("验证码已经过期，请重新获取");
 			}
 			if (!randomCode.equals(code)) {
-				throw new BusinessException("SMS-10000", "输入的验证码不正确");
+				throw new BusinessException("输入的验证码不正确");
 			}
 			Response rep = DubboConsumerFactory.getService(IUserSV.class).userRegister(userRegReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
@@ -220,7 +178,7 @@ public class UserController {
 		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
 		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
 		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
+			throw new BusinessException("您的微信号没有注册成用户，请先注册");
 		}
 		request.setAttribute("userInfo", userInfo);
 		long timestamp = DateUtil.getCurrentTimeMillis();
@@ -243,7 +201,7 @@ public class UserController {
 		ResponseData<String> responseData = null;
 		try {
 			if (req == null) {
-				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "认证材料信息不正确");
+				throw new BusinessException("认证材料信息不正确");
 			}
 			Response rep = DubboConsumerFactory.getService(IUserSV.class).submitUserCertification(req);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {

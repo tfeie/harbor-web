@@ -1,6 +1,8 @@
 package com.the.harbor.web.go.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,17 +17,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderReq;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderResp;
+import com.the.harbor.api.go.param.Go;
 import com.the.harbor.api.go.param.GoCreateReq;
 import com.the.harbor.api.go.param.GoCreateResp;
-import com.the.harbor.api.go.param.GoOrderCheckReq;
-import com.the.harbor.api.go.param.GoOrderCheckResp;
+import com.the.harbor.api.go.param.GoOrder;
 import com.the.harbor.api.go.param.GoOrderCreateReq;
 import com.the.harbor.api.go.param.GoOrderCreateResp;
-import com.the.harbor.api.go.param.GoOrderQueryReq;
-import com.the.harbor.api.go.param.GoOrderQueryResp;
 import com.the.harbor.api.go.param.UpdateGoOrderPayReq;
 import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
+import com.the.harbor.base.enumeration.hygoorder.OrderStatus;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
 import com.the.harbor.base.exception.BusinessException;
@@ -42,7 +43,7 @@ import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
-import com.the.harbor.web.weixin.param.WeixinOauth2Token;
+import com.the.harbor.web.util.DubboServiceUtil;
 
 @RestController
 @RequestMapping("/go")
@@ -60,19 +61,60 @@ public class GoController {
 	public ModelAndView toOrder(HttpServletRequest request) {
 		String goId = request.getParameter("goId");
 		if (StringUtil.isBlank(goId)) {
-			throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "预约失败:缺少活动标识");
+			throw new BusinessException("请先选择活动后才可以预约", true, "../go/oneononeindex.html");
 		}
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
+		UserInfo userInfo = WXUserUtil.getUserInfoByWXAuth(request);
 		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
+			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
+		}
+		// 查询活动信息
+		Go go = DubboServiceUtil.queryGo(goId);
+		if (go == null) {
+			throw new BusinessException("活动不存在，请重新选择", true, "../go/oneononeindex.html");
+		}
+		if (userInfo.getUserId().equals(go.getUserId())) {
+			throw new BusinessException("此活动是您自己发布，不可预约，请重新选择", true, "../go/oneononeindex.html");
+		}
+		// 校验当前用户对于此活动的状态来执行处理
+		GoOrder goOrder = DubboServiceUtil.queryGoOrder(userInfo.getUserId(), goId);
+		if (goOrder != null) {
+			String goOrderId = goOrder.getOrderId();
+			String orderStatus = goOrder.getOrderStatus();
+			Map<String, String> m = this.getJumpURLAndMessage(orderStatus, goOrder.getGoId(), goOrderId);
+			String jumpURL = m.get("jumpURL");
+			String message = m.get("message");
+			throw new BusinessException("您已经预约了此活动," + message, true, jumpURL);
 		}
 		request.setAttribute("goId", goId);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("go/order");
 		return view;
+	}
+
+	private Map<String, String> getJumpURLAndMessage(String orderStatus, String goId, String goOrderId) {
+		Map<String, String> m = new HashMap<String, String>();
+		String jumpURL = null;
+		String message = null;
+		if (OrderStatus.PAY_FAILURE.getValue().equals(orderStatus)
+				|| OrderStatus.WAIT_PAY.getValue().equals(orderStatus)) {
+			// 如果是支付失败或者待支付，直接进入支付页面
+			jumpURL = "../go/toPay.html?goId=" + goId + "&goOrderId=" + goOrderId;
+			message = "需要您进行支付,请前往";
+		} else if (OrderStatus.WAIT_CONFIRM.getValue().equals(orderStatus)) {
+			// 如果是待海牛确认，则跳转到确认页面
+			jumpURL = "../go/toConfirm.html?goOrderId=" + goOrderId;
+			message = "需要等待海牛确认,请前往";
+		} else if ((OrderStatus.REJECT.getValue().equals(orderStatus))) {
+			// 海牛已经拒绝
+			message = "海牛拒绝了您的参与请求，请重新选择其他活动";
+			jumpURL = "../go/oneononeindex.html";
+		} else if ((OrderStatus.WAIT_MEET.getValue().equals(orderStatus))) {
+			message = "海牛接收了您的请求，请前往";
+			jumpURL = "../go/toAppointment.html";
+		}
+		m.put("jumpURL", jumpURL);
+		m.put("message", message);
+		return m;
 	}
 
 	@RequestMapping("/toAppointment.html")
@@ -84,23 +126,33 @@ public class GoController {
 	@RequestMapping("/toPay.html")
 	public ModelAndView toPay(HttpServletRequest request) {
 		String goOrderId = request.getParameter("goOrderId");
-		if (StringUtil.isBlank(goOrderId)) {
-			throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "支付失败:缺少活动预约信息");
+		String goId = request.getParameter("goId");
+		if (StringUtil.isBlank(goId) || StringUtil.isBlank(goOrderId)) {
+			throw new BusinessException("支付失败:您需要同时指定活动信息和活动预约单信息");
 		}
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
+		Go go = DubboServiceUtil.queryGo(goId);
+		if (go == null) {
+			throw new BusinessException("支付失败:活动不存在。请前往预约活动", true, "../go/oneononeindex.html");
+		}
+		UserInfo userInfo = WXUserUtil.getUserInfoByWXAuth(request);
 		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
+			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
+		}
+		// 校验当前用户对于此活动的状态来执行处理
+		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
+		if (goOrder == null) {
+			throw new BusinessException("支付失败:您没有对此活动进行预约。请前往预约", true, "../go/toOrder.html?goId=" + go.getGoId());
+		}
+		// 判断活动是否属于待支付或者支付失败状态
+		if (!(OrderStatus.PAY_FAILURE.getValue().equals(goOrder.getOrderStatus())
+				|| OrderStatus.WAIT_PAY.getValue().equals(goOrder.getOrderStatus()))) {
+			Map<String, String> m = this.getJumpURLAndMessage(goOrder.getOrderStatus(), goOrder.getGoId(),
+					goOrder.getOrderId());
+			String jumpURL = m.get("jumpURL");
+			String message = m.get("message");
+			throw new BusinessException("此活动预约单不可支付," + message, true, jumpURL);
 		}
 		// 获取预约信息
-		GoOrderQueryReq goOrderQueryReq = new GoOrderQueryReq();
-		goOrderQueryReq.setGoOrderId(goOrderId);
-		GoOrderQueryResp goOrderQueryResp = DubboConsumerFactory.getService(IGoSV.class)
-				.queryGoOrderDetail(goOrderQueryReq);
-		if (!ExceptCodeConstants.SUCCESS.equals(goOrderQueryResp.getResponseHeader().getResultCode())) {
-			throw new BusinessException(goOrderQueryResp.getResponseHeader().getResultCode(),
-					goOrderQueryResp.getResponseHeader().getResultMessage());
-		}
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -112,23 +164,22 @@ public class GoController {
 		request.setAttribute("signature", signature);
 
 		request.setAttribute("userInfo", userInfo);
-		request.setAttribute("openId", wtoken.getOpenId());
-		request.setAttribute("topic", goOrderQueryResp.getTopic());
-		request.setAttribute("goId", goOrderQueryResp.getGoId());
+		request.setAttribute("openId", userInfo.getWxOpenid());
+		request.setAttribute("topic", goOrder.getTopic());
+		request.setAttribute("goId", goOrder.getGoId());
 		request.setAttribute("goOrderId", goOrderId);
-		request.setAttribute("price", AmountUtils.changeF2Y(goOrderQueryResp.getFixedPrice()));
+		request.setAttribute("orderStatus", goOrder.getOrderStatus());
+		request.setAttribute("orderStatusName", goOrder.getOrderStatusName());
+		request.setAttribute("price", AmountUtils.changeF2Y(goOrder.getFixedPrice()));
 		ModelAndView view = new ModelAndView("go/pay");
 		return view;
 	}
 
 	@RequestMapping("/publishGo.html")
 	public ModelAndView publishGo(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
+		UserInfo userInfo = WXUserUtil.getUserInfoByWXAuth(request);
 		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
+			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
 		}
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
@@ -251,28 +302,6 @@ public class GoController {
 		return responseData;
 	}
 
-	@RequestMapping("/checkUserJoinGo")
-	@ResponseBody
-	public ResponseData<GoOrderCheckResp> checkUserJoinGo(String userId, String goId) {
-		ResponseData<GoOrderCheckResp> responseData = null;
-		try {
-			GoOrderCheckReq goOrderCheckReq = new GoOrderCheckReq();
-			goOrderCheckReq.setGoId(goId);
-			goOrderCheckReq.setUserId(userId);
-			GoOrderCheckResp rep = DubboConsumerFactory.getService(IGoSV.class).checkUserJoinGo(goOrderCheckReq);
-			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<GoOrderCheckResp>(ResponseData.AJAX_STATUS_FAILURE,
-						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<GoOrderCheckResp>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", rep);
-			}
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<GoOrderCheckResp>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
-		}
-		return responseData;
-	}
-
 	@RequestMapping("/orderOneOnOne")
 	@ResponseBody
 	public ResponseData<String> orderOneOnOne(GoOrderCreateReq goOrderCreateReq) {
@@ -353,8 +382,9 @@ public class GoController {
 			// 组织支付认证信息
 			String payOrderId = resp.getPayOrderId();
 			String host = "192.168.1.1";
-			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId, Integer.parseInt(AmountUtils.changeY2F(price)), host,
-					openId, GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
+			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId,
+					Integer.parseInt(AmountUtils.changeY2F(price)), host, openId,
+					GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
 			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
 
 			JSONObject d = new JSONObject();

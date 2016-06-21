@@ -77,11 +77,7 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript"
-		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script type="text/javascript">
@@ -96,7 +92,6 @@
 	
 		prototype: {
 			init: function(){
-				this.checkUserJoinGo();
 				this.bindEvents(); 
 			},
 			
@@ -185,45 +180,6 @@
 					
 				});
 				
-			},
-			
-			checkUserJoinGo: function(){
-				var _this = this;
-				ajaxController.ajax({
-					url: "../go/checkUserJoinGo",
-					type: "post", 
-					data: {
-						userId: _this.getPropertyValue("userId"),
-						goId: _this.getPropertyValue("goId")
-					},
-					success: function(transport){
-						var data  = transport.data?transport.data:{};
-						var join = data.join;
-						var remark = data.remark;
-						var orderId = data.orderId;
-						var orderStatus = data.orderStatus;
-						if(join=="1" || join=="2"){
-							//禁止提交
-							$("#BTN_SUBMIT").attr({"disabled":"disabled"});
-							weUI.alert({
-								content: remark,
-								ok: function(){
-									weUI.closeAlert();
-									window.location.href="../go/toPay.html?goOrderId="+orderId;
-								}
-							});
-						}
-						
-					},
-					failure: function(transport){
-						//禁止提交
-						$("#BTN_SUBMIT").attr({"disabled":"disabled"});
-						weUI.alert({
-							content: "判断是否参与活动失败"+transport.statusInfo
-						})
-					}
-					
-				});
 			}
 		}
 	});

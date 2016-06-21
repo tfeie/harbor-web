@@ -74,4 +74,51 @@
 		</section>
 	</section>
 </body>
+
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script> 
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script> 
+	
+<script type="text/javascript">
+(function($){
+	$.GoWaitConfirmPage = function(data){
+		this.settings = $.extend(true,{},$.GoWaitConfirmPage.defaults);
+		this.params= data?data:{}
+	}
+	$.extend($.GoWaitConfirmPage,{
+		defaults: { 
+		},
+	
+		prototype: {
+			init: function(){
+				this.bindEvents(); 
+			},
+			
+			bindEvents: function(){
+				var _this = this;
+				$("#HREF_GO_PAY").on("click", function() {
+					_this.gotoPay();
+				}); 
+			},
+ 
+			
+			getPropertyValue: function(propertyName){
+				if(!propertyName)return;
+				return this.params[propertyName];
+			}
+		}
+	});
+})(jQuery);
+
+$(document).ready(function(){
+	var p = new $.GoWaitConfirmPage({
+		userId: "<c:out value="${userInfo.userId}"/>", 
+		goId:  "<c:out value="${goId}"/>",
+		goOrderId:  "<c:out value="${goOrderId}"/>"
+		
+	});
+	p.init();
+});
+</script>
 </html>
