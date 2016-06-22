@@ -55,6 +55,18 @@ import com.the.harbor.web.util.DubboServiceUtil;
 public class GoController {
 
 	private static final Logger LOG = Logger.getLogger(GoController.class);
+	
+	@RequestMapping("/mygroup.html")
+	public ModelAndView mygroup(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/mygroup");
+		return view;
+	}
+	
+	@RequestMapping("/myono.html")
+	public ModelAndView myono(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/myono");
+		return view;
+	}
 
 	/**
 	 * OneOnOne活动参与者确认页面

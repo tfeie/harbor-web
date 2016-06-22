@@ -34,6 +34,16 @@
 			<p class="on1">
 				<span>Be详情</span><label>be/detail.jsp <a href="../be/detail.html">Go</a></label>
 			</p> 
+			<p class="on1">
+				<span>新建Be</span><label>be/publishbe.jsp <a href="../be/publishbe.html">Go</a></label>
+			</p> 
+			<p class="on1">
+				<span>我创建的Be</span><label>be/mybe.jsp <a href="../be/mybe.html">Go</a></label>
+			</p> 
+			<p class="on1">
+				<span>我的时间线</span><label>be/mytimeline.jsp <a href="../be/mytimeline.html">Go</a></label>
+			</p> 
+			
 		</section>
 		<section class="shouji">
 			<p class="title">
@@ -86,6 +96,17 @@
 			<p class="on1">
 				<span>我的海友</span><label>myhaiyou.jsp <a href="../user/myhaiyou.html">Go</a></label>
 			</p>
+			<p class="on1">
+				<span>我的关注</span><label>myguanzhu.jsp <a href="../user/myguanzhu.html">Go</a></label>
+			</p> 
+			<p class="on1">
+				<span>消息中心</span><label>messagecenter.jsp <a href="../user/messagecenter.html">Go</a></label>
+			</p> 
+			<p class="on1">
+				<span>消息内容</span><label>mymessagedetail.jsp <a href="../user/mymessagedetail.html">Go</a></label>
+			</p> 
+			
+			
 		</section>
 
 		<section class="shouji">
@@ -131,6 +152,12 @@
 			</p>
 			<p class="on1">
 				<span>邀约详细2</span><label>go/invite2.jsp <a href="../go/invite2.html">Go</a></label>
+			</p>
+			<p class="on1">
+				<span>我创建的group</span><label>go/mygroup.jsp <a href="../go/mygroup.html">Go</a></label>
+			</p> 
+			<p class="on1">
+				<span>我创建的ono</span><label>go/myono.jsp <a href="../go/myono.html">Go</a></label>
 			</p>
 		</section>
 	</section>

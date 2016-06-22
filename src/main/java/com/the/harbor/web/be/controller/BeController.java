@@ -26,5 +26,23 @@ public class BeController {
 		ModelAndView view = new ModelAndView("be/detail");
 		return view;
 	}
+	
+	@RequestMapping("/publishbe.html")
+	public ModelAndView publishbe(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("be/publishbe");
+		return view;
+	}
+	
+	@RequestMapping("/mybe.html")
+	public ModelAndView mybe(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("be/mybe");
+		return view;
+	}
+	
+	@RequestMapping("/mytimeline.html")
+	public ModelAndView mytimeline(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("be/mytimeline");
+		return view;
+	}
 
 }

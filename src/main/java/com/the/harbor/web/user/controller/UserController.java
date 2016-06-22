@@ -69,7 +69,25 @@ public class UserController {
 		ModelAndView view = new ModelAndView("pages");
 		return view;
 	}
+	
+	@RequestMapping("/myguanzhu.html")
+	public ModelAndView myguanzhu(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("user/myguanzhu");
+		return view;
+	}
+	
+	@RequestMapping("/messagecenter.html")
+	public ModelAndView messagecenter(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("user/messagecenter");
+		return view;
+	}
 
+	@RequestMapping("/mymessagedetail.html")
+	public ModelAndView mymessagedetail(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("user/mymessagedetail");
+		return view;
+	}
+	
 	@RequestMapping("/tuijian.html")
 	public ModelAndView tuijian(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView view = new ModelAndView("user/haiyoutuijian");
