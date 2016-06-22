@@ -257,7 +257,7 @@
 											},
 											success: function(transport){
 												var imgURL  = transport.data;
-												$(s).find("#IMG_GO").attr("src", imgURL).css({"width":"100%","height":"100%"});
+												$(s).find("#IMG_GO").attr("src", imgURL);
 												_this.modifyGoDetail(_id,"",imgURL);
 											},
 											failure: function(transport){
@@ -848,9 +848,8 @@
 		{{if type=="image"}}
 			<section class="jia_img add_mask items">
 				<p name="P_GO_UPLOAD_IMG" _id="{{:_id}}">
-					<img id="IMG_GO" src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/images/img51.png{{else}}{{:imageUrl}}{{/if}}">
+					<img id="IMG_GO" src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/images/img51-1.png{{else}}{{:imageUrl}}{{/if}}">
 				</p>
-				<p>上传图片</p>
 				<section class="yingchang on" name="SECTION_DEL_GO_DETAIL" _id="{{:_id}}">
 					<img src="//static.tfeie.com/images/img50.png" />
 				</section>
