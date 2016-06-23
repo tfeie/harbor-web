@@ -247,15 +247,16 @@ public class BeController {
 								}
 							}
 						}
-						//获取创建日期,标记是否显示时间线日期
+						// 获取创建日期,标记是否显示时间线日期
 						boolean showtime = false;
-						String t = DateUtil.getDateString(be.getCreateDate(),DateUtil.YYYYMMDD);
-						if(!dayMap.containsKey(t)){
+						String t = DateUtil.getDateString(be.getCreateDate(), DateUtil.YYYYMMDD);
+						if (!dayMap.containsKey(t)) {
 							showtime = true;
 							dayMap.put(t, t);
 						}
 						// 获取标签
-						long days = DateUtil.getTimeDifference(DateUtil.getTheDayFirstSecond(DateUtil.getSysDate()), be.getCreateDate());
+						long days = DateUtil.getTimeDifference(DateUtil.getTheDayFirstSecond(DateUtil.getSysDate()),
+								DateUtil.getTheDayFirstSecond(be.getCreateDate()));
 						String publishDay = "";
 						if (days == 0) {
 							publishDay = "今天";
