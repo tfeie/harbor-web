@@ -32,7 +32,7 @@
 				<span>Beauty & Excellence</span><label>be/index.jsp <a href="../be/index.html">Go</a></label>
 			</p> 
 			<p class="on1">
-				<span>Be详情</span><label>be/detail.jsp <a href="../be/detail.html">Go</a></label>
+				<span>Be详情</span><label>be/detail.jsp-ing <a href="../be/detail.html?beId=33BE0E40387F4FA4AB4982EFB1D26B57">Go</a></label>
 			</p> 
 			<p class="on1">
 				<span>新建Be</span><label>be/publishbe.jsp-ok <a href="../be/publishbe.html">Go</a></label>

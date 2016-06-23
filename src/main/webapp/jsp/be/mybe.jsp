@@ -170,7 +170,7 @@
             <div class="bottom">
             	<div class="time">{{:publishdate}}</div>
                 <div class="ic">
-                    <a class="list btn-pl" href="#"><font>2</font></a>
+                    <a class="list btn-pl" href="../be/detail.html?beId={{:beId}}"><font>2</font></a>
                     <div class="list btn-bk"><font>30</font></div>
                     <div class="list btn-z"><font>3</font></div>
                 </div>
