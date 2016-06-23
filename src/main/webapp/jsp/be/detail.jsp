@@ -15,18 +15,16 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>海友推荐</title>
+<title>B&E动态详情</title>
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
-
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
-<script type="text/javascript" src="//static.tfeie.com/js/json2.js"></script>
 <script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
 <script src="//static.tfeie.com/v2/js/tap.js"></script>
 
@@ -40,38 +38,23 @@
 			</div>
 			<div class="c">
 				<div class="img">
-					<img src="//static.tfeie.com/v2/images/tx.png" width="40"
+					<img src="<c:out value="${userInfo.wxHeadimg}"/>" width="40"
 						height="40" class="br-100">
 				</div>
 				<div class="name">
 					<div class="name-xx">
-						<div class="xx chaochu_1">Mays</div>
+						<div class="xx chaochu_1"><c:out value="${userInfo.enName}"/></div>
 						<div class="yrz">
-							<span class="bg-lan">香港</span><font>已认证</font>
+							<span class="bg-lan"><c:out value="${userInfo.abroadCountryName}"/></span><font><c:out value="${userInfo.userStatusName}"/></font>
 						</div>
 					</div>
-					<div class="jj">金融/合伙人/北京</div>
+					<div class="jj"><c:out value="${userInfo.industryName}"/>/<c:out value="${userInfo.title}"/>/<c:out value="${userInfo.atCityName}"/></div>
 				</div>
 			</div>
 		</div>
 
-		<div class="con  box-s mar-top-10 pad-10">
-			<div class="time">2016-04-16 19：32</div>
-			<div class="c">
-				奶奶把那奖励来的半口袋“下风头”麦子精奶奶把那奖励来的半口袋“下风头”麦子精心设计奶奶把那奖励来的半口袋“下风头”麦子精心设计奶奶把那奖励来的半口袋“下风头”麦子精心设计奶奶把那奖励来的半口袋“下风头”麦子精心设计心设计
-			</div>
-			<div class="bq clearfix">
-				<a href="#">#友谊</a> <a href="#">#金融</a> <a href="#">#回忆</a>
-			</div>
-			<div class="img">
-				<img src="//static.tfeie.com/v2/images/zw-img.jpg" width="100%">
-			</div>
-			<div class="btn-bottom">
-				<div class="btn-fx box-s"></div>
-				<div class="btn-z  box-s">
-					<font>32</font>
-				</div>
-			</div>
+		<div class="con  box-s mar-top-10 pad-10" id="DIV_BE_DETAIL">
+			
 		</div>
 
 
@@ -206,64 +189,117 @@
 		</div>
 	</footer>
 </body>
-<script>
-	$(function() {
 
-		//关注
-		$('.btn-gz').tap(function() {
-			$(this).toggleClass('on');
-
-		})
-		//关注
-		$('.btn-fx').tap(function() {
-			alert('请点击页面右上角微信分享按钮')
-
-		})
-		//点赞
-		$('.btn-z').tap(
-				function() {
-					//+1
-					if ($(this).attr('class') == 'btn-z  box-s') {
-						$(this).children('font').text(
-								Number($(this).children('font').text())
-										+ Number(1))
-						$(this).addClass('on');
-
-					} else {
-
-						$(this).children('font').text(
-								Number($(this).children('font').text())
-										- Number(1))
-						$(this).removeClass('on');
-					}
-
-				})
-
-		//点赞
-		$('.btn-like').tap(function() {
-			//+1
-			if ($(this).attr('class') == 'num btn-like') {
-				$(this).text(Number($(this).text()) + Number(1))
-				$(this).addClass('on');
-
-			} else {
-
-				$(this).text(Number($(this).text()) - Number(1))
-				$(this).removeClass('on');
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script> 
+<script type="text/javascript">
+	(function($){
+		$.BeDetailPage = function(data){
+			this.settings = $.extend(true,{},$.BeDetailPage.defaults);
+			this.params= data?data:{}
+		}
+		$.extend($.BeDetailPage,{
+			defaults: { 
+			},
+		
+			prototype: {
+				init: function(){
+					this.bindEvents(); 
+					this.initData();  
+				},
+				
+				bindEvents: function(){
+					var _this = this; 
+					
+					//添加图片按钮事件
+					$("#SPAN_ADD_IMAGE").on("click",function(){
+						 
+					}); 
+					
+				},
+				
+				initData: function(){
+					this.getBeDetail();
+				}, 
+				
+				getBeDetail: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/getOneBe",
+						type: "post", 
+						data: { 
+							beId: _this.getPropertyValue("beId")
+						},
+						success: function(transport){
+							var data =transport.data; 
+							_this.renderBeDetail(data); 
+						},
+						failure: function(transport){ 
+							_this.renderBeDetail({}); 
+						}
+					});
+				},
+				 
+				renderBeDetail: function(data){ 
+					data= data?data:{};
+					var opt=$("#BeDetailImpl").render(data);
+					$("#DIV_BE_DETAIL").html(opt); 
+				},
+				
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
+				}
 			}
-
 		})
+	})(jQuery);
+	
 
-		//顶部评论 获取焦点
-		$('.btn-pl').tap(function() {
-			$('#In-pl').focus();
-		})
+	$(document).ready(function(){ 
+		var p = new $.BeDetailPage({
+			beId: "<c:out value="${beId}"/>"
+		});
+		p.init();
+		
+	});
+</script>
 
-		//底部评论 获取焦点
-		$('.icon-pl').tap(function() {
-			$('#In-pl').focus();
-		})
 
-	})
+<script id="BeDetailImpl" type="text/x-jsrender"> 
+			<div class="time">{{:createDate}}</div>
+			{{for beDetails ~beTags=beTags}} 	
+				{{if type=="text"}}
+					<div class="c">
+						{{:detail}}
+					</div>
+				{{/if}}
+				{{if type=="image"}}
+					<div class="img">
+						<img src="{{:imageUrl}}" width="100%">
+					</div>
+				{{/if}}
+				{{if #index==0}}
+					<div class="bq clearfix">
+					{{for ~beTags}} 	
+					<a href="javascript:void(0)"># {{:tagName}}</a>
+					{{/for}} 	
+					</div>
+				{{/if}}
+			{{/for}} 
+
+			<div class="btn-bottom">
+				<div class="btn-fx box-s"></div>
+				<div class="btn-z  box-s">
+					<font>32</font>
+				</div>
+			</div> 
 </script>
 </html>

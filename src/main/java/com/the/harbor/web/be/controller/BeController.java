@@ -22,6 +22,8 @@ import com.the.harbor.api.be.param.BeCreateResp;
 import com.the.harbor.api.be.param.BeDetail;
 import com.the.harbor.api.be.param.QueryMyBeReq;
 import com.the.harbor.api.be.param.QueryMyBeResp;
+import com.the.harbor.api.be.param.QueryOneBeReq;
+import com.the.harbor.api.be.param.QueryOneBeResp;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hybe.BeDetailType;
@@ -56,6 +58,26 @@ public class BeController {
 
 	@RequestMapping("/detail.html")
 	public ModelAndView detail(HttpServletRequest request) {
+		String beId = request.getParameter("beId");
+		if (StringUtil.isBlank(beId)) {
+			throw new BusinessException("B&E标识不存在");
+		}
+		QueryOneBeReq queryOneBeReq = new QueryOneBeReq();
+		queryOneBeReq.setBeId(beId);
+		QueryOneBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryOneBe(queryOneBeReq);
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(ResponseData.AJAX_STATUS_FAILURE, resp.getResponseHeader().getResultMessage());
+		}
+		Be be = resp.getBe();
+		if (be == null) {
+			throw new BusinessException("查看的B&E不存在");
+		}
+		UserViewInfo userInfo = DubboServiceUtil.queryUserViewInfoByUserId(be.getUserId());
+		if (userInfo == null) {
+			throw new BusinessException("B&E发表的用户不存在");
+		}
+		request.setAttribute("beId", beId);
+		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("be/detail");
 		return view;
 	}
@@ -282,6 +304,25 @@ public class BeController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getOneBe")
+	@ResponseBody
+	public ResponseData<Be> getOneBe(QueryOneBeReq queryOneBeReq) {
+		ResponseData<Be> responseData = null;
+		try {
+			QueryOneBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryOneBe(queryOneBeReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<Be>(ResponseData.AJAX_STATUS_FAILURE,
+						resp.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<Be>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", resp.getBe());
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, Be.class);
 		}
 		return responseData;
 	}

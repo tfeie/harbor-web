@@ -154,7 +154,7 @@
 			<div class="l">
 				{{if showtime==true}}{{:publishDay}} {{/if}}
 			</div>
-			<a href="javascript:void(0)" class="r">
+			<a href="../be/detail.html?beId={{:beId}}" class="r">
 				<div class="c">
 					<div class="i">
 						{{if hasimg==true}}
