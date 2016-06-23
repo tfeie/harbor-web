@@ -249,7 +249,7 @@ public class BeController {
 						}
 						//获取创建日期,标记是否显示时间线日期
 						boolean showtime = false;
-						String t = DateUtil.getDateString(DateUtil.YYYYMMDD);
+						String t = DateUtil.getDateString(be.getCreateDate(),DateUtil.YYYYMMDD);
 						if(!dayMap.containsKey(t)){
 							showtime = true;
 							dayMap.put(t, t);
