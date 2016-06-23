@@ -255,7 +255,7 @@ public class BeController {
 							dayMap.put(t, t);
 						}
 						// 获取标签
-						long days = DateUtil.getTimeDifference(DateUtil.getSysDate(), be.getCreateDate());
+						long days = DateUtil.getTimeDifference(DateUtil.getTheDayFirstSecond(DateUtil.getSysDate()), be.getCreateDate());
 						String publishDay = "";
 						if (days == 0) {
 							publishDay = "今天";
