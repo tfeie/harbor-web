@@ -21,204 +21,155 @@
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
-
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
-<script type="text/javascript" src="//static.tfeie.com/js/json2.js"></script>
 <script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
 <script src="//static.tfeie.com/v2/js/tap.js"></script>
-
 </head>
 
 <body>
-
 	<section class="wdsjx-main">
 		<div class="top-img">
-			<font>US-XXXXXXXX</font><img
-				src="//static.tfeie.com/v2/images/sjx-img.jpg" width="100%">
+			<font><c:out value="${userInfo.hyId}"/></font><img
+				src="<c:out value="${userInfo.homePageBg}"/>" width="100%">
 		</div>
 		<div class="grxx">
 			<div class="img">
-				<a href="#"><img src="//static.tfeie.com/v2/images/tx.png"
+				<a href="#"><img src="<c:out value="${userInfo.wxHeadimg}"/>"
 					width="80" height="80"></a>
 			</div>
 			<div class="r">
 				<div class="name">
-					MaysMays<span class="bg-lv">美国</span><font>已认证</font>
+					<c:out value="${userInfo.enName}"/><span class="bg-lv"><c:out value="${userInfo.abroadCountryName}"/></span><font><c:out value="${userInfo.userStatusName}"/></font>
 				</div>
-				<div class="xx">金融/合伙人/北京</div>
+				<div class="xx"><c:out value="${userInfo.industryName}"/>/<c:out value="${userInfo.title}"/>/<c:out value="${userInfo.atCityName}"/></div>
 			</div>
 		</div>
 
+		<div class="pad-10 clearfix line-20"><c:out value="${userInfo.signature}"/></div>
+		
+		<div id="DIV_MY_TIMELINE">
+		
 		</div>
-
-		<div class="pad-10 clearfix line-20">果你无法简洁地你的想你的想你的想你的想你的想</div>
-		<div class="itms">
-			<div class="l">
-				08/<font>5月</font>
-			</div>
-			<a href="#" class="r">
-				<div class="c">
-					<div class="i">
-						<img src="//static.tfeie.com/v2/images/pyq-img.jpg" width="60"
-							height="60">
-					</div>
-					<p class="chaochu_3">果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想</p>
-				</div>
-			</a>
-		</div>
-		<div class="itms">
-			<div class="l">
-				08/<font>5月</font>
-			</div>
-			<a href="#" class="r">
-				<div class="c">
-					<div class="i">
-						<img src="//static.tfeie.com/v2/images/pyq-img.jpg" width="60"
-							height="60">
-					</div>
-					<p class="chaochu_3">果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想</p>
-				</div>
-			</a>
-		</div>
-		<div class="itms">
-			<div class="l">
-				08/<font>5月</font>
-			</div>
-			<a href="#" class="r">
-				<div class="c">
-					<div class="i">
-						<img src="//static.tfeie.com/v2/images/pyq-img.jpg" width="60"
-							height="60">
-					</div>
-					<p class="chaochu_3">果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想</p>
-				</div>
-			</a>
-		</div>
-		<div class="itms">
-			<div class="l">
-				08/<font>5月</font>
-			</div>
-			<a href="#" class="r">
-				<div class="c">
-					<div class="i">
-						<img src="//static.tfeie.com/v2/images/pyq-img.jpg" width="60"
-							height="60">
-					</div>
-					<p class="chaochu_3">果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想</p>
-				</div>
-			</a>
-		</div>
-		<div class="itms">
-			<div class="l">
-				08/<font>5月</font>
-			</div>
-			<a href="#" class="r">
-				<div class="c">
-					<div class="i">
-						<img src="//static.tfeie.com/v2/images/pyq-img.jpg" width="60"
-							height="60">
-					</div>
-					<p class="chaochu_3">果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想</p>
-				</div>
-			</a>
-		</div>
-		<div class="itms">
-			<div class="l">
-				08/<font>5月</font>
-			</div>
-			<a href="#" class="r">
-				<div class="c">
-					<div class="i">
-						<img src="//static.tfeie.com/v2/images/pyq-img.jpg" width="60"
-							height="60">
-					</div>
-					<p class="chaochu_3">果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想</p>
-				</div>
-			</a>
-		</div>
-		<div class="itms">
-			<div class="l">
-				08/<font>5月</font>
-			</div>
-			<a href="#" class="r">
-				<div class="c">
-					<div class="i">
-						<img src="//static.tfeie.com/v2/images/pyq-img.jpg" width="60"
-							height="60">
-					</div>
-					<p class="chaochu_3">果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想果你无法简洁地表达你的想</p>
-				</div>
-			</a>
-		</div>
-	</section>
-
-
-
-	<div class="tc-main">
-		<span class="btn-show po-f"></span> <span class="btn-be po-f"></span>
-		<span class="btn-go po-f"></span>
-		<div class="bg-main po-f"></div>
-	</div>
-
-	<footer class="footer po-f">
-		<a href="#"><i class="icon-f1"></i><span>Be</span></a> <a href="#"><i
-			class="icon-f2"></i><span>Go</span></a> <a href="#"><i
-			class="icon-f3"></i><span>Frd</span></a> <a href="#"><i
-			class="icon-f4"><font>6</font></i><span>Msg</span></a> <a href="#"><i
-			class="icon-f5"></i><span>Me</span></a>
-	</footer>
-
-
-	<script>
-		$(function() {
-
-			//检查版本
-			var u = navigator.userAgent, app = navigator.appVersion;
-			var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-
-			//苹果兼容
-			if (isiOS) {
-
-				$('.In-pof').focus(function() {
-
-					$('.po-f').addClass('po-a')
-
-				}).blur(function() {//输入框失焦后还原初始状态
-
-					$('.po-f').removeClass('po-a')
-
-				});
-
-			}
-
-			//显示底部
-			$('.btn-show')
-					.tap(
-							function() {
-								if ($(this).parent('.tc-main').attr('class') == 'tc-main'
-										|| $(this).parent('.tc-main').attr(
-												'class') == 'tc-main on1') {
-									$(this).parent('.tc-main').removeClass(
-											'on1');
-									$(this).parent('.tc-main').addClass('on');
-									$(this).parent('.tc-main').children(
-											'.bg-main').fadeIn();
-
-								} else {
-									$(this).parent('.tc-main')
-											.removeClass('on');
-									$(this).parent('.tc-main').addClass('on1');
-									$(this).parent('.tc-main').children(
-											'.bg-main').fadeOut();
-
-								}
-							})
-
-		})
-	</script>
-
+	</section> 
 </body>
+
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script type="text/javascript">
+	(function($){
+		$.MyTimeLinePage = function(data){
+			this.settings = $.extend(true,{},$.MyTimeLinePage.defaults);
+			this.params= data?data:{}
+		}
+		$.extend($.MyTimeLinePage,{
+			defaults: { 
+			},
+		
+			prototype: {
+				init: function(){
+					this.bindEvents(); 
+					this.initData();  
+				},
+				
+				bindEvents: function(){
+					var _this = this; 
+					
+					//添加图片按钮事件
+					$("#SPAN_ADD_IMAGE").on("click",function(){
+						 
+					}); 
+					
+				},
+				
+				initData: function(){
+					this.getMyTimeLine();
+				}, 
+				
+				getMyTimeLine: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/getMyTimeLine",
+						type: "post", 
+						data: { 
+							userId: _this.getPropertyValue("userId"),
+							openId: _this.getPropertyValue("openId"),
+							pageNo: 1,
+							pageSize: 100
+						},
+						success: function(transport){
+							var data =transport.data; 
+							_this.renderMyTimeLineList(data); 
+						},
+						failure: function(transport){ 
+							_this.renderMyBeList([]); 
+						}
+					});
+				},
+				 
+				renderMyTimeLineList: function(data){ 
+					data= data?data:[];
+					var opt=$("#MyBeListImpl").render(data);
+					$("#DIV_MY_TIMELINE").html(opt); 
+				},
+				
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
+				}
+			}
+		})
+	})(jQuery);
+	
+
+	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter();
+		
+		var p = new $.MyTimeLinePage({
+			userId: "<c:out value="${userInfo.userId}"/>",
+			openId: "<c:out value="${userInfo.wxOpenid}"/>"
+		});
+		p.init();
+		
+		
+	});
+</script>
+
+
+<script id="MyBeListImpl" type="text/x-jsrender"> 	
+		{{for belist}} 	
+		<div class="itms">
+			<div class="l">
+				{{if showtime==true}}{{:publishDay}} {{/if}}
+			</div>
+			<a href="javascript:void(0)" class="r">
+				<div class="c">
+					<div class="i">
+						{{if hasimg==true}}
+						<img src="{{:firstImgDetail.imageUrl}}" width="60"
+							height="60">
+						{{/if}}
+						{{if hasimg==false}}
+						<img src="//static.tfeie.com/v2/images/pyq-img.jpg" width="60"
+							height="60">
+						{{/if}}
+					</div>
+					<p class="chaochu_3">{{if hastext==true}} {{:firstTextDetail.detail}} {{/if}}</p>
+				</div>
+			</a>
+		</div>
+		{{/for}} 	
+</script>
 </html>

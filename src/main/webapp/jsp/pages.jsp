@@ -35,13 +35,13 @@
 				<span>Be详情</span><label>be/detail.jsp <a href="../be/detail.html">Go</a></label>
 			</p> 
 			<p class="on1">
-				<span>新建Be</span><label>be/publishbe.jsp <a href="../be/publishbe.html">Go</a></label>
+				<span>新建Be</span><label>be/publishbe.jsp-ok <a href="../be/publishbe.html">Go</a></label>
 			</p> 
 			<p class="on1">
-				<span>我创建的Be</span><label>be/mybe.jsp <a href="../be/mybe.html">Go</a></label>
+				<span>我创建的Be</span><label>be/mybe.jsp-ok <a href="../be/mybe.html">Go</a></label>
 			</p> 
 			<p class="on1">
-				<span>我的时间线</span><label>be/mytimeline.jsp <a href="../be/mytimeline.html">Go</a></label>
+				<span>我的时间线</span><label>be/mytimeline.jsp-ok <a href="../be/mytimeline.html">Go</a></label>
 			</p> 
 			
 		</section>

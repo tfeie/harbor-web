@@ -21,12 +21,10 @@
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
-
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
-<script type="text/javascript" src="//static.tfeie.com/js/json2.js"></script>
 <script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
 <script src="//static.tfeie.com/v2/js/tap.js"></script>
 
@@ -36,195 +34,149 @@
 
 	<nav class="be-nav po-f box-s">
     	<div class="hd clearfix">
-            <a href="02-be.html" class="itms on">Be</a>
-            <a href="02-group.html" class="itms">Group</a>
-            <a href="02-ono.html" class="itms">OnO</a>
+            <a href="../be/mybe.html" class="itms on">Be</a>
+            <a href="../go/mygroup.html" class="itms">Group</a>
+            <a href="../go/myono.html" class="itms">OnO</a>
         </div>
 	</nav>
     
-    <section class="betwo-main">
-    	<div  class="itms box-s">
-        	<div class="top">
-                <div class="img">
-                    <a href="#"><img src="//static.tfeie.com/v2/images/tx.png" width="40" height="40"></a>
-                    <div class="name-xx">
-                        <div class="xx">Mays</div>
-                        <div class="yrz"><span class="bg-cen">英国</span><font>已认证</font></div>
-                    </div>
-                </div>
-                <div class="c">
-                    <h3>朋友相聚，一切都不一样了</h3>
-                    <div class="bq">
-                   		#
-                        <a href="#">友谊</a> 
-                        <a href="#">金融</a> 
-                        <a href="#">回忆</a>
-                    </div>
-                    <img src="//static.tfeie.com/v2/images/zw-img.jpg" width="100%">
-                </div>
-            </div>
-            <div class="bottom">
-            	<div class="time">10分钟前</div>
-                <div class="ic">
-                    <a class="list btn-pl" href="#"><font>2</font></a>
-                    <div class="list btn-bk"><font>30</font></div>
-                    <div class="list btn-z"><font>3</font></div>
-                </div>
-            </div>
-        </div>
-    	<div  class="itms box-s">
-        	<div class="top">
-                <div class="img">
-                    <a href="#"><img src="//static.tfeie.com/v2/images/tx.png" width="40" height="40"></a>
-                    <div class="name-xx">
-                        <div class="xx">Mays</div>
-                        <div class="yrz"><span class="bg-cen">英国</span><font>已认证</font></div>
-                    </div>
-                </div>
-                <div class="c">
-                    <h3>朋友相聚，一切都不一样了</h3>
-                    <div class="bq">
-                   		#
-                        <a href="#">友谊</a> 
-                        <a href="#">金融</a> 
-                        <a href="#">回忆</a>
-                    </div>
-                    <img src="//static.tfeie.com/v2/images/zw-img.jpg" width="100%">
-                </div>
-            </div>
-            <div class="bottom">
-            	<div class="time">10分钟前</div>
-                <div class="ic">
-                    <a class="list btn-pl" href="#"><font>2</font></a>
-                    <div class="list btn-bk"><font>30</font></div>
-                    <div class="list btn-z"><font>3</font></div>
-                </div>
-            </div>
-        </div>
-    	<div  class="itms box-s">
-        	<div class="top">
-                <div class="img">
-                    <img src="//static.tfeie.com/v2/images/tx.png" width="40" height="40">
-                    <div class="name-xx">
-                        <div class="xx">Mays</div>
-                        <div class="yrz"><span class="bg-cen">英国</span><font>已认证</font></div>
-                    </div>
-                </div>
-                <div class="c">
-                    <h3>朋友相聚，一切都不一样了</h3>
-                    <div class="bq">
-                   		#
-                        <a href="#">友谊</a> 
-                        <a href="#">金融</a> 
-                        <a href="#">回忆</a>
-                    </div>
-                    <img src="//static.tfeie.com/v2/images/zw-img.jpg" width="100%">
-                </div>
-            </div>
-            <div class="bottom">
-            	<div class="time">10分钟前</div>
-                <div class="ic">
-                    <a class="list btn-pl" href="#"><font>2</font></a>
-                    <div class="list btn-bk"><font>30</font></div>
-                    <div class="list btn-z"><font>3</font></div>
-                </div>
-            </div>
-        </div>
-    	<div  class="itms box-s">
-        	<div class="top">
-                <div class="img">
-                    <img src="//static.tfeie.com/v2/images/tx.png" width="40" height="40">
-                    <div class="name-xx">
-                        <div class="xx">Mays</div>
-                        <div class="yrz"><span class="bg-cen">英国</span><font>已认证</font></div>
-                    </div>
-                </div>
-                <div class="c">
-                    <h3>朋友相聚，一切都不一样了</h3>
-                    <div class="bq">
-                   		#
-                        <a href="#">友谊</a> 
-                        <a href="#">金融</a> 
-                        <a href="#">回忆</a>
-                    </div>
-                    <img src="//static.tfeie.com/v2/images/zw-img.jpg" width="100%">
-                </div>
-            </div>
-            <div class="bottom">
-            	<div class="time">10分钟前</div>
-                <div class="ic">
-                    <a class="list btn-pl" href="#"><font>2</font></a>
-                    <div class="list btn-bk"><font>30</font></div>
-                    <div class="list btn-z"><font>3</font></div>
-                </div>
-            </div>
-        </div>
-    
-    </section>
-    
-    
-    </section>
-	<footer class="footer po-f">
-    	<a href="#"><i class="icon-f1"></i><span>Be</span></a>
-    	<a href="#"><i class="icon-f2"></i><span>Go</span></a>
-    	<a href="#"><i class="icon-f3"></i><span>Frd</span></a>
-    	<a href="#"><i class="icon-f4"><font>6</font></i><span>Msg</span></a>
-    	<a href="#"><i class="icon-f5"></i><span>Me</span></a>
-    </footer>
-    
-    
-    <div class="tc-main">
-    	<span class="btn-show po-f"></span>
-    	<span class="btn-be po-f"></span>
-    	<span class="btn-go po-f"></span>
-        <div class="bg-main po-f"></div>
-    </div>
-     
-<script>
-	$(function(){
-			
-			//显示底部
-			$('.btn-show').tap(function(){
-				if($(this).parent('.tc-main').attr('class')	==	'tc-main' || $(this).parent('.tc-main').attr('class')	==	'tc-main on1'){
-					$(this).parent('.tc-main').removeClass('on1');
-					$(this).parent('.tc-main').addClass('on');
-					$(this).parent('.tc-main').children('.bg-main').fadeIn();
+    <section class="betwo-main" id="SELECTTION_MY_BE_LIST">
+    	
+    </section>	
+</body>
+
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script type="text/javascript">
+	(function($){
+		$.MyBePage = function(data){
+			this.settings = $.extend(true,{},$.MyBePage.defaults);
+			this.params= data?data:{}
+		}
+		$.extend($.MyBePage,{
+			defaults: { 
+			},
+		
+			prototype: {
+				init: function(){
+					this.bindEvents(); 
+					this.initData();  
+				},
+				
+				bindEvents: function(){
+					var _this = this; 
 					
-					}else{
-					$(this).parent('.tc-main').removeClass('on');
-					$(this).parent('.tc-main').addClass('on1');
-					$(this).parent('.tc-main').children('.bg-main').fadeOut();
-						
+					//添加图片按钮事件
+					$("#SPAN_ADD_IMAGE").on("click",function(){
+						 
+					}); 
+					
+				},
+				
+				initData: function(){
+					this.getMyBes();
+				}, 
+				
+				getMyBes: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/getMyBes",
+						type: "post", 
+						data: { 
+							userId: _this.getPropertyValue("userId"),
+							openId: _this.getPropertyValue("openId"),
+							pageNo: 1,
+							pageSize: 100
+						},
+						success: function(transport){
+							var data =transport.data; 
+							//alert(JSON.stringify(data));
+							_this.renderMyBeList(data); 
+						},
+						failure: function(transport){ 
+							_this.renderMyBeList([]); 
 						}
-			})
-	
-		//点赞
-		$('.btn-z').tap(function(){
-			//+1
-			if($(this).attr('class')	== 'list btn-z'){
-					$(this).children('font').text(Number($(this).children('font').text())+Number(1))
-					$(this).addClass('on');
+					});
+				},
+				 
+				renderMyBeList: function(data){ 
+					data= data?data:[];
+					var opt=$("#MyBeListImpl").render(data);
+					$("#SELECTTION_MY_BE_LIST").html(opt); 
+				},
 				
-				}else{
-					
-					$(this).children('font').text(Number($(this).children('font').text())-Number(1))
-					$(this).removeClass('on');
-					}
-			
-			})
-		
-		//贝壳
-		$('.btn-bk').tap(function(){
-					$(this).children('font').text(Number($(this).children('font').text())+Number(1))
-					$(this).addClass('on');
-				
-			
-			})
-		
-		
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
+				}
+			}
 		})
+	})(jQuery);
+	
+
+	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter();
 		
+		var p = new $.MyBePage({
+			userId: "<c:out value="${userInfo.userId}"/>",
+			openId: "<c:out value="${userInfo.wxOpenid}"/>"
+		});
+		p.init();
+		
+		
+	});
+</script>
+
+
+<script id="MyBeListImpl" type="text/x-jsrender"> 
+	{{for belist ~userInfo=userInfo}} 	
+	<div  class="itms box-s">
+        	<div class="top">
+                <div class="img">
+                    <a href="javascript:void(0)"><img src="{{:~userInfo.wxHeadimg}}" width="40" height="40"></a>
+                    <div class="name-xx">
+                        <div class="xx">{{:~userInfo.enName}}</div>
+                        <div class="yrz"><span class="bg-cen">{{:~userInfo.abroadCountryName}}</span><font>{{:~userInfo.userStatusName}}</font></div>
+                    </div>
+                </div>
+                <div class="c">
+					{{if hastext==true}}
+                    <h3>{{:firstTextDetail.detail}}</h3>
+                    {{/if}}
+					<div class="bq">
+                   		#
+						{{for tags}} 
+                        <a href="javascript:void(0)">{{:tagName}}</a>  
+						{{/for}}
+                    </div>
+					{{if hasimg==true}}
+                    <img src="{{:firstImgDetail.imageUrl}}" width="100%">
+					{{/if}}
+					{{if hasimg==false}}
+					<img  width="100%">
+					{{/if}}
+                </div>
+            </div>
+            <div class="bottom">
+            	<div class="time">{{:publishdate}}</div>
+                <div class="ic">
+                    <a class="list btn-pl" href="#"><font>2</font></a>
+                    <div class="list btn-bk"><font>30</font></div>
+                    <div class="list btn-z"><font>3</font></div>
+                </div>
+            </div>
+        </div>  
+		{{/for}} 	
 </script>
 	
-</body>
 </html>

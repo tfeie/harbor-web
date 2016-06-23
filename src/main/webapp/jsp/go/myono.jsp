@@ -35,8 +35,9 @@
 
 	<nav class="be-nav po-f box-s">
 		<div class="hd clearfix">
-			<a href="02-be.html" class="itms">Be</a> <a href="02-group.html"
-				class="itms">Group</a> <a href="02-ono.html" class="itms on">OnO</a>
+			 <a href="../be/mybe.html" class="itms on">Be</a>
+            <a href="../go/mygroup.html" class="itms">Group</a>
+            <a href="../go/myono.html" class="itms">OnO</a>
 		</div>
 	</nav>
 
