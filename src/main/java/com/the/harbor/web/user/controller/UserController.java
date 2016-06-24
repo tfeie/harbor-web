@@ -55,7 +55,6 @@ import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
-import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
 
 @RestController
@@ -108,14 +107,11 @@ public class UserController {
 
 	@RequestMapping("/toUserRegister.html")
 	public ModelAndView toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
+		UserInfo userInfo = WXUserUtil.getUserInfo(request);
 		if (userInfo != null) {
 			throw new BusinessException("您的微信已经注册");
 		}
-		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
+		WeixinUserInfo wxUserInfo = WXUserUtil.getWeixinUserInfo(request);
 		request.setAttribute("wxUserInfo", wxUserInfo);
 		ModelAndView view = new ModelAndView("user/toUserRegister");
 		return view;
@@ -197,14 +193,7 @@ public class UserController {
 
 	@RequestMapping("/toApplyCertficate.html")
 	public ModelAndView toApplyCertficate(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
-		if (userInfo == null) {
-			throw new BusinessException("您的微信号没有注册成用户，请先注册");
-		}
-		request.setAttribute("userInfo", userInfo);
+		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -215,6 +204,7 @@ public class UserController {
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
 		request.setAttribute("url", url);
+		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/toApplyCertficate");
 		return view;
 	}
@@ -320,18 +310,7 @@ public class UserController {
 
 	@RequestMapping("/previewUserInfo.html")
 	public ModelAndView previewUserInfo(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByOpenId(wtoken.getOpenId());
-		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-			throw new BusinessException(resp.getResponseHeader().getResultCode(),
-					resp.getResponseHeader().getResultMessage());
-		}
-		UserViewInfo userInfo = resp.getUserInfo();
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
-		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
-		}
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/userInfopreview");
 		return view;
@@ -339,14 +318,7 @@ public class UserController {
 
 	@RequestMapping("/memberCenter.html")
 	public ModelAndView memberCenter(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
-		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
-		}
-
+		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
 		UserMemberQuery query = new UserMemberQuery();
 		query.setUserId(userInfo.getUserId());
 		UserMemberInfo userMember = DubboConsumerFactory.getService(IUserSV.class).queryUserMemberInfo(query);
@@ -354,9 +326,8 @@ public class UserController {
 			throw new BusinessException(userMember.getResponseHeader().getResultCode(),
 					userMember.getResponseHeader().getResultMessage());
 		}
-		request.setAttribute("openId", wtoken.getOpenId());
+		request.setAttribute("openId", userInfo.getWxOpenid());
 		request.setAttribute("userMember", userMember);
-
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -366,7 +337,6 @@ public class UserController {
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
-
 		ModelAndView view = new ModelAndView("user/memberCenter");
 		return view;
 	}
@@ -442,13 +412,7 @@ public class UserController {
 
 	@RequestMapping("/userCenter.html")
 	public ModelAndView userCenter(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
-		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
-		}
+		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/userCenter");
 		return view;
@@ -456,14 +420,7 @@ public class UserController {
 
 	@RequestMapping("/editUserInfo.html")
 	public ModelAndView editUserInfo(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
-		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
-		}
-		request.setAttribute("userInfo", userInfo);
+		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -474,7 +431,7 @@ public class UserController {
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
 		request.setAttribute("url", url);
-		request.setAttribute("openId", wtoken.getOpenId());
+		request.setAttribute("openId", userInfo.getWxOpenid());
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/editUserInfo");
 		return view;
@@ -482,18 +439,7 @@ public class UserController {
 
 	@RequestMapping("/getUserCard.html")
 	public ModelAndView getUserCard(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByOpenId(wtoken.getOpenId());
-		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-			throw new BusinessException(resp.getResponseHeader().getResultCode(),
-					resp.getResponseHeader().getResultMessage());
-		}
-		UserViewInfo userInfo = resp.getUserInfo();
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
-		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
-		}
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -544,13 +490,7 @@ public class UserController {
 
 	@RequestMapping("/userWealth.html")
 	public ModelAndView userWealth(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
-		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
-		}
+		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/userWealth");
 		return view;
@@ -558,13 +498,7 @@ public class UserController {
 
 	@RequestMapping("/setUserSkills.html")
 	public ModelAndView setUserSkills(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
-		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信号没有注册成用户，请先注册");
-		}
+		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/setUserSkills");
 		return view;

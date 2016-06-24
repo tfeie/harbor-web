@@ -9,7 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.the.harbor.base.exception.SystemException;
+import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.util.AmountUtils;
 import com.the.harbor.commons.util.RandomUtil;
@@ -39,10 +39,10 @@ public class WXRequestUtil {
 		return url.toString();
 	}
 
-	public static WeixinOauth2Token getWeixinOauth2TokenFromReqAttr(HttpServletRequest request) {
+	public static WeixinOauth2Token getWeixinOauth2TokenFromSession(HttpServletRequest request) {
 		Object o = request.getSession().getAttribute(WXConstants.SESSION_WX_WEB_AUTH);
 		if (o == null) {
-			throw new SystemException("您还没有通过微信网页授权认证");
+			throw new BusinessException("您还没有通过微信网页授权认证");
 		}
 		WeixinOauth2Token wtoken = (WeixinOauth2Token) o;
 		return wtoken;

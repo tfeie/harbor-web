@@ -55,13 +55,13 @@ import com.the.harbor.web.util.DubboServiceUtil;
 public class GoController {
 
 	private static final Logger LOG = Logger.getLogger(GoController.class);
-	
+
 	@RequestMapping("/mygroup.html")
 	public ModelAndView mygroup(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("go/mygroup");
 		return view;
 	}
-	
+
 	@RequestMapping("/myono.html")
 	public ModelAndView myono(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("go/myono");
@@ -80,10 +80,7 @@ public class GoController {
 		if (StringUtil.isBlank(goOrderId)) {
 			throw new BusinessException("不能查看确认信息:缺少预约单信息");
 		}
-		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
-		if (userInfo == null) {
-			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
-		}
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		// 校验当前用户对于此活动的状态来执行处理
 		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
 		if (goOrder == null) {
@@ -131,10 +128,7 @@ public class GoController {
 		if (StringUtil.isBlank(goOrderId)) {
 			throw new BusinessException("不能确认活动预约信息:缺少预约单信息");
 		}
-		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
-		if (userInfo == null) {
-			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
-		}
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		// 校验当前用户对于此活动的状态来执行处理
 		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
 		if (goOrder == null) {
@@ -180,10 +174,7 @@ public class GoController {
 		if (StringUtil.isBlank(goId)) {
 			throw new BusinessException("请先选择活动后才可以预约", true, "../go/oneononeindex.html");
 		}
-		UserInfo userInfo = WXUserUtil.getUserInfoByWXAuth(request);
-		if (userInfo == null) {
-			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
-		}
+		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
 		// 查询活动信息
 		Go go = DubboServiceUtil.queryGo(goId);
 		if (go == null) {
@@ -251,10 +242,7 @@ public class GoController {
 		if (go == null) {
 			throw new BusinessException("支付失败:活动不存在。请前往预约活动", true, "../go/oneononeindex.html");
 		}
-		UserInfo userInfo = WXUserUtil.getUserInfoByWXAuth(request);
-		if (userInfo == null) {
-			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
-		}
+		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
 		// 校验当前用户对于此活动的状态来执行处理
 		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
 		if (goOrder == null) {
@@ -294,10 +282,7 @@ public class GoController {
 
 	@RequestMapping("/publishGo.html")
 	public ModelAndView publishGo(HttpServletRequest request) {
-		UserInfo userInfo = WXUserUtil.getUserInfoByWXAuth(request);
-		if (userInfo == null) {
-			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
-		}
+		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();

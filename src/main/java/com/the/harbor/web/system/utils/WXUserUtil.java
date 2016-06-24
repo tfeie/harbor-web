@@ -2,8 +2,6 @@ package com.the.harbor.web.system.utils;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
-
 import com.alibaba.fastjson.JSON;
 import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.UserInfo;
@@ -15,10 +13,9 @@ import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.RedisDataKey;
 import com.the.harbor.web.util.DubboServiceUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
+import com.the.harbor.web.weixin.param.WeixinUserInfo;
 
 public final class WXUserUtil {
-
-	private static final Logger LOG = Logger.getLogger(WXUserUtil.class);
 
 	private WXUserUtil() {
 
@@ -33,38 +30,48 @@ public final class WXUserUtil {
 		return exists;
 	}
 
+	public static WeixinUserInfo getWeixinUserInfo(HttpServletRequest request) {
+		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
+		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
+		if (wxUserInfo == null) {
+			throw new BusinessException("您没有通过微信网页授权认证,请先认证");
+		}
+		return wxUserInfo;
+	}
+
 	public static UserInfo getUserInfo(String openId) {
 		UserQueryResp userResp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfoByOpenId(openId);
 		return userResp.getUserInfo();
 	}
 
-	public static UserInfo getUserInfoByWXAuth(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
+	public static UserInfo getUserInfo(HttpServletRequest request) {
+		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
 		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
+		return userInfo;
+	}
+
+	public static UserInfo checkUserRegAndGetUserInfo(HttpServletRequest request) {
+		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
+		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
 		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信没有注册成用户");
+			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
 		}
 		return userInfo;
 	}
 
-	public static UserViewInfo getUserViewInfoByWXAuth(HttpServletRequest request) {
-		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromReqAttr(request);
-		LOG.debug("获取到的微信认证token=" + JSON.toJSONString(wtoken));
+	public static UserViewInfo checkUserRegAndGetUserViewInfo(HttpServletRequest request) {
+		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
 		UserViewInfo userInfo = DubboServiceUtil.queryUserViewByOpenId(wtoken.getOpenId());
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
 		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信没有注册成用户");
+			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
 		}
 		return userInfo;
 	}
-	
-	public static UserViewInfo getUserViewInfoByWXAuth1(HttpServletRequest request) { 
+
+	public static UserViewInfo checkUserRegAndGetUserViewInfo1(HttpServletRequest request) {
 		UserViewInfo userInfo = DubboServiceUtil.queryUserViewByOpenId("oztCUs_Ci25lT7IEMeDLtbK6nr1M");
-		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
 		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您的微信没有注册成用户");
+			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
 		}
 		return userInfo;
 	}

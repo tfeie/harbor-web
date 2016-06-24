@@ -84,10 +84,7 @@ public class BeController {
 
 	@RequestMapping("/publishbe.html")
 	public ModelAndView publishbe(HttpServletRequest request) {
-		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
-		if (userInfo == null) {
-			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
-		}
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -105,7 +102,7 @@ public class BeController {
 
 	@RequestMapping("/mybe.html")
 	public ModelAndView mybe(HttpServletRequest request) {
-		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("be/mybe");
 		return view;
@@ -113,7 +110,7 @@ public class BeController {
 
 	@RequestMapping("/mytimeline.html")
 	public ModelAndView mytimeline(HttpServletRequest request) {
-		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("be/mytimeline");
 		return view;
