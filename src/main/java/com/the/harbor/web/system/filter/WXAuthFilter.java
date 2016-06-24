@@ -27,7 +27,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		LOG.info("开始执行微信网页认证拦截器...");
+		LOG.info("开始判测请求是否要进行微信网页授权认证...");
 		String[] shouldFilter = new String[] { "/user/toUserRegister.html", "/user/toApplyCertficate.html",
 				"/user/editUserInfo.html", "/user/previewUserInfo.html", "/user/memberCenter.html",
 				"/user/userCenter.html", "/user/setUserSkills.html", "/user/getUserCard.html", "/user/userWealth.html",
@@ -43,10 +43,11 @@ public class WXAuthFilter extends OncePerRequestFilter {
 		}
 
 		if (doFilter) {
+			LOG.debug("当前地址在需要认证的地址列表中，需要进行认证。开始判断session是否有会话信息");
 			// 判断会话中，是否有已经获取的openId
 			if (request.getSession().getAttribute(WXConstants.SESSION_WX_WEB_AUTH) == null) {
 				/* 1.如果会话中没有OPEN_ID，则需要进行授权认证 */
-				LOG.debug("当前请求会话中没有已经认证过的信息，需要进行微信网页授权认证");
+				LOG.debug("当前请求会话中没有已经认证过的信息，进行微信网页授权认证");
 				String redirectURL = URLEncoder.encode(WXRequestUtil.getFullURL(request), "utf-8");
 				String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid="
 						+ GlobalSettings.getWeiXinAppId()
