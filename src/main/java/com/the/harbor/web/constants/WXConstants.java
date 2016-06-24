@@ -11,5 +11,7 @@ public class WXConstants {
 		public static final String APP = "APP";
 	}
 
-	public static final String WX_WEB_AUTH = "_WeixinOauth2Token_";
+	// 本地网页授权后获取的信息,存储在本地session中
+	public static final String SESSION_WX_WEB_AUTH = "_WeixinOauth2Token_"; 
+	
 }
