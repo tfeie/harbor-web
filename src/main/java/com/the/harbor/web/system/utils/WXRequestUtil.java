@@ -42,7 +42,7 @@ public class WXRequestUtil {
 	public static WeixinOauth2Token getWeixinOauth2TokenFromReqAttr(HttpServletRequest request) {
 		Object o = request.getAttribute(WXConstants.WX_WEB_AUTH);
 		if (o == null) {
-			throw new SystemException("获取不到网页授权token");
+			throw new SystemException("您还没有通过微信登录，无法获取Token");
 		}
 		WeixinOauth2Token wtoken = (WeixinOauth2Token) o;
 		return wtoken;

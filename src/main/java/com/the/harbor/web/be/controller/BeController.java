@@ -213,7 +213,7 @@ public class BeController {
 							}
 						}
 						// 获取标签
-						d.put("beId",be.getBeId());
+						d.put("beId", be.getBeId());
 						d.put("publishdate", DateUtil.getInterval(be.getCreateDate()));
 						d.put("tags", be.getBeTags());
 						d.put("hastext", !(firstTextDetail == null));
@@ -290,7 +290,7 @@ public class BeController {
 							int month = DateUtil.getMonth(be.getCreateDate());
 							publishDay = day + "/<font>" + month + "月</font>";
 						}
-						d.put("beId",be.getBeId());
+						d.put("beId", be.getBeId());
 						d.put("showtime", showtime);
 						d.put("publishDay", publishDay);
 						d.put("hastext", !(firstTextDetail == null));
@@ -325,6 +325,19 @@ public class BeController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, Be.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/dianzan")
+	@ResponseBody
+	public ResponseData<String> dianzan(String beId) {
+		ResponseData<String> responseData = null;
+		try {
+			
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}

@@ -66,16 +66,22 @@ public class UserController {
 
 	@RequestMapping("/pages.html")
 	public ModelAndView pages(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.getSession().setAttribute("loginUserId", "11112311");
 		ModelAndView view = new ModelAndView("pages");
 		return view;
 	}
-	
+
 	@RequestMapping("/myguanzhu.html")
 	public ModelAndView myguanzhu(HttpServletRequest request) {
+		Object loginUserId = request.getSession().getAttribute("loginUserId");
+		if (loginUserId == null) {
+			throw new BusinessException("loginUserId 不存在");
+		}
+		request.setAttribute("loginUserId", loginUserId);
 		ModelAndView view = new ModelAndView("user/myguanzhu");
 		return view;
 	}
-	
+
 	@RequestMapping("/messagecenter.html")
 	public ModelAndView messagecenter(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("user/messagecenter");
@@ -87,7 +93,7 @@ public class UserController {
 		ModelAndView view = new ModelAndView("user/mymessagedetail");
 		return view;
 	}
-	
+
 	@RequestMapping("/tuijian.html")
 	public ModelAndView tuijian(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView view = new ModelAndView("user/haiyoutuijian");

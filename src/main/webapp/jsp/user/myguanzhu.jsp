@@ -40,7 +40,7 @@
             	<div class="time">30分钟前</div>
                 <div class="c">
                 	<a href="#">
-                	<div class="name">系统通知</div>
+                	<div class="name">系统通知<c:out value="${loginUserId }"/></div>
                     <div class="xx">已报名</div>
                     </a>
                 </div>
