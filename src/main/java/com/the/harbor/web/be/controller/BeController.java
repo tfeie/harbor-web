@@ -3,10 +3,12 @@ package com.the.harbor.web.be.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,29 +17,41 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyun.mns.client.CloudQueue;
+import com.aliyun.mns.client.MNSClient;
+import com.aliyun.mns.common.ClientException;
+import com.aliyun.mns.common.ServiceException;
+import com.aliyun.mns.model.Message;
 import com.the.harbor.api.be.IBeSV;
 import com.the.harbor.api.be.param.Be;
 import com.the.harbor.api.be.param.BeCreateReq;
 import com.the.harbor.api.be.param.BeCreateResp;
 import com.the.harbor.api.be.param.BeDetail;
+import com.the.harbor.api.be.param.DoBeLikes;
+import com.the.harbor.api.be.param.DoBeLikes.HandleType;
 import com.the.harbor.api.be.param.QueryMyBeReq;
 import com.the.harbor.api.be.param.QueryMyBeResp;
 import com.the.harbor.api.be.param.QueryOneBeReq;
 import com.the.harbor.api.be.param.QueryOneBeResp;
+import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hybe.BeDetailType;
+import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.PageInfo;
+import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
+import com.the.harbor.commons.redisdata.util.HyBeUtil;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
+import com.the.harbor.commons.util.UUIDUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.go.controller.GoController;
 import com.the.harbor.web.system.utils.WXRequestUtil;
@@ -288,6 +302,7 @@ public class BeController {
 							publishDay = day + "/<font>" + month + "月</font>";
 						}
 						d.put("beId", be.getBeId());
+						d.put("dianzan", be.getDianzan());
 						d.put("showtime", showtime);
 						d.put("publishDay", publishDay);
 						d.put("hastext", !(firstTextDetail == null));
@@ -328,15 +343,149 @@ public class BeController {
 
 	@RequestMapping("/dianzan")
 	@ResponseBody
-	public ResponseData<String> dianzan(String beId) {
-		ResponseData<String> responseData = null;
+	public ResponseData<Long> dianzan(@NotBlank(message = "动态标识为空") String beId, HttpServletRequest request) {
+		ResponseData<Long> responseData = null;
 		try {
-			
+			/* 1.获取当前注册的用户 */
+			UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+			/* 2.判断用户是否已经点赞过了 */
+			boolean had = HyBeUtil.checkUserDianzan(beId, userInfo.getUserId());
+			if (!had) {
+				// 记录用户一次点赞行为
+				HyBeUtil.recordUserDianzan(beId, userInfo.getUserId());
+				// 发送一条消息给MNS记录用户点赞数据
+				this.sendBeDoLikesMQ(beId, userInfo.getUserId());
+			}
+			long count = HyBeUtil.getBeDianzanCount(beId);
+			responseData = new ResponseData<Long>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", count);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = ExceptionUtil.convert(e, String.class);
+			responseData = ExceptionUtil.convert(e, Long.class);
 		}
 		return responseData;
+	}
+
+	@RequestMapping("/cancelDianzn")
+	@ResponseBody
+	public ResponseData<Long> cancelDianzn(@NotBlank(message = "动态标识为空") String beId, HttpServletRequest request) {
+		ResponseData<Long> responseData = null;
+		try {
+			/* 1.获取当前注册的用户 */
+			UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+			/* 2.判断用户是否已经点赞过了 */
+			boolean had = HyBeUtil.checkUserDianzan(beId, userInfo.getUserId());
+			if (!had) {
+				// 记录用户一次点赞行为
+				HyBeUtil.userCancelZan(beId, userInfo.getUserId());
+				// 发送一条消息给MNS记录用户取消点赞数据
+				this.sendBeCancelLikesMQ(beId, userInfo.getUserId());
+			}
+			long count = HyBeUtil.getBeDianzanCount(beId);
+			responseData = new ResponseData<Long>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", count);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, Long.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getDianzanUsers")
+	@ResponseBody
+	public ResponseData<JSONArray> getDianzanUsers(@NotBlank(message = "动态标识为空") String beId) {
+		ResponseData<JSONArray> responseData = null;
+		try {
+			JSONArray array = new JSONArray();
+			// 获取BE的点赞用户列表
+			Set<String> users = HyBeUtil.getDianzanUsers(beId);
+			for (String userId : users) {
+				// 获取用户信息
+				UserInfo userInfo = DubboServiceUtil.getUserInfoByUserId(userId);
+				if (userInfo != null) {
+					JSONObject d = new JSONObject();
+					d.put("userId", userInfo.getUserId());
+					d.put("enName", userInfo.getEnName());
+					d.put("wxHeadimg", userInfo.getWxHeadimg());
+					array.add(d);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", array);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONArray.class);
+		}
+		return responseData;
+	}
+
+	/**
+	 * 发送一条BE点赞数据
+	 * 
+	 * @param beId
+	 * @param userId
+	 */
+	private void sendBeDoLikesMQ(String beId, String userId) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			DoBeLikes body = new DoBeLikes();
+			body.setBeId(beId);
+			body.setUserId(userId);
+			body.setTime(DateUtil.getSysDate());
+			body.setHandleType(HandleType.ZAN.name());
+			body.setMqId(UUIDUtil.genId32());
+			body.setMqType(MQType.MQ_HY_BE_LIKES.getValue());
+			message.setMessageBody(JSONObject.toJSONString(body));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("BE dianzan  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
+	}
+
+	/**
+	 * 发送一条取消BE点赞数据
+	 * 
+	 * @param beId
+	 * @param userId
+	 */
+	private void sendBeCancelLikesMQ(String beId, String userId) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			DoBeLikes body = new DoBeLikes();
+			body.setBeId(beId);
+			body.setUserId(userId);
+			body.setTime(DateUtil.getSysDate());
+			body.setHandleType(HandleType.CANCEL.name());
+			body.setMqId(UUIDUtil.genId32());
+			body.setMqType(MQType.MQ_HY_BE_LIKES.getValue());
+			message.setMessageBody(JSONObject.toJSONString(body));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("BE dianzan  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
 	}
 
 }

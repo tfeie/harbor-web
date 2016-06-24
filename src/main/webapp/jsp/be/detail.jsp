@@ -59,25 +59,8 @@
 
 
 		<div class="like-main  box-s mar-top-10 pad-10">
-			<div class="list">
-				<a href="#"><img src="//static.tfeie.com/v2/images/tx.png"
-					width="30" height="30"></a> <a href="#"><img
-					src="//static.tfeie.com/v2/images/tx.png" width="30" height="30"></a>
-				<a href="#"><img src="//static.tfeie.com/v2/images/tx.png"
-					width="30" height="30"></a> <a href="#"><img
-					src="//static.tfeie.com/v2/images/tx.png" width="30" height="30"></a>
-				<a href="#"><img src="//static.tfeie.com/v2/images/tx.png"
-					width="30" height="30"></a> <a href="#"><img
-					src="//static.tfeie.com/v2/images/tx.png" width="30" height="30"></a>
-				<a href="#"><img src="//static.tfeie.com/v2/images/tx.png"
-					width="30" height="30"></a> <a href="#"><img
-					src="//static.tfeie.com/v2/images/tx.png" width="30" height="30"></a>
-				<a href="#"><img src="//static.tfeie.com/v2/images/tx.png"
-					width="30" height="30"></a> <a href="#"><img
-					src="//static.tfeie.com/v2/images/tx.png" width="30" height="30"></a>
-				<a href="#"><img src="//static.tfeie.com/v2/images/tx.png"
-					width="30" height="30"></a> <a href="#"><img
-					src="//static.tfeie.com/v2/images/tx.png" width="30" height="30"></a>
+			<div class="list" id="DIV_DIANZAN_USERS">
+				
 			</div>
 			<div class="c">
 				<div class="f-left">认为值得赞</div>
@@ -224,11 +207,54 @@
 						 
 					}); 
 					
+					//点赞事件代理
+					$("#DIV_BE_DETAIL").delegate("#DIV_DO_DIANZAN",click,function(){
+						_this.doDianzan();
+					});
+					
 				},
 				
 				initData: function(){
 					this.getBeDetail();
 				}, 
+				
+				doDianzan: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/dianzan",
+						type: "post", 
+						data: { 
+							beId: _this.getPropertyValue("beId")
+						},
+						success: function(transport){
+							var count = transport.data;
+							$("#DIV_DO_DIANZAN").html("<font>"+count+"</font>");
+							_this.getBeDianzanUsers(); 
+						},
+						failure: function(transport){ 
+							
+						}
+					});
+				},
+				
+				cancelDianzan: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/cancelDianzn",
+						type: "post", 
+						data: { 
+							beId: _this.getPropertyValue("beId")
+						},
+						success: function(transport){
+							var count = transport.data;
+							$("#DIV_DO_DIANZAN").html("<font>"+count+"</font>");
+							_this.getBeDianzanUsers(); 
+						},
+						failure: function(transport){ 
+							
+						}
+					});
+				},
 				
 				getBeDetail: function(){
 					var _this = this;
@@ -247,11 +273,36 @@
 						}
 					});
 				},
-				 
+				
+				
 				renderBeDetail: function(data){ 
 					data= data?data:{};
 					var opt=$("#BeDetailImpl").render(data);
 					$("#DIV_BE_DETAIL").html(opt); 
+				},
+				
+				getBeDianzanUsers: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/getDianzanUsers",
+						type: "post", 
+						data: { 
+							beId: _this.getPropertyValue("beId")
+						},
+						success: function(transport){
+							var data =transport.data; 
+							_this.renderBeDianzanUsers(data); 
+						},
+						failure: function(transport){ 
+							_this.renderBeDianzanUsers([]); 
+						}
+					});
+				},
+				 
+				renderBeDianzanUsers: function(data){ 
+					data= data?data:[];
+					var opt=$("#BeDianZanUsersImpl").render(data);
+					$("#DIV_DIANZAN_USERS").html(opt); 
 				},
 				
 				getPropertyValue: function(propertyName){
@@ -297,9 +348,14 @@
 
 			<div class="btn-bottom">
 				<div class="btn-fx box-s"></div>
-				<div class="btn-z  box-s">
-					<font>32</font>
+				<div class="btn-z  box-s" id="DIV_DO_DIANZAN" beId = "{{:beId}}">
+					<font>{{:dianzan}}</font>
 				</div>
 			</div> 
 </script>
+
+<script id="BeDianZanUsersImpl" type="text/x-jsrender"> 
+<a href="javascript:void(0)"><img src="{{:wxHeadimg}}"  alt="{{:enName}}" width="30" height="30"></a> 
+</script>
+
 </html>

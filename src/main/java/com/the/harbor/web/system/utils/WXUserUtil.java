@@ -3,13 +3,10 @@ package com.the.harbor.web.system.utils;
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
-import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.UserInfo;
-import com.the.harbor.api.user.param.UserQueryResp;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.commons.components.redis.CacheFactory;
-import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.RedisDataKey;
 import com.the.harbor.web.util.DubboServiceUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
@@ -39,20 +36,15 @@ public final class WXUserUtil {
 		return wxUserInfo;
 	}
 
-	public static UserInfo getUserInfo(String openId) {
-		UserQueryResp userResp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfoByOpenId(openId);
-		return userResp.getUserInfo();
-	}
-
 	public static UserInfo getUserInfo(HttpServletRequest request) {
 		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
+		UserInfo userInfo = DubboServiceUtil.getUserInfoByOpenId(wtoken.getOpenId());
 		return userInfo;
 	}
 
 	public static UserInfo checkUserRegAndGetUserInfo(HttpServletRequest request) {
 		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
-		UserInfo userInfo = WXUserUtil.getUserInfo(wtoken.getOpenId());
+		UserInfo userInfo = DubboServiceUtil.getUserInfoByOpenId(wtoken.getOpenId());
 		if (userInfo == null) {
 			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
 		}

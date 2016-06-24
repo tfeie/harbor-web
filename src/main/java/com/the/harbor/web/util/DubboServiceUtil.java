@@ -8,6 +8,8 @@ import com.the.harbor.api.go.param.GoOrderQueryResp;
 import com.the.harbor.api.go.param.GoQueryReq;
 import com.the.harbor.api.go.param.GoQueryResp;
 import com.the.harbor.api.user.IUserSV;
+import com.the.harbor.api.user.param.UserInfo;
+import com.the.harbor.api.user.param.UserQueryResp;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.api.user.param.UserViewResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
@@ -97,6 +99,22 @@ public final class DubboServiceUtil {
 			GenericException ge = ExceptionUtil.convert2GenericException(ex);
 			throw ge;
 		}
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultMessage());
+		}
+		return resp.getUserInfo();
+	}
+	
+	public static UserInfo getUserInfoByOpenId(String openId) {
+		UserQueryResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfoByOpenId(openId);
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultMessage());
+		}
+		return resp.getUserInfo();
+	}
+	
+	public static UserInfo getUserInfoByUserId(String userId) {
+		UserQueryResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfoByUserId(userId);
 		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 			throw new BusinessException(resp.getResponseHeader().getResultMessage());
 		}
