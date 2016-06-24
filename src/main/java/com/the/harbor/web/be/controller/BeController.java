@@ -225,6 +225,7 @@ public class BeController {
 						}
 						// 获取标签
 						d.put("beId", be.getBeId());
+						d.put("dianzan", be.getDianzan());
 						d.put("publishdate", DateUtil.getInterval(be.getCreateDate()));
 						d.put("tags", be.getBeTags());
 						d.put("hastext", !(firstTextDetail == null));

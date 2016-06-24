@@ -216,6 +216,7 @@
 				
 				initData: function(){
 					this.getBeDetail();
+					this.getBeDianzanUsers();
 				}, 
 				
 				doDianzan: function(){
