@@ -208,7 +208,7 @@
 					}); 
 					
 					//点赞事件代理
-					$("#DIV_BE_DETAIL").delegate("#DIV_DO_DIANZAN",click,function(){
+					$("#DIV_BE_DETAIL").delegate("#DIV_DO_DIANZAN","click",function(){
 						_this.doDianzan();
 					});
 					
