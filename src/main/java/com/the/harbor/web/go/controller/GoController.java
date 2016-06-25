@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderReq;
@@ -25,6 +26,8 @@ import com.the.harbor.api.go.param.GoOrder;
 import com.the.harbor.api.go.param.GoOrderConfirmReq;
 import com.the.harbor.api.go.param.GoOrderCreateReq;
 import com.the.harbor.api.go.param.GoOrderCreateResp;
+import com.the.harbor.api.go.param.QueryGoReq;
+import com.the.harbor.api.go.param.QueryGoResp;
 import com.the.harbor.api.go.param.QueryMyGoReq;
 import com.the.harbor.api.go.param.QueryMyGoResp;
 import com.the.harbor.api.go.param.UpdateGoOrderPayReq;
@@ -41,10 +44,12 @@ import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
+import com.the.harbor.commons.redisdata.def.HyDictsVo;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyDictUtil;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.util.AmountUtils;
+import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
@@ -362,7 +367,7 @@ public class GoController {
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", data);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
 		}
 		return responseData;
 	}
@@ -423,7 +428,7 @@ public class GoController {
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}
@@ -442,7 +447,7 @@ public class GoController {
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}
@@ -520,7 +525,7 @@ public class GoController {
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}
@@ -535,6 +540,62 @@ public class GoController {
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			queryMyGoReq.setUserId(userInfo.getUserId());
 			QueryMyGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryMyGoes(queryMyGoReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
+						rep.getPagInfo());
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getIndexPageSilders")
+	@ResponseBody
+	public ResponseData<JSONArray> getIndexPageSilders() {
+		ResponseData<JSONArray> responseData = null;
+		try {
+			JSONArray array = new JSONArray();
+			List<HyDictsVo> list = HyDictUtil.getHyDicts(TypeCode.HY_GO.getValue(), ParamCode.INDEX_SILDER.getValue());
+			if (!CollectionUtil.isEmpty(list)) {
+				for (HyDictsVo dict : list) {
+					String value = dict.getParamValue();
+					String[] arr = value.split("!!");
+					String imgURL = "";
+					String linkURL = "javascript:void(0)";
+					if (arr.length == 1) {
+						// throw new
+						// BusinessException("首页轮播图配置错误，图片地址与超链接地址以$分隔");
+						imgURL = arr[0];
+					} else if (arr.length == 2) {
+						imgURL = arr[0];
+						linkURL = arr[1];
+					}
+					JSONObject d = new JSONObject();
+					d.put("imgURL", imgURL);
+					d.put("linkURL", linkURL);
+					array.add(d);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "获取轮播图成功", array);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONArray.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/queryGoes")
+	@ResponseBody
+	public ResponseData<PageInfo<Go>> queryGoes(@NotNull(message = "参数为空") QueryGoReq queryGoReq,
+			HttpServletRequest request) {
+		ResponseData<PageInfo<Go>> responseData = null;
+		try {
+			QueryGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryGoes(queryGoReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
 						rep.getResponseHeader().getResultMessage());
