@@ -767,7 +767,15 @@
 						},
 						success: function(transport){
 							weUI.alert({
-								content: "活动提交成功"
+								content: "活动提交成功",
+								ok: function(){
+									if(goType=="group"){
+										window.location.href="../go/mygroup.html";
+									}else{
+										window.location.href="../go/myono.html";
+									}
+									weUI.closeAlert();
+								}
 							})
 						},
 						failure: function(transport){

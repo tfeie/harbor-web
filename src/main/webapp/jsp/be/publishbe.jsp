@@ -466,7 +466,11 @@
 						},
 						success: function(transport){
 							weUI.alert({
-								content: "B&E发布成功"
+								content: "B&E发布成功",
+								ok: function(){
+									window.location.href="../be/mybe.html";
+									weUI.closeAlert();
+								}
 							})
 						},
 						failure: function(transport){

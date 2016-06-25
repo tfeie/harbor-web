@@ -61,12 +61,14 @@ public class GoController {
 
 	@RequestMapping("/mygroup.html")
 	public ModelAndView mygroup(HttpServletRequest request) {
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		ModelAndView view = new ModelAndView("go/mygroup");
 		return view;
 	}
 
 	@RequestMapping("/myono.html")
 	public ModelAndView myono(HttpServletRequest request) {
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		ModelAndView view = new ModelAndView("go/myono");
 		return view;
 	}
@@ -530,7 +532,7 @@ public class GoController {
 		ResponseData<PageInfo<Go>> responseData = null;
 		try {
 			// 获取用户信息
-			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo1(request);
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			queryMyGoReq.setUserId(userInfo.getUserId());
 			QueryMyGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryMyGoes(queryMyGoReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
