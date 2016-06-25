@@ -21,7 +21,6 @@ import com.the.harbor.api.pay.param.CreatePaymentOrderResp;
 import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.UserCertificationReq;
 import com.the.harbor.api.user.param.UserEditReq;
-import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.api.user.param.UserMemberInfo;
 import com.the.harbor.api.user.param.UserMemberQuery;
 import com.the.harbor.api.user.param.UserMemberRenewalReq;
@@ -107,7 +106,7 @@ public class UserController {
 
 	@RequestMapping("/toUserRegister.html")
 	public ModelAndView toUserRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		UserInfo userInfo = WXUserUtil.getUserInfo(request);
+		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
 		if (userInfo != null) {
 			throw new BusinessException("您的微信已经注册");
 		}
@@ -193,7 +192,7 @@ public class UserController {
 
 	@RequestMapping("/toApplyCertficate.html")
 	public ModelAndView toApplyCertficate(HttpServletRequest request) {
-		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -318,7 +317,7 @@ public class UserController {
 
 	@RequestMapping("/memberCenter.html")
 	public ModelAndView memberCenter(HttpServletRequest request) {
-		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		UserMemberQuery query = new UserMemberQuery();
 		query.setUserId(userInfo.getUserId());
 		UserMemberInfo userMember = DubboConsumerFactory.getService(IUserSV.class).queryUserMemberInfo(query);
@@ -412,7 +411,7 @@ public class UserController {
 
 	@RequestMapping("/userCenter.html")
 	public ModelAndView userCenter(HttpServletRequest request) {
-		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/userCenter");
 		return view;
@@ -420,7 +419,7 @@ public class UserController {
 
 	@RequestMapping("/editUserInfo.html")
 	public ModelAndView editUserInfo(HttpServletRequest request) {
-		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -490,7 +489,7 @@ public class UserController {
 
 	@RequestMapping("/userWealth.html")
 	public ModelAndView userWealth(HttpServletRequest request) {
-		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/userWealth");
 		return view;
@@ -498,7 +497,7 @@ public class UserController {
 
 	@RequestMapping("/setUserSkills.html")
 	public ModelAndView setUserSkills(HttpServletRequest request) {
-		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/setUserSkills");
 		return view;

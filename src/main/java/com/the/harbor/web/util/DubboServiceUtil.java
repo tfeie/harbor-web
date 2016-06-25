@@ -104,7 +104,7 @@ public final class DubboServiceUtil {
 		}
 		return resp.getUserInfo();
 	}
-	
+
 	public static UserInfo getUserInfoByOpenId(String openId) {
 		UserQueryResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfoByOpenId(openId);
 		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
@@ -112,7 +112,7 @@ public final class DubboServiceUtil {
 		}
 		return resp.getUserInfo();
 	}
-	
+
 	public static UserInfo getUserInfoByUserId(String userId) {
 		UserQueryResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserInfoByUserId(userId);
 		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {

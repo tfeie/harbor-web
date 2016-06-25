@@ -86,7 +86,7 @@ public class BeController {
 		if (be == null) {
 			throw new BusinessException("查看的B&E不存在");
 		}
-		UserViewInfo userInfo = DubboServiceUtil.queryUserViewInfoByUserId(be.getUserId());
+		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(be.getUserId());
 		if (userInfo == null) {
 			throw new BusinessException("B&E发表的用户不存在");
 		}
@@ -196,7 +196,7 @@ public class BeController {
 		JSONArray arr = new JSONArray();
 		try {
 			// 获取用户资料
-			UserViewInfo userInfo = DubboServiceUtil.queryUserViewInfoByUserId(queryMyBeReq.getUserId());
+			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(queryMyBeReq.getUserId());
 			if (userInfo == null) {
 				throw new BusinessException("非法查询:缺少用户信息");
 			}
@@ -254,7 +254,7 @@ public class BeController {
 		JSONArray arr = new JSONArray();
 		try {
 			// 获取用户资料
-			UserViewInfo userInfo = DubboServiceUtil.queryUserViewInfoByUserId(queryMyBeReq.getUserId());
+			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(queryMyBeReq.getUserId());
 			if (userInfo == null) {
 				throw new BusinessException("非法查询:缺少用户信息");
 			}
@@ -348,7 +348,7 @@ public class BeController {
 		ResponseData<Long> responseData = null;
 		try {
 			/* 1.获取当前注册的用户 */
-			UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			/* 2.判断用户是否已经点赞过了 */
 			boolean had = HyBeUtil.checkUserDianzan(beId, userInfo.getUserId());
 			if (!had) {
@@ -372,7 +372,7 @@ public class BeController {
 		ResponseData<Long> responseData = null;
 		try {
 			/* 1.获取当前注册的用户 */
-			UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			/* 2.判断用户是否已经点赞过了 */
 			boolean had = HyBeUtil.checkUserDianzan(beId, userInfo.getUserId());
 			if (!had) {

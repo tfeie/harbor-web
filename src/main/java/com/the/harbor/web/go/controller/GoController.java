@@ -25,7 +25,6 @@ import com.the.harbor.api.go.param.GoOrderConfirmReq;
 import com.the.harbor.api.go.param.GoOrderCreateReq;
 import com.the.harbor.api.go.param.GoOrderCreateResp;
 import com.the.harbor.api.go.param.UpdateGoOrderPayReq;
-import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.dict.ParamCode;
@@ -91,7 +90,7 @@ public class GoController {
 					"../go/toOrder.html?goId=" + goOrder.getGoId());
 		}
 		// 活动发起者用户
-		UserViewInfo publishUserInfo = DubboServiceUtil.queryUserViewInfoByUserId(goOrder.getPublishUserId());
+		UserViewInfo publishUserInfo = WXUserUtil.getUserViewInfoByUserId(goOrder.getPublishUserId());
 		if (publishUserInfo == null) {
 			throw new BusinessException("不能查看确认信息:活动发起者信息不存在");
 		}
@@ -138,7 +137,7 @@ public class GoController {
 			throw new BusinessException("不能确认活动预约信息:您不是该活动的发起方");
 		}
 		// 活动参与方
-		UserViewInfo joinUserInfo = DubboServiceUtil.queryUserViewInfoByUserId(goOrder.getUserId());
+		UserViewInfo joinUserInfo = WXUserUtil.getUserViewInfoByUserId(goOrder.getUserId());
 		if (joinUserInfo == null) {
 			throw new BusinessException("不能确认活动预约信息:活动预约方信息不存在");
 		}
@@ -174,7 +173,7 @@ public class GoController {
 		if (StringUtil.isBlank(goId)) {
 			throw new BusinessException("请先选择活动后才可以预约", true, "../go/oneononeindex.html");
 		}
-		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		// 查询活动信息
 		Go go = DubboServiceUtil.queryGo(goId);
 		if (go == null) {
@@ -242,7 +241,7 @@ public class GoController {
 		if (go == null) {
 			throw new BusinessException("支付失败:活动不存在。请前往预约活动", true, "../go/oneononeindex.html");
 		}
-		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		// 校验当前用户对于此活动的状态来执行处理
 		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
 		if (goOrder == null) {
@@ -282,7 +281,7 @@ public class GoController {
 
 	@RequestMapping("/publishGo.html")
 	public ModelAndView publishGo(HttpServletRequest request) {
-		UserInfo userInfo = WXUserUtil.checkUserRegAndGetUserInfo(request);
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
