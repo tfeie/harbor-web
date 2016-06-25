@@ -507,6 +507,7 @@ public class BeController {
 		b.setWxHeadimg(userInfo.getWxHeadimg());
 		b.setEnName(userInfo.getEnName());
 		b.setUserStatusName(userInfo.getUserStatusName());
+		b.setAbroadCountryName(userInfo.getAbroadCountryName());
 		// 回复上级信息
 		if (!StringUtil.isBlank(doBeComment.getParentUserId())) {
 			UserViewInfo puser = WXUserUtil.getUserViewInfoByUserId(doBeComment.getParentUserId());
