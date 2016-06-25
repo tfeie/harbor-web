@@ -229,6 +229,7 @@ public class BeController {
 						}
 						// 获取标签
 						d.put("beId", be.getBeId());
+						d.put("commentCount", HyBeUtil.getBeCommentsCount(be.getBeId()));
 						d.put("dianzan", be.getDianzan());
 						d.put("publishdate", DateUtil.getInterval(be.getCreateDate()));
 						d.put("tags", be.getBeTags());
@@ -528,7 +529,7 @@ public class BeController {
 				b.setUserStatusName(userInfo.getUserStatusName());
 				b.setWxHeadimg(userInfo.getWxHeadimg());
 				b.setEnName(userInfo.getEnName());
-				b.setUserStatusName(userInfo.getUserStatusName());
+				b.setAbroadCountryName(userInfo.getAbroadCountryName());
 			}
 
 		}

@@ -128,13 +128,13 @@
 						_this.doDianzan();
 					});
 					
-					$("#DIV_BE_COMMENTS").delegate("#DIV_COMMENT_CONTENT","click",function(){
+					$("#DIV_BE_COMMENTS").delegate("[name='DIV_COMMENT_CONTENT']","click",function(){
 						var userId = $(this).attr("userId");
 						var commentId = $(this).attr("commentId");
 						var enName = $(this).attr("enName");
 						$("#parentCommentId").val(commentId);
 						$("#parentUserId").val(userId);
-						$("#COMMENT_CONTENT").attr("placeholder","回复 "+enName+":")
+						$("#COMMENT_CONTENT").attr("placeholder","回复 "+enName+":").focus
 					}); 
 				},
 				
@@ -186,6 +186,9 @@
 							var arr = [data];
 							var opt=$("#BeCommentsImpl").render(arr);
 							$("#DIV_BE_COMMENTS").append(opt); 
+							$("#COMMENT_CONTENT").val("");
+							$("#parentUserId").val("");
+							$("#parentCommentId").val("");
 						},
 						failure: function(transport){ 
 							weUI.alert({content:"评论失败,请重试..."});
@@ -367,7 +370,7 @@
 				</div>
 				<div class="c">
 					<div class="name-xx">
-						<div class="icon-pl"></div>
+						<div class="icon-pl" name="DIV_COMMENT_CONTENT" commentId="{{:commentId}}" userId="{{:userId}}" enName="{{:enName}}"></div>
 						<div class="name">
 							<div class="xx">{{:enName}}</div>
 							<div class="yrz">
@@ -376,7 +379,7 @@
 							<div class="time">{{:createTimeInteval}}</div>
 						</div>
 					</div>
-					<div class="pl" name="DIV_COMMENT_CONTENT" commentId="{{:commentId}}" userId="{{:userId}}" enName="{{:enName}}">{{if penName!="undefined"}} 回复<span href="javascript:void(0)" class="lc">{{:penName}}</span>  {{/if}} {{:content}}</div>
+					<div class="pl" name="DIV_COMMENT_CONTENT" commentId="{{:commentId}}" userId="{{:userId}}" enName="{{:enName}}">{{if penName}} 回复<span href="javascript:void(0)" class="lc">{{:penName}}</span>  {{/if}} {{:content}}</div>
 				</div>
 			</div>	
 </script>
