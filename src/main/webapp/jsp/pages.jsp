@@ -154,10 +154,10 @@
 				<span>邀约详细2</span><label>go/invite2.jsp <a href="../go/invite2.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>我创建的group</span><label>go/mygroup.jsp <a href="../go/mygroup.html">Go</a></label>
+				<span>我创建的group</span><label>mygroup.jsp-ok <a href="../go/mygroup.html">Go</a></label>
 			</p> 
 			<p class="on1">
-				<span>我创建的ono</span><label>go/myono.jsp <a href="../go/myono.html">Go</a></label>
+				<span>我创建的ono</span><label>myono.jsp-ok <a href="../go/myono.html">Go</a></label>
 			</p>
 		</section>
 	</section>
