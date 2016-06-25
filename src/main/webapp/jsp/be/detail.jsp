@@ -379,7 +379,7 @@
 							<div class="time">{{:createTimeInteval}}</div>
 						</div>
 					</div>
-					<div class="pl" name="DIV_COMMENT_CONTENT" commentId="{{:commentId}}" userId="{{:userId}}" enName="{{:enName}}">{{if penName}} 回复<span href="javascript:void(0)" class="lc">{{:penName}}</span>  {{/if}} {{:content}}</div>
+					<div class="pl" name="DIV_COMMENT_CONTENT" commentId="{{:commentId}}" userId="{{:userId}}" enName="{{:enName}}">{{if penName}} 回复<span href="javascript:void(0)" class="lc" style="color:red">{{:penName}}</span>  {{/if}} {{:content}}</div>
 				</div>
 			</div>	
 </script>
