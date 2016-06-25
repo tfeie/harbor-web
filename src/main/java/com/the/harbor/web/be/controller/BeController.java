@@ -1,5 +1,6 @@
 package com.the.harbor.web.be.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,9 +26,11 @@ import com.aliyun.mns.common.ServiceException;
 import com.aliyun.mns.model.Message;
 import com.the.harbor.api.be.IBeSV;
 import com.the.harbor.api.be.param.Be;
+import com.the.harbor.api.be.param.BeComment;
 import com.the.harbor.api.be.param.BeCreateReq;
 import com.the.harbor.api.be.param.BeCreateResp;
 import com.the.harbor.api.be.param.BeDetail;
+import com.the.harbor.api.be.param.DoBeComment;
 import com.the.harbor.api.be.param.DoBeLikes;
 import com.the.harbor.api.be.param.DoBeLikes.HandleType;
 import com.the.harbor.api.be.param.QueryMyBeReq;
@@ -417,6 +421,130 @@ public class BeController {
 		return responseData;
 	}
 
+	@RequestMapping("/sendBeComment")
+	@ResponseBody
+	public ResponseData<BeComment> sendBeComment(@NotBlank(message = "评论内容为空") DoBeComment doBeComment,
+			HttpServletRequest request) {
+		ResponseData<BeComment> responseData = null;
+		try {
+			/* 1.获取当前操作的用户 */
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			/* 2.主要参数信息是否为空 */
+			if (StringUtil.isBlank(doBeComment.getContent())) {
+				throw new BusinessException("请输入评论内容");
+			}
+			if (StringUtil.isBlank(doBeComment.getBeId())) {
+				throw new BusinessException("B&E标识为空");
+			}
+			/* 2.组织消息 */
+			doBeComment.setCommentId(UUIDUtil.genId32());
+			doBeComment.setUserId(userInfo.getUserId());
+			doBeComment.setSysdate(DateUtil.getSysDate());
+			doBeComment.setHandleType(DoBeComment.HandleType.PUBLISH.name());
+			/* 3.发送评论消息 */
+			this.sendDoBeCommentMQ(doBeComment);
+			/* 4.组织评论内容返回 */
+			BeComment b = this.convertBeComment(doBeComment, userInfo);
+			responseData = new ResponseData<BeComment>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", b);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, BeComment.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/deleteBeComment")
+	@ResponseBody
+	public ResponseData<String> deleteBeComment(@NotBlank(message = "BE标识为空") String beId,
+			@NotBlank(message = "评论标识为空") String commentId, HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			/* 1.获取当前操作的用户 */
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			/* 3.发送评论消息 */
+			this.sendBeCommentDelMQ(beId, commentId);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", commentId);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getBeComments")
+	@ResponseBody
+	public ResponseData<List<BeComment>> getBeComments(@NotBlank(message = "BE标识为空") String beId) {
+		ResponseData<List<BeComment>> responseData = null;
+		try {
+			/* 1.获取BE的所有评论集合 */
+			Set<String> set = HyBeUtil.getBeCommentIds(beId, 0, -1);
+			/* 2.获取所有评论数据 */
+			List<BeComment> list = new ArrayList<BeComment>();
+			for (String commentId : set) {
+				String commentData = HyBeUtil.getBeComment(commentId);
+				if (!StringUtil.isBlank(commentData)) {
+					BeComment b = JSONObject.parseObject(commentData, BeComment.class);
+					this.fillBeCommentInfo(b);
+					list.add(b);
+				}
+			}
+			responseData = new ResponseData<List<BeComment>>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", list);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<List<BeComment>>(ResponseData.AJAX_STATUS_FAILURE, "操作失败");
+		}
+		return responseData;
+	}
+
+	private BeComment convertBeComment(DoBeComment doBeComment, UserViewInfo userInfo) {
+		BeComment b = new BeComment();
+		BeanUtils.copyProperties(doBeComment, b);
+		b.setCreateDate(doBeComment.getSysdate());
+		b.setCreateTimeInteval(DateUtil.getInterval(doBeComment.getSysdate()));
+		// 发布人信息
+		b.setUserStatusName(userInfo.getUserStatusName());
+		b.setWxHeadimg(userInfo.getWxHeadimg());
+		b.setEnName(userInfo.getEnName());
+		b.setUserStatusName(userInfo.getUserStatusName());
+		// 回复上级信息
+		if (!StringUtil.isBlank(doBeComment.getParentUserId())) {
+			UserViewInfo puser = WXUserUtil.getUserViewInfoByUserId(doBeComment.getParentUserId());
+			if (puser != null) {
+				b.setPabroadCountryName(puser.getAbroadCountryName());
+				b.setPenName(puser.getEnName());
+				b.setPuserStatusName(puser.getUserStatusName());
+				b.setPwxHeadimg(puser.getWxHeadimg());
+			}
+		}
+		return b;
+	}
+
+	private void fillBeCommentInfo(BeComment b) {
+		b.setCreateTimeInteval(DateUtil.getInterval(b.getCreateDate()));
+		// 发布人信息
+		if (!StringUtil.isBlank(b.getUserId())) {
+			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(b.getUserId());
+			if (userInfo != null) {
+				b.setUserStatusName(userInfo.getUserStatusName());
+				b.setWxHeadimg(userInfo.getWxHeadimg());
+				b.setEnName(userInfo.getEnName());
+				b.setUserStatusName(userInfo.getUserStatusName());
+			}
+
+		}
+
+		// 回复上级信息
+		if (!StringUtil.isBlank(b.getParentUserId())) {
+			UserViewInfo puser = WXUserUtil.getUserViewInfoByUserId(b.getParentUserId());
+			if (puser != null) {
+				b.setPabroadCountryName(puser.getAbroadCountryName());
+				b.setPenName(puser.getEnName());
+				b.setPuserStatusName(puser.getUserStatusName());
+				b.setPwxHeadimg(puser.getWxHeadimg());
+			}
+		}
+	}
+
 	/**
 	 * 发送一条BE点赞数据
 	 * 
@@ -446,7 +574,7 @@ public class BeController {
 			} else if (se.getErrorCode().equals("TimeExpired")) {
 				LOG.error("The request is time expired. Please check your local machine timeclock", se);
 			}
-			LOG.error("BE dianzan  message put in Queue error", se);
+			LOG.error("BE dianzan add message put in Queue error", se);
 		} catch (Exception e) {
 			LOG.error("Unknown exception happened!", e);
 		}
@@ -482,7 +610,73 @@ public class BeController {
 			} else if (se.getErrorCode().equals("TimeExpired")) {
 				LOG.error("The request is time expired. Please check your local machine timeclock", se);
 			}
-			LOG.error("BE dianzan  message put in Queue error", se);
+			LOG.error("BE dianzan cancel message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
+	}
+
+	/**
+	 * 发送BE评论消息
+	 * 
+	 * @param doBeComment
+	 */
+	private void sendDoBeCommentMQ(DoBeComment doBeComment) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			doBeComment.setMqId(UUIDUtil.genId32());
+			doBeComment.setMqType(MQType.MQ_HY_BE_COMMENT.getValue());
+			message.setMessageBody(JSONObject.toJSONString(doBeComment));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("BE comments add  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
+	}
+
+	/**
+	 * 发送BE评论删除消息
+	 * 
+	 * @param beId
+	 * @param commentId
+	 */
+	private void sendBeCommentDelMQ(String beId, String commentId) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			DoBeComment body = new DoBeComment();
+			body.setBeId(beId);
+			body.setCommentId(commentId);
+			body.setSysdate(DateUtil.getSysDate());
+			body.setHandleType(DoBeComment.HandleType.CANCEL.name());
+			body.setMqId(UUIDUtil.genId32());
+			body.setMqType(MQType.MQ_HY_BE_COMMENT.getValue());
+			message.setMessageBody(JSONObject.toJSONString(body));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("BE comment delete  message put in Queue error", se);
 		} catch (Exception e) {
 			LOG.error("Unknown exception happened!", e);
 		}

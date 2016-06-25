@@ -70,93 +70,7 @@
 		</div>
 
 
-		<div class="pl-main box-s mar-top-10 pad-10">
-			<div class="itms clearfix">
-				<div class="img">
-					<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-						height="40">
-				</div>
-				<div class="c">
-					<div class="name-xx">
-						<div class="icon-pl"></div>
-						<div class="name">
-							<div class="xx">Mays</div>
-							<div class="yrz">
-								<span class="bg-lan">香港</span><font>已认证</font>
-							</div>
-							<div class="time">10分钟前</div>
-						</div>
-					</div>
-					<div class="pl">给老婆买的，质量好，性价比高。很喜欢，以后买给老婆买的，质量好，性价比高。很喜欢，以后买</div>
-				</div>
-			</div>
-			<div class="itms clearfix">
-				<div class="img">
-					<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-						height="40">
-				</div>
-				<div class="c">
-					<div class="name-xx">
-						<div class="icon-pl"></div>
-						<div class="name">
-							<div class="xx">Mays</div>
-							<div class="yrz">
-								<span class="bg-lv">美国</span><font>已认证</font>
-							</div>
-							<div class="time">10分钟前</div>
-						</div>
-					</div>
-					<div class="pl">给老婆买的，质量好，性价比高。很喜欢，以后买给老婆买的，质量好，性价比高。很喜欢，以后买</div>
-
-					<div class="pl-more">
-						<div class="pl-img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="30"
-								height="30">
-						</div>
-						<div class="pl-c">
-							<span href="#" class="lc">三楼</span>觉得<span href="#" class="lc">一楼</span>说的对
-						</div>
-					</div>
-					<div class="pl-more">
-						<div class="pl-img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="30"
-								height="30">
-						</div>
-						<div class="pl-c">
-							<span href="#" class="lc">三楼</span>觉得<span href="#" class="lc">一楼</span>说的对
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="itms clearfix">
-				<div class="img">
-					<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-						height="40">
-				</div>
-				<div class="c">
-					<div class="name-xx">
-						<div class="icon-pl"></div>
-						<div class="name">
-							<div class="xx">Mays</div>
-							<div class="yrz">
-								<span class="bg-lv">美国</span><font>已认证</font>
-							</div>
-							<div class="time">10分钟前</div>
-						</div>
-					</div>
-					<div class="pl">给老婆买的，质量好，性价比高。很喜欢，以后买给老婆买的，质量好，性价比高。很喜欢，以后买</div>
-
-					<div class="pl-more">
-						<div class="pl-img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="30"
-								height="30">
-						</div>
-						<div class="pl-c">
-							<span href="#" class="lc">三楼</span>觉得<span href="#" class="lc">一楼</span>说的对说的对说的对说的对说的对说的对说的对说的对
-						</div>
-					</div>
-				</div>
-			</div>
+		<div class="pl-main box-s mar-top-10 pad-10" id="DIV_BE_COMMENTS">
 
 		</div>
 
@@ -165,9 +79,11 @@
 
 	<footer class="be_footer po-f">
 		<div class="c">
-			<input type="button" class="In-btn" value="发射">
+			<input type="button" class="In-btn" value="发射" id="BTN_SEND">
 			<div class="left">
-				<input type="text" class="In-text" id="In-pl" placeholder="朕以为...">
+				<input type="text" class="In-text" id="COMMENT_CONTENT" placeholder="朕以为...">
+				<input type="hidden" id="parentCommentId"/>
+				<input type="hidden" id="parentUserId"/>
 			</div>
 		</div>
 	</footer>
@@ -203,8 +119,8 @@
 					var _this = this; 
 					
 					//添加图片按钮事件
-					$("#SPAN_ADD_IMAGE").on("click",function(){
-						 
+					$("#BTN_SEND").on("click",function(){
+						 _this.sendBeComment();
 					}); 
 					
 					//点赞事件代理
@@ -212,12 +128,71 @@
 						_this.doDianzan();
 					});
 					
+					$("#DIV_BE_COMMENTS").delegate("#DIV_COMMENT_CONTENT","click",function(){
+						var userId = $(this).attr("userId");
+						var commentId = $(this).attr("commentId");
+						var enName = $(this).attr("enName");
+						$("#parentCommentId").val(commentId);
+						$("#parentUserId").val(userId);
+						$("#COMMENT_CONTENT").attr("placeholder","回复 "+enName+":")
+					}); 
 				},
 				
 				initData: function(){
 					this.getBeDetail();
 					this.getBeDianzanUsers();
+					this.getBeComments();
 				}, 
+				
+				sendBeComment: function(){
+					var _this = this;
+					var content = $.trim($("#COMMENT_CONTENT").val());
+					var parentCommentId =  $.trim($("#parentCommentId").val());
+					var parentUserId =  $.trim($("#parentUserId").val());
+					var valueValidator = new $.ValueValidator();
+					valueValidator.addRule({
+						labelName: "评论内容",
+						fieldName: "content",
+						getValue: function(){
+							return content;
+						},
+						fieldRules: {
+							required: true, 
+							cnlength: 200
+						},
+						ruleMessages: {
+							required: "请填写评论",
+							cnlength:"评论不能超过100个汉字"
+						}
+					});
+					var res=valueValidator.fireRulesAndReturnFirstError();
+					if(res){
+						weUI.alert({content:res});
+						return;
+					}
+					
+					var data = {
+						beId: _this.getPropertyValue("beId"),
+						content: content,
+						parentCommentId: parentCommentId,
+						parentUserId: parentUserId
+					}
+					ajaxController.ajax({
+						url: "../be/sendBeComment",
+						type: "post", 
+						data: data,
+						success: function(transport){
+							var data = transport.data;
+							var arr = [data];
+							var opt=$("#BeCommentsImpl").render(arr);
+							$("#DIV_BE_COMMENTS").append(opt); 
+						},
+						failure: function(transport){ 
+							weUI.alert({content:"评论失败,请重试..."});
+							return ;
+						}
+					});
+				},
 				
 				doDianzan: function(){
 					var _this = this;
@@ -233,7 +208,8 @@
 							_this.getBeDianzanUsers(); 
 						},
 						failure: function(transport){ 
-							
+							weUI.alert({content:transport.statusInfo});
+							return ;
 						}
 					});
 				},
@@ -299,11 +275,35 @@
 						}
 					});
 				},
+				
+				getBeComments: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/getBeComments",
+						type: "post", 
+						data: { 
+							beId: _this.getPropertyValue("beId")
+						},
+						success: function(transport){
+							var data =transport.data; 
+							_this.renderBeComments(data); 
+						},
+						failure: function(transport){ 
+							_this.renderBeComments([]); 
+						}
+					});
+				},
 				 
 				renderBeDianzanUsers: function(data){ 
 					data= data?data:[];
 					var opt=$("#BeDianZanUsersImpl").render(data);
 					$("#DIV_DIANZAN_USERS").html(opt); 
+				},
+				
+				renderBeComments: function(data){
+					data= data?data:[];
+					var opt=$("#BeCommentsImpl").render(data);
+					$("#DIV_BE_COMMENTS").html(opt); 
 				},
 				
 				getPropertyValue: function(propertyName){
@@ -357,6 +357,28 @@
 
 <script id="BeDianZanUsersImpl" type="text/x-jsrender"> 
 <a href="javascript:void(0)"><img src="{{:wxHeadimg}}"  alt="{{:enName}}" width="30" height="30"></a> 
+</script>
+
+<script id="BeCommentsImpl" type="text/x-jsrender"> 
+			<div class="itms clearfix" commentId="{{:commentId}}">
+				<div class="img">
+					<img src="{{:wxHeadimg}}" width="40"
+						height="40">
+				</div>
+				<div class="c">
+					<div class="name-xx">
+						<div class="icon-pl"></div>
+						<div class="name">
+							<div class="xx">{{:enName}}</div>
+							<div class="yrz">
+								<span class="bg-lv">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+							</div>
+							<div class="time">{{:createTimeInteval}}</div>
+						</div>
+					</div>
+					<div class="pl" name="DIV_COMMENT_CONTENT" commentId="{{:commentId}}" userId="{{:userId}}" enName="{{:enName}}">{{if penName!="undefined"}} 回复<span href="javascript:void(0)" class="lc">{{:penName}}</span>  {{/if}} {{:content}}</div>
+				</div>
+			</div>	
 </script>
 
 </html>
