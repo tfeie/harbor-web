@@ -72,7 +72,7 @@
 					<a href="#">我参加的</a>
 				</p>
 				<p class="ip2_2">
-					<a href="#">我发起的</a>
+					<a href="../be/mybe.html">我发起的</a>
 				</p>
 				<p class="ip2_3">
 					<a href="#">我的收藏</a>

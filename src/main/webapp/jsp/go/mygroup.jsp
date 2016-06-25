@@ -35,205 +35,130 @@
 
 	<nav class="be-nav po-f box-s">
 		<div class="hd clearfix">
-			 <a href="../be/mybe.html" class="itms on">Be</a>
-            <a href="../go/mygroup.html" class="itms">Group</a>
-            <a href="../go/myono.html" class="itms">OnO</a>
+			<a href="../be/mybe.html" class="itms">Be</a> <a
+				href="../go/mygroup.html" class="itms on">Group</a> <a
+				href="../go/myono.html" class="itms">OnO</a>
 		</div>
 	</nav>
 
-	<section class="group-main">
-		<div class="itms box-s" href="#">
-			<a href="#">
-				<div class="tie">
-					<p>户外健身</p>
-					<div class="tim">5月6日</div>
-				</div>
-			</a> <a href="#">
-				<div class="name clearfix">
-					<div class="img">
-						<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-							height="40">
-					</div>
-					<div class="name-xx">
-						<div class="xx">
-							MaysMays<span class="bg-lv">美国</span><font>已认证</font>
-						</div>
-						<div class="jj">金融/合伙人/北京</div>
-					</div>
-				</div>
-			</a> <a href="#">
-				<div class="time">
-					2016-5-5 星期四 15:00<span class="bg-f5922f">线下服务</span>
-				</div>
-				<div class="yq">
-					Group邀请2-3人<span class="fc-f5922f">我请客</span>
-				</div>
-				<div class="dz">北京，国贸附近</div>
-				<div class="js chaochu_2">怎样提高你的身体效率，怎样有效的改善体型。怎怎样提高你的身体效率，怎样有效的改善体型。怎</div>
-			</a>
-			<div class="bottom">
-				<div class="list">
-					浏览<font>3</font>
-				</div>
-				<div class="list">
-					参加<font>3</font>
-				</div>
-				<div class="list list-sc">
-					收藏<font>3</font>
-				</div>
-			</div>
-		</div>
-		<div class="itms box-s" href="#">
-			<a href="#">
-				<div class="tie">
-					<p>52小时精益创业</p>
-					<div class="tim">5月6日</div>
-				</div>
-			</a> <a href="#">
-				<div class="name clearfix">
-					<div class="img">
-						<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-							height="40">
-					</div>
-					<div class="name-xx">
-						<div class="xx">
-							MaysMays<span class="bg-lv">美国</span><font>已认证</font>
-						</div>
-						<div class="jj">金融/合伙人/北京</div>
-					</div>
-				</div>
-			</a> <a href="#">
-				<div class="time">
-					2016-5-5 星期四 15:00<span class="bg-ff6a42">在线服务</span>
-				</div>
-				<div class="yq">
-					Group邀请2-3人<span class="fc-ff6a42">我请客</span>
-				</div>
-				<div class="js chaochu_2">怎样提高你的身体效率，怎样有效的改善体型。怎怎样提高你的身体效率，怎样有效的改善体型。怎</div>
-			</a>
-			<div class="bottom">
-				<div class="list">
-					浏览<font>3</font>
-				</div>
-				<div class="list">
-					参加<font>3</font>
-				</div>
-				<div class="list list-sc">
-					收藏<font>3</font>
-				</div>
-			</div>
-		</div>
-		<div class="itms box-s" href="#">
-			<a href="#">
-				<div class="tie">
-					<p>户外健身</p>
-					<div class="tim">5月6日</div>
-				</div>
-			</a> <a href="#">
-				<div class="name clearfix">
-					<div class="img">
-						<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-							height="40">
-					</div>
-					<div class="name-xx">
-						<div class="xx">
-							MaysMays<span class="bg-lv">美国</span><font>已认证</font>
-						</div>
-						<div class="jj">金融/合伙人/北京</div>
-					</div>
-				</div>
-			</a> <a href="#">
-				<div class="time">
-					2016-5-5 星期四 15:00<span>线下服务</span>
-				</div>
-				<div class="yq">
-					Group邀请2-3人<span>我请客</span>
-				</div>
-				<div class="dz">北京，国贸附近</div>
-				<div class="js chaochu_2">怎样提高你的身体效率，怎样有效的改善体型。怎怎样提高你的身体效率，怎样有效的改善体型。怎</div>
-			</a>
-			<div class="bottom">
-				<div class="list">
-					浏览<font>3</font>
-				</div>
-				<div class="list">
-					参加<font>3</font>
-				</div>
-				<div class="list list-sc">
-					收藏<font>3</font>
-				</div>
-			</div>
-		</div>
+	<section class="group-main" id="DIV_MY_GOES">
+		
 
 	</section>
-
-
-	</section>
-	<footer class="footer po-f">
-		<a href="#"><i class="icon-f1"></i><span>Be</span></a> <a href="#"><i
-			class="icon-f2"></i><span>Go</span></a> <a href="#"><i
-			class="icon-f3"></i><span>Frd</span></a> <a href="#"><i
-			class="icon-f4"><font>6</font></i><span>Msg</span></a> <a href="#"><i
-			class="icon-f5"></i><span>Me</span></a>
-	</footer>
-
-
-	<div class="tc-main">
-		<span class="btn-show po-f"></span> <span class="btn-be po-f"></span>
-		<span class="btn-go po-f"></span>
-		<div class="bg-main po-f"></div>
-	</div>
-
-
-
-	<script>
-		$(function() {
-
-			//显示底部
-			$('.btn-show')
-					.tap(
-							function() {
-								if ($(this).parent('.tc-main').attr('class') == 'tc-main'
-										|| $(this).parent('.tc-main').attr(
-												'class') == 'tc-main on1') {
-									$(this).parent('.tc-main').removeClass(
-											'on1');
-									$(this).parent('.tc-main').addClass('on');
-									$(this).parent('.tc-main').children(
-											'.bg-main').fadeIn();
-
-								} else {
-									$(this).parent('.tc-main')
-											.removeClass('on');
-									$(this).parent('.tc-main').addClass('on1');
-									$(this).parent('.tc-main').children(
-											'.bg-main').fadeOut();
-
-								}
-							})
-
-			//收藏
-			$('.list-sc').tap(
-					function() {
-						//+1
-						if ($(this).attr('class') == 'list list-sc') {
-							$(this).children('font').text(
-									Number($(this).children('font').text())
-											+ Number(1))
-							$(this).addClass('on');
-
-						} else {
-
-							$(this).children('font').text(
-									Number($(this).children('font').text())
-											- Number(1))
-							$(this).removeClass('on');
-						}
-
-					})
-
-		})
-	</script>
 
 </body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script type="text/javascript">
+	(function($) {
+		$.MyGroupGoPage = function(data) {
+			this.settings = $.extend(true, {}, $.MyGroupGoPage.defaults);
+			this.params = data ? data : {}
+		}
+		$.extend($.MyGroupGoPage, {
+			defaults : {},
+
+			prototype : {
+				init : function() {
+					this.initData();
+				},
+				initData : function() {
+					this.getMyGoes();
+				},
+
+				getMyGoes : function() {
+					var _this = this;
+					ajaxController.ajax({
+						url : "../go/getMyGoes",
+						type : "post",
+						data : {
+							goType: "group",
+							pageNo : 1,
+							pageSize : 100
+						},
+						success : function(transport) {
+							var data = transport.data;
+							//alert(JSON.stringify(data))
+							_this.renderMyGroups(data.result);
+						},
+						failure : function(transport) {
+							_this.renderMyGroups([]);
+						}
+					});
+				},
+
+				renderMyGroups : function(data) {
+					data = data ? data : [];
+					var opt = $("#MyGroupsImpl").render(data);
+					$("#DIV_MY_GOES").html(opt);
+				},
+
+				getPropertyValue : function(propertyName) {
+					if (!propertyName)
+						return;
+					return this.params[propertyName];
+				}
+			}
+		})
+	})(jQuery);
+
+	$(document).ready(function() {
+		var b = new $.HarborBuilder();
+		b.buildFooter();
+
+		var p = new $.MyGroupGoPage();
+		p.init();
+
+	});
+</script>
+
+
+<script id="MyGroupsImpl" type="text/x-jsrender"> 
+		<div class="itms box-s">
+			<div class="tie">
+				<p>{{:topic}}</p>
+				<div class="tim">{{:createTimeStr}}</div>
+			</div>
+			<div class="name clearfix">
+				<div class="img">
+					<img src="{{:wxHeadimg}}" width="40"
+						height="40">
+				</div>
+				<div class="name-xx">
+					<div class="xx">
+						{{:enName}}<span class="bg-lv">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+					</div>
+					<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>
+				</div>
+			</div>
+			<div class="time">
+				{{:expectedStartTime}}<span class="bg-f5922f">{{:orgModeName}}</span>
+			</div>
+			<div class="yq">
+				Group邀请{{:inviteMembers}}人<span class="fc-f5922f">{{:payModeName}}</span>
+			</div>
+			<div class="dz">{{:location}}</div>
+			<div class="js chaochu_2">{{:contentSummary}}</div>
+			<div class="bottom">
+				<div class="list">
+					浏览<font>{{:viewCount}}</font>
+				</div>
+				<div class="list">
+					参加<font>{{:joinCount}}</font>
+				</div>
+				<div class="list list-sc">
+					收藏<font>{{:favorCount}}</font>
+				</div>
+			</div>
+		</div> 
+</script>
 </html>

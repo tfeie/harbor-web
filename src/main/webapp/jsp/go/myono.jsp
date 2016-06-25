@@ -15,207 +15,140 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>我创建的One on One</title>
+<title>我创建的OneOnOne活动</title>
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
-
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
-<script type="text/javascript" src="//static.tfeie.com/js/json2.js"></script>
 <script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
 <script src="//static.tfeie.com/v2/js/tap.js"></script>
-
 </head>
 <body class="bg-eeeeee">
-
 	<nav class="be-nav po-f box-s">
 		<div class="hd clearfix">
-			 <a href="../be/mybe.html" class="itms on">Be</a>
-            <a href="../go/mygroup.html" class="itms">Group</a>
-            <a href="../go/myono.html" class="itms">OnO</a>
+			<a href="../be/mybe.html" class="itms">Be</a> <a
+				href="../go/mygroup.html" class="itms">Group</a> <a
+				href="../go/myono.html" class="itms on">OnO</a>
 		</div>
 	</nav>
-
-	<section class="group-main one-main">
-		<div class="itms box-s" href="#">
-			<a href="#">
-				<div class="tie">
-					<p>户外健身</p>
-				</div>
-			</a> <a href="#">
-				<div class="fw">
-					<div class="right">
-						<span class="bg-f5922f">线下服务</span> <font class="fc-f5922f">我请客</font>
-					</div>
-					<div class="name clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name-xx">
-							<div class="xx">
-								MaysMays<span class="bg-lv">美国</span><font>已认证</font>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-				</div>
-			</a> <a href="#">
-				<div class="c pad-10 chaochu_3">果你无法简洁的表达你的想法，那只能说明你还果你无法简洁的表达你的想法，那只能说明你还果你无法简洁的表达你的想法，那只能说明你还</div>
-			</a>
-			<div class="bottom">
-				<div class="list">
-					浏览<font>3</font>
-				</div>
-				<div class="list list-sc">
-					收藏<font>3</font>
-				</div>
-			</div>
-		</div>
-		<div class="itms box-s" href="#">
-			<a href="#">
-				<div class="tie">
-					<p>户外健身</p>
-				</div>
-			</a> <a href="#">
-				<div class="fw">
-					<div class="right">
-						<span class="bg-f5922f">线下服务</span> <font class="fc-f5922f">我请客</font>
-					</div>
-					<div class="name clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name-xx">
-							<div class="xx">
-								MaysMays<span class="bg-lv">美国</span><font>已认证</font>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-				</div>
-			</a> <a href="#">
-				<div class="c pad-10 chaochu_3">果你无法简洁的表达你的想法，那只能说明你还果你无法简洁的表达你的想法，那只能说明你还果你无法简洁的表达你的想法，那只能说明你还</div>
-			</a>
-			<div class="bottom">
-				<div class="list">
-					浏览<font>3</font>
-				</div>
-				<div class="list list-sc">
-					收藏<font>3</font>
-				</div>
-			</div>
-		</div>
-		<div class="itms box-s" href="#">
-			<a href="#">
-				<div class="tie">
-					<p>户外健身</p>
-				</div>
-			</a> <a href="#">
-				<div class="fw">
-					<div class="right">
-						<span class="bg-f5922f">线下服务</span> <font class="fc-f5922f">我请客</font>
-					</div>
-					<div class="name clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name-xx">
-							<div class="xx">
-								MaysMays<span class="bg-lv">美国</span><font>已认证</font>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-				</div>
-			</a> <a href="#">
-				<div class="c pad-10 chaochu_3">果你无法简洁的表达你的想法，那只能说明你还果你无法简洁的表达你的想法，那只能说明你还果你无法简洁的表达你的想法，那只能说明你还</div>
-			</a>
-			<div class="bottom">
-				<div class="list">
-					浏览<font>3</font>
-				</div>
-				<div class="list list-sc">
-					收藏<font>3</font>
-				</div>
-			</div>
-		</div>
-
+	<section class="group-main one-main" id="DIV_MY_GOES">
 
 	</section>
-
-
-	</section>
-	<footer class="footer po-f">
-		<a href="#"><i class="icon-f1"></i><span>Be</span></a> <a href="#"><i
-			class="icon-f2"></i><span>Go</span></a> <a href="#"><i
-			class="icon-f3"></i><span>Frd</span></a> <a href="#"><i
-			class="icon-f4"><font>6</font></i><span>Msg</span></a> <a href="#"><i
-			class="icon-f5"></i><span>Me</span></a>
-	</footer>
-
-
-	<div class="tc-main">
-		<span class="btn-show po-f"></span> <span class="btn-be po-f"></span>
-		<span class="btn-go po-f"></span>
-		<div class="bg-main po-f"></div>
-	</div>
-
-	<script>
-		$(function() {
-
-			//显示底部
-			$('.btn-show')
-					.tap(
-							function() {
-								if ($(this).parent('.tc-main').attr('class') == 'tc-main'
-										|| $(this).parent('.tc-main').attr(
-												'class') == 'tc-main on1') {
-									$(this).parent('.tc-main').removeClass(
-											'on1');
-									$(this).parent('.tc-main').addClass('on');
-									$(this).parent('.tc-main').children(
-											'.bg-main').fadeIn();
-
-								} else {
-									$(this).parent('.tc-main')
-											.removeClass('on');
-									$(this).parent('.tc-main').addClass('on1');
-									$(this).parent('.tc-main').children(
-											'.bg-main').fadeOut();
-
-								}
-							})
-
-			//收藏
-			$('.list-sc').tap(
-					function() {
-						//+1
-						if ($(this).attr('class') == 'list list-sc') {
-							$(this).children('font').text(
-									Number($(this).children('font').text())
-											+ Number(1))
-							$(this).addClass('on');
-
-						} else {
-
-							$(this).children('font').text(
-									Number($(this).children('font').text())
-											- Number(1))
-							$(this).removeClass('on');
-						}
-
-					})
-
-		})
-	</script>
-
 </body>
+
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script type="text/javascript">
+	(function($) {
+		$.MyOnOGoPage = function(data) {
+			this.settings = $.extend(true, {}, $.MyOnOGoPage.defaults);
+			this.params = data ? data : {}
+		}
+		$.extend($.MyOnOGoPage, {
+			defaults : {},
+
+			prototype : {
+				init : function() {
+					this.initData();
+				},
+				initData : function() {
+					this.getMyGoes();
+				},
+
+				getMyGoes : function() {
+					var _this = this;
+					ajaxController.ajax({
+						url : "../go/getMyGoes",
+						type : "post",
+						data : {
+							goType: "oneonone",
+							pageNo : 1,
+							pageSize : 100
+						},
+						success : function(transport) {
+							var data = transport.data;
+							//alert(JSON.stringify(data))
+							_this.renderMyGroups(data.result);
+						},
+						failure : function(transport) {
+							_this.renderMyGroups([]);
+						}
+					});
+				},
+
+				renderMyGroups : function(data) {
+					data = data ? data : [];
+					var opt = $("#MyGroupsImpl").render(data);
+					$("#DIV_MY_GOES").html(opt);
+				},
+
+				getPropertyValue : function(propertyName) {
+					if (!propertyName)
+						return;
+					return this.params[propertyName];
+				}
+			}
+		})
+	})(jQuery);
+
+	$(document).ready(function() {
+		var b = new $.HarborBuilder();
+		b.buildFooter();
+
+		var p = new $.MyOnOGoPage();
+		p.init();
+
+	});
+</script>
+
+
+<script id="MyGroupsImpl" type="text/x-jsrender"> 	
+		<div class="itms box-s">
+			<div class="tie">
+				<p>{{:topic}}</p>
+			</div>
+			<div class="fw">
+				<div class="right">
+					<span class="bg-f5922f">{{:orgModeName}}</span> <font class="fc-f5922f">{{:payModeName}}</font>
+				</div>
+				<div class="name clearfix">
+					<div class="img">
+						<img src="{{:wxHeadimg}}" width="40"
+							height="40">
+					</div>
+					<div class="name-xx">
+						<div class="xx">
+							{{:enName}}<span class="bg-lv">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+						</div>
+						<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>
+					</div>
+				</div>
+			</div>
+			<div class="c pad-10 chaochu_3">
+				{{:contentSummary}}
+			</div>
+			<div class="bottom">
+				<div class="list">
+					浏览<font>{{:viewCount}}</font>
+				</div>
+				<div class="list list-sc">
+					收藏<font>{{:favorCount}}</font>
+				</div>
+			</div>
+		</div> 	
+</script>
 </html>
