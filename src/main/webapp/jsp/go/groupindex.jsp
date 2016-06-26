@@ -51,9 +51,9 @@
 			<div class="search"></div>
 		</section>
 
-		<section class="group_oneon" id="DIV_GOES">
-			
-			
+		<section class="group_oneon" >
+			<section class="lat_group on" id="DIV_GOES">
+			</section>
 		</section>
 		
 		
@@ -90,9 +90,8 @@
 					$("#DIV_GO_TAGS").delegate("[name='GO_TAG']","click",function(){
 						var tagName = $(this).attr("tagName");
 						var tagId = $(this).attr("tagId");
-						//_this.setTagOn(tagName);
-						//_this.renderGoTags();
-						_this.queryGoes(tagName,"");
+						_this.setTagOn(tagName);
+						_this.queryGoes(tagId,"");
 					})
 					
 				},
@@ -141,6 +140,7 @@
 								firstTag.selected=true;
 							}
 							_this.renderGoTags(); 
+							_this.owlCarousel();
 						},
 						failure: function(transport){ 
 							_this.renderGoTags(); 
@@ -194,6 +194,9 @@
 					}
 					var opt=$("#GoTagsImpl").render(data);
 					$("#DIV_GO_TAGS").html(opt); 
+				},
+				
+				owlCarousel: function(){
 					$(".title_owl").owlCarousel({
 						items : 5,
 						dots : false
@@ -234,7 +237,7 @@
 </script>
 
 <script id="GroupsImpl" type="text/x-jsrender"> 
-		<section class="lat_group on">
+		
 				<section class="wuwai_jiansheng">
 					<section class="title_jiansheng">
 						<p>{{:topic}}</p>
@@ -282,7 +285,6 @@
 						</p>
 					</section>
 				</section>
-			</section>	
 </script>
 
 </html>

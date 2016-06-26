@@ -16,303 +16,257 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
+	type="text/css" />
+<link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
-<script>
-	$(function() {
-		$(".banner").owlCarousel({
-			items : 1
-		})
-		$(".title_owl").owlCarousel({
-			items : 5,
-			dots : false
-		})
+<script src="//static.tfeie.com/v2/js/tap.js"></script>
 
-		$(".bor_wid p span").click(
-				function() {
-					$(this).parents("p").find("span").removeClass("on")
-					$(this).addClass("on")
-					$(this).parents(".mainer").find(".lat_group").removeClass(
-							"on")
-					$(this).parents(".mainer").find(".lat_group").eq(
-							$(this).index()).addClass("on")
-				})
-
-	})
-</script>
 </head>
 <body>
 	<header class="header"></header>
 
-	<section class="banner">
-		<section class="item">
-			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
-		</section>
-		<section class="item">
-			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
-		</section>
-		<section class="item">
-			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
-		</section>
-		<section class="item">
-			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
-		</section>
-	</section>
+	<section class="banner" id="INDEX_SILDER"></section>
 	<div class="clear"></div>
 	<section class="mainer">
 		<section class="choose_go">
 			<div class="bor_wid">
 				<p>
-					<span>Group</span><span class="on">One on One</span>
+					<span><a href="../go/groupindex.html">Group</a></span><span class="on"><a
+						href="../go/oneononeindex.html">One on One</a></span>
 				</p>
 			</div>
 		</section>
 		<section class="title">
 			<div class="tit_nav">
-				<div class="title_owl">
-					<div class="item">
-						<a href="" class="on">风景</a>
-					</div>
-					<div class="item">
-						<a href="">人物</a>
-					</div>
-					<div class="item">
-						<a href="">萌宠</a>
-					</div>
-					<div class="item">
-						<a href="">美女</a>
-					</div>
-					<div class="item">
-						<a href="">校园</a>
-					</div>
-					<div class="item">
-						<a href="">美女</a>
-					</div>
-					<div class="item">
-						<a href="">校园</a>
-					</div>
-				</div>
+				<div class="title_owl" id="DIV_GO_TAGS"></div>
 			</div>
 			<div class="search"></div>
 		</section>
 
 		<section class="group_oneon">
-			<section class="lat_group">
-				<section class="wuwai_jiansheng">
-					<section class="title_jiansheng">
-						<p>户外健身</p>
-						<section class="pos_yuan">
-							<span></span><span class="on"></span>
-							<div class="clear"></div>
-						</section>
-					</section>
-					<section class="info_fuwu">
-						<section class="ip_info">
-							<section class="info_img">
-								<span><img src="//static.tfeie.com/images/img29.png"></span>
-							</section>
-							<section class="ip_text">
-								<p>
-									<span>Martin</span><label class="lbl2">英国</label><i>已认证</i>
-								</p>
-								<p>金融/合伙人/北京</p>
-							</section>
-							<div class="clear"></div>
-						</section>
-						<section class="info_time">
-							<p>
-								<span>2016-5-5 星期四 15:00</span><a href="#">线下服务</a>
-							</p>
-						</section>
-						<section class="info_time back1">
-							<p>
-								<span>Group邀请2-3人</span><a href="#">我请客</a>
-							</p>
-						</section>
-						<section class="info_time back2">
-							<p>
-								<span>北京，国贸附近</span>
-							</p>
-						</section>
-						<section class="info_fangf">
-							<p>怎样提高你的身体效率，怎样有效的改善体型。怎样提高你的身体效率，怎样有效的改善体型…</p>
-						</section>
-						<div class="clear"></div>
-					</section>
-					<section class="num_per">
-						<p>
-							<a href="#">浏览 126</a><a href="#">参加 126</a><a href="#">收藏 12</a>
-						</p>
-					</section>
-				</section>
-				<section class="wuwai_jiansheng">
-					<section class="title_jiansheng">
-						<p>52小时精益创业</p>
-						<section class="pos_yuan">
-							<span></span><span class="on"></span>
-							<div class="clear"></div>
-						</section>
-					</section>
-					<section class="info_fuwu">
-						<section class="ip_info">
-							<section class="info_img">
-								<span><img src="//static.tfeie.com/images/img34.png"></span>
-							</section>
-							<section class="ip_text">
-								<p>
-									<span>Martin</span><label class="lbl1">美国</label><i>已认证</i>
-								</p>
-								<p>金融/合伙人/北京</p>
-							</section>
-							<div class="clear"></div>
-						</section>
-						<section class="info_time">
-							<p>
-								<span>2016-5-5 星期四 15:00</span><a href="#" class="on">在线服务</a>
-							</p>
-						</section>
-						<section class="info_time back1">
-							<p>
-								<span>Group邀请2-3人</span><a href="#">180元</a>
-							</p>
-						</section>
-						<section class="info_time back2">
-							<p>
-								<span>北京，国贸附近</span>
-							</p>
-						</section>
-						<section class="info_fangf">
-							<p>怎样提高你的身体效率，怎样有效的改善体型。怎样提高你的身体效率，怎样有效的改善体型…</p>
-						</section>
-						<div class="clear"></div>
-					</section>
-					<section class="num_per">
-						<p>
-							<a href="#">浏览 126</a><a href="#">参加 126</a><a href="#">收藏 12</a>
-						</p>
-					</section>
-				</section>
-			</section>
-			<section class="lat_group on">
-				<section class="wuwai_jiansheng">
-					<section class="title_jiansheng">
-						<p>海外市场如此Sexy</p>
-						<section class="pos_yuan">
-							<span></span><span class="on"></span>
-							<div class="clear"></div>
-						</section>
-					</section>
-					<section class="info_fuwu">
-						<section class="ip_info">
-							<section class="info_img">
-								<span><img src="//static.tfeie.com/images/img29.png"></span>
-							</section>
-							<section class="ip_text">
-								<p>
-									<span>Martin</span><label class="lbl2">英国</label><i>已认证</i><em
-										class="online"><a href="#">线下服务</a></em>
-								</p>
-								<p>
-									金融/合伙人/北京<em>21人见过</em>
-								</p>
-							</section>
-							<div class="clear"></div>
-						</section>
-						<section class="oneon_text">
-							<p>如果你无法简洁的表达你的想法，那只能说明你还不够了解它。—阿尔伯特·爱因斯坦.如果你无法简洁的表达你的想法，那只能说明你还…</p>
-						</section>
-					</section>
-					<section class="oneon_span">
-						<a href="#">浏览 12</a><a href="#">收藏 10</a>
-						<div class="clear"></div>
-					</section>
-				</section>
-				<section class="wuwai_jiansheng">
-					<section class="title_jiansheng">
-						<p>海外市场如此Sexy</p>
-						<section class="pos_yuan">
-							<span></span><span class="on"></span>
-							<div class="clear"></div>
-						</section>
-					</section>
-					<section class="info_fuwu">
-						<section class="ip_info">
-							<section class="info_img">
-								<span><img src="//static.tfeie.com/images/img29.png"></span>
-							</section>
-							<section class="ip_text">
-								<p>
-									<span>Martin</span><label class="lbl1">美国</label><i>已认证</i><em
-										class="online on"><a href="#">在线服务</a></em>
-								</p>
-								<p>
-									金融/合伙人/北京<em>21人见过</em>
-								</p>
-							</section>
-							<div class="clear"></div>
-						</section>
-						<section class="oneon_text">
-							<p>如果你无法简洁的表达你的想法，那只能说明你还不够了解它。—阿尔伯特·爱因斯坦.如果你无法简洁的表达你的想法，那只能说明你还…</p>
-						</section>
-					</section>
-					<section class="oneon_span">
-						<a href="#">浏览 12</a><a href="#">收藏 10</a>
-						<div class="clear"></div>
-					</section>
-				</section>
+			<section class="lat_group on" id="DIV_GOES">
+		
 			</section>
 		</section>
 	</section>
-
-
-
-
-	<footer class="footer">
-		<ul>
-			<li class="on"><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f1.png" />
-					</div>
-					<div class="text">Be</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f2.png" />
-					</div>
-					<div class="text">Go</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f3.png" />
-					</div>
-					<div class="text">Frd</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f4.png" />
-					</div>
-					<div class="text">Msg</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f5.png" />
-					</div>
-					<div class="text">Me</div>
-			</a></li>
-		</ul>
-	</footer>
-
-
-	<div class="mask"></div>
-	<section class="sec_menu">
-		<div class="wrap">
-			<span class="span1"><a><img src="//static.tfeie.com/images/circle.png" /></a></span> <span
-				class="span2"><a href=""><img src="//static.tfeie.com/images/be.png" /></a></span> <span
-				class="span3"><a href=""><img src="//static.tfeie.com/images/go.png" /></a></span>
-		</div>
-	</section>
 </body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script> 
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script type="text/javascript">
+	(function($){
+		$.GoIndexPage = function(data){
+			this.settings = $.extend(true,{},$.GoIndexPage.defaults);
+			this.params= data?data:{}
+		}
+		$.extend($.GoIndexPage,{
+			defaults: { 
+			},
+		
+			prototype: {
+				init: function(){
+					this.bindEvents(); 
+					this.initData();  
+				},
+				
+				bindEvents: function(){
+					var _this = this;  
+					//点击标签
+					$("#DIV_GO_TAGS").delegate("[name='GO_TAG']","click",function(){
+						var tagName = $(this).attr("tagName");
+						var tagId = $(this).attr("tagId");
+						_this.setTagOn(tagName);
+						_this.queryGoes(tagId,"");
+					})
+					
+				},
+				
+				initData: function(){
+					this.getIndexPageSilders();
+					this.getGoSystemTags();
+					this.queryGoes();
+				}, 
+				
+				getIndexPageSilders: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../go/getIndexPageSilders",
+						type: "post",  
+						success: function(transport){
+							var data =transport.data;  
+							_this.renderBannerSider(data); 
+						},
+						failure: function(transport){ 
+							_this.renderBannerSider([]); 
+						}
+					});
+				},
+				 
+				renderBannerSider: function(data){ 
+					data= data?data:[];
+					var opt=$("#BannerSiderImpl").render(data);
+					$("#INDEX_SILDER").html(opt); 
+					$(".banner").owlCarousel({
+						items : 1
+					})
+				},
+				
+				getGoSystemTags: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../go/getGoSystemTags",
+						type: "post",  
+						success: function(transport){
+							var data =transport.data;  
+							_this.allGoTags =  data.allGoTags;
+							//设置第一个元素选中
+							if(_this.allGoTags.length>0){
+								var firstTag = _this.allGoTags[0];
+								firstTag.selected=true;
+							}
+							_this.renderGoTags(); 
+							_this.owlCarousel();
+						},
+						failure: function(transport){ 
+							_this.renderGoTags(); 
+						}
+					});
+				},
+				
+				queryGoes: function(goTag,searchKey){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../go/queryGoes",
+						type: "post",  
+						data : {
+							goType: "oneonone",
+							goTag: goTag?goTag:"",
+							searchKey: searchKey?searchKey:"",
+							pageNo : 1,
+							pageSize : 100
+						},
+						success: function(transport){
+							var data =transport.data;  
+							_this.renderGroups(data.result); 
+						},
+						failure: function(transport){ 
+							_this.renderGroups(); 
+						}
+					});
+				},
+				
+				renderGroups : function(data) {
+					data = data ? data : [];
+					var opt = $("#GroupsImpl").render(data);
+					$("#DIV_GOES").html(opt);
+				},
+				
+				setTagOn: function(tagName){
+					var _this = this;
+					var tags=$.grep(_this.allGoTags,function(o,i){
+						o.selected=false;
+						return o.tagName==tagName;
+					});
+					if(!tags || tags.length==0)return;
+					var tag = tags[0];
+					tag.selected= true;
+				}, 
+				
+				renderGoTags: function(){
+					var allGoTags =this.allGoTags;
+					data= {
+						allGoTags:allGoTags
+					}
+					var opt=$("#GoTagsImpl").render(data);
+					$("#DIV_GO_TAGS").html(opt); 
+				},
+				
+				owlCarousel: function(){
+					$(".title_owl").owlCarousel({
+						items : 5,
+						dots : false
+					})
+				},
+				
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
+				}
+			}
+		})
+	})(jQuery);
+	
+
+	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter();
+		
+		var p = new $.GoIndexPage({ 
+		});
+		p.init();	
+	});
+</script>
+
+<script id="BannerSiderImpl" type="text/x-jsrender"> 
+		<section class="item">
+			<a href="{{:linkURL}}"><img src="{{:imgURL}}" /></a>
+		</section>
+</script>
+
+<script id="GoTagsImpl" type="text/x-jsrender"> 
+{{for allGoTags}}
+<div class="item">
+	<a href="javascript:void(0)" name="GO_TAG" tagId="{{:tagId}}" tagName="{{:tagName}}" {{if selected==true}}class="on"{{/if}}>{{:tagName}}</a>
+</div>
+{{/for}} 
+</script>
+
+<script id="GroupsImpl" type="text/x-jsrender"> 
+				<section class="wuwai_jiansheng">
+					<section class="title_jiansheng">
+						<p>{{:topic}}</p>
+						<section class="pos_yuan">
+							<span></span><span class="on"></span>
+							<div class="clear"></div>
+						</section>
+					</section>
+					<section class="info_fuwu">
+						<section class="ip_info">
+							<section class="info_img">
+								<span><img src="{{:wxHeadimg}}"></span>
+							</section>
+							<section class="ip_text">
+								<p>
+									<span>{{:enName}}</span><label class="lbl2">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i><em
+										class="online"><a href="#">{{:orgModeName}}</a></em>
+								</p>
+								<p>
+									{{:industryName}}/{{:title}}/{{:atCityName}}<em>{{:joinCount}}人见过</em>
+								</p>
+							</section>
+							<div class="clear"></div>
+						</section>
+						<section class="oneon_text">
+							<p>{{:contentSummary}}</p>
+						</section>
+					</section>
+					<section class="oneon_span">
+						<a href="#">浏览 {{:viewCount}}</a><a href="#">收藏 {{:favorCount}}</a>
+						<div class="clear"></div>
+					</section>
+				</section>
+</script>
 </html>

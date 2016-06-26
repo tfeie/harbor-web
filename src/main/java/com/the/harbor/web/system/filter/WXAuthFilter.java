@@ -31,8 +31,9 @@ public class WXAuthFilter extends OncePerRequestFilter {
 		String[] shouldFilter = new String[] { "/user/toUserRegister.html", "/user/toApplyCertficate.html",
 				"/user/editUserInfo.html", "/user/previewUserInfo.html", "/user/memberCenter.html",
 				"/user/userCenter.html", "/user/setUserSkills.html", "/user/getUserCard.html", "/user/userWealth.html",
-				"/go/publishGo.html", "/go/toOrder.html", "/go/toPay.html", "/go/toConfirm.html","/go/mygroup.html","/go/mygono.html",
-				"/go/toHainiuConfirm.html", "/be/publishbe.html", "/be/mybe.html", "/be/mytimeline.html" };
+				"/go/publishGo.html", "/go/toOrder.html", "/go/toPay.html", "/go/toConfirm.html", "/go/mygroup.html",
+				"/go/mygono.html", "/go/toHainiuConfirm.html", "/be/publishbe.html", "/be/mybe.html",
+				"/be/mytimeline.html" };
 		String uri = request.getRequestURI();
 		boolean doFilter = false;
 		for (String s : shouldFilter) {
@@ -41,6 +42,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				break;
 			}
 		}
+		//initSession(request);
 
 		if (doFilter) {
 			LOG.debug("当前地址在需要认证的地址列表中，需要进行认证。开始判断session是否有会话信息");
@@ -89,6 +91,12 @@ public class WXAuthFilter extends OncePerRequestFilter {
 			return true;
 		else
 			return false;
+	}
+
+	public static void initSession(HttpServletRequest request) {
+		WeixinOauth2Token wtoken = new WeixinOauth2Token();
+		wtoken.setOpenId("oztCUs_Ci25lT7IEMeDLtbK6nr1M");
+		request.getSession().setAttribute(WXConstants.SESSION_WX_WEB_AUTH, wtoken);
 	}
 
 }

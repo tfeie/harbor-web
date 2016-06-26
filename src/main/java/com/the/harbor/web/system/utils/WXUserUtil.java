@@ -54,13 +54,6 @@ public final class WXUserUtil {
 		return userInfo;
 	}
 
-	public static UserViewInfo checkUserRegAndGetUserViewInfo1(HttpServletRequest request) {
-		UserViewInfo userInfo = getUserViewInfoByOpenId("oztCUs_Ci25lT7IEMeDLtbK6nr1M");
-		if (userInfo == null) {
-			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
-		}
-		return userInfo;
-	}
 
 	public static UserViewInfo getUserViewInfoByOpenId(String openId) {
 		UserViewInfo userInfo = null;
