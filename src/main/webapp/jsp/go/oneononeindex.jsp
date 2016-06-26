@@ -86,9 +86,9 @@
 					var _this = this;  
 					//点击标签
 					$("#DIV_GO_TAGS").delegate("[name='GO_TAG']","click",function(){
-						var tagName = $(this).attr("tagName");
 						var tagId = $(this).attr("tagId");
-						_this.setTagOn(tagName);
+						$("[name='GO_TAG']").removeClass("on");
+						$(this).addClass("on");
 						_this.queryGoes(tagId,"");
 					})
 					
@@ -172,17 +172,6 @@
 					data = data ? data : [];
 					var opt = $("#GroupsImpl").render(data);
 					$("#DIV_GOES").html(opt);
-				},
-				
-				setTagOn: function(tagName){
-					var _this = this;
-					var tags=$.grep(_this.allGoTags,function(o,i){
-						o.selected=false;
-						return o.tagName==tagName;
-					});
-					if(!tags || tags.length==0)return;
-					var tag = tags[0];
-					tag.selected= true;
 				}, 
 				
 				renderGoTags: function(){
@@ -192,6 +181,7 @@
 					}
 					var opt=$("#GoTagsImpl").render(data);
 					$("#DIV_GO_TAGS").html(opt); 
+					this.owlCarousel();
 				},
 				
 				owlCarousel: function(){
@@ -229,7 +219,7 @@
 <script id="GoTagsImpl" type="text/x-jsrender"> 
 {{for allGoTags}}
 <div class="item">
-	<a href="javascript:void(0)" name="GO_TAG" tagId="{{:tagId}}" tagName="{{:tagName}}" {{if selected==true}}class="on"{{/if}}>{{:tagName}}</a>
+	<a href="javascript:void(0)" name="GO_TAG" tagId="{{:tagId}}" tagName="{{:tagName}}">{{:tagName}}</a>
 </div>
 {{/for}} 
 </script>

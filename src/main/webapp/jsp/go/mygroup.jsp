@@ -144,7 +144,7 @@
 				{{:expectedStartTime}}<span class="bg-f5922f">{{:orgModeName}}</span>
 			</div>
 			<div class="yq">
-				Group邀请{{:inviteMembers}}人<span class="fc-f5922f">{{:payModeName}}</span>
+				Group邀请{{:inviteMembers}}人<span class="fc-f5922f">{{if payMode=="10"}}{{:fixPriceYuan}}元{{else payMode=="20"}}{{:payModeName}}{{:fixPriceYuan}}元 {{else payMode=="30"}} {{:payModeName}} {{/if}}</span>
 			</div>
 			<div class="dz">{{:location}}</div>
 			<div class="js chaochu_2">{{:contentSummary}}</div>

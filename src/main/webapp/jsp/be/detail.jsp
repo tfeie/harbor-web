@@ -353,7 +353,7 @@
 			<div class="btn-bottom">
 				<div class="btn-fx box-s"></div>
 				<div class="btn-z  box-s" id="DIV_DO_DIANZAN" beId = "{{:beId}}">
-					<font>{{:dianzan}}</font>
+					<font>{{:dianzanCount}}</font>
 				</div>
 			</div> 
 </script>

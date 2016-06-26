@@ -374,7 +374,7 @@ public class GoController {
 
 	@RequestMapping("/submitNewGo")
 	@ResponseBody
-	public ResponseData<String> submitNewGo(String goData) {
+	public ResponseData<String> submitNewGo(@NotNull(message = "参数为空") String goData) {
 		ResponseData<String> responseData = null;
 		try {
 			if (StringUtil.isBlank(goData)) {
@@ -416,7 +416,7 @@ public class GoController {
 
 	@RequestMapping("/orderOneOnOne")
 	@ResponseBody
-	public ResponseData<String> orderOneOnOne(GoOrderCreateReq goOrderCreateReq) {
+	public ResponseData<String> orderOneOnOne(@NotNull(message = "参数为空") GoOrderCreateReq goOrderCreateReq) {
 		ResponseData<String> responseData = null;
 		try {
 			GoOrderCreateResp rep = DubboConsumerFactory.getService(IGoSV.class).orderOneOnOne(goOrderCreateReq);
@@ -435,7 +435,7 @@ public class GoController {
 
 	@RequestMapping("/updateGoOrderPay")
 	@ResponseBody
-	public ResponseData<String> updateGoOrderPay(UpdateGoOrderPayReq updateGoOrderPayReq) {
+	public ResponseData<String> updateGoOrderPay(@NotNull(message = "参数为空") UpdateGoOrderPayReq updateGoOrderPayReq) {
 		ResponseData<String> responseData = null;
 		try {
 			Response rep = DubboConsumerFactory.getService(IGoSV.class).updateGoOrderPay(updateGoOrderPayReq);
@@ -513,7 +513,7 @@ public class GoController {
 
 	@RequestMapping("/confirmGoOrder")
 	@ResponseBody
-	public ResponseData<String> confirmGoOrder(GoOrderConfirmReq goOrderConfirmReq) {
+	public ResponseData<String> confirmGoOrder(@NotNull(message = "参数为空") GoOrderConfirmReq goOrderConfirmReq) {
 		ResponseData<String> responseData = null;
 		try {
 			Response rep = DubboConsumerFactory.getService(IGoSV.class).confirmGoOrder(goOrderConfirmReq);

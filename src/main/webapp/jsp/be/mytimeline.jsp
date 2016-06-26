@@ -103,14 +103,12 @@
 						url: "../be/getMyTimeLine",
 						type: "post", 
 						data: { 
-							userId: _this.getPropertyValue("userId"),
-							openId: _this.getPropertyValue("openId"),
 							pageNo: 1,
 							pageSize: 100
 						},
 						success: function(transport){
 							var data =transport.data; 
-							_this.renderMyTimeLineList(data); 
+							_this.renderMyTimeLineList(data.result); 
 						},
 						failure: function(transport){ 
 							_this.renderMyBeList([]); 
@@ -137,9 +135,7 @@
 		var b = new $.HarborBuilder();
 		b.buildFooter();
 		
-		var p = new $.MyTimeLinePage({
-			userId: "<c:out value="${userInfo.userId}"/>",
-			openId: "<c:out value="${userInfo.wxOpenid}"/>"
+		var p = new $.MyTimeLinePage({ 
 		});
 		p.init();
 		
@@ -149,16 +145,15 @@
 
 
 <script id="MyBeListImpl" type="text/x-jsrender"> 	
-		{{for belist}} 	
 		<div class="itms">
 			<div class="l">
-				{{if showtime==true}}{{:publishDay}} {{/if}}
+				{{if showMMdd==true}}{{:mmdd}} {{/if}}
 			</div>
 			<a href="../be/detail.html?beId={{:beId}}" class="r">
 				<div class="c">
 					<div class="i">
 						{{if hasimg==true}}
-						<img src="{{:firstImgDetail.imageUrl}}" width="60"
+						<img src="{{:imageURL}}" width="60"
 							height="60">
 						{{/if}}
 						{{if hasimg==false}}
@@ -166,10 +161,9 @@
 							height="60">
 						{{/if}}
 					</div>
-					<p class="chaochu_3">{{if hastext==true}} {{:firstTextDetail.detail}} {{/if}}</p>
+					<p class="chaochu_3">{{if hastext==true}} {{:contentSummary}} {{/if}}</p>
 				</div>
 			</a>
 		</div>
-		{{/for}} 	
 </script>
 </html>

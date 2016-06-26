@@ -91,16 +91,13 @@
 					ajaxController.ajax({
 						url: "../be/getMyBes",
 						type: "post", 
-						data: { 
-							userId: _this.getPropertyValue("userId"),
-							openId: _this.getPropertyValue("openId"),
+						data: {  
 							pageNo: 1,
 							pageSize: 100
 						},
 						success: function(transport){
 							var data =transport.data; 
-							//alert(JSON.stringify(data));
-							_this.renderMyBeList(data); 
+							_this.renderMyBeList(data.result); 
 						},
 						failure: function(transport){ 
 							_this.renderMyBeList([]); 
@@ -128,8 +125,6 @@
 		b.buildFooter();
 		
 		var p = new $.MyBePage({
-			userId: "<c:out value="${userInfo.userId}"/>",
-			openId: "<c:out value="${userInfo.wxOpenid}"/>"
 		});
 		p.init();
 		
@@ -139,44 +134,40 @@
 
 
 <script id="MyBeListImpl" type="text/x-jsrender"> 
-	{{for belist ~userInfo=userInfo}} 	
 	<div  class="itms box-s">
         	<div class="top">
                 <div class="img">
-                    <a href="javascript:void(0)"><img src="{{:~userInfo.wxHeadimg}}" width="40" height="40"></a>
+                    <a href="javascript:void(0)"><img src="{{:wxHeadimg}}" width="40" height="40"></a>
                     <div class="name-xx">
-                        <div class="xx">{{:~userInfo.enName}}</div>
-                        <div class="yrz"><span class="bg-cen">{{:~userInfo.abroadCountryName}}</span><font>{{:~userInfo.userStatusName}}</font></div>
+                        <div class="xx">{{:enName}}</div>
+                        <div class="yrz"><span class="bg-cen">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font></div>
                     </div>
                 </div>
                 <div class="c">
 					{{if hastext==true}}
-                    <h3>{{:firstTextDetail.detail}}</h3>
+                    <h3><a href="../be/detail.html?beId={{:beId}}">{{:contentSummary}}</a></h3>
                     {{/if}}
 					<div class="bq">
-                   		#
-						{{for tags}} 
-                        <a href="javascript:void(0)">{{:tagName}}</a>  
+						{{for beTags}} 
+                        #<a href="javascript:void(0)">{{:tagName}}</a>  
 						{{/for}}
                     </div>
 					{{if hasimg==true}}
-                    <img src="{{:firstImgDetail.imageUrl}}" width="100%">
-					{{/if}}
-					{{if hasimg==false}}
-					<img  width="100%">
+                    <img src="{{:imageURL}}" width="100%">
+					{{else}}
+					<div  width="100%"></div>
 					{{/if}}
                 </div>
             </div>
             <div class="bottom">
-            	<div class="time">{{:publishdate}}</div>
+            	<div class="time">{{:createTimeInterval}}</div>
                 <div class="ic">
                     <a class="list btn-pl" href="../be/detail.html?beId={{:beId}}"><font>{{:commentCount}}</font></a>
-                    <div class="list btn-bk"><font>30</font></div>
-                    <div class="list btn-z"><font>{{:dianzan}}</font></div>
+                    <div class="list btn-bk"><font>{{:giveHaibeiCount}}</font></div>
+                    <div class="list btn-z"><font>{{:dianzanCount}}</font></div>
                 </div>
             </div>
         </div>  
-		{{/for}} 	
 </script>
 	
 </html>

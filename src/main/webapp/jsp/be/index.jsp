@@ -16,66 +16,36 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
+	type="text/css" />
+<link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
-	src="//static.tfeie.com/js/owl.carousel.js"></script>
-<script>
-	$(function() {
-		$(".banner").owlCarousel({
-			items : 1
-		})
-		$(".title_owl").owlCarousel({
-			items : 5,
-			dots : false
-		})
-	})
-</script>
+	src="//static.tfeie.com/js/owl.carousel.js"></script> 
+<script src="//static.tfeie.com/v2/js/tap.js"></script>
+
 </head>
 <body>
 	<header class="header"></header>
 
-	<section class="banner">
-		<section class="item">
-			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
-		</section>
-		<section class="item">
-			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
-		</section>
-		<section class="item">
-			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
-		</section>
-		<section class="item">
-			<a href=""><img src="//static.tfeie.com/images/aimg.jpg" /></a>
-		</section>
+	<section class="banner" id="INDEX_SILDER">
+		 
 	</section>
 	<div class="clear"></div>
 	<section class="mainer">
 
 		<section class="title">
 			<div class="tit_nav">
-				<div class="title_owl">
+				<div class="title_owl" id="DIV_BE_TAGS">
 					<div class="item">
-						<a href="" class="on">推荐</a>
+						<a href="javascript:void(0)" class="on" tagId="" name="BE_TAG">推荐</a>
 					</div>
 					<div class="item">
-						<a href="">热点</a>
-					</div>
-					<div class="item">
-						<a href="">萌宠</a>
-					</div>
-					<div class="item">
-						<a href="">美女</a>
-					</div>
-					<div class="item">
-						<a href="">校园</a>
-					</div>
-					<div class="item">
-						<a href="">美女</a>
-					</div>
-					<div class="item">
-						<a href="">校园</a>
+						<a href="javascript:void(0)" tagId="" name="BE_TAG">热点</a>
 					</div>
 				</div>
 			</div>
@@ -83,173 +53,218 @@
 		</section>
 
 		<section class="sec_list">
-			<ul>
-				<li>
-					<section class="list">
-						<div class="member_info">
-							<div class="img">
-								<img src="//static.tfeie.com/images/img1.png" />
-							</div>
-							<span>Martin</span> <label class="lbl2">英国</label> <em>已认证</em>
-						</div>
-						<div class="member">
-							<div class="div_title">
-								<h3>
-									<a href="">好朋友相聚，一切都不一样了</a>
-								</h3>
-								<p>
-									<a>#</a><a>摄影</a><a>风景</a><a>建筑</a><a>欧洲</a><a>手机</a>
-								</p>
-								<div class="img">
-									<img src="//static.tfeie.com/images/img2.png" />
-								</div>
-							</div>
-						</div>
-
-						<div class="b_more">
-							<span class="span_time">10分钟前</span> <span class="span_pl"><a>24</a></span>
-							<span class="span_bk"><a>16</a></span> <span class="span_z"><a>20</a></span>
-						</div>
-
-					</section>
-				</li>
-				<li>
-					<section class="list">
-						<div class="member_info">
-							<div class="img">
-								<img src="//static.tfeie.com/images/img1.png" />
-							</div>
-							<span>Martin</span> <label class="lbl1">美国</label> <em>已认证</em>
-						</div>
-						<div class="member">
-							<div class="div_title">
-								<h3>
-									<a href="">好朋友相聚，一切都不一样了</a>
-								</h3>
-								<p>
-									<a>#</a><a>摄影</a><a>风景</a><a>建筑</a><a>欧洲</a><a>手机</a>
-								</p>
-								<div class="img">
-									<img src="//static.tfeie.com/images/img2.png" />
-								</div>
-							</div>
-						</div>
-
-						<div class="b_more">
-							<span class="span_time">10分钟前</span> <span class="span_pl"><a>24</a></span>
-							<span class="span_bk"><a>16</a></span> <span class="span_z"><a>20</a></span>
-						</div>
-
-					</section>
-				</li>
-				<li>
-					<section class="list">
-						<div class="member_info">
-							<div class="img">
-								<img src="//static.tfeie.com/images/img1.png" />
-							</div>
-							<span>Martin</span> <label class="lbl2">英国</label> <em>已认证</em>
-						</div>
-						<div class="member">
-							<div class="div_title">
-								<h3>
-									<a href="">好朋友相聚，一切都不一样了</a>
-								</h3>
-								<p>
-									<a>#</a><a>摄影</a><a>风景</a><a>建筑</a><a>欧洲</a><a>手机</a>
-								</p>
-								<div class="img">
-									<img src="//static.tfeie.com/images/img2.png" />
-								</div>
-							</div>
-						</div>
-
-						<div class="b_more">
-							<span class="span_time">10分钟前</span> <span class="span_pl"><a>24</a></span>
-							<span class="span_bk"><a>16</a></span> <span class="span_z"><a>20</a></span>
-						</div>
-
-					</section>
-				</li>
-				<li>
-					<section class="list">
-						<div class="member_info">
-							<div class="img">
-								<img src="//static.tfeie.com/images/img1.png" />
-							</div>
-							<span>Martin</span> <label class="lbl1">美国</label> <em>已认证</em>
-						</div>
-						<div class="member">
-							<div class="div_title">
-								<h3>
-									<a href="">好朋友相聚，一切都不一样了</a>
-								</h3>
-								<p>
-									<a>#</a><a>摄影</a><a>风景</a><a>建筑</a><a>欧洲</a><a>手机</a>
-								</p>
-								<div class="img">
-									<img src="//static.tfeie.com/images/img2.png" />
-								</div>
-							</div>
-						</div>
-
-						<div class="b_more">
-							<span class="span_time">10分钟前</span> <span class="span_pl"><a>24</a></span>
-							<span class="span_bk"><a>16</a></span> <span class="span_z"><a>20</a></span>
-						</div>
-
-					</section>
-				</li>
+			<ul id="UL_BES">
+				
 			</ul>
 		</section>
 
 	</section>
-
-	<footer class="footer">
-		<ul>
-			<li class="on"><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f1.png" />
-					</div>
-					<div class="text">Be</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f2.png" />
-					</div>
-					<div class="text">Go</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f3.png" />
-					</div>
-					<div class="text">Frd</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f4.png" />
-					</div>
-					<div class="text">Msg</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f5.png" />
-					</div>
-					<div class="text">Me</div>
-			</a></li>
-		</ul>
-	</footer>
-
-
-	<div class="mask"></div>
-	<section class="sec_menu">
-		<div class="wrap">
-			<span class="span1"><a><img src="//static.tfeie.com/images/circle.png" /></a></span> <span
-				class="span2"><a href=""><img src="//static.tfeie.com/images/be.png" /></a></span> <span
-				class="span3"><a href=""><img src="//static.tfeie.com/images/go.png" /></a></span>
-		</div>
-	</section>
-
-
 </body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script> 
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script type="text/javascript">
+	(function($){
+		$.BeIndexPage = function(data){
+			this.settings = $.extend(true,{},$.BeIndexPage.defaults);
+			this.params= data?data:{}
+		}
+		$.extend($.BeIndexPage,{
+			defaults: { 
+			},
+		
+			prototype: {
+				init: function(){
+					this.bindEvents(); 
+					this.initData();  
+				},
+				
+				bindEvents: function(){
+					var _this = this;  
+					//点击标签
+					$("#DIV_BE_TAGS").delegate("[name='BE_TAG']","click",function(){
+						var tagId = $(this).attr("tagId");
+						$("[name='BE_TAG']").removeClass("on");
+						$(this).addClass("on");
+						_this.queryBes(tagId,"");
+					})
+					
+				},
+				
+				initData: function(){
+					this.getIndexPageSilders();
+					this.getBeSystemTags();
+					this.queryBes();
+				}, 
+				
+				getIndexPageSilders: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../go/getIndexPageSilders",
+						type: "post",  
+						success: function(transport){
+							var data =transport.data;  
+							_this.renderBannerSider(data); 
+						},
+						failure: function(transport){ 
+							_this.renderBannerSider([]); 
+						}
+					});
+				},
+				 
+				renderBannerSider: function(data){ 
+					data= data?data:[];
+					var opt=$("#BannerSiderImpl").render(data);
+					$("#INDEX_SILDER").html(opt); 
+					$(".banner").owlCarousel({
+						items : 1
+					})
+				},
+				
+				getBeSystemTags: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/getBeSystemTags",
+						type: "post",  
+						success: function(transport){
+							var data =transport.data;  
+							_this.allBeTags =  data.allBeTags;
+							//设置第一个元素选中
+							if(_this.allBeTags.length>0){
+								var firstTag = _this.allBeTags[0];
+								firstTag.selected=true;
+							}
+							_this.renderBeTags(); 
+						},
+						failure: function(transport){ 
+							_this.renderBeTags(); 
+						}
+					});
+				},
+				
+				queryBes: function(beTag,searchKey){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/queryBes",
+						type: "post",  
+						data : {
+							beTag: beTag?beTag:"",
+							searchKey: searchKey?searchKey:"",
+							pageNo : 1,
+							pageSize : 100
+						},
+						success: function(transport){
+							var data =transport.data;  
+							_this.renderBes(data.result); 
+						},
+						failure: function(transport){ 
+							_this.renderBes(); 
+						}
+					});
+				},
+				
+				renderBes : function(data) {
+					data = data ? data : [];
+					var opt = $("#BeListImpl").render(data);
+					$("#UL_BES").html(opt);
+				},
+				
+				renderBeTags: function(){
+					var allBeTags =this.allBeTags;
+					data= {
+						allBeTags: allBeTags
+					}
+					var opt=$("#BeTagsImpl").render(data);
+					$("#DIV_BE_TAGS").append(opt); 
+					this.owlCarousel();
+				},
+				
+				owlCarousel: function(){
+					$(".title_owl").owlCarousel({
+						items : 5,
+						dots : false
+					})
+				},
+				
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
+				}
+			}
+		})
+	})(jQuery);
+	
+
+	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter();
+		
+		var p = new $.BeIndexPage({ 
+		});
+		p.init();	
+	});
+</script>
+
+<script id="BannerSiderImpl" type="text/x-jsrender"> 
+		<section class="item">
+			<a href="{{:linkURL}}"><img src="{{:imgURL}}" /></a>
+		</section>
+</script>
+
+<script id="BeTagsImpl" type="text/x-jsrender"> 
+{{for allBeTags}}
+<div class="item">
+	<a href="javascript:void(0)" name="BE_TAG" tagId="{{:tagId}}" tagName="{{:tagName}}">{{:tagName}}</a>
+</div>
+{{/for}} 
+</script>
+
+<script id="BeListImpl" type="text/x-jsrender"> 
+<li>
+					<section class="list">
+						<div class="member_info">
+							<div class="img">
+				<a href="javascript:void(0)"><img src="{{:wxHeadimg}}"
+					width="80" height="80"></a>
+			</div>
+							
+							<span>{{:enName}}</span> <label class="lbl2">{{:abroadCountryName}}</label> <em>{{:userStatusName}}</em>
+						</div>
+						<div class="member">
+							<div class="div_title">
+								{{if hastext==true}}
+								<h3>
+									<a href="../be/detail.html?beId={{:beId}}">{{:contentSummary}}</a>
+								</h3>
+								{{/if}}
+								<p>
+									{{for beTags}} 
+                        				#<a href="javascript:void(0)">{{:tagName}}</a>  
+									{{/for}}
+								</p>
+								{{if hasimg==true}} 
+								<div class="img">
+									<img src="{{:imageURL}}" width="100%">
+								</div>
+								{{else}}
+								<div  width="100%"></div>
+								{{/if}}
+							</div>
+						</div>
+
+						<div class="b_more">
+							<span class="span_time">{{:createTimeInterval}}</span> <span class="span_pl"><a class="list btn-pl" href="../be/detail.html?beId={{:beId}}">{{:commentCount}}</a></span>
+							<span class="span_bk"><a>{{:giveHaibeiCount}}</a></span> <span class="span_z"><a>{{:dianzanCount}}</a></span>
+						</div>
+
+					</section>
+				</li>
+
+</script>
 </html>

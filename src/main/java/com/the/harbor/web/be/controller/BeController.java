@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 
 import org.apache.log4j.Logger;
 import org.hibernate.validator.constraints.NotBlank;
@@ -29,7 +30,8 @@ import com.the.harbor.api.be.param.Be;
 import com.the.harbor.api.be.param.BeComment;
 import com.the.harbor.api.be.param.BeCreateReq;
 import com.the.harbor.api.be.param.BeCreateResp;
-import com.the.harbor.api.be.param.BeDetail;
+import com.the.harbor.api.be.param.BeQueryReq;
+import com.the.harbor.api.be.param.BeQueryResp;
 import com.the.harbor.api.be.param.DoBeComment;
 import com.the.harbor.api.be.param.DoBeLikes;
 import com.the.harbor.api.be.param.DoBeLikes.HandleType;
@@ -40,7 +42,6 @@ import com.the.harbor.api.be.param.QueryOneBeResp;
 import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
-import com.the.harbor.base.enumeration.hybe.BeDetailType;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.PageInfo;
@@ -171,7 +172,7 @@ public class BeController {
 
 	@RequestMapping("/submitNewBe")
 	@ResponseBody
-	public ResponseData<String> submitNewBe(String beData) {
+	public ResponseData<String> submitNewBe(@NotBlank(message = "参数为空") String beData) {
 		ResponseData<String> responseData = null;
 		try {
 			if (StringUtil.isBlank(beData)) {
@@ -194,99 +195,46 @@ public class BeController {
 
 	@RequestMapping("/getMyBes")
 	@ResponseBody
-	public ResponseData<JSONObject> getMyBes(QueryMyBeReq queryMyBeReq) {
-		ResponseData<JSONObject> responseData = null;
-		JSONObject data = new JSONObject();
-		JSONArray arr = new JSONArray();
+	public ResponseData<PageInfo<Be>> getMyBes(@NotNull(message = "参数为空") QueryMyBeReq queryMyBeReq,
+			HttpServletRequest request) {
+		ResponseData<PageInfo<Be>> responseData = null;
 		try {
 			// 获取用户资料
-			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(queryMyBeReq.getUserId());
-			if (userInfo == null) {
-				throw new BusinessException("非法查询:缺少用户信息");
-			}
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			queryMyBeReq.setUserId(userInfo.getUserId());
 			QueryMyBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryMyBe(queryMyBeReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE,
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
 						resp.getResponseHeader().getResultMessage());
 			} else {
-				PageInfo<Be> pagInfo = resp.getPagInfo();
-				if (!CollectionUtil.isEmpty(pagInfo.getResult())) {
-					for (Be be : pagInfo.getResult()) {
-						JSONObject d = new JSONObject();
-						// 获取第一个文本内容
-						BeDetail firstTextDetail = null;
-						BeDetail firstImgDetail = null;
-						if (!CollectionUtil.isEmpty(be.getBeDetails())) {
-							for (BeDetail detail : be.getBeDetails()) {
-								if (BeDetailType.TEXT.getValue().equals(detail.getType())) {
-									if (firstTextDetail == null)
-										firstTextDetail = detail;
-								} else if (BeDetailType.IMAGE.getValue().equals(detail.getType())) {
-									if (firstImgDetail == null)
-										firstImgDetail = detail;
-								}
-							}
-						}
-						// 获取标签
-						d.put("beId", be.getBeId());
-						d.put("commentCount", HyBeUtil.getBeCommentsCount(be.getBeId()));
-						d.put("dianzan", be.getDianzan());
-						d.put("publishdate", DateUtil.getInterval(be.getCreateDate()));
-						d.put("tags", be.getBeTags());
-						d.put("hastext", !(firstTextDetail == null));
-						d.put("hasimg", !(firstImgDetail == null));
-						d.put("firstTextDetail", firstTextDetail);
-						d.put("firstImgDetail", firstImgDetail);
-						arr.add(d);
-					}
-				}
-				data.put("userInfo", userInfo);
-				data.put("belist", arr);
-				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", data);
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
+						resp.getPagInfo());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = ExceptionUtil.convert(e, JSONObject.class);
+			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE, "查询失败，稍候重试...");
 		}
 		return responseData;
 	}
 
 	@RequestMapping("/getMyTimeLine")
 	@ResponseBody
-	public ResponseData<JSONObject> getMyTimeLine(QueryMyBeReq queryMyBeReq) {
-		ResponseData<JSONObject> responseData = null;
-		JSONObject data = new JSONObject();
-		JSONArray arr = new JSONArray();
+	public ResponseData<PageInfo<Be>> getMyTimeLine(@NotNull(message = "参数为空") QueryMyBeReq queryMyBeReq,
+			HttpServletRequest request) {
+		ResponseData<PageInfo<Be>> responseData = null;
 		try {
 			// 获取用户资料
-			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(queryMyBeReq.getUserId());
-			if (userInfo == null) {
-				throw new BusinessException("非法查询:缺少用户信息");
-			}
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			queryMyBeReq.setUserId(userInfo.getUserId());
 			QueryMyBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryMyBe(queryMyBeReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE,
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
 						resp.getResponseHeader().getResultMessage());
 			} else {
 				Map<String, String> dayMap = new HashMap<String, String>();
 				PageInfo<Be> pagInfo = resp.getPagInfo();
 				if (!CollectionUtil.isEmpty(pagInfo.getResult())) {
 					for (Be be : pagInfo.getResult()) {
-						JSONObject d = new JSONObject();
-						// 获取第一个文本内容
-						BeDetail firstTextDetail = null;
-						BeDetail firstImgDetail = null;
-						if (!CollectionUtil.isEmpty(be.getBeDetails())) {
-							for (BeDetail detail : be.getBeDetails()) {
-								if (BeDetailType.TEXT.getValue().equals(detail.getType())) {
-									if (firstTextDetail == null)
-										firstTextDetail = detail;
-								} else if (BeDetailType.IMAGE.getValue().equals(detail.getType())) {
-									if (firstImgDetail == null)
-										firstImgDetail = detail;
-								}
-							}
-						}
 						// 获取创建日期,标记是否显示时间线日期
 						boolean showtime = false;
 						String t = DateUtil.getDateString(be.getCreateDate(), DateUtil.YYYYMMDD);
@@ -307,30 +255,22 @@ public class BeController {
 							int month = DateUtil.getMonth(be.getCreateDate());
 							publishDay = day + "/<font>" + month + "月</font>";
 						}
-						d.put("beId", be.getBeId());
-						d.put("dianzan", be.getDianzan());
-						d.put("showtime", showtime);
-						d.put("publishDay", publishDay);
-						d.put("hastext", !(firstTextDetail == null));
-						d.put("hasimg", !(firstImgDetail == null));
-						d.put("firstTextDetail", firstTextDetail);
-						d.put("firstImgDetail", firstImgDetail);
-						arr.add(d);
+						be.setShowMMdd(showtime);
+						be.setMmdd(publishDay);
 					}
 				}
-				data.put("belist", arr);
-				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", data);
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", pagInfo);
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = ExceptionUtil.convert(e, JSONObject.class);
+			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE, "查询失败，稍候重试...");
 		}
 		return responseData;
 	}
 
 	@RequestMapping("/getOneBe")
 	@ResponseBody
-	public ResponseData<Be> getOneBe(QueryOneBeReq queryOneBeReq) {
+	public ResponseData<Be> getOneBe(@NotNull(message = "参数为空") QueryOneBeReq queryOneBeReq) {
 		ResponseData<Be> responseData = null;
 		try {
 			QueryOneBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryOneBe(queryOneBeReq);
@@ -461,7 +401,7 @@ public class BeController {
 		ResponseData<String> responseData = null;
 		try {
 			/* 1.获取当前操作的用户 */
-			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			/* 3.发送评论消息 */
 			this.sendBeCommentDelMQ(beId, commentId);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", commentId);
@@ -683,6 +623,27 @@ public class BeController {
 			LOG.error("Unknown exception happened!", e);
 		}
 		client.close();
+	}
+
+	@RequestMapping("/queryBes")
+	@ResponseBody
+	public ResponseData<PageInfo<Be>> queryBes(@NotNull(message = "参数为空") BeQueryReq beQueryReq,
+			HttpServletRequest request) {
+		ResponseData<PageInfo<Be>> responseData = null;
+		try {
+			BeQueryResp rep = DubboConsumerFactory.getService(IBeSV.class).queryBes(beQueryReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
+						rep.getPagInfo());
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
 	}
 
 }

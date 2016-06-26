@@ -48,8 +48,9 @@
 			<div class="tit_nav">
 				<div class="title_owl" id="DIV_GO_TAGS"></div>
 			</div>
-			<div class="search"></div>
-		</section>
+			<div class="search">
+			</div>
+		</section> 
 
 		<section class="group_oneon" >
 			<section class="lat_group on" id="DIV_GOES">
@@ -88,9 +89,9 @@
 					var _this = this;  
 					//点击标签
 					$("#DIV_GO_TAGS").delegate("[name='GO_TAG']","click",function(){
-						var tagName = $(this).attr("tagName");
 						var tagId = $(this).attr("tagId");
-						_this.setTagOn(tagName);
+						$("[name='GO_TAG']").removeClass("on");
+						$(this).addClass("on");
 						_this.queryGoes(tagId,"");
 					})
 					
@@ -140,7 +141,6 @@
 								firstTag.selected=true;
 							}
 							_this.renderGoTags(); 
-							_this.owlCarousel();
 						},
 						failure: function(transport){ 
 							_this.renderGoTags(); 
@@ -176,17 +176,6 @@
 					$("#DIV_GOES").html(opt);
 				},
 				
-				setTagOn: function(tagName){
-					var _this = this;
-					var tags=$.grep(_this.allGoTags,function(o,i){
-						o.selected=false;
-						return o.tagName==tagName;
-					});
-					if(!tags || tags.length==0)return;
-					var tag = tags[0];
-					tag.selected= true;
-				}, 
-				
 				renderGoTags: function(){
 					var allGoTags =this.allGoTags;
 					data= {
@@ -194,6 +183,7 @@
 					}
 					var opt=$("#GoTagsImpl").render(data);
 					$("#DIV_GO_TAGS").html(opt); 
+					this.owlCarousel();
 				},
 				
 				owlCarousel: function(){
@@ -231,7 +221,7 @@
 <script id="GoTagsImpl" type="text/x-jsrender"> 
 {{for allGoTags}}
 <div class="item">
-	<a href="javascript:void(0)" name="GO_TAG" tagId="{{:tagId}}" tagName="{{:tagName}}" {{if selected==true}}class="on"{{/if}}>{{:tagName}}</a>
+	<a href="javascript:void(0)" name="GO_TAG" tagId="{{:tagId}}" tagName="{{:tagName}}">{{:tagName}}</a>
 </div>
 {{/for}} 
 </script>
@@ -266,7 +256,7 @@
 						</section>
 						<section class="info_time back1">
 							<p>
-								<span>Group邀请{{:inviteMembers}}人</span><a href="#">{{:payModeName}}</a>
+								<span>Group邀请{{:inviteMembers}}人</span><a href="#">{{if payMode=="10"}}{{:fixPriceYuan}}元{{else payMode=="20"}}{{:payModeName}}{{:fixPriceYuan}}元 {{else payMode=="30"}} {{:payModeName}} {{/if}}</a>
 							</p>
 						</section>
 						<section class="info_time back2">
