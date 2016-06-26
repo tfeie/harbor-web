@@ -23,8 +23,8 @@
 	var _getFooterHTML= function(){
 		var html = "<div class=\"tc-main\">";
 		html+="<span class=\"btn-show po-f\"></span>";
-		html+="<span class=\"btn-be po-f\"></span>";
-		html+="<span class=\"btn-go po-f\"></span>";
+		html+="<span class=\"btn-be po-f\" id=\"_btn_goto_be\"></span>";
+		html+="<span class=\"btn-go po-f\" id=\"_btn_goto_go\"></span>";
 		html+="<div class=\"bg-main po-f\"></div>";
 		html+="</div>";
 		html+="<footer class=\"footer po-f\">";
@@ -50,6 +50,14 @@
 				$(this).parent('.tc-main').addClass('on1');
 				$(this).parent('.tc-main').children('.bg-main').fadeOut();
 			}
+		});
+		
+		$("#_btn_goto_go").off("click").on("click",function(){
+			window.location.href="../go/publishGo.html";
+		});
+		
+		$("#_btn_goto_be").off("click").on("click",function(){
+			window.location.href="../be/publishbe.html";
 		});
 	}
 })(jQuery); 

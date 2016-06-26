@@ -42,6 +42,8 @@ import com.the.harbor.api.be.param.QueryOneBeResp;
 import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
+import com.the.harbor.base.enumeration.dict.ParamCode;
+import com.the.harbor.base.enumeration.dict.TypeCode;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.PageInfo;
@@ -49,8 +51,10 @@ import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
+import com.the.harbor.commons.redisdata.def.HyDictsVo;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyBeUtil;
+import com.the.harbor.commons.redisdata.util.HyDictUtil;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
@@ -642,6 +646,41 @@ public class BeController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getIndexPageSilders")
+	@ResponseBody
+	public ResponseData<JSONArray> getIndexPageSilders() {
+		ResponseData<JSONArray> responseData = null;
+		try {
+			JSONArray array = new JSONArray();
+			List<HyDictsVo> list = HyDictUtil.getHyDicts(TypeCode.HY_BE.getValue(), ParamCode.INDEX_SILDER.getValue());
+			if (!CollectionUtil.isEmpty(list)) {
+				for (HyDictsVo dict : list) {
+					String value = dict.getParamValue();
+					String[] arr = value.split("!!");
+					String imgURL = "";
+					String linkURL = "javascript:void(0)";
+					if (arr.length == 1) {
+						// throw new
+						// BusinessException("首页轮播图配置错误，图片地址与超链接地址以$分隔");
+						imgURL = arr[0];
+					} else if (arr.length == 2) {
+						imgURL = arr[0];
+						linkURL = arr[1];
+					}
+					JSONObject d = new JSONObject();
+					d.put("imgURL", imgURL);
+					d.put("linkURL", linkURL);
+					array.add(d);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "获取轮播图成功", array);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONArray.class);
 		}
 		return responseData;
 	}

@@ -106,7 +106,7 @@
 				getIndexPageSilders: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../go/getIndexPageSilders",
+						url: "../be/getIndexPageSilders",
 						type: "post",  
 						success: function(transport){
 							var data =transport.data;  
