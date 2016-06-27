@@ -716,22 +716,22 @@ public class UserController {
 		return responseData;
 	}
 
-	@RequestMapping("/addFans")
+	@RequestMapping("/addGuanzhu")
 	@ResponseBody
-	public ResponseData<String> addFans(@NotBlank(message = "粉丝用户ID为空") String fansUserId, HttpServletRequest request) {
+	public ResponseData<String> addGuanzhu(@NotBlank(message = "关注用户ID为空") String userId, HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
 			// 获取当前登录的用户信息
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-			if (userInfo.getUserId().equals(fansUserId)) {
+			if (userInfo.getUserId().equals(userId)) {
 				throw new BusinessException("您不可以关注自己哦");
 			}
-			Set<String> sets = HyUserUtil.getUserFans(userInfo.getUserId());
-			if(sets.contains(fansUserId)){
+			Set<String> sets = HyUserUtil.getUserFans(userId);
+			if(sets.contains(userInfo.getUserId())){
 				throw new BusinessException("您已经关注了这个海友哦");
 			}
 			// 构造一条粉丝关注的消息
-			this.sendAddFansMQ(userInfo.getUserId(), fansUserId);
+			this.sendAddFansMQ(userInfo.getUserId(), userId);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -740,20 +740,20 @@ public class UserController {
 		return responseData;
 	}
 
-	@RequestMapping("/cancelFans")
+	@RequestMapping("/cancelGuanzhu")
 	@ResponseBody
-	public ResponseData<String> cancelFans(@NotBlank(message = "粉丝用户ID为空") String fansUserId,
+	public ResponseData<String> cancelGuanzhu(@NotBlank(message = "用户ID为空") String userId,
 			HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
 			// 获取当前登录的用户信息
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			Set<String> sets = HyUserUtil.getUserGuanzhuUsers(userInfo.getUserId());
-			if(!sets.contains(fansUserId)){
+			if(!sets.contains(userId)){
 				throw new BusinessException("您没有关注这个海友哦");
 			}
 			// 构造一条粉丝关注的消息
-			this.sendDeleteFansMQ(userInfo.getUserId(), fansUserId);
+			this.sendDeleteFansMQ(userInfo.getUserId(), userId);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);

@@ -125,8 +125,8 @@
 					
 					//添加关注按钮事件 
 					$("#SPAN_ADD_FANS").on("click",function(){
-						var fansUserId = $(this).attr("userId");
-						 _this.addFans(fansUserId,this);
+						var userId = $(this).attr("userId");
+						 _this.addGuanzhu(userId,this);
 					});  
 					//点赞事件代理
 					$("#DIV_BE_DETAIL").delegate("#DIV_DO_DIANZAN","click",function(){
@@ -241,13 +241,13 @@
 					});
 				},
 				
-				addFans: function(fansUserId,_t){
+				addGuanzhu: function(userId,_t){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../user/addFans",
+						url: "../user/addGuanzhu",
 						type: "post", 
 						data: { 
-							fansUserId: fansUserId
+							userId: userId
 						},
 						success: function(transport){
 							$(_t).html("已关注").off("click");

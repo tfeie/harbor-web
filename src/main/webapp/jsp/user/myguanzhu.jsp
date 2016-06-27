@@ -75,8 +75,8 @@
 					var _this = this;  
 					//取消关注事件代理
 					$("#DIV_USER_LIST").delegate("[name='SPAN_CANCEL_FANS']","click",function(){
-						var fansUserId = $(this).attr("userId");
-						_this.cancelFans(fansUserId);
+						var userId = $(this).attr("userId");
+						_this.cancelGuanzhu(userId);
 					});
 				},
 				
@@ -84,13 +84,13 @@
 					this.getMyFans();
 				}, 
 				
-				cancelFans: function(fansUserId){
+				cancelGuanzhu: function(userId){
 					var _this = this;
 					ajaxController.ajax({
 						url: "../user/cancelFans",
 						type: "post", 
 						data: {
-							fansUserId: fansUserId
+							userId: userId
 						},
 						success: function(transport){
 							$("#DIV_FANS_PROFILE_"+fansUserId).remove();
