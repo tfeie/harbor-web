@@ -99,7 +99,7 @@
 							}
 						},
 						failure: function(transport){ 
-							weUI.alert({content:"取消失败，请重试"})
+							weUI.alert({content:transport.statusInfo})
 						}
 					});
 				},

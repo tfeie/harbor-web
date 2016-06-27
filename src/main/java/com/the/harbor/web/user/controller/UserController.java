@@ -748,7 +748,7 @@ public class UserController {
 		try {
 			// 获取当前登录的用户信息
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-			Set<String> sets = HyUserUtil.getUserFans(userInfo.getUserId());
+			Set<String> sets = HyUserUtil.getUserGuanzhuUsers(userInfo.getUserId());
 			if(!sets.contains(fansUserId)){
 				throw new BusinessException("您没有关注这个海友哦");
 			}
