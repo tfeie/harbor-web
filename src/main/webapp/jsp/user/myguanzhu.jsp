@@ -151,7 +151,7 @@
 
 
 <script id="UserListImpl" type="text/x-jsrender"> 
-					<div class="itms clearfix" id="DIV_FANS_PROFILE_{{:userId}}">
+					<div class="itms clearfix" name="DIV_FANS_PROFILE" id="DIV_FANS_PROFILE_{{:userId}}">
 						<div class="btn-right">
 							<span class="btn-js" name="SPAN_CANCEL_FANS" userId="{{:userId}}">取消</span>
 						</div>
