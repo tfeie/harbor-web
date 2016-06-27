@@ -93,7 +93,7 @@
 							userId: userId
 						},
 						success: function(transport){
-							$("#DIV_FANS_PROFILE_"+fansUserId).remove();
+							$("#DIV_FANS_PROFILE_"+userId).remove();
 							if($("name=['DIV_FANS_PROFILE']").length==0){
 								$("#DIV_USER_LIST").html("还没有任何关注的海友哦~"); 
 							}
