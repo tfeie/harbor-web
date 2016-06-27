@@ -41,12 +41,7 @@
 		<section class="title">
 			<div class="tit_nav">
 				<div class="title_owl" id="DIV_BE_TAGS">
-					<div class="item">
-						<a href="javascript:void(0)" class="on" tagId="" name="BE_TAG">推荐</a>
-					</div>
-					<div class="item">
-						<a href="javascript:void(0)" tagId="" name="BE_TAG">热点</a>
-					</div>
+					
 				</div>
 			</div>
 			<div class="search"></div>
@@ -181,7 +176,7 @@
 						allBeTags: allBeTags
 					}
 					var opt=$("#BeTagsImpl").render(data);
-					$("#DIV_BE_TAGS").append(opt); 
+					$("#DIV_BE_TAGS").html(opt); 
 					this.owlCarousel();
 				},
 				
@@ -218,6 +213,12 @@
 </script>
 
 <script id="BeTagsImpl" type="text/x-jsrender"> 
+<div class="item">
+						<a href="javascript:void(0)" class="on" tagId="" name="BE_TAG">推荐</a>
+					</div>
+					<div class="item">
+						<a href="javascript:void(0)" tagId="" name="BE_TAG">热点</a>
+					</div>
 {{for allBeTags}}
 <div class="item">
 	<a href="javascript:void(0)" name="BE_TAG" tagId="{{:tagId}}" tagName="{{:tagName}}">{{:tagName}}</a>

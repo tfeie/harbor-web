@@ -11,8 +11,9 @@
 	
 		prototype: { 
 			
-			buildFooter: function(){
-				var html = _getFooterHTML();
+			buildFooter: function(options){
+				options = options?options:{};
+				var html = _getFooterHTML(options.showBeGoQuick?options.showBeGoQuick:true);
 				$(document.body).append(html);
 				_addEvents();
 			}
@@ -20,13 +21,16 @@
 		
 	});
 	
-	var _getFooterHTML= function(){
-		var html = "<div class=\"tc-main\">";
-		html+="<span class=\"btn-show po-f\"></span>";
-		html+="<span class=\"btn-be po-f\" id=\"_btn_goto_be\"></span>";
-		html+="<span class=\"btn-go po-f\" id=\"_btn_goto_go\"></span>";
-		html+="<div class=\"bg-main po-f\"></div>";
-		html+="</div>";
+	var _getFooterHTML= function(showBeGoQuick){
+		var html="";
+		if(showBeGoQuick){
+			html+= "<div class=\"tc-main\">";
+			html+="<span class=\"btn-show po-f\"></span>";
+			html+="<span class=\"btn-be po-f\" id=\"_btn_goto_be\"></span>";
+			html+="<span class=\"btn-go po-f\" id=\"_btn_goto_go\"></span>";
+			html+="<div class=\"bg-main po-f\"></div>";
+			html+="</div>";
+		}
 		html+="<footer class=\"footer po-f\">";
 		html+="<a href=\"../be/index.html\"><i class=\"icon-f1\"></i><span>Be</span></a>";
 		html+="<a href=\"../go/groupindex.html\"><i class=\"icon-f2\"></i><span>Go</span></a>";

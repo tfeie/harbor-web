@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>我关注的海友</title>
+<title>我的粉丝</title>
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
@@ -73,41 +73,16 @@
 				
 				bindEvents: function(){
 					var _this = this;  
-					//取消关注事件代理
-					$("#DIV_USER_LIST").delegate("[name='SPAN_CANCEL_FANS']","click",function(){
-						var fansUserId = $(this).attr("userId");
-						_this.cancelFans(fansUserId);
-					});
 				},
 				
 				initData: function(){
 					this.getMyFans();
 				}, 
 				
-				cancelFans: function(fansUserId){
-					var _this = this;
-					ajaxController.ajax({
-						url: "../user/cancelFans",
-						type: "post", 
-						data: {
-							fansUserId: fansUserId
-						},
-						success: function(transport){
-							$("#DIV_FANS_PROFILE_"+fansUserId).remove();
-							if($("name=['DIV_FANS_PROFILE']").length==0){
-								$("#DIV_USER_LIST").html("还没有任何关注的海友哦~"); 
-							}
-						},
-						failure: function(transport){ 
-							weUI.alert({content:"取消失败，请重试"})
-						}
-					});
-				},
-				
 				getMyFans: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../user/getMyGuanzhuUsers",
+						url: "../user/getMyFansUsers",
 						type: "post", 
 						success: function(transport){
 							var data =transport.data; 
@@ -122,12 +97,11 @@
 				renderMyFansList: function(data){ 
 					data= data?data:[];
 					if(data.length==0){
-						$("#DIV_USER_LIST").html("还没有任何关注的海友哦~"); 
+						$("#DIV_USER_LIST").html("还没有任何粉丝哦~"); 
 						return;
 					}
 					var opt=$("#UserListImpl").render(data);
-					$("#DIV_USER_LIST").html(opt);
-					
+					$("#DIV_USER_LIST").html(opt); 
 				},
 				
 				getPropertyValue: function(propertyName){
@@ -151,7 +125,7 @@
 
 
 <script id="UserListImpl" type="text/x-jsrender"> 
-					<div class="itms clearfix" id="DIV_FANS_PROFILE_{{:userId}}">
+					<div class="itms clearfix" name="DIV_FANS_PROFILE" id="DIV_FANS_PROFILE_{{:userId}}">
 						<div class="btn-right">
 							<span class="btn-js" name="SPAN_CANCEL_FANS" userId="{{:userId}}">取消</span>
 						</div>

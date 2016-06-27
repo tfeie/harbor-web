@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -16,32 +17,36 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
+	type="text/css" />
+<link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/owl.carousel.js"></script>
+<script src="//static.tfeie.com/v2/js/tap.js"></script>
 </head>
 <body>
 	<section class="ip2_zhongxin">
 		<section class="ip2_top">
 			<p>
-				<img src="//static.tfeie.com/images/aimg3.png">
+				<img src="<c:out value="${userInfo.homePageBg}"/>">
 			</p>
 			<section class="ip_logo ip2">
 				<p>
-					<span><img src="//static.tfeie.com/images/icon18.png" /></span>
+					<span><img src="<c:out value="${userInfo.wxHeadimg}"/>" /></span>
 				</p>
 			</section>
 		</section>
 
 		<section class="ip_name ip2">
 			<p>
-				<span>Martin</span><label class="lbl2">英国</label>已认证
+				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2"><c:out value="${userInfo.abroadCountryName}"/></label><c:out value="${userInfo.userStatusName}"/>
 			</p>
 		</section>
 		<section class="ip_shengf ip2">
-			<p>金融/合伙人/北京</p>
+			<p><c:out value="${userInfo.industryName}"/>/<c:out value="${userInfo.title}"/>/<c:out value="${userInfo.atCityName}"/></p>
 			<p>
 				<span><a href="#"><img
 						src="//static.tfeie.com/images/icon19_1.png"></a><a href="#"><img
@@ -60,8 +65,8 @@
 			<ul>
 				<li><a href="#"><span>10</span><label>益友</label></a></li>
 				<li><a href="#"><span>10</span><label>助人</label></a></li>
-				<li><a href="#"><span>35</span><label>关注</label></a></li>
-				<li><a href="#"><span>16</span><label>粉丝</label></a></li>
+				<li><a href="../user/myguanzhu.html"><span><c:out value="${guanzhuCount}"/></span><label>关注</label></a></li>
+				<li><a href="../user/myfans.html"><span><c:out value="${fansCount}"/></span><label>粉丝</label></a></li>
 			</ul>
 			<div class="clear"></div>
 		</section>
@@ -83,7 +88,7 @@
 		<section class="ip2_my">
 			<section class="ip2_wid">
 				<p class="ip2_4">
-					<a href="#">我的时间线</a>
+					<a href="../be/mytimeline.html">我的时间线</a>
 				</p>
 				<p class="ip2_5">
 					<a href="../user/getUserCard.html">我的名片</a>
@@ -106,39 +111,16 @@
 		</section>
 
 	</section>
-	<footer class="footer">
-		<ul>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f1.png" />
-					</div>
-					<div class="text">Be</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f2.png" />
-					</div>
-					<div class="text">Go</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f3.png" />
-					</div>
-					<div class="text">Frd</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
-					</div>
-					<div class="text">Msg</div>
-			</a></li>
-			<li class="on"><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f5.png" />
-					</div>
-					<div class="text">Me</div>
-			</a></li>
-		</ul>
-	</footer>
+	
 </body>
+
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter({
+			showBeGoQuick: false
+		});
+	});
+</script>
 </html>

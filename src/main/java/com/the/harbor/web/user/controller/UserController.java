@@ -2,10 +2,12 @@ package com.the.harbor.web.user.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyun.mns.client.CloudQueue;
+import com.aliyun.mns.client.MNSClient;
+import com.aliyun.mns.common.ClientException;
+import com.aliyun.mns.common.ServiceException;
+import com.aliyun.mns.model.Message;
 import com.the.harbor.api.pay.IPaymentSV;
 import com.the.harbor.api.pay.param.CreatePaymentOrderReq;
 import com.the.harbor.api.pay.param.CreatePaymentOrderResp;
 import com.the.harbor.api.user.IUserSV;
+import com.the.harbor.api.user.param.DoUserFans;
 import com.the.harbor.api.user.param.UserCertificationReq;
 import com.the.harbor.api.user.param.UserEditReq;
 import com.the.harbor.api.user.param.UserMemberInfo;
@@ -37,8 +46,10 @@ import com.the.harbor.api.user.param.UserViewResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
+import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.Response;
+import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
 import com.the.harbor.commons.components.aliyuncs.sms.param.SMSSendRequest;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
@@ -46,11 +57,13 @@ import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
+import com.the.harbor.commons.redisdata.util.HyUserUtil;
 import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
 import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
+import com.the.harbor.commons.util.UUIDUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
@@ -64,19 +77,21 @@ public class UserController {
 
 	@RequestMapping("/pages.html")
 	public ModelAndView pages(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		request.getSession().setAttribute("loginUserId", "11112311");
 		ModelAndView view = new ModelAndView("pages");
 		return view;
 	}
 
 	@RequestMapping("/myguanzhu.html")
 	public ModelAndView myguanzhu(HttpServletRequest request) {
-		Object loginUserId = request.getSession().getAttribute("loginUserId");
-		if (loginUserId == null) {
-			throw new BusinessException("loginUserId 不存在");
-		}
-		request.setAttribute("loginUserId", loginUserId);
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		ModelAndView view = new ModelAndView("user/myguanzhu");
+		return view;
+	}
+
+	@RequestMapping("/myfans.html")
+	public ModelAndView myfans(HttpServletRequest request) {
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		ModelAndView view = new ModelAndView("user/myfans");
 		return view;
 	}
 
@@ -413,6 +428,8 @@ public class UserController {
 	public ModelAndView userCenter(HttpServletRequest request) {
 		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		request.setAttribute("userInfo", userInfo);
+		request.setAttribute("fansCount", HyUserUtil.getUserFans(userInfo.getUserId()).size());
+		request.setAttribute("guanzhuCount", HyUserUtil.getUserGuanzhuUsers(userInfo.getUserId()).size());
 		ModelAndView view = new ModelAndView("user/userCenter");
 		return view;
 	}
@@ -631,6 +648,190 @@ public class UserController {
 			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
+	}
+
+	@RequestMapping("/getMyGuanzhuUsers")
+	@ResponseBody
+	public ResponseData<JSONArray> getMyGuanzhuUsers(HttpServletRequest request) {
+		ResponseData<JSONArray> responseData = null;
+		try {
+			JSONArray arr = new JSONArray();
+			// 获取当前登录的用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			Set<String> userIds = HyUserUtil.getUserGuanzhuUsers(userInfo.getUserId());
+			for (String userId : userIds) {
+				// 获取单个用户信息
+				UserViewInfo u = WXUserUtil.getUserViewInfoByUserId(userId);
+				if (u != null) {
+					JSONObject d = new JSONObject();
+					d.put("userId", u.getUserId());
+					d.put("wxHeadimg", u.getWxHeadimg());
+					d.put("enName", u.getEnName());
+					d.put("abroadCountryName", u.getAbroadCountryName());
+					d.put("userStatusName", u.getUserStatusName());
+					d.put("industryName", u.getIndustryName());
+					d.put("title", u.getTitle());
+					d.put("atCityName", u.getAtCityName());
+					arr.add(d);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", arr);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONArray.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getMyFansUsers")
+	@ResponseBody
+	public ResponseData<JSONArray> getMyFansUsers(HttpServletRequest request) {
+		ResponseData<JSONArray> responseData = null;
+		try {
+			JSONArray arr = new JSONArray();
+			// 获取当前登录的用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			Set<String> userIds = HyUserUtil.getUserFans(userInfo.getUserId());
+			for (String userId : userIds) {
+				// 获取单个用户信息
+				UserViewInfo u = WXUserUtil.getUserViewInfoByUserId(userId);
+				if (u != null) {
+					JSONObject d = new JSONObject();
+					d.put("userId", u.getUserId());
+					d.put("wxHeadimg", u.getWxHeadimg());
+					d.put("enName", u.getEnName());
+					d.put("abroadCountryName", u.getAbroadCountryName());
+					d.put("userStatusName", u.getUserStatusName());
+					d.put("industryName", u.getIndustryName());
+					d.put("title", u.getTitle());
+					d.put("atCityName", u.getAtCityName());
+					arr.add(d);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", arr);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONArray.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/addFans")
+	@ResponseBody
+	public ResponseData<String> addFans(@NotBlank(message = "粉丝用户ID为空") String fansUserId, HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			// 获取当前登录的用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			if (userInfo.getUserId().equals(fansUserId)) {
+				throw new BusinessException("您不可以关注自己哦");
+			}
+			Set<String> sets = HyUserUtil.getUserFans(userInfo.getUserId());
+			if(sets.contains(fansUserId)){
+				throw new BusinessException("您已经关注了这个海友哦");
+			}
+			// 构造一条粉丝关注的消息
+			this.sendAddFansMQ(userInfo.getUserId(), fansUserId);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/cancelFans")
+	@ResponseBody
+	public ResponseData<String> cancelFans(@NotBlank(message = "粉丝用户ID为空") String fansUserId,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			// 获取当前登录的用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			Set<String> sets = HyUserUtil.getUserFans(userInfo.getUserId());
+			if(!sets.contains(fansUserId)){
+				throw new BusinessException("您没有关注这个海友哦");
+			}
+			// 构造一条粉丝关注的消息
+			this.sendDeleteFansMQ(userInfo.getUserId(), fansUserId);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	/**
+	 * 发送添加粉丝消息
+	 * 
+	 * @param userId
+	 * @param fansUserId
+	 */
+	private void sendAddFansMQ(String userId, String fansUserId) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			DoUserFans body = new DoUserFans();
+			body.setFansUserId(fansUserId);
+			body.setUserId(userId);
+			body.setTime(DateUtil.getSysDate());
+			body.setHandleType(DoUserFans.HandleType.GUANZHU.name());
+			body.setMqId(UUIDUtil.genId32());
+			body.setMqType(MQType.MQ_HY_USER_FANS.getValue());
+			message.setMessageBody(JSONObject.toJSONString(body));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("User Fans build  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
+	}
+
+	/**
+	 * 发送删除粉丝消息
+	 * 
+	 * @param userId
+	 * @param fansUserId
+	 */
+	private void sendDeleteFansMQ(String userId, String fansUserId) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			DoUserFans body = new DoUserFans();
+			body.setFansUserId(fansUserId);
+			body.setUserId(userId);
+			body.setTime(DateUtil.getSysDate());
+			body.setHandleType(DoUserFans.HandleType.CANCEL.name());
+			body.setMqId(UUIDUtil.genId32());
+			body.setMqType(MQType.MQ_HY_USER_FANS.getValue());
+			message.setMessageBody(JSONObject.toJSONString(body));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("User Fans build  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
 	}
 
 	private List<HyTagVo> getSelectedTags(List<HyTagVo> allTags) {

@@ -34,7 +34,7 @@
 	<section class="be_main">
 		<div class="tx_top box-s">
 			<div class="btn-right">
-				<span class="btn-gz">+关注</span> <span class="btn-pl"></span>
+				<span class="btn-gz" id="SPAN_ADD_FANS" userId="<c:out value="${userInfo.userId}"/>">+关注</span> <span class="btn-pl"></span>
 			</div>
 			<div class="c">
 				<div class="img">
@@ -123,6 +123,11 @@
 						 _this.sendBeComment();
 					}); 
 					
+					//添加关注按钮事件 
+					$("#SPAN_ADD_FANS").on("click",function(){
+						var fansUserId = $(this).attr("userId");
+						 _this.addFans(fansUserId,this);
+					});  
 					//点赞事件代理
 					$("#DIV_BE_DETAIL").delegate("#DIV_DO_DIANZAN","click",function(){
 						_this.doDianzan();
@@ -232,6 +237,23 @@
 						},
 						failure: function(transport){ 
 							
+						}
+					});
+				},
+				
+				addFans: function(fansUserId,_t){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/addFans",
+						type: "post", 
+						data: { 
+							fansUserId: fansUserId
+						},
+						success: function(transport){
+							$(_t).html("已关注").off("click");
+						},
+						failure: function(transport){ 
+							weUI.alert({content:transport.statusInfo});
 						}
 					});
 				},

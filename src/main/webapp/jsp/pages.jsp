@@ -29,10 +29,10 @@
 				<span>APP</span><label></label>
 			</p>
 			<p class="on1">
-				<span>Beauty & Excellence</span><label>be/index.jsp <a href="../be/index.html">Go</a></label>
+				<span>Beauty & Excellence</span><label>be/index.jsp-ok <a href="../be/index.html">Go</a></label>
 			</p> 
 			<p class="on1">
-				<span>Be详情</span><label>be/detail.jsp-ing <a href="../be/detail.html?beId=33BE0E40387F4FA4AB4982EFB1D26B57">Go</a></label>
+				<span>Be详情</span><label>be/detail.jsp-ok <a href="../be/detail.html?beId=33BE0E40387F4FA4AB4982EFB1D26B57">Go</a></label>
 			</p> 
 			<p class="on1">
 				<span>新建Be</span><label>be/publishbe.jsp-ok <a href="../be/publishbe.html">Go</a></label>
@@ -97,7 +97,10 @@
 				<span>我的海友</span><label>myhaiyou.jsp <a href="../user/myhaiyou.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>我的关注</span><label>myguanzhu.jsp <a href="../user/myguanzhu.html">Go</a></label>
+				<span>我关注的</span><label>myguanzhu.jsp-ok <a href="../user/myguanzhu.html">Go</a></label>
+			</p> 
+			<p class="on1">
+				<span>我的粉丝</span><label>myfans.jsp-ok <a href="../user/myfans.html">Go</a></label>
 			</p> 
 			<p class="on1">
 				<span>消息中心</span><label>messagecenter.jsp <a href="../user/messagecenter.html">Go</a></label>
