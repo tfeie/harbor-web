@@ -87,7 +87,7 @@
 				cancelGuanzhu: function(userId){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../user/cancelFans",
+						url: "../user/cancelGuanzhu",
 						type: "post", 
 						data: {
 							userId: userId
