@@ -13,7 +13,7 @@
 			
 			buildFooter: function(options){
 				options = options?options:{};
-				var html = _getFooterHTML(options.showBeGoQuick?options.showBeGoQuick:true);
+				var html = _getFooterHTML(options.showBeGoQuick?options.showBeGoQuick:"show");
 				$(document.body).append(html);
 				_addEvents();
 			}
@@ -23,7 +23,7 @@
 	
 	var _getFooterHTML= function(showBeGoQuick){
 		var html="";
-		if(showBeGoQuick){
+		if(showBeGoQuick=="show"){
 			html+= "<div class=\"tc-main\">";
 			html+="<span class=\"btn-show po-f\"></span>";
 			html+="<span class=\"btn-be po-f\" id=\"_btn_goto_be\"></span>";

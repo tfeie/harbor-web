@@ -231,7 +231,7 @@
 					<section class="list">
 						<div class="member_info">
 							<div class="img">
-				<a href="javascript:void(0)"><img src="{{:wxHeadimg}}"
+				<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}"
 					width="80" height="80"></a>
 			</div>
 							

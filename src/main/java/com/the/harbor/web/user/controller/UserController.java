@@ -28,6 +28,7 @@ import com.the.harbor.api.pay.param.CreatePaymentOrderReq;
 import com.the.harbor.api.pay.param.CreatePaymentOrderResp;
 import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.DoUserFans;
+import com.the.harbor.api.user.param.DoUserFriend;
 import com.the.harbor.api.user.param.UserCertificationReq;
 import com.the.harbor.api.user.param.UserEditReq;
 import com.the.harbor.api.user.param.UserMemberInfo;
@@ -727,7 +728,7 @@ public class UserController {
 				throw new BusinessException("您不可以关注自己哦");
 			}
 			Set<String> sets = HyUserUtil.getUserFans(userId);
-			if(sets.contains(userInfo.getUserId())){
+			if (sets.contains(userInfo.getUserId())) {
 				throw new BusinessException("您已经关注了这个海友哦");
 			}
 			// 构造一条粉丝关注的消息
@@ -742,14 +743,13 @@ public class UserController {
 
 	@RequestMapping("/cancelGuanzhu")
 	@ResponseBody
-	public ResponseData<String> cancelGuanzhu(@NotBlank(message = "用户ID为空") String userId,
-			HttpServletRequest request) {
+	public ResponseData<String> cancelGuanzhu(@NotBlank(message = "用户ID为空") String userId, HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
 			// 获取当前登录的用户信息
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			Set<String> sets = HyUserUtil.getUserGuanzhuUsers(userInfo.getUserId());
-			if(!sets.contains(userId)){
+			if (!sets.contains(userId)) {
 				throw new BusinessException("您没有关注这个海友哦");
 			}
 			// 构造一条粉丝关注的消息
@@ -758,6 +758,141 @@ public class UserController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	/**
+	 * 主动申请某人成为自己的好友
+	 * 
+	 * @param friendUserId
+	 * @param applyMq
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/applyFriend")
+	@ResponseBody
+	public ResponseData<String> applyFriend(@NotBlank(message = "好友用户ID为空") String friendUserId, String applyMq,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			// 获取当前登录的用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			// 判断他的好友申请列表中是否有我
+			Set<String> sets = HyUserUtil.getUserFriendApplies(friendUserId);
+			if (sets.contains(userInfo.getUserId())) {
+				throw new BusinessException("您已经申请成为TA的好友，等待确认");
+			}
+			// 好友关系是双向的，判断哪个都一样
+			sets = HyUserUtil.getUserFriends(userInfo.getUserId());
+			if (sets.contains(friendUserId)) {
+				throw new BusinessException("TA已经是您的好友哦~");
+			}
+			this.sendAddFriendMQ(userInfo.getUserId(), friendUserId, applyMq);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/ignorApplyFriend")
+	@ResponseBody
+	public ResponseData<String> ignorApplyFriend(@NotBlank(message = "好友用户ID为空") String friendUserId,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			// 获取当前登录的用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			this.sendIgnorOrRejectFriendMQ(userInfo.getUserId(), friendUserId);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/agreeApplyFriend")
+	@ResponseBody
+	public ResponseData<String> agreeApplyFriend(@NotBlank(message = "好友用户ID为空") String friendUserId,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			// 获取当前登录的用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			this.sendAgreeFriendMQ(userInfo.getUserId(), friendUserId);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getMyFriends")
+	@ResponseBody
+	public ResponseData<JSONArray> getMyFriends(HttpServletRequest request) {
+		ResponseData<JSONArray> responseData = null;
+		try {
+			JSONArray arr = new JSONArray();
+			// 获取当前登录的用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			Set<String> set = HyUserUtil.getUserFriends(userInfo.getUserId());
+			for (String userId : set) {
+				// 获取单个用户信息
+				UserViewInfo u = WXUserUtil.getUserViewInfoByUserId(userId);
+				if (u != null) {
+					JSONObject d = new JSONObject();
+					d.put("userId", u.getUserId());
+					d.put("wxHeadimg", u.getWxHeadimg());
+					d.put("enName", u.getEnName());
+					d.put("abroadCountryName", u.getAbroadCountryName());
+					d.put("userStatusName", u.getUserStatusName());
+					d.put("industryName", u.getIndustryName());
+					d.put("title", u.getTitle());
+					d.put("atCityName", u.getAtCityName());
+					arr.add(d);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", arr);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONArray.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getMyFriendsApplies")
+	@ResponseBody
+	public ResponseData<JSONArray> getMyFriendsApplies(HttpServletRequest request) {
+		ResponseData<JSONArray> responseData = null;
+		try {
+			JSONArray arr = new JSONArray();
+			// 获取当前登录的用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			Set<String> set = HyUserUtil.getUserFriendApplies(userInfo.getUserId());
+			for (String userId : set) {
+				// 获取单个用户信息
+				UserViewInfo u = WXUserUtil.getUserViewInfoByUserId(userId);
+				if (u != null) {
+					JSONObject d = new JSONObject();
+					d.put("userId", u.getUserId());
+					d.put("wxHeadimg", u.getWxHeadimg());
+					d.put("enName", u.getEnName());
+					d.put("abroadCountryName", u.getAbroadCountryName());
+					d.put("userStatusName", u.getUserStatusName());
+					d.put("industryName", u.getIndustryName());
+					d.put("title", u.getTitle());
+					d.put("atCityName", u.getAtCityName());
+					arr.add(d);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", arr);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONArray.class);
 		}
 		return responseData;
 	}
@@ -828,6 +963,151 @@ public class UserController {
 				LOG.error("The request is time expired. Please check your local machine timeclock", se);
 			}
 			LOG.error("User Fans build  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
+	}
+
+	/**
+	 * 发送一条加好友消息
+	 * 
+	 * @param userId
+	 * @param friendUserId
+	 */
+	private void sendAddFriendMQ(String userId, String friendUserId, String applyMq) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			DoUserFriend body = new DoUserFriend();
+			body.setFriendUserId(friendUserId);
+			body.setUserId(userId);
+			body.setTime(DateUtil.getSysDate());
+			body.setHandleType(DoUserFriend.HandleType.APPLY.name());
+			body.setMqId(UUIDUtil.genId32());
+			body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
+			body.setApplyMq(applyMq);
+			message.setMessageBody(JSONObject.toJSONString(body));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("User FRIEND build  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
+	}
+
+	/**
+	 * 发送一条拒绝或忽略好友申请消息
+	 * 
+	 * @param userId
+	 * @param friendUserId
+	 */
+	private void sendIgnorOrRejectFriendMQ(String userId, String friendUserId) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			DoUserFriend body = new DoUserFriend();
+			body.setFriendUserId(friendUserId);
+			body.setUserId(userId);
+			body.setTime(DateUtil.getSysDate());
+			body.setHandleType(DoUserFriend.HandleType.REJECT.name());
+			body.setMqId(UUIDUtil.genId32());
+			body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
+			message.setMessageBody(JSONObject.toJSONString(body));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("User FRIEND build  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
+	}
+
+	/**
+	 * 发送一条同意好友申请消息
+	 * 
+	 * @param userId
+	 * @param friendUserId
+	 */
+	private void sendAgreeFriendMQ(String userId, String friendUserId) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			DoUserFriend body = new DoUserFriend();
+			body.setFriendUserId(friendUserId);
+			body.setUserId(userId);
+			body.setTime(DateUtil.getSysDate());
+			body.setHandleType(DoUserFriend.HandleType.AGREE.name());
+			body.setMqId(UUIDUtil.genId32());
+			body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
+			message.setMessageBody(JSONObject.toJSONString(body));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("User FRIEND build  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
+	}
+
+	/**
+	 * 发送一条取消好友消息
+	 * 
+	 * @param userId
+	 * @param friendUserId
+	 */
+	private void sendRemoveFriendMQ(String userId, String friendUserId) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			DoUserFriend body = new DoUserFriend();
+			body.setFriendUserId(friendUserId);
+			body.setUserId(userId);
+			body.setTime(DateUtil.getSysDate());
+			body.setHandleType(DoUserFriend.HandleType.CANCEL.name());
+			body.setMqId(UUIDUtil.genId32());
+			body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
+			message.setMessageBody(JSONObject.toJSONString(body));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("User FRIEND build  message put in Queue error", se);
 		} catch (Exception e) {
 			LOG.error("Unknown exception happened!", e);
 		}

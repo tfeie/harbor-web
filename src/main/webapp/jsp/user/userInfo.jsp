@@ -18,6 +18,10 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
+	type="text/css" />
+<link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
+	type="text/css" />
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -27,16 +31,17 @@
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/json2.js"></script>
+<script src="//static.tfeie.com/v2/js/tap.js"></script>
 </head>
 <body class="body">
 	<section class="ip_info oc">
 		<section class="top_info">
 			<p class="span_file">
-				<img src="<c:out value="${userInfo.homePageBg}"/>">
+				<img src="<c:out value="${userInfo.homePageBg}"/>" >
 			</p>
 			<section class="ip_logo">
 				<p>
-					<span class="span_file"><img src="<c:out value="${userInfo.wxHeadimg}"/>" /></span>
+					<span class="span_file"><img src="<c:out value="${userInfo.wxHeadimg}"/>"/></span>
 				</p>
 			</section>
 		</section>
@@ -75,49 +80,22 @@
 			<p><c:out value="${userInfo.company}"/></p>
 			<p><c:out value="${userInfo.title}"/></p>
 		</section>
-
-	</section>
-	<footer class="footer">
-		<ul>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f1.png" />
-					</div>
-					<div class="text">Be</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f2.png" />
-					</div>
-					<div class="text">Go</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f3.png" />
-					</div>
-					<div class="text">Frd</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
-					</div>
-					<div class="text">Msg</div>
-			</a></li>
-			<li class="on"><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f5.png" />
-					</div>
-					<div class="text">Me</div>
-			</a></li>
-		</ul>
-	</footer>
+		
+		 <section class="but_baoc but_baoc1">
+            <p><input type="button" value="发送消息" /></p>
+        </section> 
+		
+		<section class="ip_bianji">
+			<p><a href="javascript:void(0)" id="BTN_ADD_FRIEND">加为好友</a></p>
+		</section>
+	</section> 
 </body>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+
 
 	<script type="text/javascript">
 	(function($){
@@ -132,10 +110,37 @@
 			prototype: {
 				init: function(){
 					this.initData(); 
+					this.bindEvents();
+				},
+				
+				bindEvents: function(){
+					var _this= this;
+					$("#BTN_ADD_FRIEND").on("click",function(){
+						_this.applyFriend();
+					})
 				},
 				
 				initData: function(){ 
 					this.getAllTags(); 
+				},
+				
+				applyFriend: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/applyFriend",
+						type: "post", 
+						data: {
+							friendUserId: this.getPropertyValue("userId"),
+							applyMq: ""
+						},
+						success: function(transport){
+							var data =transport.data;
+							
+						},
+						failure: function(transport){  
+							
+						}
+					});
 				},
 				
 				getAllTags: function(){
@@ -181,6 +186,8 @@
 	
 
 	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter({showBeGoQuick: "hide"});
 		var p = new $.UserViewPreviewPage({
 			userId: "<c:out value="${userInfo.userId}"/>"
 		});

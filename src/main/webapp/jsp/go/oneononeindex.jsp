@@ -236,7 +236,7 @@
 					<section class="info_fuwu">
 						<section class="ip_info">
 							<section class="info_img">
-								<span><img src="{{:wxHeadimg}}"></span>
+								<span><a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}"></a></span>
 							</section>
 							<section class="ip_text">
 								<p>

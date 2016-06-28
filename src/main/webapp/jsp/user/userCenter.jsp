@@ -119,7 +119,7 @@
 	$(document).ready(function(){
 		var b = new $.HarborBuilder();
 		b.buildFooter({
-			showBeGoQuick: false
+			showBeGoQuick: "hide"
 		});
 	});
 </script>
