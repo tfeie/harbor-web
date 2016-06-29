@@ -95,7 +95,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 
 	public static void initSession(HttpServletRequest request) {
 		WeixinOauth2Token wtoken = new WeixinOauth2Token();
-		wtoken.setOpenId("oztCUsxAjtgqU8AfsHuen-C9ouMI");
+		wtoken.setOpenId("oztCUs_Ci25lT7IEMeDLtbK6nr1M");
 		request.getSession().setAttribute(WXConstants.SESSION_WX_WEB_AUTH, wtoken);
 	}
 

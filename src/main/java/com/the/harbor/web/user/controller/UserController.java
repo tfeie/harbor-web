@@ -118,6 +118,7 @@ public class UserController {
 
 	@RequestMapping("/myhaiyou.html")
 	public ModelAndView myhaiyou(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		ModelAndView view = new ModelAndView("user/myhaiyou");
 		return view;
 	}

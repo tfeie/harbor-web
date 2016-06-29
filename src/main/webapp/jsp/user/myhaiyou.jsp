@@ -60,8 +60,8 @@
 
 		<div class="top-tap box-s">
 			<div class="hd" id="hd">
-				<div class="itms">新海友&推荐</div>
-				<div class="itms on">我的海友</div>
+				<div class="itms"><a href="../user/tuijian.html">新海友&推荐</a></div>
+				<div class="itms on"><a href="../user/myhaiyou.html">我的海友</a></div>
 			</div>
 		</div>
 
