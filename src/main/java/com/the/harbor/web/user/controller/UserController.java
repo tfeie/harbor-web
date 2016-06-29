@@ -1,7 +1,9 @@
 package com.the.harbor.web.user.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +65,7 @@ import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
 import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
+import com.the.harbor.commons.util.Pinyin;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.util.UUIDUtil;
 import com.the.harbor.commons.web.model.ResponseData;
@@ -839,7 +842,7 @@ public class UserController {
 	public ResponseData<JSONArray> getMyFriends(HttpServletRequest request) {
 		ResponseData<JSONArray> responseData = null;
 		try {
-			JSONArray arr = new JSONArray();
+			Map<String, JSONArray> m = new HashMap<String, JSONArray>();
 			// 获取当前登录的用户信息
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			Set<String> set = HyUserUtil.getUserFriends(userInfo.getUserId());
@@ -856,13 +859,32 @@ public class UserController {
 					d.put("industryName", u.getIndustryName());
 					d.put("title", u.getTitle());
 					d.put("atCityName", u.getAtCityName());
-					arr.add(d);
+
+					char firstChar = Pinyin.getPinyin(u.getEnName()).toUpperCase().charAt(0);
+					String fc = String.valueOf(firstChar);
+					if (m.containsKey(fc)) {
+						m.get(fc).add(d);
+					} else {
+						JSONArray arr = new JSONArray();
+						arr.add(d);
+						m.put(fc, arr);
+					}
+
 				}
 			}
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", arr);
+
+			JSONArray a = new JSONArray();
+			for (String key : m.keySet()) {
+				JSONObject o = new JSONObject();
+				o.put("letter", key);
+				o.put("friends", m.get(key));
+				a.add(o);
+			}
+
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", a);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = ExceptionUtil.convert(e, JSONArray.class);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_FAILURE, "操作失败");
 		}
 		return responseData;
 	}
