@@ -21,11 +21,10 @@
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
-
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
-	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script> 
 <script type="text/javascript" src="//static.tfeie.com/js/json2.js"></script>
 <script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
 <script src="//static.tfeie.com/v2/js/tap.js"></script>
@@ -35,32 +34,8 @@
 
 	<section class="txl-main">
 		<div class="swiper-container" id="banner-img">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-					<a href="#"><img src="//static.tfeie.com/v2/images/aimg.jpg"
-						width="100%"></a>
-				</div>
-				<div class="swiper-slide">
-					<a href="#"><img src="//static.tfeie.com/v2/images/aimg.jpg"
-						width="100%"></a>
-				</div>
-				<div class="swiper-slide">
-					<a href="#"><img src="//static.tfeie.com/v2/images/aimg.jpg"
-						width="100%"></a>
-				</div>
-				<div class="swiper-slide">
-					<a href="#"><img src="//static.tfeie.com/v2/images/aimg.jpg"
-						width="100%"></a>
-				</div>
-				<div class="swiper-slide">
-					<a href="#"><img src="//static.tfeie.com/v2/images/aimg.jpg"
-						width="100%"></a>
-				</div>
-			</div>
-
-			<div class="pagination">
-				<div class="ppage"></div>
-			</div>
+			<div class="swiper-wrapper" id="INDEX_SILDER"> 
+			</div> 
 		</div>
 
 		<div class="top-tap box-s">
@@ -74,52 +49,10 @@
 		<div id="bd">
 			<!--新海友-->
 			<div class="bd">
-				<div class="new-main box-s mar-top-10 pad-0-10">
+				<div class="new-main box-s mar-top-10 pad-0-10" id="DIV_HAIYOU_APPLY">
 					<div class="top-tie">
 						<span>新海友请求</span>
-					</div>
-					<div class="itms clearfix">
-						<div class="btn-right">
-							<span class="btn-hl">忽略</span> <span class="btn-js">接受</span>
-						</div>
-						<div class="c">
-							<div class="img">
-								<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-									height="40">
-							</div>
-							<div class="name">
-								<div class="name-xx">
-									<div class="xx">MaysMays</div>
-									<div class="yrz">
-										<span class="bg-lan">香港</span><font>已认证</font>
-									</div>
-								</div>
-								<div class="jj">金融/合伙人/北京</div>
-								<div class="hyy">Hi，Nice to meet you.</div>
-							</div>
-						</div>
-					</div>
-					<div class="itms clearfix">
-						<div class="btn-right">
-							<span class="btn-hl">忽略</span> <span class="btn-js">接受</span>
-						</div>
-						<div class="c">
-							<div class="img">
-								<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-									height="40">
-							</div>
-							<div class="name">
-								<div class="name-xx">
-									<div class="xx">Mays</div>
-									<div class="yrz">
-										<span class="bg-cen">英国</span><font>已认证</font>
-									</div>
-								</div>
-								<div class="jj">金融/合伙人/北京</div>
-								<div class="hyy">Hi，Nice to meet you.</div>
-							</div>
-						</div>
-					</div>
+					</div> 
 				</div>
 
 				<div class="tj-main box-s mar-top-10 pad-0-10">
@@ -131,22 +64,7 @@
 								<input type="text" placeholder="国家/行业/学校/职业" class="In-text">
 							</div>
 						</div>
-					</div>
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lv">美国</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
+					</div> 
 					<div class="itms clearfix">
 						<div class="img">
 							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
@@ -161,226 +79,15 @@
 							</div>
 							<div class="jj">金融/合伙人/北京</div>
 						</div>
-					</div>
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lan">香港</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lan">香港</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
+					</div> 
 
 				</div>
 			</div>
 			<!--新海友-->
-
-
-			<!--我的海友-->
-			<div class="bd" style="display: none;">
-				<div class="myhy">
-
-					<div class="btn-search"></div>
-					<div class="search-main">
-						<div class="m">
-							<input type="text" placeholder="国家/行业/学校/职业" class="In-text">
-						</div>
-					</div>
-				</div>
-
-				<div class="nav-r po-a">
-					<a href="#a" class="itms">A</a> <a href="#b" class="itms">B</a> <a
-						href="#c" class="itms">C</a> <a href="#d" class="itms">D</a> <a
-						href="#e" class="itms">E</a> <a href="#f" class="itms">F</a> <a
-						href="#g" class="itms">G</a> <a href="#h" class="itms">H</a> <a
-						href="#i" class="itms">I</a> <a href="#j" class="itms">J</a> <a
-						href="#k" class="itms">K</a> <a href="#l" class="itms">L</a> <a
-						href="#m" class="itms">M</a> <a href="#n" class="itms">N</a> <a
-						href="#o" class="itms">O</a> <a href="#p" class="itms">P</a> <a
-						href="#q" class="itms">Q</a> <a href="#r" class="itms">R</a> <a
-						href="#s" class="itms">S</a> <a href="#t" class="itms">T</a> <a
-						href="#u" class="itms">U</a> <a href="#v" class="itms">V</a> <a
-						href="#w" class="itms">W</a> <a href="#x" class="itms">X</a> <a
-						href="#y" class="itms">Y</a> <a href="#z" class="itms">Z</a>
-				</div>
-				<div class="bg-eeeeee pad-0-10 line-40 fs-16" id="a">A</div>
-				<div class="tj-main box-s pad-0-10">
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lv">美国</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lan">香港</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lan">香港</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lan">香港</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="bg-eeeeee pad-0-10 line-40 fs-16" id="b">B</div>
-				<div class="tj-main box-s pad-0-10">
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lv">美国</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lan">香港</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lan">香港</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lan">香港</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div>
-
-				</div>
-
-
-
-
-			</div>
-			<!--我的海友-->
 		</div>
 
 
 	</section>
-
-	<footer class="footer po-f">
-		<a href="#"><i class="icon-f1"></i><span>Be</span></a> <a href="#"><i
-			class="icon-f2"></i><span>Go</span></a> <a href="#"><i
-			class="icon-f3"></i><span>Frd</span></a> <a href="#"><i
-			class="icon-f4"><font>6</font></i><span>Msg</span></a> <a href="#"><i
-			class="icon-f5"></i><span>Me</span></a>
-	</footer>
-
-
-	<div class="tc-main">
-		<span class="btn-show po-f"></span> <span class="btn-be po-f"></span>
-		<span class="btn-go po-f"></span>
-		<div class="bg-main po-f"></div>
-	</div>
-
-
 	<script>
 		//轮播
 		var mySwiper = new Swiper('.swiper-container', {
@@ -392,64 +99,195 @@
 
 		})
 	</script>
-
-	<script>
-		$(function() {
-			//新朋友确认
-			$('.btn-js').tap(function() {
-				var dom = $(this).parents('.itms');
-				dom.fadeOut("200", function() {
-					dom.detach();
-				})
-			})
-
-			//新朋友取消
-			$('.btn-hl').tap(function() {
-				var dom = $(this).parents('.itms');
-				dom.fadeOut("200", function() {
-					dom.detach();
-				})
-			})
-
-			//点击搜索
-			$('.btn-search').tap(function() {
-				$(this).siblings('.search-main').fadeIn();
-			})
-			//显示底部
-			$('.btn-show')
-					.tap(
-							function() {
-								if ($(this).parent('.tc-main').attr('class') == 'tc-main'
-										|| $(this).parent('.tc-main').attr(
-												'class') == 'tc-main on1') {
-									$(this).parent('.tc-main').removeClass(
-											'on1');
-									$(this).parent('.tc-main').addClass('on');
-									$(this).parent('.tc-main').children(
-											'.bg-main').fadeIn();
-
-								} else {
-									$(this).parent('.tc-main')
-											.removeClass('on');
-									$(this).parent('.tc-main').addClass('on1');
-									$(this).parent('.tc-main').children(
-											'.bg-main').fadeOut();
-
-								}
-							})
-			//tap切换
-			$('#hd .itms').tap(function() {
-				$(this).siblings().removeClass('on')
-				$(this).addClass('on')
-				$('#bd .bd').css({
-					display : 'none'
-				})
-				$('#bd .bd').eq($(this).index()).css({
-					display : 'block'
-				})
-
-			})
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script type="text/javascript">
+	(function($){
+		$.HYTuijianPage = function(data){
+			this.settings = $.extend(true,{},$.HYTuijianPage.defaults);
+			this.params= data?data:{}
+		}
+		$.extend($.HYTuijianPage,{
+			defaults: { 
+			},
+		
+			prototype: {
+				init: function(){
+					this.bindEvents(); 
+					this.initData();  
+				},
+				
+				bindEvents: function(){
+					var _this = this; 
+					
+					//添加图片按钮事件
+					$("#SPAN_ADD_IMAGE").on("click",function(){
+						 
+					}); 
+					
+					//海友请求忽略
+					$("#DIV_HAIYOU_APPLY").delegate("[name='BTN_IGNORE']","click",function(){
+						var userId =$(this).attr("userId");
+						_this.ignoreFriendApply(userId,this);
+					});
+					//海友请求接收
+					$("#DIV_HAIYOU_APPLY").delegate("[name='BTN_ACCEPT']","click",function(){
+						var userId =$(this).attr("userId");
+						_this.acceptFriendApply(userId,this);
+					});
+					
+				},
+				
+				initData: function(){
+					this.getIndexPageSilders();
+					this.getMyFriendsApplies();
+				}, 
+				
+				acceptFriendApply: function(userId,_t){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/agreeApplyFriend",
+						type: "post",  
+						data: {
+							friendUserId: userId
+						},
+						success: function(transport){
+							var dom	=	$(_t).parents('.itms');
+							dom.fadeOut("200",function(){dom.detach();});
+						},
+						failure: function(transport){ 
+							weUI.alert({content:transport.statusInfo})
+						}
+					});
+				},
+				
+				ignoreFriendApply: function(userId,_t){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/ignorApplyFriend",
+						type: "post",  
+						data: {
+							friendUserId: userId
+						},
+						success: function(transport){
+							var dom	=	$(_t).parents('.itms');
+							dom.fadeOut("200",function(){dom.detach();});
+						},
+						failure: function(transport){ 
+							weUI.alert({content:transport.statusInfo})
+						}
+					});
+				},
+				
+				getIndexPageSilders: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/getIndexPageSilders",
+						type: "post",  
+						success: function(transport){
+							var data =transport.data;  
+							_this.renderBannerSider(data); 
+						},
+						failure: function(transport){ 
+							_this.renderBannerSider([]); 
+						}
+					});
+				},
+				
+				getMyFriendsApplies: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/getMyFriendsApplies",
+						type: "post",  
+						success: function(transport){
+							var data =transport.data;  
+							_this.renderFriendApplies(data); 
+						},
+						failure: function(transport){ 
+							_this.renderFriendApplies([]); 
+						}
+					});
+				},
+				
+				renderFriendApplies: function(data){
+					data= data?data:[];
+					var opt= "";
+					if(data.length>0){
+						opt=$("#HaiyouApplyImpl").render(data);
+					}else{
+						opt="<div class=\"itms clearfix\">没有新海友申请哦~</div>"
+					}
+					
+					$("#DIV_HAIYOU_APPLY").append(opt); 
+					
+				},
+				 
+				renderBannerSider: function(data){ 
+					data= data?data:[];
+					var opt=$("#BannerSiderImpl").render(data);
+					$("#INDEX_SILDER").html(opt); 
+				},
+				
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
+				}
+			}
 		})
-	</script>
+	})(jQuery);
+	
+
+	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter();
+		
+		var p = new $.HYTuijianPage({ 
+		});
+		p.init();
+		
+		
+	});
+</script>
+
+<script id="BannerSiderImpl" type="text/x-jsrender"> 
+		<div class="swiper-slide">
+					<a href="{{:linkURL}}"><img src="{{:imgURL}}"
+						width="100%"></a>
+				</div>
+</script>
+
+<script id="HaiyouApplyImpl" type="text/x-jsrender"> 	
+<div class="itms clearfix">
+						<div class="btn-right">
+							<span class="btn-hl" name="BTN_IGNORE" userId="{{:userId}}">忽略</span> <span class="btn-js" name="BTN_ACCEPT" userId="{{:userId}}">接受</span>
+						</div>
+						<div class="c">
+							<div class="img">
+								<img src="{{:wxHeadimg}}" width="40"
+									height="40">
+							</div>
+							<div class="name">
+								<div class="name-xx">
+									<div class="xx">{{:enName}}</div>
+									<div class="yrz">
+										<span class="bg-lan">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+									</div>
+								</div>
+								<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>
+								<div class="hyy">Hi，Nice to meet you.</div>
+							</div>
+						</div>
+					</div>
+</script>
+	
 </body>
 </html>
