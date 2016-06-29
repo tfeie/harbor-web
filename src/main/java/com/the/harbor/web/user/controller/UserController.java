@@ -98,6 +98,7 @@ public class UserController {
 
 	@RequestMapping("/messagecenter.html")
 	public ModelAndView messagecenter(HttpServletRequest request) {
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		ModelAndView view = new ModelAndView("user/messagecenter");
 		return view;
 	}
@@ -110,6 +111,7 @@ public class UserController {
 
 	@RequestMapping("/tuijian.html")
 	public ModelAndView tuijian(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		ModelAndView view = new ModelAndView("user/haiyoutuijian");
 		return view;
 	}

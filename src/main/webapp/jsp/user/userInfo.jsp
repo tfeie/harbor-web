@@ -22,6 +22,8 @@
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -82,8 +84,11 @@
 		</section>
 		
 		 <section class="but_baoc but_baoc1">
-            <p><input type="button" value="发送消息" /></p>
+            <p><input type="button" value="发送消息" id="BTN_IM"/></p>
         </section> 
+		<section class="zhangdemei">
+			<p></p>
+		</section>
 		
 		<section class="ip_bianji">
 			<p><a href="javascript:void(0)" id="BTN_ADD_FRIEND">加为好友</a></p>
@@ -94,6 +99,8 @@
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
 
 
@@ -117,6 +124,9 @@
 					var _this= this;
 					$("#BTN_ADD_FRIEND").on("click",function(){
 						_this.applyFriend();
+					});
+					$("#BTN_IM").on("click",function(){
+						weUI.alert({content: "发送消息测试"});
 					})
 				},
 				
@@ -135,10 +145,10 @@
 						},
 						success: function(transport){
 							var data =transport.data;
-							
+							weUI.alert({content: "好友申请已经发送，请等待TA同意"});
 						},
 						failure: function(transport){  
-							
+							weUI.alert({content: transport.statusInfo});
 						}
 					});
 				},
