@@ -132,6 +132,7 @@
 					//添加图片按钮事件
 					$("#SPAN_ADD_IMAGE").on("click",function(){
 						 
+						
 					}); 
 					
 					//海友请求忽略
