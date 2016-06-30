@@ -352,16 +352,13 @@
 
 <script id="BeDetailImpl" type="text/x-jsrender"> 
 			<div class="time">{{:createDate}}</div>
+			<div class="m">
 			{{for beDetails ~beTags=beTags}} 	
 				{{if type=="text"}}
-					<div class="c">
-						{{:detail}}
-					</div>
+					<p> {{:detail}} </p>
 				{{/if}}
 				{{if type=="image"}}
-					<div class="img">
-						<img src="{{:imageUrl}}" width="100%">
-					</div>
+					<img src="{{:imageUrl}}" width="100%">
 				{{/if}}
 				{{if #index==0}}
 					<div class="bq clearfix">
@@ -371,7 +368,7 @@
 					</div>
 				{{/if}}
 			{{/for}} 
-
+			</div>
 			<div class="btn-bottom">
 				<div class="btn-fx box-s"></div>
 				<div class="btn-z  box-s" id="DIV_DO_DIANZAN" beId = "{{:beId}}">
@@ -381,7 +378,7 @@
 </script>
 
 <script id="BeDianZanUsersImpl" type="text/x-jsrender"> 
-<a href="javascript:void(0)"><img src="{{:wxHeadimg}}"  alt="{{:enName}}" width="30" height="30"></a> 
+<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}"  alt="{{:enName}}" width="30" height="30"></a> 
 </script>
 
 <script id="BeCommentsImpl" type="text/x-jsrender"> 

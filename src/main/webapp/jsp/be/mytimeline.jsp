@@ -144,15 +144,13 @@
 </script>
 
 
-<script id="MyBeListImpl" type="text/x-jsrender"> 	
-		<div class="itms">
-			<div class="l">
-				{{if showMMdd==true}}{{:mmdd}} {{/if}}
-			</div>
-			<a href="../be/detail.html?beId={{:beId}}" class="r">
-				<div class="c">
-					<div class="i">
-						{{if hasimg==true}}
+<script id="MyBeListImpl" type="text/x-jsrender"> 
+	<div class="itms">
+        	<div class="l">{{if showMMdd==true}}{{:mmdd}} {{/if}}</div>
+            <a href="../be/detail.html?beId={{:beId}}" class="r">
+            	<div class="c">
+            	<div class="i">
+					{{if hasimg==true}}
 						<img src="{{:imageURL}}" width="60"
 							height="60">
 						{{/if}}
@@ -160,10 +158,13 @@
 						<img src="//static.tfeie.com/v2/images/pyq-img.jpg" width="60"
 							height="60">
 						{{/if}}
-					</div>
-					<p class="chaochu_3">{{if hastext==true}} {{:contentSummary}} {{/if}}</p>
 				</div>
-			</a>
-		</div>
+                <div class="r-jj">
+                	<p class="chaochu_3">{{if hastext==true}} {{:contentSummary}} {{/if}}</p>	
+                </div>
+
+                </div>
+            </a>
+        </div> 
 </script>
 </html>

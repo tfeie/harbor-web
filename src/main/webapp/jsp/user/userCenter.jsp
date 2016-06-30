@@ -35,7 +35,7 @@
 			</p>
 			<section class="ip_logo ip2">
 				<p>
-					<span><img src="<c:out value="${userInfo.wxHeadimg}"/>" /></span>
+					<span><a href="../user/editUserInfo.html?userId=<c:out value="${userInfo.userId}"/>"><img src="<c:out value="${userInfo.wxHeadimg}"/>"> </a></span>
 				</p>
 			</section>
 		</section>

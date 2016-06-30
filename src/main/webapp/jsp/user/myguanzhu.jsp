@@ -157,8 +157,7 @@
 						</div>
 						<div class="c">
 							<div class="img">
-								<img src="{{:wxHeadimg}}" width="40"
-									height="40">
+								 <a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}" width="40" height="40"></a>
 							</div>
 							<div class="name">
 								<div class="name-xx">
