@@ -40,15 +40,53 @@
 
 		<div class="top-tap box-s">
 			<div class="hd" id="hd">
-				<div class="itms"><a href="../user/tuijian.html">新海友&推荐</a></div>
-				<div class="itms on"><a href="../user/myhaiyou.html">我的海友</a></div>
+				<div class="itms">新海友&推荐</div>
+				<div class="itms on">我的海友</div>
 			</div>
 		</div>
 
 
 		<div id="bd">
+			<!--新海友-->
+			<div class="bd" style="display:none">
+				<div class="new-main box-s mar-top-10 pad-0-10" id="DIV_HAIYOU_APPLY">
+					<div class="top-tie">
+						<span>新海友请求</span>
+					</div> 
+				</div>
+
+				<div class="tj-main box-s mar-top-10 pad-0-10">
+					<div class="top-tie">
+						<span>推荐的海友</span>
+						<div class="btn-search"></div>
+						<div class="search-main">
+							<div class="m">
+								<input type="text" placeholder="国家/行业/学校/职业" class="In-text">
+							</div>
+						</div>
+					</div> 
+					<div class="itms clearfix">
+						<div class="img">
+							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
+								height="40">
+						</div>
+						<div class="name">
+							<div class="name-xx">
+								<div class="xx">MaysMays</div>
+								<div class="yrz">
+									<span class="bg-lan">香港</span><font>已认证</font>
+								</div>
+							</div>
+							<div class="jj">金融/合伙人/北京</div>
+						</div>
+					</div> 
+
+				</div>
+			</div>
+			<!--新海友-->
+			
 			<!--我的海友-->
-			<div class="bd" id="DIV_MYFRIENDS">
+			<div class="bd">
 				<div class="myhy">
 					<div class="btn-search"></div>
 					<div class="search-main">
@@ -72,7 +110,7 @@
 						href="#W" class="itms">W</a> <a href="#X" class="itms">X</a> <a
 						href="#Y" class="itms">Y</a> <a href="#Z" class="itms">Z</a>
 				</div>
-				
+				<div id="DIV_MYFRIENDS"></div>
 	
 
 			</div>
@@ -82,17 +120,6 @@
 
 	</section>
 
-	<script>
-		//轮播
-		var mySwiper = new Swiper('.swiper-container', {
-			grabCursor : true,
-			loop : true,
-			paginationClickable : true,
-			pagination : '.ppage',
-			autoplay : 5000,
-
-		})
-	</script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript"
@@ -121,12 +148,31 @@
 				},
 				
 				bindEvents: function(){
-					var _this = this; 					
+					var _this = this; 
+					//海友请求忽略
+					$("#DIV_HAIYOU_APPLY").delegate("[name='BTN_IGNORE']","click",function(){
+						var userId =$(this).attr("userId");
+						_this.ignoreFriendApply(userId,this);
+					});
+					//海友请求接收
+					$("#DIV_HAIYOU_APPLY").delegate("[name='BTN_ACCEPT']","click",function(){
+						var userId =$(this).attr("userId");
+						_this.acceptFriendApply(userId,this);
+					});
+					
+					$('#hd .itms').tap(function(){
+						$(this).siblings().removeClass('on')
+						$(this).addClass('on')
+						$('#bd .bd').css({display:'none'})
+						$('#bd .bd').eq($(this).index()).css({display:'block'})
+					})
+
 				},
 				
 				initData: function(){
 					this.getIndexPageSilders();
 					this.getMyFriends();
+					this.getMyFriendsApplies();
 				}, 
 				
 				getIndexPageSilders: function(){
@@ -142,6 +188,81 @@
 							_this.renderBannerSider([]); 
 						}
 					});
+				},
+				
+				acceptFriendApply: function(userId,_t){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/agreeApplyFriend",
+						type: "post",  
+						data: {
+							friendUserId: userId
+						},
+						success: function(transport){
+							var dom	=	$(_t).parents('.itms');
+							dom.fadeOut("200",function(){dom.detach();});
+							var len = $(".items").length;
+							if(len==0){
+								var opt="<div class=\"itms clearfix\">没有新的海友申请哦~</div>";
+								$("#DIV_HAIYOU_APPLY").append(opt); 
+							}
+							_this.getMyFriends();
+						},
+						failure: function(transport){ 
+							weUI.alert({content:transport.statusInfo})
+						}
+					});
+				},
+				
+				ignoreFriendApply: function(userId,_t){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/ignorApplyFriend",
+						type: "post",  
+						data: {
+							friendUserId: userId
+						},
+						success: function(transport){
+							var dom	=	$(_t).parents('.itms');
+							dom.fadeOut("200",function(){dom.detach();});
+							var len = $(".items").length;
+							if(len==0){
+								var opt="<div class=\"itms clearfix\">没有新的海友申请哦~</div>";
+								$("#DIV_HAIYOU_APPLY").append(opt); 
+							}
+						},
+						failure: function(transport){ 
+							weUI.alert({content:transport.statusInfo})
+						}
+					});
+				},
+				
+				getMyFriendsApplies: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/getMyFriendsApplies",
+						type: "post",  
+						success: function(transport){
+							var data =transport.data;  
+							_this.renderFriendApplies(data); 
+						},
+						failure: function(transport){ 
+							_this.renderFriendApplies([]); 
+						}
+					});
+				},
+				
+				renderFriendApplies: function(data){
+					data= data?data:[];
+					var opt= "";
+					if(data.length>0){
+						opt=$("#HaiyouApplyImpl").render(data);
+					}else{
+						opt="<div class=\"itms clearfix\">没有新海友申请哦~</div>"
+					}
+					
+					$("#DIV_HAIYOU_APPLY").append(opt); 
+					
 				},
 				
 				getMyFriends: function(){
@@ -167,7 +288,7 @@
 						opt="<div class=\"itms clearfix\">您还没有海友哦~~</div>"
 					}
 					
-					$("#DIV_MYFRIENDS").append(opt); 
+					$("#DIV_MYFRIENDS").html(opt); 
 					
 				},
 				 
@@ -175,6 +296,15 @@
 					data= data?data:[];
 					var opt=$("#BannerSiderImpl").render(data);
 					$("#INDEX_SILDER").html(opt); 
+					
+					var mySwiper = new Swiper('.swiper-container', {
+						grabCursor : true,
+						loop : true,
+						paginationClickable : true,
+						pagination : '.ppage',
+						autoplay : 5000,
+
+					}) 
 				},
 				
 				getPropertyValue: function(propertyName){
@@ -224,5 +354,30 @@
 				{{/for}}
 				</div>
 </script>
+
+<script id="HaiyouApplyImpl" type="text/x-jsrender"> 	
+<div class="itms clearfix">
+						<div class="btn-right">
+							<span class="btn-hl" name="BTN_IGNORE" userId="{{:userId}}">忽略</span> <span class="btn-js" name="BTN_ACCEPT" userId="{{:userId}}">接受</span>
+						</div>
+						<div class="c">
+							<div class="img">
+								<img src="{{:wxHeadimg}}" width="40"
+									height="40">
+							</div>
+							<div class="name">
+								<div class="name-xx">
+									<div class="xx">{{:enName}}</div>
+									<div class="yrz">
+										<span class="bg-lan">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+									</div>
+								</div>
+								<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>
+								<div class="hyy">Hi，Nice to meet you.</div>
+							</div>
+						</div>
+					</div>
+</script>
+
 </body>
 </html>

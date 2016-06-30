@@ -91,10 +91,7 @@
 				<span>兴趣技能</span><label>setUserSkills.jsp-ok<a href="../user/setUserSkills.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>海友新-01</span><label>haiyoutuijian.jsp <a href="../user/tuijian.html">Go</a></label>
-			</p>
-			<p class="on1">
-				<span>我的海友</span><label>myhaiyou.jsp <a href="../user/myhaiyou.html">Go</a></label>
+				<span>我的海友/推荐</span><label>myhaiyou.jsp-ok <a href="../user/myhaiyou.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>我关注的</span><label>myguanzhu.jsp-ok <a href="../user/myguanzhu.html">Go</a></label>

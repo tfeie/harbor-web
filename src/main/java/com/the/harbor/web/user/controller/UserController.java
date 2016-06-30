@@ -1,10 +1,11 @@
 package com.the.harbor.web.user.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -109,13 +110,6 @@ public class UserController {
 	@RequestMapping("/mymessagedetail.html")
 	public ModelAndView mymessagedetail(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("user/mymessagedetail");
-		return view;
-	}
-
-	@RequestMapping("/tuijian.html")
-	public ModelAndView tuijian(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-		ModelAndView view = new ModelAndView("user/haiyoutuijian");
 		return view;
 	}
 
@@ -842,7 +836,7 @@ public class UserController {
 	public ResponseData<JSONArray> getMyFriends(HttpServletRequest request) {
 		ResponseData<JSONArray> responseData = null;
 		try {
-			Map<String, JSONArray> m = new HashMap<String, JSONArray>();
+			Map<String, JSONArray> m = new TreeMap<String, JSONArray>();
 			// 获取当前登录的用户信息
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			Set<String> set = HyUserUtil.getUserFriends(userInfo.getUserId());
@@ -872,9 +866,9 @@ public class UserController {
 
 				}
 			}
-
+			Map<String, JSONArray> newMap=this.sortByKey(m);
 			JSONArray a = new JSONArray();
-			for (String key : m.keySet()) {
+			for (String key : newMap.keySet()) {
 				JSONObject o = new JSONObject();
 				o.put("letter", key);
 				o.put("friends", m.get(key));
@@ -1167,6 +1161,19 @@ public class UserController {
 			}
 		}
 
+	}
+
+	private Map<String, JSONArray> sortByKey(Map<String, JSONArray> m) {
+		Map<String, JSONArray> sortMap = new TreeMap<String, JSONArray>(new MapKeyComparator());
+		sortMap.putAll(m);
+		return sortMap;
+	}
+
+	class MapKeyComparator implements Comparator<String> {
+		@Override
+		public int compare(String key1, String key2) {
+			return key1.compareTo(key2);
+		}
 	}
 
 }
