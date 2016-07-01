@@ -152,6 +152,7 @@ wx.config({
 									content: "活动支付失败",
 									ok: function(){
 										 _this.updateGoOrderStatus(d.payOrderId,"FAIL");
+										 weUI.closeAlert();
 									}
 								})
 						    }, 
@@ -182,11 +183,16 @@ wx.config({
 						payStatus: payStatus
 					},
 					success: function(transport){
-						
+						weUI.alert({
+							content: "支付成功，请等待海牛确认.您可以浏览下其它活动",
+							ok: function(){
+								window.location.href="../go/oneononeindex.html";
+							}
+						})
 					},
 					failure: function(transport){
 						weUI.alert({
-							content: "更新活动预约支付状态失败"+transport.statusInfo
+							content: transport.statusInfo
 						})
 					}
 					
