@@ -1200,6 +1200,7 @@ public class UserController {
     public ResponseData<String> saveData(HttpServletRequest request,HttpServletResponse response) {
 		ResponseData<String> responseData = null;
 		String param = request.getParameter("param");
+		/**存入数据 **/
 		SMSRandomCodeUtil.setSmsRandomCode("test_lisener", param);
 		responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
 		return responseData;

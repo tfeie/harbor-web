@@ -19,6 +19,7 @@ $(function(){
 	$("button").bind("click",function(){
 		if (!!window.EventSource) {
 			var source = new EventSource('<%=_base%>/user/lisener?user='+"11");
+			
 			source.addEventListener('message', function(e) {
 				$("p").html(e.data);
 			});
