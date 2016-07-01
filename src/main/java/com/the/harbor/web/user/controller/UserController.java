@@ -1176,4 +1176,32 @@ public class UserController {
 		}
 	}
 
+	@RequestMapping("/lisener")
+    public @ResponseBody
+    String sendMessage(HttpServletRequest request,HttpServletResponse response) {
+        String user = request.getParameter("user");
+        response.setContentType("text/event-stream; charset=utf-8");
+        response.setHeader("Cache-Control", "no-cache");
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            LOG.error(e.getMessage());
+        }
+        
+        String odata = SMSRandomCodeUtil.getSmsRandomCode("test_lisener");
+        if (!StringUtil.isBlank(odata)) {
+            return "data:" + odata + "\n\n";
+        } else {
+            return null;
+        }
+    }
+	
+	@RequestMapping("/saveData")
+    public ResponseData<String> saveData(HttpServletRequest request,HttpServletResponse response) {
+		ResponseData<String> responseData = null;
+		String param = request.getParameter("param");
+		SMSRandomCodeUtil.setSmsRandomCode("test_lisener", param);
+		responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+		return responseData;
+	}
 }
