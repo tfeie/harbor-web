@@ -8,6 +8,7 @@ import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.GoCreateReq;
 import com.the.harbor.api.go.param.GoCreateResp;
 import com.the.harbor.api.go.param.GoTag;
+import com.the.harbor.api.go.param.UpdateGoOrderPayReq;
 import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.util.ExceptionUtil;
@@ -15,18 +16,12 @@ import com.the.harbor.commons.util.ExceptionUtil;
 public class DubboClientTest {
 
 	public static void main(String[] args) {
-		try {
-			GoCreateReq req = new GoCreateReq();
-			List<GoTag> goTags = new ArrayList<GoTag>();
-			GoTag tag = new GoTag();
-			goTags.add(tag);
-			req.setGoTags(goTags);
-			GoCreateResp resp = DubboConsumerFactory.getService(IGoSV.class).createGo(req);
-			System.out.println(JSON.toJSONString(resp));
-		} catch (Exception ex) {
-			Response resp = ExceptionUtil.convert(ex, String.class);
-			System.out.println(JSON.toJSONString(resp));
-		}
+		UpdateGoOrderPayReq updateGoOrderPayReq = new UpdateGoOrderPayReq();
+		updateGoOrderPayReq.setPayOrderId("7B810C32459B44F0B820C6B51A4DDBF8");
+		updateGoOrderPayReq.setGoOrderId("6F0DBDFB848C42F7926A2BD999FDBAFA");
+		updateGoOrderPayReq.setPayStatus("SUCCESS");
+		
+		Response rep = DubboConsumerFactory.getService(IGoSV.class).updateGoOrderPay(updateGoOrderPayReq);
 	}
 
 }

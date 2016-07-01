@@ -85,6 +85,7 @@
 						type: "post",  
 						success: function(transport){
 							var data =transport.data; 
+							alert(JSON.stringify(data));
 							_this.renderNotifyList(data); 
 						},
 						failure: function(transport){ 

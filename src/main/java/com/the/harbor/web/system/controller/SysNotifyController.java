@@ -49,9 +49,9 @@ public class SysNotifyController {
 	}
 
 	private void fillNotifyVo(HyNotifyVo vo) {
-		vo.setHaslink(StringUtil.isBlank(vo.getLink()));
+		vo.setHaslink(!StringUtil.isBlank(vo.getLink()));
 		if (SenderType.USER.getValue().equals(vo.getSenderType())) {
-			if (!StringUtil.isBlank(vo.getAccepterId())) {
+			if (!StringUtil.isBlank(vo.getSenderId())) {
 				UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(vo.getSenderId());
 				if (userInfo != null) {
 					vo.setUserStatusName(userInfo.getUserStatusName());
