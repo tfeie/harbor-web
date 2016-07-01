@@ -117,7 +117,6 @@
 				var _this = this;
 				var data = {
 					goOrderId: _this.getPropertyValue("goOrderId"),
-					publishUserId:_this.getPropertyValue("publishUserId"),
 					ackFlag: ackFlag
 				};
 				ajaxController.ajax({
@@ -136,7 +135,7 @@
 					},
 					failure: function(transport){
 						weUI.alert({
-							content: "处理失败"+transport.statusInfo
+							content: transport.statusInfo
 						})
 					}
 					
@@ -153,7 +152,6 @@
 
 $(document).ready(function(){
 	var p = new $.GoWaitConfirmPage({
-		publishUserId: "<c:out value="${publishUserId}"/>", 
 		goOrderId:  "<c:out value="${goOrder.orderId}"/>"
 		
 	});

@@ -98,7 +98,13 @@
 
 				renderMyGroups : function(data) {
 					data = data ? data : [];
-					var opt = $("#MyGroupsImpl").render(data);
+					var opt="";
+					if(data.length>0){
+						opt = $("#MyGroupsImpl").render(data);
+					}else{
+						opt="<div class='itms box-s'><div class='js chaochu_2'>您还没有发布任何Group活动哦~</div></div>";
+					}
+					
 					$("#DIV_MY_GOES").html(opt);
 				},
 

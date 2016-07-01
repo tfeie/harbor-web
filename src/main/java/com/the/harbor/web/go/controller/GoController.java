@@ -1,13 +1,16 @@
 package com.the.harbor.web.go.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
 import org.apache.log4j.Logger;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +23,7 @@ import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderReq;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderResp;
 import com.the.harbor.api.go.param.Go;
+import com.the.harbor.api.go.param.GoComment;
 import com.the.harbor.api.go.param.GoCreateReq;
 import com.the.harbor.api.go.param.GoCreateResp;
 import com.the.harbor.api.go.param.GoOrder;
@@ -47,6 +51,7 @@ import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.HyDictsVo;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyDictUtil;
+import com.the.harbor.commons.redisdata.util.HyGoUtil;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.util.AmountUtils;
 import com.the.harbor.commons.util.CollectionUtil;
@@ -173,7 +178,6 @@ public class GoController {
 		request.setAttribute("tips", tips);
 		request.setAttribute("userInfo", joinUserInfo);
 		request.setAttribute("goOrder", goOrder);
-		request.setAttribute("publishUserId", userInfo.getUserId());
 		ModelAndView view = new ModelAndView("go/hainiuconfirm");
 		return view;
 	}
@@ -244,19 +248,14 @@ public class GoController {
 	@RequestMapping("/toPay.html")
 	public ModelAndView toPay(HttpServletRequest request) {
 		String goOrderId = request.getParameter("goOrderId");
-		String goId = request.getParameter("goId");
-		if (StringUtil.isBlank(goId) || StringUtil.isBlank(goOrderId)) {
+		if (StringUtil.isBlank(goOrderId)) {
 			throw new BusinessException("支付失败:您需要同时指定活动信息和活动预约单信息");
-		}
-		Go go = DubboServiceUtil.queryGo(goId);
-		if (go == null) {
-			throw new BusinessException("支付失败:活动不存在。请前往预约活动", true, "../go/oneononeindex.html");
 		}
 		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		// 校验当前用户对于此活动的状态来执行处理
 		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
 		if (goOrder == null) {
-			throw new BusinessException("支付失败:您没有对此活动进行预约。请前往预约", true, "../go/toOrder.html?goId=" + go.getGoId());
+			throw new BusinessException("支付失败:您没有对此活动进行预约", true, "../go/oneononeindex.html");
 		}
 		// 判断活动是否属于待支付或者支付失败状态
 		if (!(OrderStatus.PAY_FAILURE.getValue().equals(goOrder.getOrderStatus())
@@ -320,9 +319,18 @@ public class GoController {
 		return view;
 	}
 
-	@RequestMapping("/godetail.html")
-	public ModelAndView godetail(HttpServletRequest request) {
-		ModelAndView view = new ModelAndView("go/godetail");
+	@RequestMapping("/onodetail.html")
+	public ModelAndView onodetail(HttpServletRequest request) {
+		String goId = request.getParameter("goId");
+		if (StringUtil.isBlank(goId)) {
+			throw new BusinessException("您查看的活动信息不存在");
+		}
+		Go go = DubboServiceUtil.queryGo(goId);
+		if (go == null) {
+			throw new BusinessException("您查看的活动信息不存在");
+		}
+		request.setAttribute("go", go);
+		ModelAndView view = new ModelAndView("go/onodetail");
 		return view;
 	}
 
@@ -513,9 +521,12 @@ public class GoController {
 
 	@RequestMapping("/confirmGoOrder")
 	@ResponseBody
-	public ResponseData<String> confirmGoOrder(@NotNull(message = "参数为空") GoOrderConfirmReq goOrderConfirmReq) {
+	public ResponseData<String> confirmGoOrder(@NotNull(message = "参数为空") GoOrderConfirmReq goOrderConfirmReq,
+			HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			goOrderConfirmReq.setPublishUserId(userInfo.getUserId());
 			Response rep = DubboConsumerFactory.getService(IGoSV.class).confirmGoOrder(goOrderConfirmReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
@@ -610,4 +621,86 @@ public class GoController {
 		return responseData;
 	}
 
+	@RequestMapping("/queryGo")
+	@ResponseBody
+	public ResponseData<Go> queryGo(@NotNull(message = "参数为空") String goId, HttpServletRequest request) {
+		ResponseData<Go> responseData = null;
+		try {
+			Go go = DubboServiceUtil.queryGo(goId);
+			responseData = new ResponseData<Go>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", go);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, Go.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getGoComments")
+	@ResponseBody
+	public ResponseData<List<GoComment>> getGoComments(@NotBlank(message = "GO标识为空") String goId) {
+		ResponseData<List<GoComment>> responseData = null;
+		try {
+			/* 1.获取BE的所有评论集合 */
+			Set<String> set = HyGoUtil.getGoCommentIds(goId, 0, -1);
+			/* 2.获取所有评论数据 */
+			List<GoComment> list = new ArrayList<GoComment>();
+			for (String commentId : set) {
+				String commentData = HyGoUtil.getGoComment(commentId);
+				if (!StringUtil.isBlank(commentData)) {
+					GoComment b = JSONObject.parseObject(commentData, GoComment.class);
+					this.fillGoCommentInfo(b);
+					list.add(b);
+				}
+			}
+			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", list);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_FAILURE, "操作失败");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/checkGoOrder")
+	@ResponseBody
+	public ResponseData<String> checkGoOrder(@NotBlank(message = "GO标识为空") String goId, HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			GoOrder goOrder = DubboServiceUtil.queryGoOrder(userInfo.getUserId(), goId);
+			if (goOrder != null && !OrderStatus.CANCEL.getValue().equals(goOrder.getOrderStatus())) {
+				throw new BusinessException("您已经预约过此活动哦~");
+			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	private void fillGoCommentInfo(GoComment b) {
+		b.setCreateTimeInteval(DateUtil.getInterval(b.getCreateDate()));
+		// 发布人信息
+		if (!StringUtil.isBlank(b.getUserId())) {
+			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(b.getUserId());
+			if (userInfo != null) {
+				b.setUserStatusName(userInfo.getUserStatusName());
+				b.setWxHeadimg(userInfo.getWxHeadimg());
+				b.setEnName(userInfo.getEnName());
+				b.setAbroadCountryName(userInfo.getAbroadCountryName());
+			}
+
+		}
+
+		// 回复上级信息
+		if (!StringUtil.isBlank(b.getParentUserId())) {
+			UserViewInfo puser = WXUserUtil.getUserViewInfoByUserId(b.getParentUserId());
+			if (puser != null) {
+				b.setPabroadCountryName(puser.getAbroadCountryName());
+				b.setPenName(puser.getEnName());
+				b.setPuserStatusName(puser.getUserStatusName());
+				b.setPwxHeadimg(puser.getWxHeadimg());
+			}
+		}
+	}
 }

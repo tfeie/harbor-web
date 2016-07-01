@@ -227,7 +227,7 @@
 <script id="GroupsImpl" type="text/x-jsrender"> 
 				<section class="wuwai_jiansheng">
 					<section class="title_jiansheng">
-						<p>{{:topic}}</p>
+						<p><a href="../go/onodetail.html?goId={{:goId}}">{{:topic}}</a></p>
 						<section class="pos_yuan">
 							<span></span><span class="on"></span>
 							<div class="clear"></div>
@@ -250,7 +250,7 @@
 							<div class="clear"></div>
 						</section>
 						<section class="oneon_text">
-							<p>{{:contentSummary}}</p>
+							<p><a href="../go/onodetail.html?goId={{:goId}}">{{:contentSummary}}</p>
 						</section>
 					</section>
 					<section class="oneon_span">

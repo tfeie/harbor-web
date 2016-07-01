@@ -92,7 +92,11 @@
 
 				renderMyGroups : function(data) {
 					data = data ? data : [];
-					var opt = $("#MyGroupsImpl").render(data);
+					if(data.length>0){
+						opt = $("#MyGroupsImpl").render(data);
+					}else{
+						opt="<div class='itms box-s'><div class='js chaochu_2'>您还没有发布任何One On One活动哦~</div></div>";
+					}
 					$("#DIV_MY_GOES").html(opt);
 				},
 

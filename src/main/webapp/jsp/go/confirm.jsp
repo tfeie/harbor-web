@@ -50,7 +50,7 @@
 		<section class="touxiang-info">
 			<section class="touxiang-img">
 				<p>
-					<span><img src="<c:out value="${userInfo.wxHeadimg}" escapeXml="false"/>"></span>
+					<span><a href="../user/userInfo.html?userId=<c:out value="${userInfo.userId}" escapeXml="false"/>"><img src="<c:out value="${userInfo.wxHeadimg}" escapeXml="false"/>" width="40" height="40"></a></span>
 				</p>
 			</section>
 			<section class="text-info">

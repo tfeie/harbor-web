@@ -107,7 +107,12 @@
 				 
 				renderMyBeList: function(data){ 
 					data= data?data:[];
-					var opt=$("#MyBeListImpl").render(data);
+					var opt="";
+					if(data.length>0){
+						opt = $("#MyBeListImpl").render(data);
+					}else{
+						opt="<div class='itms box-s'><div class='js chaochu_2'>您还没有发布任何动态哦~</div></div>";
+					}
 					$("#SELECTTION_MY_BE_LIST").html(opt); 
 				},
 				

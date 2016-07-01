@@ -174,7 +174,7 @@
 					},
 					failure: function(transport){
 						weUI.alert({
-							content: "活动预约失败"+transport.statusInfo
+							content: transport.statusInfo
 						})
 					}
 					

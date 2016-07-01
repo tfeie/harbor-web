@@ -135,7 +135,7 @@
 				<span>审核信息</span><label>go/confirmlist.jsp <a href="../go/confirmlist.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>主题详情</span><label>go/godetail.jsp <a href="../go/godetail.html">Go</a></label>
+				<span>主题详情</span><label>onodetail.jsp <a href="../go/onodetail.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>GO</span><label>go/groupindex.jsp  <a href="../go/groupindex.html">Go</a></label>
