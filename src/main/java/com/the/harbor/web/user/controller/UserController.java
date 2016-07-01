@@ -57,6 +57,8 @@ import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
 import com.the.harbor.commons.components.aliyuncs.sms.param.SMSSendRequest;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
+import com.the.harbor.commons.components.redis.CacheFactory;
+import com.the.harbor.commons.components.redis.interfaces.ICacheClient;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
@@ -1187,8 +1189,8 @@ public class UserController {
         } catch (InterruptedException e) {
             LOG.error(e.getMessage());
         }
-        
-        String odata = SMSRandomCodeUtil.getSmsRandomCode("test_lisener");
+        ICacheClient cacheClient = CacheFactory.getClient();
+        String odata = cacheClient.get("test_lisener");
         if (!StringUtil.isBlank(odata)) {
             return "data:" + odata + "\n\n";
         } else {
@@ -1201,7 +1203,9 @@ public class UserController {
 		ResponseData<String> responseData = null;
 		String param = request.getParameter("param");
 		/**存入数据 **/
-		SMSRandomCodeUtil.setSmsRandomCode("test_lisener", param);
+		ICacheClient cacheClient = CacheFactory.getClient();
+
+		cacheClient.set("test_lisener", param);
 		responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
 		return responseData;
 	}
