@@ -66,10 +66,17 @@
 				
 				bindEvents: function(){
 					var _this = this; 
-					
-					//添加图片按钮事件
-					$("#SPAN_ADD_IMAGE").on("click",function(){
-						 
+					//删除消息按钮事件
+					$("#DIV_MY_NOTIFY").delegate("[name='DEL_NOTIFY']","click",function(){
+						 var notifyId = $(this).attr("notifyId");
+						 weUI.confirm({
+							 content: "您是否已经处理了消息内容?",
+							 ok:function(){
+								 _this.delNotify(notifyId);
+								 weUI.closeConfirm();
+							 }
+						 })
+						
 					}); 
 					
 				},
@@ -78,6 +85,29 @@
 					this.getMessages();
 				}, 
 				
+				delNotify: function(notifyId){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../notify/deleteUserMessage",
+						type: "post",
+						data: {
+							notifyId:notifyId
+						},
+						success: function(transport){
+							var dom=$("#DIV_NOTIFY_"+notifyId);
+							dom.fadeOut("200",function(){dom.detach();});
+							var len = $("[name='DIV_NOTIFY']").length;
+							if(len==0){
+								var opt="<div class=\"itms clearfix\">没有任何消息哦~</div>";
+								$("#DIV_MY_NOTIFY").append(opt); 
+							}
+						},
+						failure: function(transport){ 
+							 weUI.alert({content:transport.statusInfo});
+						}
+					});
+				},
+				
 				getMessages: function(){
 					var _this = this;
 					ajaxController.ajax({
@@ -85,7 +115,6 @@
 						type: "post",  
 						success: function(transport){
 							var data =transport.data; 
-							alert(JSON.stringify(data));
 							_this.renderNotifyList(data); 
 						},
 						failure: function(transport){ 
@@ -128,13 +157,13 @@
 
 
 <script id="MyNotifyListImpl" type="text/x-jsrender"> 
-		<div class="itms clearfix">
+		<div class="itms clearfix" name="DIV_NOTIFY" id="DIV_NOTIFY_{{:notifyId}}">
 			<div class="img">
 				{{if senderType=='system'}}
-				<a href="#"><img src="//static.tfeie.com/v2/images/tx.png"
+				<a href="javascript:void(0)"><img src="//static.tfeie.com/v2/images/tx.png"
 					width="50" height="50"></a>
 				{{else}}
-				<a href="#"><img src="{{:wxHeadimg}}"
+				<a href="../user/userInfo.html?userId={{:senderId}}"><img src="{{:wxHeadimg}}"
 					width="50" height="50"></a>
 				{{/if}}
 			</div>
@@ -152,7 +181,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="icon-gb"></div>
+			<div class="icon-gb" name="DEL_NOTIFY" notifyId="{{:notifyId}}"></div>
 		</div>
 </script>
 </html>
