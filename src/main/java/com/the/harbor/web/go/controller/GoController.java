@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.log4j.Logger;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,9 +20,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyun.mns.client.CloudQueue;
+import com.aliyun.mns.client.MNSClient;
+import com.aliyun.mns.common.ClientException;
+import com.aliyun.mns.common.ServiceException;
+import com.aliyun.mns.model.Message;
 import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderReq;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderResp;
+import com.the.harbor.api.go.param.DoGoComment;
 import com.the.harbor.api.go.param.Go;
 import com.the.harbor.api.go.param.GoComment;
 import com.the.harbor.api.go.param.GoCreateReq;
@@ -30,6 +37,9 @@ import com.the.harbor.api.go.param.GoOrder;
 import com.the.harbor.api.go.param.GoOrderConfirmReq;
 import com.the.harbor.api.go.param.GoOrderCreateReq;
 import com.the.harbor.api.go.param.GoOrderCreateResp;
+import com.the.harbor.api.go.param.GoOrderFinishReq;
+import com.the.harbor.api.go.param.GoOrderMeetLocaltionConfirmReq;
+import com.the.harbor.api.go.param.GoOrderMeetLocaltionReq;
 import com.the.harbor.api.go.param.QueryGoReq;
 import com.the.harbor.api.go.param.QueryGoResp;
 import com.the.harbor.api.go.param.QueryMyGoReq;
@@ -42,9 +52,11 @@ import com.the.harbor.base.enumeration.dict.TypeCode;
 import com.the.harbor.base.enumeration.hygoorder.OrderStatus;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
+import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.PageInfo;
 import com.the.harbor.base.vo.Response;
+import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
@@ -58,6 +70,7 @@ import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
+import com.the.harbor.commons.util.UUIDUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
@@ -182,6 +195,38 @@ public class GoController {
 		return view;
 	}
 
+	@RequestMapping("/toHainiuAppointment.html")
+	public ModelAndView toHainiuAppointment(HttpServletRequest request) {
+		String goOrderId = request.getParameter("goOrderId");
+		if (StringUtil.isBlank(goOrderId)) {
+			throw new BusinessException("缺少预约单信息");
+		}
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		// 校验当前用户对于此活动的状态来执行处理
+		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
+		if (goOrder == null) {
+			throw new BusinessException("该预约单不存在。");
+		}
+		if (!userInfo.getUserId().equals(goOrder.getPublishUserId())) {
+			throw new BusinessException("您不是该活动的发起方");
+		}
+		// 活动参与方
+		UserViewInfo joinUserInfo = WXUserUtil.getUserViewInfoByUserId(goOrder.getUserId());
+		if (joinUserInfo == null) {
+			throw new BusinessException("预约方信息不存在");
+		}
+		if (!OrderStatus.WAIT_MEET.getValue().equals(goOrder.getOrderStatus())) {
+			throw new BusinessException("预约单状态不正确，不能设定约定地点");
+		}
+		// 判断小白是否已经选择了时间地点
+		boolean confirm = !StringUtil.isBlank(goOrder.getConfirmLocation());
+		request.setAttribute("confirm", confirm);
+		request.setAttribute("userInfo", joinUserInfo);
+		request.setAttribute("goOrder", goOrder);
+		ModelAndView view = new ModelAndView("go/toHainiuAppointment");
+		return view;
+	}
+
 	@RequestMapping("/toOrder.html")
 	public ModelAndView toOrder(HttpServletRequest request) {
 		String goId = request.getParameter("goId");
@@ -241,6 +286,40 @@ public class GoController {
 
 	@RequestMapping("/toAppointment.html")
 	public ModelAndView toAppointment(HttpServletRequest request) {
+		String goOrderId = request.getParameter("goOrderId");
+		if (StringUtil.isBlank(goOrderId)) {
+			throw new BusinessException("缺少预约单信息");
+		}
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		// 校验当前用户对于此活动的状态来执行处理
+		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
+		if (goOrder == null) {
+			throw new BusinessException("该预约单不存在");
+		}
+		if (!userInfo.getUserId().equals(goOrder.getUserId())) {
+			throw new BusinessException("您不是预约活动人");
+		}
+		if (!OrderStatus.WAIT_MEET.getValue().equals(goOrder.getOrderStatus())) {
+			throw new BusinessException("预约单状态不正确，不能选择约定地点");
+		}
+		UserViewInfo publishUserInfo = WXUserUtil.getUserViewInfoByUserId(goOrder.getPublishUserId());
+		if (publishUserInfo == null) {
+			throw new BusinessException("活动发起方信息不存在");
+		}
+		// 判断小白是否已经选择了时间地点
+		boolean confirm = !StringUtil.isBlank(goOrder.getConfirmLocation());
+		// 判断海牛是否设置了时间地点
+		boolean setMeetLocalFlag = !(StringUtil.isBlank(goOrder.getExpectedLocation1())
+				|| StringUtil.isBlank(goOrder.getExpectedLocation2()));
+		// 如果已经设置判断是哪一个
+		boolean on1 = goOrder.getExpectedLocation1().equals(goOrder.getConfirmLocation());
+		boolean on2 = goOrder.getExpectedLocation2().equals(goOrder.getConfirmLocation());
+		request.setAttribute("confirm", confirm);
+		request.setAttribute("on1", on1);
+		request.setAttribute("on2", on2);
+		request.setAttribute("setMeetLocalFlag", setMeetLocalFlag);
+		request.setAttribute("userInfo", publishUserInfo);
+		request.setAttribute("goOrder", goOrder);
 		ModelAndView view = new ModelAndView("go/appointment");
 		return view;
 	}
@@ -307,8 +386,36 @@ public class GoController {
 		return view;
 	}
 
+	/**
+	 * 小白确认
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/toFeedback.html")
 	public ModelAndView toFeedback(HttpServletRequest request) {
+		String goOrderId = request.getParameter("goOrderId");
+		if (StringUtil.isBlank(goOrderId)) {
+			throw new BusinessException("缺少预约单信息");
+		}
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		// 校验当前用户对于此活动的状态来执行处理
+		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
+		if (goOrder == null) {
+			throw new BusinessException("该预约单不存在");
+		}
+		if (!userInfo.getUserId().equals(goOrder.getUserId())) {
+			throw new BusinessException("您不是预约活动人");
+		}
+		if (!OrderStatus.FINISH.getValue().equals(goOrder.getOrderStatus())) {
+			throw new BusinessException("海牛没有确认活动结束，还不能评价");
+		}
+		UserViewInfo publishUserInfo = WXUserUtil.getUserViewInfoByUserId(goOrder.getPublishUserId());
+		if (publishUserInfo == null) {
+			throw new BusinessException("活动发起方信息不存在");
+		}
+		request.setAttribute("userInfo", publishUserInfo);
+		request.setAttribute("goOrder", goOrder);
 		ModelAndView view = new ModelAndView("go/feedback");
 		return view;
 	}
@@ -541,6 +648,30 @@ public class GoController {
 		return responseData;
 	}
 
+	@RequestMapping("/confirmGoOrderMeetLocaltion")
+	@ResponseBody
+	public ResponseData<String> confirmGoOrderMeetLocaltion(
+			@NotNull(message = "参数为空") GoOrderMeetLocaltionConfirmReq goOrderMeetLocaltionConfirmReq,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			goOrderMeetLocaltionConfirmReq.setUserId(userInfo.getUserId());
+			Response rep = DubboConsumerFactory.getService(IGoSV.class)
+					.confirmGoOrderMeetLocaltion(goOrderMeetLocaltionConfirmReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
 	@RequestMapping("/getMyGoes")
 	@ResponseBody
 	public ResponseData<PageInfo<Go>> getMyGoes(@NotNull(message = "参数为空") QueryMyGoReq queryMyGoReq,
@@ -678,11 +809,56 @@ public class GoController {
 		return responseData;
 	}
 
+	@RequestMapping("/setGoOrderMeetLocaltion")
+	@ResponseBody
+	public ResponseData<String> setGoOrderMeetLocaltion(
+			@NotBlank(message = "参数为空") GoOrderMeetLocaltionReq goOrderMeetLocaltionReq, HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			goOrderMeetLocaltionReq.setPublishUserId(userInfo.getUserId());
+			Response resp = DubboConsumerFactory.getService(IGoSV.class)
+					.setGoOrderMeetLocaltion(goOrderMeetLocaltionReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						resp.getResponseHeader().getResultMessage(), "");
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/finishGoOrder")
+	@ResponseBody
+	public ResponseData<String> finishGoOrder(@NotBlank(message = "参数为空") GoOrderFinishReq goOrderFinishReq,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			goOrderFinishReq.setUserId(userInfo.getUserId());
+			Response resp = DubboConsumerFactory.getService(IGoSV.class).finishGoOrder(goOrderFinishReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						resp.getResponseHeader().getResultMessage(), "");
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
 	private void fillGoCommentInfo(GoComment b) {
 		b.setCreateTimeInteval(DateUtil.getInterval(b.getCreateDate()));
 		// 发布人信息
-		if (!StringUtil.isBlank(b.getUserId())) {
-			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(b.getUserId());
+		if (!StringUtil.isBlank(b.getPublishUserId())) {
+			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(b.getPublishUserId());
 			if (userInfo != null) {
 				b.setUserStatusName(userInfo.getUserStatusName());
 				b.setWxHeadimg(userInfo.getWxHeadimg());
@@ -702,6 +878,116 @@ public class GoController {
 				b.setPwxHeadimg(puser.getWxHeadimg());
 			}
 		}
+	}
+
+	@RequestMapping("/sendGoComment")
+	@ResponseBody
+	public ResponseData<GoComment> sendGoComment(@NotBlank(message = "评论内容为空") DoGoComment doGoComment,
+			HttpServletRequest request) {
+		ResponseData<GoComment> responseData = null;
+		try {
+			/* 1.获取当前操作的用户 */
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			/* 2.主要参数信息是否为空 */
+			if (StringUtil.isBlank(doGoComment.getContent())) {
+				throw new BusinessException("请输入评论内容");
+			}
+			if (StringUtil.isBlank(doGoComment.getGoId())) {
+				throw new BusinessException("GO标识为空");
+			}
+			if (StringUtil.isBlank(doGoComment.getOrderId())) {
+				throw new BusinessException("GO订购标识为空");
+			}
+			/* 2.组织消息 */
+			doGoComment.setCommentId(UUIDUtil.genId32());
+			doGoComment.setPublishUserId(userInfo.getUserId());
+			doGoComment.setSysdate(DateUtil.getSysDate());
+			doGoComment.setHandleType(DoGoComment.HandleType.PUBLISH.name());
+			/* 3.发送评论消息 */
+			this.sendDoGoCommentMQ(doGoComment);
+			/* 4.组织评论内容返回 */
+			GoComment b = this.convertGoComment(doGoComment, userInfo);
+			responseData = new ResponseData<GoComment>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", b);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, GoComment.class);
+		}
+		return responseData;
+	}
+
+	private void sendDoGoCommentMQ(DoGoComment doGoComment) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			doGoComment.setMqId(UUIDUtil.genId32());
+			doGoComment.setMqType(MQType.MQ_HY_GO_COMMENT.getValue());
+			message.setMessageBody(JSONObject.toJSONString(doGoComment));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("GO comments add  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
+	}
+
+	private GoComment convertGoComment(DoGoComment doGoComment, UserViewInfo userInfo) {
+		GoComment b = new GoComment();
+		BeanUtils.copyProperties(doGoComment, b);
+		b.setCreateDate(doGoComment.getSysdate());
+		b.setCreateTimeInteval(DateUtil.getInterval(doGoComment.getSysdate()));
+		b.setIsreply(!StringUtil.isBlank(doGoComment.getParentCommentId()));
+		// 发布人信息
+		b.setUserStatusName(userInfo.getUserStatusName());
+		b.setWxHeadimg(userInfo.getWxHeadimg());
+		b.setEnName(userInfo.getEnName());
+		b.setUserStatusName(userInfo.getUserStatusName());
+		b.setAbroadCountryName(userInfo.getAbroadCountryName());
+		// 回复上级信息
+		if (!StringUtil.isBlank(doGoComment.getParentUserId())) {
+			UserViewInfo puser = WXUserUtil.getUserViewInfoByUserId(doGoComment.getParentUserId());
+			if (puser != null) {
+				b.setPabroadCountryName(puser.getAbroadCountryName());
+				b.setPenName(puser.getEnName());
+				b.setPuserStatusName(puser.getUserStatusName());
+				b.setPwxHeadimg(puser.getWxHeadimg());
+			}
+		}
+		return b;
+	}
+
+	@RequestMapping("/getGoOrderComments")
+	@ResponseBody
+	public ResponseData<List<GoComment>> getGoOrderComments(@NotBlank(message = "GO预约标识为空") String orderId) {
+		ResponseData<List<GoComment>> responseData = null;
+		try {
+			/* 1.获取GO的所有评论集合 */
+			Set<String> set = HyGoUtil.getGoOrderCommentIds(orderId, 0, -1);
+			/* 2.获取所有评论数据 */
+			List<GoComment> list = new ArrayList<GoComment>();
+			for (String commentId : set) {
+				String commentData = HyGoUtil.getGoComment(commentId);
+				if (!StringUtil.isBlank(commentData)) {
+					GoComment b = JSONObject.parseObject(commentData, GoComment.class);
+					this.fillGoCommentInfo(b);
+					list.add(b);
+				}
+			}
+			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", list);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_FAILURE, "操作失败");
+		}
+		return responseData;
 	}
 
 }

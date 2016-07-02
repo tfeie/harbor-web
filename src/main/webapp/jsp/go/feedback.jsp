@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -16,21 +17,15 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css">	
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
-<script>
-	$(function() {
-		$(".yes_no p span").click(function() {
-			$(this).parents("p").find("span").removeClass("on")
-			$(this).addClass("on")
-		})
-	})
-</script>
 </head>
-<body class="">
+<body>
 	<section class="haiuliu-top pingjia">
 		<p class="bgcolor">
 			<label></label>
@@ -47,20 +42,30 @@
 	</section>
 	<section class="mainer on">
 		<section class="group_pingjia">
-			<p>海外市场如此Sexy</p>
+			<p><c:out value="${goOrder.topic}" escapeXml="false" /></p>
 		</section>
 		<section class="ip_info group">
 			<section class="info_img">
-				<span><img src="//static.tfeie.com/images/img29.png" /></span>
+				<span><img src="<c:out value="${userInfo.wxHeadimg}" escapeXml="false" />" /></span>
 			</section>
 			<section class="ip_text2 frt">
-				<span>线下服务</span> <label>21人见过</label>
+				<span><c:out value="${goOrder.orgModeName}" escapeXml="false" /></span> <label><c:out value="${goOrder.orderCount}" escapeXml="false" />人见过</label>
 			</section>
 			<section class="ip_text">
 				<p>
-					<span>Martin</span><label class="lbl2">英国</label><i>已认证</i>
+					<span><c:out value="${userInfo.enName}" escapeXml="false" /></span><label class="lbl2"><c:out value="${userInfo.abroadCountryName}" escapeXml="false" /></label><i><c:out value="${userInfo.userStatusName}" escapeXml="false" /></i>
 				</p>
-				<p>金融/合伙人/北京</p>
+				<p>
+				<c:if test="${userInfo.industryName!=null}">
+						<c:out value="${userInfo.industryName}" escapeXml="false" />
+					/
+					</c:if>
+					<c:if test="${userInfo.title!=null}">
+						<c:out value="${userInfo.title}" escapeXml="false" />
+					/
+					</c:if>
+					<c:out value="${userInfo.atCityName}" escapeXml="false" />
+				</p>
 			</section>
 
 			<div class="clear"></div>
@@ -105,39 +110,207 @@
 		</section>
 		<section class="pinglun_textarea">
 			<p>
-				<textarea placeholder="评，具体帮助…"></textarea>
+				<textarea placeholder="评，具体帮助…" id="COMMENT_CONTENT"></textarea>
+				<input type="hidden" id="parentCommentId"/>
+				<input type="hidden" id="parentUserId"/>
 			</p>
 			<p>
-				<input type="button" value="发射" />
+				<input type="button" value="发射" id="BTN_SEND"/>
 			</p>
 		</section>
 		<section class="liulan">
 			<section class="look_pinglun">
 				<p>评论浏览</p>
 			</section>
-			<section class="duihua">
+			<section class="duihua" id="DIV_COMMENTS">
+				
+			</section>
+		</section>
+	</section>
+</body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script> 
+
+<script type="text/javascript">
+	(function($) {
+		$.GoXiaoBaiFeedBackPage = function(data) {
+			this.settings = $.extend(true, {},
+					$.GoXiaoBaiFeedBackPage.defaults);
+			this.params = data ? data : {}
+		}
+		$.extend($.GoXiaoBaiFeedBackPage, {
+			defaults : {},
+
+			prototype : {
+				init : function() {
+					this.bindEvents();
+					this.getComments();
+				},
+
+				bindEvents : function() {
+					var _this = this;
+					$("#BTN_SEND").on("click", function() {
+						_this.sendComment();
+					});
+					
+					$(".yuejian-bott").delegate("[name='P_CONFIRM']","click",function(){
+						$("[name='P_CONFIRM']").removeClass("on");
+						$(this).addClass("on");
+					});
+					
+					$("#DIV_COMMENTS").delegate("[name='DIV_COMMENT_CONTENT']","click",function(){
+						var userId = $(this).attr("userId");
+						var commentId = $(this).attr("commentId");
+						var enName = $(this).attr("enName");
+						$("#parentCommentId").val(commentId);
+						$("#parentUserId").val(userId);
+						$("#COMMENT_CONTENT").attr("placeholder","回复 "+enName+":").focus
+					});
+
+				},
+				
+				getComments: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../go/getGoOrderComments",
+						type: "post", 
+						data: { 
+							orderId: _this.getPropertyValue("goOrderId")
+						},
+						success: function(transport){
+							var data =transport.data; 
+							//alert(JSON.stringify(data));
+							_this.renderComments(data); 
+						},
+						failure: function(transport){ 
+							_this.renderComments([]); 
+						}
+					});
+				},
+
+				sendComment: function(){
+					var _this = this;
+					var content = $.trim($("#COMMENT_CONTENT").val());
+					var parentCommentId =  $.trim($("#parentCommentId").val());
+					var parentUserId =  $.trim($("#parentUserId").val());
+					var valueValidator = new $.ValueValidator();
+					valueValidator.addRule({
+						labelName: "评论内容",
+						fieldName: "content",
+						getValue: function(){
+							return content;
+						},
+						fieldRules: {
+							required: true, 
+							cnlength: 200
+						},
+						ruleMessages: {
+							required: "请填写评论",
+							cnlength:"评论不能超过100个汉字"
+						}
+					});
+					var res=valueValidator.fireRulesAndReturnFirstError();
+					if(res){
+						weUI.alert({content:res});
+						return;
+					}
+					
+					var data = {
+						goId: _this.getPropertyValue("goId"),
+						orderId: _this.getPropertyValue("goOrderId"),
+						content: content,
+						parentCommentId: parentCommentId,
+						parentUserId: parentUserId
+					}
+					ajaxController.ajax({
+						url: "../go/sendGoComment",
+						type: "post", 
+						data: data,
+						success: function(transport){
+							var data = transport.data;
+							var arr = [data];
+							var opt=$("#CommentsImpl").render(arr);
+							if($("[name='SEL_NONE_COMMENTS']").length>0){
+								$("#DIV_COMMENTS").html(opt); 
+							}else{
+								$("#DIV_COMMENTS").append(opt); 
+							}
+							
+							$("#COMMENT_CONTENT").val("");
+							$("#parentUserId").val("");
+							$("#parentCommentId").val("");
+						},
+						failure: function(transport){ 
+							weUI.alert({content:"评论失败,请重试..."});
+							return ;
+						}
+					});
+				},
+				
+				renderComments: function(data){
+					data= data?data:[];
+					var opt="";
+					if(data.length>0){
+						opt=$("#CommentsImpl").render(data);
+					}else{
+						opt="<section class=\"duihua_1\" name=\"SEL_NONE_COMMENTS\">没有任何评论哦~</section>"
+					}
+					
+					$("#DIV_COMMENTS").html(opt); 
+				},
+
+				getPropertyValue : function(propertyName) {
+					if (!propertyName)
+						return;
+					return this.params[propertyName];
+				}
+			}
+		});
+	})(jQuery);
+
+	$(document).ready(function() {
+		var p = new $.GoXiaoBaiFeedBackPage({
+			goId : "<c:out value="${goOrder.goId}"/>",
+			goOrderId : "<c:out value="${goOrder.orderId}"/>"
+
+		});
+		p.init();
+	});
+</script>
+
+<script id="CommentsImpl" type="text/x-jsrender"> 
+				{{if isreply==false}}
 				<section class="duihua_1">
 					<section class="left_img">
 						<span> </span>
 					</section>
 					<section class="duihua_text">
-						<p>对方很热情的接待了我，并提供了很大的帮助，我的问题也得到了圆满的解决!</p>
-						<p class="time">5-6 16:40</p>
+						<p name="DIV_COMMENT_CONTENT" commentId="{{:commentId}}" userId="{{:publishUserId}}" enName="{{:enName}}">{{:content}}</p>
+						<p class="time">{{:createTimeInteval}}</p>
 						<section class="zhixiang">
 							<img src="//static.tfeie.com/images/img42.png" />
 						</section>
 					</section>
 					<section class="right_img">
-						<span><img src="//static.tfeie.com/images/img41.png" /></span>
+						<span><a href="../user/userInfo.html?userId={{:publishUserId}}"><img src="{{:wxHeadimg}}" /></a></span>
 					</section>
 				</section>
+				{{else}}
 				<section class="duihua_1">
 					<section class="left_img">
-						<span><img src="//static.tfeie.com/images/img41.png" /></span>
+						<span><a href="../user/userInfo.html?userId={{:publishUserId}}"><img src="{{:wxHeadimg}}" /></a></span>
 					</section>
 					<section class="duihua_text left">
-						<p>很高兴能帮到您，谢谢!</p>
-						<p class="time">5-6 16:40</p>
+						<p>{{if penName}} 回复<span href="javascript:void(0)" class="lc" style="color:red">{{:penName}}</span>  {{/if}} {{:content}}</p>
+						<p class="time">{{:createTimeInteval}}</p>
 						<section class="zhixiang left">
 							<img src="//static.tfeie.com/images/img42_1.png" />
 						</section>
@@ -147,8 +320,6 @@
 					</section>
 				</section>
 				<div class="clear"></div>
-			</section>
-		</section>
-	</section>
-</body>
+				{{/if}}
+</script>
 </html>

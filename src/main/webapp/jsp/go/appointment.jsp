@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -16,6 +17,8 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css">	
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -39,41 +42,157 @@
 
 		</section>
 		<section class="tijiao on">
-			<p>海牛已确认！请选择时间地点</p>
+			<p>
+				<c:if test="${setMeetLocalFlag==true}">
+					<c:if test="${confirm==true}">您已经确认了约见时间地点，不可以修改</c:if>
+					<c:if test="${confirm==false}">海牛已经设置了约见地点，请确认</c:if>
+				</c:if>
+				<c:if test="${setMeetLocalFlag==false}">海牛没有还没有设置约见地点，请耐心等候</c:if>
+			</p>
 		</section>
 
 		<section class="sexy on">
-			<p>海外市场如此Sexy</p>
+			<p>
+				<c:out value="${goOrder.topic}" escapeXml="false" />
+			</p>
 		</section>
 
 		<section class="touxiang-info">
 			<section class="touxiang-img">
 				<p>
-					<span><img src="//static.tfeie.com/images/img21.png"></span>
+					<span><img
+						src="<c:out value="${userInfo.wxHeadimg}" escapeXml="false"/>"></span>
 				</p>
 			</section>
 			<section class="text-info">
 				<p>
-					<i>Martin</i><label class="lbl2">英国</label><span>已认证</span>
+					<i><c:out value="${userInfo.enName}" escapeXml="false" /></i><span><c:out
+							value="${userInfo.abroadCountryName}" escapeXml="false" /></span><label><c:out
+							value="${userInfo.userStatusName}" escapeXml="false" /></label>
 				</p>
-				<p class="on">金融/合伙人/北京</p>
+				<p class="on">
+					<c:if test="${userInfo.industryName!=null}">
+						<c:out value="${userInfo.industryName}" escapeXml="false" />
+					/
+					</c:if>
+					<c:if test="${userInfo.title!=null}">
+						<c:out value="${userInfo.title}" escapeXml="false" />
+					/
+					</c:if>
+					<c:out value="${userInfo.atCityName}" escapeXml="false" />
+				</p>
 			</section>
 			<div class="clear"></div>
 		</section>
 
 		<section class="wenti-jies">
 			<section class="yuejian-bott">
-				<p>2016-5-16 18:00 海淀区附近</p>
-				<p class="on">2016-5-16 18:00 海淀区附近</p>
+				<c:if test="${setMeetLocalFlag==true}">
+					<p name="P_CONFIRM" <c:if test="${on1==true}">class="on"</c:if>>
+						<c:out value="${goOrder.expectedTime1}" escapeXml="false" />
+						<c:out value="${goOrder.expectedLocation1}" escapeXml="false" />
+						<input type="hidden" id="confirmTime" value="<c:out value="${goOrder.expectedTime1}" escapeXml="false" />"/>
+						<input type="hidden" id="confirmLocation" value="<c:out value="${goOrder.expectedLocation1}" escapeXml="false" />"/>
+					</p>
+					<p name="P_CONFIRM" <c:if test="${on2==true}">class="on"</c:if>>
+						<c:out value="${goOrder.expectedTime2}" escapeXml="false" />
+						<c:out value="${goOrder.expectedLocation2}" escapeXml="false" />
+						<input type="hidden" id="confirmTime" value="<c:out value="${goOrder.expectedTime2}" escapeXml="false" />"/>
+						<input type="hidden" id="confirmLocation" value="<c:out value="${goOrder.expectedLocation2}" escapeXml="false" />"/>
+					</p>
+				</c:if>
+				<c:if test="${setMeetLocalFlag==false}">
+				<p>海牛还没有设定约见地点，请耐心等待哦~</p>
+				</c:if>
 			</section>
+			<c:if test="${setMeetLocalFlag==true && confirm==false}">
 			<section class="yuejian-but">
-				<button>确认时间地点</button>
+				<button id="BTN_CONFITM_MEET_LOCAL">确认时间地点</button>
 			</section>
-		</section>
-
-		<section class="sec_btn2 yuejian">
-			<input type="button" value="确认服务结束">
+			</c:if>
 		</section>
 	</section>
 </body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+
+<script type="text/javascript">
+	(function($) {
+		$.GoXiaoBaiAppointmentPage = function(data) {
+			this.settings = $.extend(true, {},
+					$.GoXiaoBaiAppointmentPage.defaults);
+			this.params = data ? data : {}
+		}
+		$.extend($.GoXiaoBaiAppointmentPage, {
+			defaults : {},
+
+			prototype : {
+				init : function() {
+					this.bindEvents();
+				},
+
+				bindEvents : function() {
+					var _this = this;
+					$("#BTN_CONFITM_MEET_LOCAL").on("click", function() {
+						_this.confirmGoOrderMeetLocaltion();
+					});
+					
+					$(".yuejian-bott").delegate("[name='P_CONFIRM']","click",function(){
+						$("[name='P_CONFIRM']").removeClass("on");
+						$(this).addClass("on");
+					});
+
+				},
+
+				confirmGoOrderMeetLocaltion : function() {
+					var _this = this;
+					var confirmTime = $("[name='P_CONFIRM'].on").find("#confirmTime").val();
+					var confirmLocation=$("[name='P_CONFIRM'].on").find("#confirmLocation").val();
+					if($("[name='P_CONFIRM'].on").length==0){
+						weUI.alert({content:"请选择活动约见时间地点"});
+						return ;
+					}
+					ajaxController.ajax({
+						url : "../go/confirmGoOrderMeetLocaltion",
+						type : "post",
+						data : {
+							goOrderId : _this.getPropertyValue("goOrderId"),
+							confirmTime: confirmTime,
+							confirmLocation: confirmLocation
+						},
+						success : function(transport) {
+							weUI.alert({
+								content : "您已经确认约见地点"
+							});
+						},
+						failure : function(transport) {
+							weUI.alert({
+								content : transport.statusInfo
+							});
+						}
+					});
+				},
+
+				getPropertyValue : function(propertyName) {
+					if (!propertyName)
+						return;
+					return this.params[propertyName];
+				}
+			}
+		});
+	})(jQuery);
+
+	$(document).ready(function() {
+		var p = new $.GoXiaoBaiAppointmentPage({
+			goId : "<c:out value="${goOrder.goId}"/>",
+			goOrderId : "<c:out value="${goOrder.orderId}"/>"
+
+		});
+		p.init();
+	});
+</script>
 </html>
