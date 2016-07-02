@@ -387,7 +387,7 @@ public class GoController {
 	}
 
 	/**
-	 * 小白确认
+	 * 小白评价页
 	 * 
 	 * @param request
 	 * @return
@@ -417,6 +417,41 @@ public class GoController {
 		request.setAttribute("userInfo", publishUserInfo);
 		request.setAttribute("goOrder", goOrder);
 		ModelAndView view = new ModelAndView("go/feedback");
+		return view;
+	}
+
+	/**
+	 * 海牛评价页
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/toHainiuFeedback.html")
+	public ModelAndView toHainiuFeedback(HttpServletRequest request) {
+		String goOrderId = request.getParameter("goOrderId");
+		if (StringUtil.isBlank(goOrderId)) {
+			throw new BusinessException("缺少预约单信息");
+		}
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		// 校验当前用户对于此活动的状态来执行处理
+		GoOrder goOrder = DubboServiceUtil.queryGoOrder(goOrderId);
+		if (goOrder == null) {
+			throw new BusinessException("该预约单不存在");
+		}
+		if (!userInfo.getUserId().equals(goOrder.getPublishUserId())) {
+			throw new BusinessException("您不是活动发起者");
+		}
+		if (!OrderStatus.FINISH.getValue().equals(goOrder.getOrderStatus())) {
+			throw new BusinessException("您没有确认活动结束，还不能评价");
+		}
+		// 获取活动预约者信息
+		UserViewInfo orderUserInfo = WXUserUtil.getUserViewInfoByUserId(goOrder.getUserId());
+		if (orderUserInfo == null) {
+			throw new BusinessException("活动预约者信息不存在");
+		}
+		request.setAttribute("userInfo", orderUserInfo);
+		request.setAttribute("goOrder", goOrder);
+		ModelAndView view = new ModelAndView("go/hainiufeedback");
 		return view;
 	}
 
@@ -856,6 +891,7 @@ public class GoController {
 
 	private void fillGoCommentInfo(GoComment b) {
 		b.setCreateTimeInteval(DateUtil.getInterval(b.getCreateDate()));
+		b.setIsreply(!StringUtil.isBlank(b.getParentCommentId()));
 		// 发布人信息
 		if (!StringUtil.isBlank(b.getPublishUserId())) {
 			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(b.getPublishUserId());
