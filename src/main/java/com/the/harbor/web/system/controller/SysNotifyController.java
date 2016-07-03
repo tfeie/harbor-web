@@ -77,7 +77,6 @@ public class SysNotifyController {
 
 	private void fillNotifyVo(HyNotifyVo vo) {
 		vo.setHaslink(!StringUtil.isBlank(vo.getLink()));
-		vo.setCreateDate(DateUtil.getSysDate());
 		vo.setTimeInterval(DateUtil.getInterval(vo.getCreateDate()));
 		if (SenderType.USER.getValue().equals(vo.getSenderType())) {
 			if (!StringUtil.isBlank(vo.getSenderId())) {
