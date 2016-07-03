@@ -496,6 +496,15 @@ public class GoController {
 
 	@RequestMapping("/invite.html")
 	public ModelAndView invite(HttpServletRequest request) {
+		String goId = request.getParameter("goId");
+		if (StringUtil.isBlank(goId)) {
+			throw new BusinessException("您查看的活动信息不存在");
+		}
+		Go go = DubboServiceUtil.queryGo(goId);
+		if (go == null) {
+			throw new BusinessException("您查看的活动信息不存在");
+		}
+		request.setAttribute("go", go);
 		ModelAndView view = new ModelAndView("go/invite");
 		return view;
 	}

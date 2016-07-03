@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -16,49 +17,60 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
-
 </head>
 <body>
 	<section class="mainer in">
 		<section class="ma_shenghe">
-			<p>52小时精益创业</p>
+			<p>
+				<c:out value="${go.topic}" />
+			</p>
 		</section>
 		<section class="shenhe_xinxi">
 			<section class="info_fuwu">
 				<section class="ip_info">
 					<section class="info_img">
-						<span><img src="//static.tfeie.com/images/img29.png"></span>
+						<span><img src="<c:out value="${go.wxHeadimg}"/>"></span>
 					</section>
 					<section class="ip_text">
 						<p>
-							<span>Martin</span><label class="lbl2">英国</label><i>已认证</i>
+							<span><c:out value="${go.enName}" /></span><label class="lbl2"><c:out
+									value="${go.abroadCountryName}" /></label>
+							<c:out value="${go.userStatusName}" />
 						</p>
-						<p>金融/合伙人/北京</p>
+						<p>
+							<c:out value="${go.industryName}" />
+							/
+							<c:out value="${go.title}" />
+							/
+							<c:out value="${go.atCityName}" />
+						</p>
 					</section>
 					<div class="clear"></div>
 				</section>
 				<section class="info_time">
 					<p>
-						<span>2016-5-5 星期四 15:00</span><a href="#">线下服务</a>
+						<span><c:out value="${go.expectedStartTime}" /></span><a href="#"><c:out value="${go.orgModeName}" /></a>
 					</p>
 				</section>
 				<section class="info_time back1">
 					<p>
-						<span>Group邀请2-3人</span><a href="#">180元</a>
+						<span>Group邀请<c:out value="${go.inviteMembers}" />人</span><a href="#"><c:out value="${go.fixPriceYuan}" />元</a>
 					</p>
 				</section>
 				<section class="info_time back2">
 					<p>
-						<span>北京，国贸附近</span>
+						<span><c:out value="${go.location}" /></span>
 					</p>
 				</section>
 				<section class="info_fangf pz">
-					<p>怎样提高你的身体效率，怎样有效的改善体型。怎样提高你的身体效率，怎样有效的改善体型…</p>
+					<p><c:out value="${go.contentSummary}" /></p>
 				</section>
 				<div class="clear"></div>
 			</section>
