@@ -153,7 +153,7 @@ wx.config({
 				ajaxController.ajax({
 					url: "../go/applyGroup",
 					type: "post", 
-					var data = {
+					data:{
 						nonceStr: _this.getPropertyValue("nonceStr"),	
 						timeStamp: _this.getPropertyValue("timeStamp"), 
 						goId: _this.getPropertyValue("goId")
