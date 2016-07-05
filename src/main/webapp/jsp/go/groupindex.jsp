@@ -158,7 +158,7 @@
 							goTag: goTag?goTag:"",
 							searchKey: searchKey?searchKey:"",
 							pageNo : 1,
-							pageSize : 100
+							pageSize : 20
 						},
 						success: function(transport){
 							var data =transport.data;  
@@ -230,7 +230,7 @@
 		
 				<section class="wuwai_jiansheng">
 					<section class="title_jiansheng">
-						<p>{{:topic}}</p>
+						<p><a href="../go/invite.html?goId={{:goId}}">{{:topic}}</a></p>
 						<section class="pos_yuan">
 							<span></span><span class="on"></span>
 							<div class="clear"></div>
@@ -265,7 +265,7 @@
 							</p>
 						</section>
 						<section class="info_fangf">
-							<p>{{:contentSummary}}</p>
+							<p><a href="../go/invite.html?goId={{:goId}}">{{:contentSummary}}</a></p>
 						</section>
 						<div class="clear"></div>
 					</section>

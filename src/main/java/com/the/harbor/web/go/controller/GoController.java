@@ -40,10 +40,13 @@ import com.the.harbor.api.go.param.GoOrderCreateResp;
 import com.the.harbor.api.go.param.GoOrderFinishReq;
 import com.the.harbor.api.go.param.GoOrderMeetLocaltionConfirmReq;
 import com.the.harbor.api.go.param.GoOrderMeetLocaltionReq;
+import com.the.harbor.api.go.param.GroupApplyReq;
+import com.the.harbor.api.go.param.GroupApplyResp;
 import com.the.harbor.api.go.param.QueryGoReq;
 import com.the.harbor.api.go.param.QueryGoResp;
 import com.the.harbor.api.go.param.QueryMyGoReq;
 import com.the.harbor.api.go.param.QueryMyGoResp;
+import com.the.harbor.api.go.param.UpdateGoJoinPayReq;
 import com.the.harbor.api.go.param.UpdateGoOrderPayReq;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
@@ -496,6 +499,7 @@ public class GoController {
 
 	@RequestMapping("/invite.html")
 	public ModelAndView invite(HttpServletRequest request) {
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		String goId = request.getParameter("goId");
 		if (StringUtil.isBlank(goId)) {
 			throw new BusinessException("您查看的活动信息不存在");
@@ -504,7 +508,21 @@ public class GoController {
 		if (go == null) {
 			throw new BusinessException("您查看的活动信息不存在");
 		}
+		boolean joint = HyGoUtil.checkUserHadJointGroup(goId, userInfo.getUserId());
+		boolean applied = HyGoUtil.checkUserHadAppliedGroup(goId, userInfo.getUserId());
+		request.setAttribute("canapply", !(joint || applied));
 		request.setAttribute("go", go);
+
+		long timestamp = DateUtil.getCurrentTimeMillis();
+		String nonceStr = WXHelpUtil.createNoncestr();
+		String jsapiTicket = WXHelpUtil.getJSAPITicket();
+		String url = WXRequestUtil.getFullURL(request);
+		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
+
 		ModelAndView view = new ModelAndView("go/invite");
 		return view;
 	}
@@ -1031,6 +1049,81 @@ public class GoController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_FAILURE, "操作失败");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/applyGroup")
+	@ResponseBody
+	public ResponseData<JSONObject> applyGroup(HttpServletRequest request) {
+		ResponseData<JSONObject> responseData = null;
+		try {
+			String nonceStr = request.getParameter("nonceStr");
+			String timeStamp = request.getParameter("timeStamp");
+			String goId = request.getParameter("goId");
+			if (StringUtil.isBlank(goId)) {
+				throw new BusinessException("活动标识不存在");
+			}
+			JSONObject d = new JSONObject();
+
+			GroupApplyReq groupApplyReq = new GroupApplyReq();
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			groupApplyReq.setUserId(userInfo.getUserId());
+			groupApplyReq.setGoId(goId);
+			GroupApplyResp resp = DubboConsumerFactory.getService(IGoSV.class).applyGroup(groupApplyReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE,
+						resp.getResponseHeader().getResultMessage());
+			} else {
+				if (resp.isNeedPay()) {
+					if (StringUtil.isBlank(nonceStr)) {
+						throw new BusinessException("支付随机串为空");
+					}
+					if (StringUtil.isBlank(timeStamp)) {
+						throw new BusinessException("申请时间戳为空");
+					}
+					String summary = "Group活动报名支付";
+					String payOrderId = resp.getPayOrderId();
+					String host = "192.168.1.1";
+					String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId,
+							Integer.parseInt(AmountUtils.changeY2F(resp.getPayAmount())), host, userInfo.getWxOpenid(),
+							GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
+					String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
+
+					d.put("package", pkg);
+					d.put("paySign", paySign);
+					d.put("payOrderId", payOrderId);
+				}
+				d.put("needPay", resp.isNeedPay());
+				d.put("orderId", resp.getOrderId());
+				d.put("payAmount", resp.getPayAmount());
+				d.put("payOrderId",resp.getPayOrderId());
+				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", d);
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/updateGoJoinPay")
+	@ResponseBody
+	public ResponseData<String> updateGoJoinPay(@NotBlank(message = "参数为空") UpdateGoJoinPayReq updateGoJoinPayReq,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			Response resp = DubboConsumerFactory.getService(IGoSV.class).updateGoJoinPay(updateGoJoinPayReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						resp.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}

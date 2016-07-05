@@ -36,7 +36,7 @@
 			<section class="info_fuwu">
 				<section class="ip_info">
 					<section class="info_img">
-						<span><img src="<c:out value="${go.wxHeadimg}"/>"></span>
+						<span><a href="../user/userInfo.html?userId=<c:out value="${go.userId}" />"><img src="<c:out value="${go.wxHeadimg}"/>"></a></span>
 					</section>
 					<section class="ip_text">
 						<p>
@@ -45,11 +45,15 @@
 							<c:out value="${go.userStatusName}" />
 						</p>
 						<p>
-							<c:out value="${go.industryName}" />
-							/
-							<c:out value="${go.title}" />
-							/
-							<c:out value="${go.atCityName}" />
+							<c:if test="${go.industryName!=null}">
+								<c:out value="${go.industryName}" escapeXml="false" />
+					/
+					</c:if>
+							<c:if test="${go.title!=null}">
+								<c:out value="${go.title}" escapeXml="false" />
+					/
+					</c:if>
+							<c:out value="${go.atCityName}" escapeXml="false" />
 						</p>
 					</section>
 					<div class="clear"></div>
@@ -76,20 +80,159 @@
 			</section>
 			<section class="num_liulan">
 				<p>
-					<a href="#">浏览 126</a><a href="#">参加 126</a><a href="#">收藏 12</a>
+					<a href="#">浏览 <c:out value="${go.viewCount}" /></a><a href="#">参加 <c:out value="${go.joinCount}" /></a><a href="#">收藏 <c:out value="${go.favorCount}" /></a>
 				</p>
 			</section>
 		</section>
 		<section class="yanbaoming">
+			<section class="sec_btn2 fabu" style="display:none">
+				<input type="button" value="报名成功，进入群聊">
+			</section>
 			<section class="yaoy">
 				<p>
-					<span>我请客</span>
-					<button>
+					<span><c:out value="${go.payModeName}" /></span>
+					<c:if test="${canapply==true}">
+					<button id="BTN_BAOMING">
 						<img src="//static.tfeie.com/images/img58.png">我要报名
 					</button>
+					</c:if>
+					<label id="APPLY_SUCCESS" style="display:none">报名成功</label>
 				</p>
 			</section>
-		</section>
+		</section> 
 	</section>
 </body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script> 
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	
+<script type="text/javascript">
+wx.config({
+	debug : false,
+	appId : '<c:out value="${appId}"/>',
+	timestamp : <c:out value="${timestamp}"/>,
+	nonceStr : '<c:out value="${nonceStr}"/>',
+	signature : '<c:out value="${signature}"/>',
+	jsApiList : [ 'checkJsApi', 'chooseWXPay' ]
+});
+
+(function($){
+	$.GroupInvitePage = function(data){
+		this.settings = $.extend(true,{},$.GroupInvitePage.defaults);
+		this.params= data?data:{}
+	}
+	$.extend($.GroupInvitePage,{
+		defaults: { 
+		},
+	
+		prototype: {
+			init: function(){
+				this.bindEvents(); 
+			},
+			
+			bindEvents: function(){
+				var _this = this; 
+				//提交事件
+				$("#BTN_BAOMING").on("click",function(){
+					_this.applyGroup();
+				});
+			},
+			
+			getPropertyValue: function(propertyName){
+				if(!propertyName)return;
+				return this.params[propertyName];
+			},
+			
+			applyGroup: function(){
+				var _this = this; 
+				ajaxController.ajax({
+					url: "../go/applyGroup",
+					type: "post", 
+					var data = {
+						nonceStr: _this.getPropertyValue("nonceStr"),	
+						timeStamp: _this.getPropertyValue("timeStamp"), 
+						goId: _this.getPropertyValue("goId")
+					},
+					success: function(transport){ 
+						var d = transport.data;
+						var orderId = d.orderId;
+						var needPay = d.needPay;
+						var payAmount=d.payAmount;
+						var payOrderId=d.payOrderId;
+						//调用支付接口
+						if(needPay){
+							wx.chooseWXPay({
+							    timestamp: _this.getPropertyValue("timeStamp"), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+							    nonceStr: _this.getPropertyValue("nonceStr"), // 支付签名随机串，不长于 32 位
+							    package: d.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+							    paySign: d.paySign, // 支付签名
+							    success: function (res) {
+							    	_this.updateGoJoinPay(orderId,payOrderId,"SUCCESS");
+							    },
+							    fail: function(res){
+							    	weUI.alert({
+										content: "活动支付失败",
+										ok: function(){
+											_this.updateGoJoinPay(orderId,payOrderId,"FAIL");
+											 weUI.closeAlert();
+										}
+									})
+							    }, 
+							    cancel: function(res){
+							    	weUI.alert({
+										content: "活动支付取消"
+									})
+							    }
+							});
+						} 
+						
+					},
+					failure: function(transport){
+						weUI.alert({
+							content: transport.statusInfo
+						})
+					}
+					
+				});
+			},
+			updateGoJoinPay: function(goOrderId,payOrderId,payStatus){
+				var _this = this; 
+				ajaxController.ajax({
+					url: "../go/updateGoJoinPay",
+					type: "post", 
+					data: {
+						goOrderId: goOrderId,
+						payOrderId: payOrderId,
+						payStatus: payStatus
+					} ,
+					success: function(transport){
+						window.location.href="../go/comments.html"
+					},
+					failure: function(transport){
+						weUI.alert({
+							content: transport.statusInfo
+						})
+					}
+					
+				});
+			}
+		}
+	});
+})(jQuery);
+
+$(document).ready(function(){
+	var p = new $.GroupInvitePage({ 
+		nonceStr:  "<c:out value="${nonceStr}"/>",
+		timeStamp:  "<c:out value="${timestamp}"/>",
+		goId:  "<c:out value="${go.goId}"/>"
+	});
+	p.init();
+});
+</script>
 </html>
