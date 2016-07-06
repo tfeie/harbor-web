@@ -520,7 +520,8 @@ public class GoController {
 		}
 		boolean joint = HyGoUtil.checkUserHadJointGroup(goId, userInfo.getUserId());
 		boolean applied = HyGoUtil.checkUserHadAppliedGroup(goId, userInfo.getUserId());
-		request.setAttribute("canapply", !(joint || applied));
+		request.setAttribute("applied", applied);
+		request.setAttribute("joint", joint);
 		request.setAttribute("go", go);
 
 		long timestamp = DateUtil.getCurrentTimeMillis();
