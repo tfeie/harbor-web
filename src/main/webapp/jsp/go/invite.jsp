@@ -85,18 +85,23 @@
 			</section>
 		</section>
 		<section class="yanbaoming">
-			<section class="sec_btn2 fabu" style="display:none">
+			<section class="sec_btn2 fabu" <c:if test="${applied==true}">style="display:none"</c:if>>
 				<input type="button" value="报名成功，进入群聊">
 			</section>
 			<section class="yaoy">
 				<p>
 					<span><c:out value="${go.payModeName}" /></span>
-					<c:if test="${canapply==true}">
+					<c:if test="${joint==false || applied==false}">
 					<button id="BTN_BAOMING">
 						<img src="//static.tfeie.com/images/img58.png">我要报名
 					</button>
 					</c:if>
+					<c:if test="${applied==true}">
 					<label id="APPLY_SUCCESS" style="display:none">报名成功</label>
+					</c:if>
+					<c:if test="${joint==true}">
+					<label id="APPLY_SUCCESS" style="display:none">已参加</label>
+					</c:if>
 				</p>
 			</section>
 		</section> 
