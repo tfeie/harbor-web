@@ -97,10 +97,10 @@
 					</button>
 					</c:if>
 					<c:if test="${applied==true}">
-					<label id="APPLY_SUCCESS" style="display:none">报名成功</label>
+					<label id="APPLY_SUCCESS">报名成功</label>
 					</c:if>
 					<c:if test="${joint==true}">
-					<label id="APPLY_SUCCESS" style="display:none">已参加</label>
+					<label id="APPLY_SUCCESS"><a href="../go/comments.html?goId=<c:out value="${go.goId}" />">已参加,进入点评</a></label>
 					</c:if>
 				</p>
 			</section>
