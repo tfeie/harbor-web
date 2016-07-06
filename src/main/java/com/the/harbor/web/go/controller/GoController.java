@@ -493,6 +493,16 @@ public class GoController {
 
 	@RequestMapping("/comments.html")
 	public ModelAndView comments(HttpServletRequest request) {
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		String goId = request.getParameter("goId");
+		if (StringUtil.isBlank(goId)) {
+			throw new BusinessException("您查看的活动信息不存在");
+		}
+		Go go = DubboServiceUtil.queryGo(goId);
+		if (go == null) {
+			throw new BusinessException("您查看的活动信息不存在");
+		}
+		request.setAttribute("go", go);
 		ModelAndView view = new ModelAndView("go/comments");
 		return view;
 	}
@@ -958,9 +968,23 @@ public class GoController {
 			if (StringUtil.isBlank(doGoComment.getGoId())) {
 				throw new BusinessException("GO标识为空");
 			}
-			if (StringUtil.isBlank(doGoComment.getOrderId())) {
-				throw new BusinessException("GO订购标识为空");
-			}
+			// 判断是否参加了活动
+			/**
+			 * CheckUserOrderGoReq checkUserOrderGoReq = new
+			 * CheckUserOrderGoReq();
+			 * checkUserOrderGoReq.setGoId(doGoComment.getGoId());
+			 * checkUserOrderGoReq.setGoOrderId(doGoComment.getOrderId());
+			 * checkUserOrderGoReq.setUserId(userInfo.getUserId());
+			 * 
+			 * CheckUserOrderGoResp resp =
+			 * DubboConsumerFactory.getService(IGoSV.class)
+			 * .checkUserOrderGo(checkUserOrderGoReq); if
+			 * (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().
+			 * getResultCode())) { throw new
+			 * BusinessException(resp.getResponseHeader().getResultMessage()); }
+			 * if (!resp.isCheckflag()) { throw new
+			 * BusinessException("您没有参与此活动，不能评价哦~"); }
+			 **/
 			/* 2.组织消息 */
 			doGoComment.setCommentId(UUIDUtil.genId32());
 			doGoComment.setPublishUserId(userInfo.getUserId());
@@ -1097,7 +1121,7 @@ public class GoController {
 				d.put("needPay", resp.isNeedPay());
 				d.put("orderId", resp.getOrderId());
 				d.put("payAmount", resp.getPayAmount());
-				d.put("payOrderId",resp.getPayOrderId());
+				d.put("payOrderId", resp.getPayOrderId());
 				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", d);
 			}
 		} catch (Exception e) {
