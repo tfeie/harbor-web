@@ -85,7 +85,7 @@
 			</section>
 		</section>
 		<section class="yanbaoming">
-			<section class="sec_btn2 fabu" <c:if test="${applied==true}">style="display:none"</c:if>>
+			<section class="sec_btn2 fabu" style="display:none" id="SEL_SHOW_RESULT">
 				<input type="button" value="报名成功，进入群聊">
 			</section>
 			<section class="yaoy">
@@ -96,9 +96,7 @@
 						<img src="//static.tfeie.com/images/img58.png">我要报名
 					</button>
 					</c:if>
-					<c:if test="${applied==true}">
-					<label id="APPLY_SUCCESS">报名成功</label>
-					</c:if>
+					<label id="APPLY_SUCCESS" style="display:none">报名成功</label>
 					<c:if test="${joint==true}">
 					<label id="APPLY_SUCCESS"><a href="../go/comments.html?goId=<c:out value="${go.goId}" />">已参加,进入点评</a></label>
 					</c:if>
@@ -217,7 +215,10 @@ wx.config({
 						payStatus: payStatus
 					} ,
 					success: function(transport){
-						window.location.href="../go/comments.html"
+						$("#BTN_BAOMING").hide();
+						$("#APPLY_SUCCESS").show();
+						$("#SEL_SHOW_RESULT").show();
+						
 					},
 					failure: function(transport){
 						weUI.alert({
