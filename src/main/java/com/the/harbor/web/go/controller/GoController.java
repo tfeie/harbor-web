@@ -1104,10 +1104,19 @@ public class GoController {
 			if (StringUtil.isBlank(goId)) {
 				throw new BusinessException("活动标识不存在");
 			}
+			Go go = DubboServiceUtil.queryGo(goId);
+			if (go == null) {
+				throw new BusinessException("活动信息不存在");
+			}
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			if (go.getUserId().equals(userInfo.getUserId())) {
+				throw new BusinessException("您是活动发起者，不能申请");
+			}
+
 			JSONObject d = new JSONObject();
 
 			GroupApplyReq groupApplyReq = new GroupApplyReq();
-			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+
 			groupApplyReq.setUserId(userInfo.getUserId());
 			groupApplyReq.setGoId(goId);
 			GroupApplyResp resp = DubboConsumerFactory.getService(IGoSV.class).applyGroup(groupApplyReq);
