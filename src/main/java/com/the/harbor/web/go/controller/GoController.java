@@ -29,6 +29,7 @@ import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderReq;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderResp;
 import com.the.harbor.api.go.param.DoGoComment;
+import com.the.harbor.api.go.param.DoGoJoinConfirm;
 import com.the.harbor.api.go.param.Go;
 import com.the.harbor.api.go.param.GoComment;
 import com.the.harbor.api.go.param.GoCreateReq;
@@ -460,6 +461,20 @@ public class GoController {
 
 	@RequestMapping("/confirmlist.html")
 	public ModelAndView confirmlist(HttpServletRequest request) {
+		String goId = request.getParameter("goId");
+		if (StringUtil.isBlank(goId)) {
+			throw new BusinessException("活动记录不存在");
+		}
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		// 查询活动信息
+		Go go = DubboServiceUtil.queryGo(goId);
+		if (go == null) {
+			throw new BusinessException("活动不存在，无法确认");
+		}
+		if (!userInfo.getUserId().equals(go.getUserId())) {
+			throw new BusinessException("您不是活动的发起者，无法确认");
+		}
+		request.setAttribute("go", go);
 		ModelAndView view = new ModelAndView("go/confirmlist");
 		return view;
 	}
@@ -1151,6 +1166,150 @@ public class GoController {
 			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
+	}
+
+	@RequestMapping("/getGroupJoinBeenConfirms")
+	@ResponseBody
+	public ResponseData<JSONArray> getGroupJoinBeenConfirms(@NotBlank(message = "活动标识为空") String goId) {
+		ResponseData<JSONArray> responseData = null;
+		try {
+			JSONArray array = new JSONArray();
+			// 获取BE的点赞用户列表
+			Set<String> users = HyGoUtil.getGroupConfirmedUsers(goId);
+			for (String userId : users) {
+				// 获取用户信息
+				UserViewInfo u = WXUserUtil.getUserViewInfoByUserId(userId);
+				if (u != null) {
+					JSONObject d = new JSONObject();
+					d.put("userId", u.getUserId());
+					d.put("wxHeadimg", u.getWxHeadimg());
+					d.put("enName", u.getEnName());
+					d.put("abroadCountryName", u.getAbroadCountryName());
+					d.put("userStatusName", u.getUserStatusName());
+					d.put("industryName", u.getIndustryName());
+					d.put("title", u.getTitle());
+					d.put("atCityName", u.getAtCityName());
+					array.add(d);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", array);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONArray.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getGroupJoinWaitConfirms")
+	@ResponseBody
+	public ResponseData<JSONArray> getGroupJoinWaitConfirms(@NotBlank(message = "活动标识为空") String goId) {
+		ResponseData<JSONArray> responseData = null;
+		try {
+			JSONArray array = new JSONArray();
+			// 获取BE的点赞用户列表
+			Set<String> users = HyGoUtil.getGroupWaitConfirmUsers(goId);
+			for (String userId : users) {
+				// 获取用户信息
+				UserViewInfo u = WXUserUtil.getUserViewInfoByUserId(userId);
+				if (u != null) {
+					JSONObject d = new JSONObject();
+					d.put("userId", u.getUserId());
+					d.put("wxHeadimg", u.getWxHeadimg());
+					d.put("enName", u.getEnName());
+					d.put("abroadCountryName", u.getAbroadCountryName());
+					d.put("userStatusName", u.getUserStatusName());
+					d.put("industryName", u.getIndustryName());
+					d.put("title", u.getTitle());
+					d.put("atCityName", u.getAtCityName());
+					array.add(d);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", array);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONArray.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/rejectUserJoinGroup")
+	@ResponseBody
+	public ResponseData<String> rejectUserJoinGroup(@NotBlank(message = "获取标识为空") String goId,
+			@NotBlank(message = "被拒绝用户标识为空") String userId, HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			DoGoJoinConfirm doGoJoinConfirm = new DoGoJoinConfirm();
+			doGoJoinConfirm.setGoId(goId);
+			doGoJoinConfirm.setHandleType(DoGoJoinConfirm.HandleType.REJECT.name());
+			doGoJoinConfirm.setMqId(UUIDUtil.genId32());
+			doGoJoinConfirm.setMqType(MQType.MQ_HY_GO_JOIN_CONFIRM.getValue());
+			doGoJoinConfirm.setUserId(userId);
+			this.sendDoGoJoinConfirm(doGoJoinConfirm);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/agreeUserJoinGroup")
+	@ResponseBody
+	public ResponseData<JSONObject> agreeUserJoinGroup(@NotBlank(message = "获取标识为空") String goId,
+			@NotBlank(message = "用户标识为空") String userId, HttpServletRequest request) {
+		ResponseData<JSONObject> responseData = null;
+		try {
+			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			DoGoJoinConfirm doGoJoinConfirm = new DoGoJoinConfirm();
+			doGoJoinConfirm.setGoId(goId);
+			doGoJoinConfirm.setHandleType(DoGoJoinConfirm.HandleType.AGREE.name());
+			doGoJoinConfirm.setMqId(UUIDUtil.genId32());
+			doGoJoinConfirm.setMqType(MQType.MQ_HY_GO_JOIN_CONFIRM.getValue());
+			doGoJoinConfirm.setUserId(userId);
+			this.sendDoGoJoinConfirm(doGoJoinConfirm);
+
+			UserViewInfo u = WXUserUtil.getUserViewInfoByUserId(userId);
+			JSONObject d = new JSONObject();
+			if (u != null) {
+				d.put("userId", u.getUserId());
+				d.put("wxHeadimg", u.getWxHeadimg());
+				d.put("enName", u.getEnName());
+				d.put("abroadCountryName", u.getAbroadCountryName());
+				d.put("userStatusName", u.getUserStatusName());
+				d.put("industryName", u.getIndustryName());
+				d.put("title", u.getTitle());
+				d.put("atCityName", u.getAtCityName());
+			}
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	private void sendDoGoJoinConfirm(DoGoJoinConfirm doGoJoinConfirm) {
+		MNSClient client = MNSFactory.getMNSClient();
+		try {
+			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
+			Message message = new Message();
+			message.setMessageBody(JSONObject.toJSONString(doGoJoinConfirm));
+			queue.putMessage(message);
+		} catch (ClientException ce) {
+			LOG.error("Something wrong with the network connection between client and MNS service."
+					+ "Please check your network and DNS availablity.", ce);
+		} catch (ServiceException se) {
+			if (se.getErrorCode().equals("QueueNotExist")) {
+				LOG.error("Queue is not exist.Please create before use", se);
+			} else if (se.getErrorCode().equals("TimeExpired")) {
+				LOG.error("The request is time expired. Please check your local machine timeclock", se);
+			}
+			LOG.error("GO join confirm add  message put in Queue error", se);
+		} catch (Exception e) {
+			LOG.error("Unknown exception happened!", e);
+		}
+		client.close();
 	}
 
 }

@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -16,66 +18,70 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css">	
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
-<script>
-	$(function() {
-
-		$(".but_queren input.inpbut").click(function() {
-			var item = $(this).parents(".daique_info").clone(true);
-			$(this).parents(".daique_info").remove();
-			$(".queren_back.in").append(item);
-
-		})
-
-	})
-</script>
 </head>
 <body>
 	<section class="mainer in">
 		<section class="ma_shenghe">
-			<p>52小时精益创业</p>
+			<p>
+				<c:out value="${go.topic}" />
+			</p>
 		</section>
 		<section class="shenhe_xinxi">
 			<section class="info_fuwu">
 				<section class="ip_info">
 					<section class="info_img">
-						<span><img src="//static.tfeie.com/images/img29.png"></span>
+						<span><a href="../user/userInfo.html?userId=<c:out value="${go.userId}" />"><img src="<c:out value="${go.wxHeadimg}"/>"></a></span>
 					</section>
 					<section class="ip_text">
 						<p>
-							<span>Martin</span><label class="lbl2">英国</label><i>已认证</i>
+							<span><c:out value="${go.enName}" /></span><label class="lbl2"><c:out
+									value="${go.abroadCountryName}" /></label>
+							<c:out value="${go.userStatusName}" />
 						</p>
-						<p>金融/合伙人/北京</p>
+						<p>
+							<c:if test="${go.industryName!=null}">
+								<c:out value="${go.industryName}" escapeXml="false" />
+					/
+					</c:if>
+							<c:if test="${go.title!=null}">
+								<c:out value="${go.title}" escapeXml="false" />
+					/
+					</c:if>
+							<c:out value="${go.atCityName}" escapeXml="false" />
+						</p>
 					</section>
 					<div class="clear"></div>
 				</section>
 				<section class="info_time">
 					<p>
-						<span>2016-5-5 星期四 15:00</span><a href="#" class="on">在线服务</a>
+						<span><c:out value="${go.expectedStartTime}" /></span><a href="#"><c:out value="${go.orgModeName}" /></a>
 					</p>
 				</section>
 				<section class="info_time back1">
 					<p>
-						<span>Group邀请2-3人</span><a href="#">180元</a>
+						<span>Group邀请<c:out value="${go.inviteMembers}" />人</span><a href="#"><c:out value="${go.fixPriceYuan}" />元</a>
 					</p>
 				</section>
 				<section class="info_time back2">
 					<p>
-						<span>北京，国贸附近</span>
+						<span><c:out value="${go.location}" /></span>
 					</p>
 				</section>
 				<section class="info_fangf pz">
-					<p>怎样提高你的身体效率，怎样有效的改善体型。怎样提高你的身体效率，怎样有效的改善体型…</p>
+					<p><c:out value="${go.contentSummary}" /></p>
 				</section>
 				<div class="clear"></div>
 			</section>
 			<section class="num_liulan">
 				<p>
-					<a href="#">浏览 126</a><a href="#">参加 126</a><a href="#">收藏 12</a>
+					<a href="#">浏览 <c:out value="${go.viewCount}" /></a><a href="#">参加 <c:out value="${go.joinCount}" /></a><a href="#">收藏 <c:out value="${go.favorCount}" /></a>
 				</p>
 			</section>
 		</section>
@@ -83,78 +89,238 @@
 		<section class="daiqueren">
 			<p>待确认</p>
 		</section>
-		<section class="queren_back">
-			<section class="daique_info">
-				<section class="info_img">
-					<span><img src="//static.tfeie.com/images/img29.png"></span>
-				</section>
-				<section class="ip_text oz">
-					<p>
-						<span>Martin</span><label class="lbl2">英国</label><i>已认证</i>
-					</p>
-					<p>金融/合伙人/北京</p>
-				</section>
-				<section class="but_queren">
-					<input type="button" value="拒绝" /><input type="button" value="通过"
-						class="inpbut" />
-				</section>
-				<div class="clear"></div>
-
-			</section>
-			<section class="daique_info">
-				<section class="info_img">
-					<span><img src="//static.tfeie.com/images/img29.png"></span>
-				</section>
-				<section class="ip_text oz">
-					<p>
-						<span>Martin</span><label class="lbl1">美国</label><i>已认证</i>
-					</p>
-					<p>金融/合伙人/北京</p>
-				</section>
-				<section class="but_queren">
-					<input type="button" value="拒绝" /><input type="button" value="通过"
-						class="inpbut" />
-				</section>
-				<div class="clear"></div>
-
-			</section>
+		<section class="queren_back" id="WAIT_CONFIRM_LIST">
+			
 		</section>
 		<section class="heiwu"></section>
 		<section class="daiqueren">
 			<p>已确认</p>
 		</section>
-		<section class="queren_back in">
-			<section class="daique_info">
-				<section class="info_img">
-					<span><img src="//static.tfeie.com/images/img29.png"></span>
-				</section>
-				<section class="ip_text oz">
-					<p>
-						<span>Martin</span><label class="lbl5">香港</label><i>已认证</i>
-					</p>
-					<p>金融/合伙人/北京</p>
-				</section>
-
-				<div class="clear"></div>
-
-			</section>
-			<section class="daique_info">
-				<section class="info_img">
-					<span><img src="//static.tfeie.com/images/img29.png"></span>
-				</section>
-				<section class="ip_text oz">
-					<p>
-						<span>Martin</span><label class="lbl6">日本</label><i>已认证</i>
-					</p>
-					<p>金融/合伙人/北京</p>
-				</section>
-
-				<div class="clear"></div>
-			</section>
+		<section class="queren_back in" id="BEEN_CONFIRM_LIST">
+			
+			
 		</section>
 	</section>
 </body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script> 
+
+<script type="text/javascript">
+	(function($) {
+		$.GoGroupConfirmPage = function(data) {
+			this.settings = $.extend(true, {},
+					$.GoGroupConfirmPage.defaults);
+			this.params = data ? data : {}
+		}
+		$.extend($.GoGroupConfirmPage, {
+			defaults : {},
+
+			prototype : {
+				init : function() {
+					this.bindEvents();
+					this.getGroupJoinWaitConfirms();
+					this.getGroupJoinBeenConfirms();
+				},
+
+				bindEvents : function() {
+					var _this = this;
+					$("#WAIT_CONFIRM_LIST").delegate("[name='BTN_REJECT']","click",function(){
+						var userId =$(this).attr("userId");
+						_this.reject(userId);
+					});
+					$("#WAIT_CONFIRM_LIST").delegate("[name='BTN_PASS']","click",function(){
+						var userId =$(this).attr("userId");
+						_this.agree(userId);
+					});
+
+				},
+				
+				reject: function(userId){
+					var _this = this;
+					var data = {
+						goId: _this.getPropertyValue("goId"),
+						userId: userId
+					}
+					ajaxController.ajax({
+						url: "../go/rejectUserJoinGroup",
+						type: "post", 
+						data: data,
+						success: function(transport){
+							var dom=$("#WAIT_CONFIRM_"+userId);
+							dom.fadeOut("200",function(){dom.detach();});
+							var len = $("[name='WAIT_CONFIRM_DETL']").length;
+							if(len==0){
+								var opt="<section class=\"daique_info\" name=\"WAIT_CONFIRM_DETAIL\">没有待确认的信息哦~</section>";
+								$("#WAIT_CONFIRM_LIST").append(opt); 
+							}
+						},
+						failure: function(transport){ 
+							weUI.alert({content:transport.statusInfo});
+						}
+					});
+				},
+				
+				agree: function(userId){
+					var _this = this;
+					var data = {
+							goId: _this.getPropertyValue("goId"),
+							userId: userId
+						}
+						ajaxController.ajax({
+							url: "../go/agreeUserJoinGroup",
+							type: "post", 
+							data: data,
+							success: function(transport){
+								var dom=$("#WAIT_CONFIRM_"+userId);
+								dom.fadeOut("200",function(){dom.detach();});
+								var len = $("[name='WAIT_CONFIRM_DETL']").length;
+								if(len==0){
+									var opt="<section class=\"daique_info\" name=\"WAIT_CONFIRM_DETAIL\">没有待确认的信息哦~</section>";
+									$("#WAIT_CONFIRM_LIST").append(opt); 
+								}
+								
+								var userData=transport.data;
+								var opt=$("#BeenConfirmImpl").render(userData?[userData]:[]);
+								var len = $("[name='BEEN_CONFIRM_DETL']").length;
+								if(len==0){
+									$("#BEEN_CONFIRM_LIST").html(opt); 
+								}else{
+									$("#BEEN_CONFIRM_LIST").append(opt); 
+								}
+								
+								
+							},
+							failure: function(transport){ 
+								weUI.alert({content:transport.statusInfo});
+							}
+						});
+					
+				},
+
+				getGroupJoinWaitConfirms: function(){
+					var _this = this;					
+					var data = {
+						goId: _this.getPropertyValue("goId")
+					}
+					ajaxController.ajax({
+						url: "../go/getGroupJoinWaitConfirms",
+						type: "post", 
+						data: data,
+						success: function(transport){
+							var data = transport.data;
+							_this.renderWaitConfirm(data);
+						},
+						failure: function(transport){ 
+							_this.renderWaitConfirm([]);
+						}
+					});
+				},
+				
+				getGroupJoinBeenConfirms: function(){
+					var _this = this;					
+					var data = {
+						goId: _this.getPropertyValue("goId")
+					}
+					ajaxController.ajax({
+						url: "../go/getGroupJoinBeenConfirms",
+						type: "post", 
+						data: data,
+						success: function(transport){
+							var data = transport.data;
+							_this.renderBeenConfirm(data);
+						},
+						failure: function(transport){ 
+							_this.renderBeenConfirm([]);
+						}
+					});
+				},
+				
+				renderWaitConfirm: function(data){
+					data= data?data:[];
+					var opt="";
+					if(data.length>0){
+						opt=$("#WaitConfirmImpl").render(data);
+					}else{
+						opt="<section class=\"daique_info\" name=\"WAIT_CONFIRM_DETAIL\">没有待确认的信息哦~</section>"
+					}
+					
+					$("#WAIT_CONFIRM_LIST").html(opt); 
+				},
+				
+				renderBeenConfirm: function(data){
+					data= data?data:[];
+					var opt="";
+					if(data.length>0){
+						opt=$("#BeenConfirmImpl").render(data);
+					}else{
+						opt="<section class=\"daique_info\" name=\"BEEN_CONFIRM_DETAIL\">没有人申请哦~</section>"
+					}
+					
+					$("#BEEN_CONFIRM_LIST").html(opt); 
+				},
+
+				getPropertyValue : function(propertyName) {
+					if (!propertyName)
+						return;
+					return this.params[propertyName];
+				}
+			}
+		});
+	})(jQuery);
+
+	$(document).ready(function() {
+		var p = new $.GoGroupConfirmPage({
+			goId : "<c:out value="${go.goId}"/>"
+
+		});
+		p.init();
+	});
+</script>
+
+<script id="WaitConfirmImpl" type="text/x-jsrender"> 
+		<section class="daique_info" id="WAIT_CONFIRM_{{:userId}}" name="WAIT_CONFIRM_DETL">
+				<section class="info_img">
+					<span><a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}"></a></span>
+				</section>
+				<section class="ip_text oz">
+					<p>
+						<span>{{:enName}}</span><label class="lbl2">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
+					</p>
+					<p>{{:industryName}}/{{:title}}/{{:atCityName}}</p>
+				</section>
+				<section class="but_queren">
+					<input type="button" value="拒绝" name="BTN_REJECT" userId="{{:userId}}"/><input type="button" value="通过" name="BTN_PASS"
+						class="inpbut" userId="{{:userId}}"/>
+				</section>
+				<div class="clear"></div>
+		</section>
 
 
+</script>
+
+<script id="BeenConfirmImpl" type="text/x-jsrender"> 
+<section class="daique_info" name="BEEN_CONFIRM_DETL">
+		<section class="info_img">
+			<span><a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}"></a></span>
+		</section>
+		<section class="ip_text oz">
+			<p>
+						<span>{{:enName}}</span><label class="lbl2">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
+					</p>
+					<p>{{:industryName}}/{{:title}}/{{:atCityName}}</p>
+		</section>
+
+		<div class="clear"></div>
+	</section>
+
+</script>
 
 </html>
