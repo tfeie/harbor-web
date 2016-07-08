@@ -147,6 +147,7 @@
 					var _this = this;
 					var data = {
 						goId: _this.getPropertyValue("goId"),
+						topic: _this.getPropertyValue("topic"),
 						userId: userId
 					}
 					ajaxController.ajax({
@@ -172,6 +173,7 @@
 					var _this = this;
 					var data = {
 							goId: _this.getPropertyValue("goId"),
+							topic: _this.getPropertyValue("topic"),
 							userId: userId
 						}
 						ajaxController.ajax({
@@ -278,7 +280,8 @@
 
 	$(document).ready(function() {
 		var p = new $.GoGroupConfirmPage({
-			goId : "<c:out value="${go.goId}"/>"
+			goId : "<c:out value="${go.goId}"/>",
+			topic : "<c:out value="${go.topic}"/>"
 
 		});
 		p.init();

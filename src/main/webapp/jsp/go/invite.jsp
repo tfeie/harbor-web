@@ -74,7 +74,20 @@
 					</p>
 				</section>
 				<section class="info_fangf pz">
-					<p><c:out value="${go.contentSummary}" /></p>
+					<article>
+					<c:forEach var="detail" items="${go.goDetails }">
+						<c:if test="${detail.type=='text'}">
+							<p>
+								<c:out value="${detail.detail}" />
+							</p>
+						</c:if>
+						<c:if test="${detail.type=='image'}">
+							<p>
+								<img src="<c:out value="${detail.imageUrl}"/>" width="100%">
+							</p>
+						</c:if>
+					</c:forEach>
+					</article> 
 				</section>
 				<div class="clear"></div>
 			</section>

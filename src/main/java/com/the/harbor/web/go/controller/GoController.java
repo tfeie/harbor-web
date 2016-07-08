@@ -1243,17 +1243,21 @@ public class GoController {
 
 	@RequestMapping("/rejectUserJoinGroup")
 	@ResponseBody
-	public ResponseData<String> rejectUserJoinGroup(@NotBlank(message = "获取标识为空") String goId,
-			@NotBlank(message = "被拒绝用户标识为空") String userId, HttpServletRequest request) {
+	public ResponseData<String> rejectUserJoinGroup(@NotBlank(message = "活动标识为空") String goId,
+			@NotBlank(message = "活动名称为空") String topic, @NotBlank(message = "被拒绝用户标识为空") String userId,
+			HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
-			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			UserViewInfo pUser = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			DoGoJoinConfirm doGoJoinConfirm = new DoGoJoinConfirm();
 			doGoJoinConfirm.setGoId(goId);
 			doGoJoinConfirm.setHandleType(DoGoJoinConfirm.HandleType.REJECT.name());
 			doGoJoinConfirm.setMqId(UUIDUtil.genId32());
 			doGoJoinConfirm.setMqType(MQType.MQ_HY_GO_JOIN_CONFIRM.getValue());
 			doGoJoinConfirm.setUserId(userId);
+			doGoJoinConfirm.setTopic(topic);
+			doGoJoinConfirm.setPublishUserName(pUser.getEnName());
+			doGoJoinConfirm.setPublishUserId(pUser.getUserId());
 			this.sendDoGoJoinConfirm(doGoJoinConfirm);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
 		} catch (Exception e) {
@@ -1265,17 +1269,21 @@ public class GoController {
 
 	@RequestMapping("/agreeUserJoinGroup")
 	@ResponseBody
-	public ResponseData<JSONObject> agreeUserJoinGroup(@NotBlank(message = "获取标识为空") String goId,
-			@NotBlank(message = "用户标识为空") String userId, HttpServletRequest request) {
+	public ResponseData<JSONObject> agreeUserJoinGroup(@NotBlank(message = "活动标识为空") String goId,
+			@NotBlank(message = "活动名称为空") String topic, @NotBlank(message = "用户标识为空") String userId,
+			HttpServletRequest request) {
 		ResponseData<JSONObject> responseData = null;
 		try {
-			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			UserViewInfo pUser = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			DoGoJoinConfirm doGoJoinConfirm = new DoGoJoinConfirm();
 			doGoJoinConfirm.setGoId(goId);
 			doGoJoinConfirm.setHandleType(DoGoJoinConfirm.HandleType.AGREE.name());
 			doGoJoinConfirm.setMqId(UUIDUtil.genId32());
 			doGoJoinConfirm.setMqType(MQType.MQ_HY_GO_JOIN_CONFIRM.getValue());
 			doGoJoinConfirm.setUserId(userId);
+			doGoJoinConfirm.setTopic(topic);
+			doGoJoinConfirm.setPublishUserName(pUser.getEnName());
+			doGoJoinConfirm.setPublishUserId(pUser.getUserId());
 			this.sendDoGoJoinConfirm(doGoJoinConfirm);
 
 			UserViewInfo u = WXUserUtil.getUserViewInfoByUserId(userId);
