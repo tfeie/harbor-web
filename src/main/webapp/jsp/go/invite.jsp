@@ -104,7 +104,7 @@
 			<section class="yaoy">
 				<p>
 					<span><c:out value="${go.payModeName}" /></span>
-					<c:if test="${joint==false || applied==false}">
+					<c:if test="${joint==false}">
 					<button id="BTN_BAOMING">
 						<img src="//static.tfeie.com/images/img58.png">我要报名
 					</button>
