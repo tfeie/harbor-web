@@ -13,7 +13,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>会员中心</title>
+<title>海贝充值</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
@@ -31,25 +31,12 @@
 <script src="//static.tfeie.com/v2/js/tap.js"></script>
 </head>
 <section class="mycenter">
-
-	<section class="sec_item">
-		<div class="div_title2">
-			<h3>
-				<span>会员福利介绍</span>
-			</h3>
-		</div>
-		<div class="div_cont">
-			<div class="img">
-				<img src="//static.tfeie.com/images/pic1.png" alt="" />
-			</div>
-		</div>
-	</section>
 	<section class="sec_item">
 		<div class="item">
-			<span>会员到期时间</span><label><c:out value="${userMember.desc}"/></label>
+			<span>海贝充值</span>
 		</div>
 		<div class="item">
-			<span>购买月份</span><label id="LABEL_BUY_MONTHS"></label>
+			<span>购买个数</span><label id="LABEL_BUY_HAIBEI"></label>
 		</div>
 		<div class="item">
 			<span>应付金额</span><label><em  id="EM_BUY_PRICE"></em>元</label>
@@ -58,6 +45,7 @@
 			<span>支付方式</span><label><i class="i_weixin"></i>微信支付</label>
 		</div>
 	</section>
+	<div class="message-err" id="DIV_TIPS"></div>
 	<section class="but_baoc">
 		<p>
 			<input type="button" value="立即购买" id="BTN_BUY"/>
@@ -92,11 +80,10 @@ wx.config({
 });
 
 	(function($) {
-		$.MemberCenterPage = function(data) {
-			this.settings = $.extend(true, {}, $.MemberCenterPage.defaults);
-			this.params= data?data:{}
+		$.BuyHaibeiPage = function() {
+			this.settings = $.extend(true, {}, $.BuyHaibeiPage.defaults);
 		}
-		$.extend($.MemberCenterPage, {
+		$.extend($.BuyHaibeiPage, {
 			defaults : {},
 
 			prototype : {
@@ -116,25 +103,28 @@ wx.config({
 					var _this = this;
 					var jq=$("[name='RADIO_MONTH'].on");
 					if(!jq){
-						weUI.alert({content:"请选择购买月份"});
+						this.showError("请选择购买数量");
 						return ;
+					}else{
+						this.hideMessage();
 					}
-					var payMonth = jq.attr("months");
+					var count = jq.attr("count");
 					var price = jq.attr("prices"); 
 					ajaxController.ajax({
-						url : "../user/createMemberPayOrder",
+						url : "../user/createHaibeiPayOrder",
 						type : "post",
 						data: {
-							payMonth: payMonth,
-							price: price,
-							nonceStr: _this.getPropertyValue("nonceStr"),
-							timeStamp: _this.getPropertyValue("timeStamp")
+							count: count,
+							price: price, 
+							nonceStr: "<c:out value="${nonceStr}"/>",
+							timeStamp: <c:out value="${timestamp}"/>
 						},
 						success : function(transport) {
 							var d = transport.data; 
+							
 							wx.chooseWXPay({
-							    timestamp: _this.getProertyValue("timestamp"),, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-							    nonceStr: _this.getPropertyValue("nonceStr"), // 支付签名随机串，不长于 32 位
+							    timestamp: <c:out value="${timestamp}"/>, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+							    nonceStr: '<c:out value="${nonceStr}"/>', // 支付签名随机串，不长于 32 位
 							    package: d.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
 							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 							    paySign: d.paySign, // 支付签名
@@ -142,15 +132,15 @@ wx.config({
 							        _this.userMemberRenewal(payMonth,d.payOrderId);
 							    },
 							    fail: function(res){
-							    	weUI.alert({content:"支付失败"});
+							    	 _this.showError("支付失败")
 							    }, 
 							    cancel: function(res){
-							    	weUI.alert({content:"您取消支付"});
+							    	 _this.showError("支付取消")
 							    }
 							});
 						},
 						failure : function(transport) {
-							weUI.alert({content:transport.statusInfo});
+							_this.showError(transport.statusInfo);
 						}
 
 					});
@@ -162,25 +152,27 @@ wx.config({
 						url : "../user/userMemberRenewal",
 						type : "post",
 						data: {
+							userId:"<c:out value="${userMember.userId}"/>",
+							openId:"<c:out value="${openId}"/>",
 							payMonth: payMonth,
 							payOrderId: payOrderId
 						},
 						success : function(transport) {
-							var d = transport.data;  
-							weUI.alert({content:"您成功购买"+payMonth+"个月会员,有效期["+d.expDate+"]"});
+							var d = transport.data; 
+							alert(d.enName+",您成功购买"+payMonth+"个月会员,有效期["+d.expDate+"]")
 						},
 						failure : function(transport) {
-							weUI.alert({content:"支付成功，会员续期失败,稍候重试"});
+							_this.showError("会员支付成功，但是处理失败");
 						}
 
 					});
 
 				},
 				
-				getMemberCanByMonths : function() {
+				getHaibeiCanBuy : function() {
 					var _this = this;
 					ajaxController.ajax({
-						url : "../sys/getMemberCanByMonths",
+						url : "../sys/getHaibeiCanBuy",
 						type : "post",
 						success : function(transport) {
 							var d = transport.data; 
@@ -196,13 +188,13 @@ wx.config({
 				
 				renderMemberPrices: function(){
 					var _this = this;
-					var template = $.templates("#BuyMonthsImpl");
+					var template = $.templates("#BuyHaibeiImpl");
                     var htmlOutput = template.render(this.memberprices?this.memberprices:[]);
                     $("#LABEL_BUY_MONTHS").html(htmlOutput);
                     
                     //初始化第一条月份费用显示 
                     if(this.memberprices && this.memberprices.length>0){
-                    	var firstmonth =this.memberprices[0].count; 
+                    	var firstmonth =this.memberprices[0].months; 
                     	var p = this.getMonthsPrice(firstmonth);
                     	$("#EM_BUY_PRICE").text(p?p.priceYuan:"");
                     }
@@ -219,7 +211,7 @@ wx.config({
 				
 				getMonthsPrice: function(months){
 					var pa=$.grep(this.memberprices,function(d,i){
-						return d.count==months;
+						return d.months==months;
 					});
 					if(!pa || pa.length==0){
 						weUI.alert({content:"会员定价信息出错，请刷新页面重试"});
@@ -239,15 +231,12 @@ wx.config({
 		var b = new $.HarborBuilder();
 		b.buildFooter();
 		
-		var p = new $.MemberCenterPage();
-		p.init({
-			timestamp : <c:out value="${timestamp}"/>,
-			nonceStr : '<c:out value="${nonceStr}"/>',
-		});
+		var p = new $.BuyHaibeiPage();
+		p.init();
 	});
 </script>
 
-<script id="BuyMonthsImpl" type="text/x-jsrender">
-<a {{if #index==0}} class="on" {{/if}} name="RADIO_MONTH" prices="{{:prices}}" months="{{:count}}">{{:count}}个月</a>
+<script id="BuyHaibeiImpl" type="text/x-jsrender">
+<a {{if #index==0}} class="on" {{/if}} name="RADIO_HAIBEI" prices="{{:prices}}" count="{{:count}}" discount="{{:discount}}">{{:count}}个</a>
 </script>
 </html>

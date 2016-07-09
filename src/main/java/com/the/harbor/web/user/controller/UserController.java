@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
@@ -137,7 +138,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/getRandomCode")
-	public ResponseData<String> getRandomCode(String mobilePhone) {
+	public ResponseData<String> getRandomCode(@NotBlank(message = "手机号码为空") String mobilePhone) {
 		ResponseData<String> responseData = null;
 		try {
 			if (StringUtil.isBlank(mobilePhone)) {
@@ -173,7 +174,8 @@ public class UserController {
 	}
 
 	@RequestMapping("/submitUserRegister")
-	public ResponseData<String> submitUserRegister(String userData, String randomCode) {
+	public ResponseData<String> submitUserRegister(@NotNull(message = "参数为空") String userData,
+			@NotNull(message = "验证码为空") String randomCode) {
 		ResponseData<String> responseData = null;
 		try {
 			if (StringUtil.isBlank(userData)) {
@@ -230,7 +232,7 @@ public class UserController {
 
 	@RequestMapping("/submitUserCertficate")
 	@ResponseBody
-	public ResponseData<String> submitUserCertficate(UserCertificationReq req) {
+	public ResponseData<String> submitUserCertficate(@NotNull(message = "参数为空") UserCertificationReq req) {
 		ResponseData<String> responseData = null;
 		try {
 			if (req == null) {
@@ -365,18 +367,11 @@ public class UserController {
 	public ResponseData<JSONObject> createMemberPayOrder(HttpServletRequest request) {
 		ResponseData<JSONObject> responseData = null;
 		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			String payMonth = request.getParameter("payMonth");
 			String price = request.getParameter("price");
 			String nonceStr = request.getParameter("nonceStr");
 			String timeStamp = request.getParameter("timeStamp");
-			String openId = request.getParameter("openId");
-			String userId = request.getParameter("userId");
-			if (StringUtil.isBlank(openId)) {
-				throw new BusinessException("USER-100001", "生成支付流水失败:没有微信绑定信息");
-			}
-			if (StringUtil.isBlank(userId)) {
-				throw new BusinessException("USER-100001", "生成支付流水失败:用户标识不存在");
-			}
 			String summary = GlobalSettings.getWeiXinMerchantName() + payMonth + "个月会员";
 			// 调用服务生成支付流水
 			CreatePaymentOrderReq createPaymentOrderReq = new CreatePaymentOrderReq();
@@ -384,7 +379,7 @@ public class UserController {
 			createPaymentOrderReq.setPayAmount(Long.parseLong(price));
 			createPaymentOrderReq.setPayType(PayType.WEIXIN.getValue());
 			createPaymentOrderReq.setSummary(summary);
-			createPaymentOrderReq.setUserId(userId);
+			createPaymentOrderReq.setUserId(userInfo.getUserId());
 			CreatePaymentOrderResp resp = DubboConsumerFactory.getService(IPaymentSV.class)
 					.createPaymentOrder(createPaymentOrderReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
@@ -395,7 +390,7 @@ public class UserController {
 			String payOrderId = resp.getPayOrderId();
 			String host = "192.168.1.1";
 			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId, Integer.parseInt(price), host,
-					openId, GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
+					userInfo.getWxOpenid(), GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
 			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
 
 			JSONObject d = new JSONObject();
@@ -412,10 +407,15 @@ public class UserController {
 
 	@RequestMapping("/userMemberRenewal")
 	@ResponseBody
-	public ResponseData<UserMemberRenewalResp> userMemberRenewal(UserMemberRenewalReq request) {
+	public ResponseData<UserMemberRenewalResp> userMemberRenewal(@NotNull(message = "参数为空") UserMemberRenewalReq req,
+			HttpServletRequest request) {
 		ResponseData<UserMemberRenewalResp> responseData = null;
 		try {
-			UserMemberRenewalResp resp = DubboConsumerFactory.getService(IUserSV.class).userMemberRenewal(request);
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			req.setOpenId(userInfo.getWxOpenid());
+			req.setUserId(userInfo.getUserId());
+
+			UserMemberRenewalResp resp = DubboConsumerFactory.getService(IUserSV.class).userMemberRenewal(req);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
@@ -529,7 +529,7 @@ public class UserController {
 
 	@RequestMapping("/getSystemTags")
 	@ResponseBody
-	public ResponseData<JSONObject> getSystemTags(String userId) {
+	public ResponseData<JSONObject> getSystemTags(@NotBlank(message = "参数为空") String userId) {
 		ResponseData<JSONObject> responseData = null;
 		JSONObject data = new JSONObject();
 		UserSystemTagQueryResp resp = null;
@@ -566,7 +566,7 @@ public class UserController {
 
 	@RequestMapping("/submitUserSelectedSystemTags")
 	@ResponseBody
-	public ResponseData<String> submitUserSelectedSystemTags(String submitString) {
+	public ResponseData<String> submitUserSelectedSystemTags(@NotBlank(message = "参数为空") String submitString) {
 		ResponseData<String> responseData = null;
 		try {
 			UserSystemTagSubmitReq request = JSON.parseObject(submitString, UserSystemTagSubmitReq.class);
@@ -587,7 +587,7 @@ public class UserController {
 
 	@RequestMapping("/getUserTags")
 	@ResponseBody
-	public ResponseData<JSONObject> getUserTags(String userId) {
+	public ResponseData<JSONObject> getUserTags(@NotBlank(message = "参数为空") String userId) {
 		ResponseData<JSONObject> responseData = null;
 		JSONObject data = new JSONObject();
 		/* 获取用户已经选择的所有标签 */
@@ -636,7 +636,7 @@ public class UserController {
 
 	@RequestMapping("/submitUserEdit")
 	@ResponseBody
-	public ResponseData<String> submitUserEdit(String userData) {
+	public ResponseData<String> submitUserEdit(@NotBlank(message = "参数为空") String userData) {
 		ResponseData<String> responseData = null;
 		try {
 			if (StringUtil.isBlank(userData)) {

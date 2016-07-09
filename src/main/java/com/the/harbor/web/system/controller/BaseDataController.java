@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.the.harbor.commons.components.globalconfig.GlobalSettings;
-import com.the.harbor.commons.components.globalconfig.MemeberPrice;
+import com.the.harbor.base.enumeration.dict.ParamCode;
+import com.the.harbor.base.enumeration.dict.TypeCode;
 import com.the.harbor.commons.indices.hyuniversity.UniversityHandler;
 import com.the.harbor.commons.redisdata.def.HyCountryVo;
 import com.the.harbor.commons.redisdata.def.HyDictsVo;
@@ -86,14 +87,22 @@ public class BaseDataController {
 
 	@RequestMapping("/getMemberCanByMonths")
 	@ResponseBody
-	public ResponseData<List<MemeberPrice>> getMemberCanByMonths() {
-		ResponseData<List<MemeberPrice>> responseData = null;
+	public ResponseData<JSONArray> getMemberCanByMonths() {
+		ResponseData<JSONArray> responseData = null;
 		try {
-			List<MemeberPrice> tags = GlobalSettings.getMemeberPrices();
-			responseData = new ResponseData<List<MemeberPrice>>(ResponseData.AJAX_STATUS_SUCCESS, "获取会员购买价格成功", tags);
+			JSONArray a = new JSONArray();
+			List<HyDictsVo> dicts = HyDictUtil.getHyDicts(TypeCode.HY_COMMON.getValue(),
+					ParamCode.MEMBER_PRICES.getValue());
+			if (!CollectionUtil.isEmpty(dicts)) {
+				for (HyDictsVo dict : dicts) {
+					JSONObject o = JSON.parseObject(dict.getParamValue());
+					a.add(o);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "获取会员购买价格成功", a);
 		} catch (Exception e) {
 			LOG.error(e);
-			responseData = new ResponseData<List<MemeberPrice>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
@@ -129,6 +138,28 @@ public class BaseDataController {
 		} catch (Exception e) {
 			LOG.error(e);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getHaibeiCanBuy")
+	@ResponseBody
+	public ResponseData<JSONArray> getHaibeiCanBuy() {
+		ResponseData<JSONArray> responseData = null;
+		try {
+			JSONArray a = new JSONArray();
+			List<HyDictsVo> dicts = HyDictUtil.getHyDicts(TypeCode.HY_COMMON.getValue(),
+					ParamCode.HAIBEI_PRICES.getValue());
+			if (!CollectionUtil.isEmpty(dicts)) {
+				for (HyDictsVo dict : dicts) {
+					JSONObject o = JSON.parseObject(dict.getParamValue());
+					a.add(o);
+				}
+			}
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "获取海贝购买价格成功", a);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
