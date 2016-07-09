@@ -160,6 +160,7 @@
 				}, 
 				
 				rewardBe: function(count){
+					var _this=this;
 					var beId =_this.getPropertyValue("beId");
 					ajaxController.ajax({
 						url: "../be/giveHaibei",
