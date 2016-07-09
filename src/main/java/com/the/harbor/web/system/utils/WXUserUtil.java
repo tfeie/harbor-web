@@ -41,6 +41,9 @@ public final class WXUserUtil {
 
 	public static UserViewInfo getUserViewInfoByWXAuth(HttpServletRequest request) {
 		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
+		if (StringUtil.isBlank(wtoken.getOpenId())) {
+			throw new BusinessException("认证失败,请关闭浏览器后重新进入");
+		}
 		UserViewInfo userInfo = getUserViewInfoByOpenId(wtoken.getOpenId());
 		return userInfo;
 	}
@@ -53,7 +56,6 @@ public final class WXUserUtil {
 		}
 		return userInfo;
 	}
-
 
 	public static UserViewInfo getUserViewInfoByOpenId(String openId) {
 		UserViewInfo userInfo = null;
