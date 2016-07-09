@@ -59,12 +59,12 @@
 
 
 		<div class="like-main  box-s mar-top-10 pad-10">
-			<div class="list" id="DIV_DIANZAN_USERS">
+			<div class="list" id="DIV_REWARD_USERS">
 				
 			</div>
 			<div class="c">
-				<div class="f-left">认为值得赞</div>
-				<div class="num btn-like">12</div>
+				<div class="f-left">认为值得赏</div>
+				<div class="num btn-like" id="DIV_REWARD_COUNT">0</div>
 			</div>
 
 		</div>
@@ -133,6 +133,16 @@
 						_this.doDianzan();
 					});
 					
+					//打赏按钮 
+					$("#DIV_REWARD_COUNT").on("click",function(){
+						weUI.confirm({
+							content:"您确定要打赏1海贝吗?",
+							ok: function(){
+								 _this.rewardBe(1);
+							}
+						})
+					}); 
+					
 					$("#DIV_BE_COMMENTS").delegate("[name='DIV_COMMENT_CONTENT']","click",function(){
 						var userId = $(this).attr("userId");
 						var commentId = $(this).attr("commentId");
@@ -145,9 +155,34 @@
 				
 				initData: function(){
 					this.getBeDetail();
-					this.getBeDianzanUsers();
+					this.getRewardUsers();
 					this.getBeComments();
 				}, 
+				
+				rewardBe: function(count){
+					var beId =_this.getPropertyValue("beId");
+					ajaxController.ajax({
+						url: "../be/giveHaibei",
+						type: "post", 
+						data: {
+							beId: beId,
+							count: count
+						},
+						success: function(transport){ 
+							_this.getRewardUsers(); 
+						},
+						failure: function(transport){ 
+							var statusCode = transport.statusCode;
+							weUI.alert({content:transport.statusInfo,ok:function(){
+								if(statusCode=="haibei_not_enough"){
+									window.location.href="../user/buyhaibei.html";
+								}
+								weUI.closeAlert();
+							}});
+							return ;
+						}
+					});
+				},
 				
 				sendBeComment: function(){
 					var _this = this;
@@ -196,7 +231,7 @@
 							$("#parentCommentId").val("");
 						},
 						failure: function(transport){ 
-							weUI.alert({content:"评论失败,请重试..."});
+							weUI.alert({content:transport.statusInfo});
 							return ;
 						}
 					});
@@ -213,7 +248,6 @@
 						success: function(transport){
 							var count = transport.data;
 							$("#DIV_DO_DIANZAN").html("<font>"+count+"</font>");
-							_this.getBeDianzanUsers(); 
 						},
 						failure: function(transport){ 
 							weUI.alert({content:transport.statusInfo});
@@ -233,7 +267,6 @@
 						success: function(transport){
 							var count = transport.data;
 							$("#DIV_DO_DIANZAN").html("<font>"+count+"</font>");
-							_this.getBeDianzanUsers(); 
 						},
 						failure: function(transport){ 
 							
@@ -283,20 +316,21 @@
 					$("#DIV_BE_DETAIL").html(opt); 
 				},
 				
-				getBeDianzanUsers: function(){
+				getRewardUsers: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../be/getDianzanUsers",
+						url: "../be/getRewardUsers",
 						type: "post", 
 						data: { 
 							beId: _this.getPropertyValue("beId")
 						},
 						success: function(transport){
 							var data =transport.data; 
-							_this.renderBeDianzanUsers(data); 
+							_this.renderBeRewardUsers(data); 
+							$("#DIV_REWARD_COUNT").html(data.length);
 						},
 						failure: function(transport){ 
-							_this.renderBeDianzanUsers([]); 
+							_this.renderBeRewardUsers([]); 
 						}
 					});
 				},
@@ -319,10 +353,10 @@
 					});
 				},
 				 
-				renderBeDianzanUsers: function(data){ 
+				renderBeRewardUsers: function(data){ 
 					data= data?data:[];
-					var opt=$("#BeDianZanUsersImpl").render(data);
-					$("#DIV_DIANZAN_USERS").html(opt); 
+					var opt=$("#BeRewardUsersImpl").render(data);
+					$("#DIV_REWARD_USERS").html(opt); 
 				},
 				
 				renderBeComments: function(data){
@@ -377,7 +411,7 @@
 			</div> 
 </script>
 
-<script id="BeDianZanUsersImpl" type="text/x-jsrender"> 
+<script id="BeRewardUsersImpl" type="text/x-jsrender"> 
 <a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}"  alt="{{:enName}}" width="30" height="30"></a> 
 </script>
 

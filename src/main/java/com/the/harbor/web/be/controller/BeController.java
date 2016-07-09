@@ -35,11 +35,11 @@ import com.the.harbor.api.be.param.BeQueryResp;
 import com.the.harbor.api.be.param.DoBeComment;
 import com.the.harbor.api.be.param.DoBeLikes;
 import com.the.harbor.api.be.param.DoBeLikes.HandleType;
+import com.the.harbor.api.be.param.GiveHBReq;
 import com.the.harbor.api.be.param.QueryMyBeReq;
 import com.the.harbor.api.be.param.QueryMyBeResp;
 import com.the.harbor.api.be.param.QueryOneBeReq;
 import com.the.harbor.api.be.param.QueryOneBeResp;
-import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.dict.ParamCode;
@@ -47,6 +47,7 @@ import com.the.harbor.base.enumeration.dict.TypeCode;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.PageInfo;
+import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
@@ -65,7 +66,6 @@ import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.go.controller.GoController;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
-import com.the.harbor.web.util.DubboServiceUtil;
 
 @RestController
 @RequestMapping("/be")
@@ -339,17 +339,17 @@ public class BeController {
 		return responseData;
 	}
 
-	@RequestMapping("/getDianzanUsers")
+	@RequestMapping("/getRewardUsers")
 	@ResponseBody
-	public ResponseData<JSONArray> getDianzanUsers(@NotBlank(message = "动态标识为空") String beId) {
+	public ResponseData<JSONArray> getRewardUsers(@NotBlank(message = "动态标识为空") String beId) {
 		ResponseData<JSONArray> responseData = null;
 		try {
 			JSONArray array = new JSONArray();
 			// 获取BE的点赞用户列表
-			Set<String> users = HyBeUtil.getDianzanUsers(beId);
+			Set<String> users = HyBeUtil.getBeRewardUsers(beId);
 			for (String userId : users) {
 				// 获取用户信息
-				UserInfo userInfo = DubboServiceUtil.getUserInfoByUserId(userId);
+				UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(userId);
 				if (userInfo != null) {
 					JSONObject d = new JSONObject();
 					d.put("userId", userInfo.getUserId());
@@ -681,6 +681,28 @@ public class BeController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONArray.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/giveHaibei")
+	@ResponseBody
+	public ResponseData<String> giveHaibei(@NotBlank(message = "参数为空") GiveHBReq giveHBReq,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			giveHBReq.setFromUserId(userInfo.getUserId());
+			Response rep = DubboConsumerFactory.getService(IBeSV.class).giveHaibei(giveHBReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "打赏成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}
