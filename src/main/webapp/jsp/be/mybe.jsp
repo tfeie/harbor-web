@@ -93,7 +93,7 @@
 						type: "post", 
 						data: {  
 							pageNo: 1,
-							pageSize: 100
+							pageSize: 15
 						},
 						success: function(transport){
 							var data =transport.data; 

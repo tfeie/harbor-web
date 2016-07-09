@@ -156,7 +156,7 @@
 							goTag: goTag?goTag:"",
 							searchKey: searchKey?searchKey:"",
 							pageNo : 1,
-							pageSize : 100
+							pageSize : 10
 						},
 						success: function(transport){
 							var data =transport.data;  

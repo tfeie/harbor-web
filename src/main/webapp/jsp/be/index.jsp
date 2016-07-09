@@ -152,7 +152,7 @@
 							beTag: beTag?beTag:"",
 							searchKey: searchKey?searchKey:"",
 							pageNo : 1,
-							pageSize : 100
+							pageSize : 5
 						},
 						success: function(transport){
 							var data =transport.data;  
