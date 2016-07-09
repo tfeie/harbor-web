@@ -47,6 +47,7 @@ import com.the.harbor.api.user.param.UserTagQueryReq;
 import com.the.harbor.api.user.param.UserTagQueryResp;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.api.user.param.UserViewResp;
+import com.the.harbor.api.user.param.UserWealthQueryResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
@@ -74,6 +75,7 @@ import com.the.harbor.commons.util.UUIDUtil;
 import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
+import com.the.harbor.web.util.DubboServiceUtil;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
 
 @RestController
@@ -510,7 +512,9 @@ public class UserController {
 	@RequestMapping("/userWealth.html")
 	public ModelAndView userWealth(HttpServletRequest request) {
 		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		UserWealthQueryResp userWealth = DubboServiceUtil.getUserWealth(userInfo.getUserId());
 		request.setAttribute("userInfo", userInfo);
+		request.setAttribute("userWealth", userWealth);
 		ModelAndView view = new ModelAndView("user/userWealth");
 		return view;
 	}
@@ -868,7 +872,7 @@ public class UserController {
 
 				}
 			}
-			Map<String, JSONArray> newMap=this.sortByKey(m);
+			Map<String, JSONArray> newMap = this.sortByKey(m);
 			JSONArray a = new JSONArray();
 			for (String key : newMap.keySet()) {
 				JSONObject o = new JSONObject();
@@ -1179,30 +1183,29 @@ public class UserController {
 	}
 
 	@RequestMapping("/lisener")
-    public @ResponseBody
-    String sendMessage(HttpServletRequest request,HttpServletResponse response) {
-        String user = request.getParameter("user");
-        response.setContentType("text/event-stream; charset=utf-8");
-        response.setHeader("Cache-Control", "no-cache");
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            LOG.error(e.getMessage());
-        }
-        ICacheClient cacheClient = CacheFactory.getClient();
-        String odata = cacheClient.get("test_lisener");
-        if (!StringUtil.isBlank(odata)) {
-            return "data:" + odata + "\n\n";
-        } else {
-            return null;
-        }
-    }
-	
+	public @ResponseBody String sendMessage(HttpServletRequest request, HttpServletResponse response) {
+		String user = request.getParameter("user");
+		response.setContentType("text/event-stream; charset=utf-8");
+		response.setHeader("Cache-Control", "no-cache");
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			LOG.error(e.getMessage());
+		}
+		ICacheClient cacheClient = CacheFactory.getClient();
+		String odata = cacheClient.get("test_lisener");
+		if (!StringUtil.isBlank(odata)) {
+			return "data:" + odata + "\n\n";
+		} else {
+			return null;
+		}
+	}
+
 	@RequestMapping("/saveData")
-    public ResponseData<String> saveData(HttpServletRequest request,HttpServletResponse response) {
+	public ResponseData<String> saveData(HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<String> responseData = null;
 		String param = request.getParameter("param");
-		/**存入数据 **/
+		/** 存入数据 **/
 		ICacheClient cacheClient = CacheFactory.getClient();
 
 		cacheClient.set("test_lisener", param);

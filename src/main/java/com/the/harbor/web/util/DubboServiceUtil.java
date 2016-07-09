@@ -12,6 +12,8 @@ import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.api.user.param.UserQueryResp;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.api.user.param.UserViewResp;
+import com.the.harbor.api.user.param.UserWealthQueryReq;
+import com.the.harbor.api.user.param.UserWealthQueryResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.exception.GenericException;
@@ -119,6 +121,16 @@ public final class DubboServiceUtil {
 			throw new BusinessException(resp.getResponseHeader().getResultMessage());
 		}
 		return resp.getUserInfo();
+	}
+
+	public static UserWealthQueryResp getUserWealth(String userId) {
+		UserWealthQueryReq req = new UserWealthQueryReq();
+		req.setUserId(userId);
+		UserWealthQueryResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserWealth(req);
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultMessage());
+		}
+		return resp;
 	}
 
 }
