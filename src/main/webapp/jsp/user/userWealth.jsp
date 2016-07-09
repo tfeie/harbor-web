@@ -79,7 +79,7 @@
 				bindEvents: function(){
 					var _this = this;  
 					$("#BTN_BUY_HAIBEI").on("click",function(){
-
+						window.location.href="../user/buyhaibei.html";
 					});
 				},
 				

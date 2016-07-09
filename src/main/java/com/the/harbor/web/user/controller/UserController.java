@@ -31,6 +31,7 @@ import com.the.harbor.api.pay.IPaymentSV;
 import com.the.harbor.api.pay.param.CreatePaymentOrderReq;
 import com.the.harbor.api.pay.param.CreatePaymentOrderResp;
 import com.the.harbor.api.user.IUserSV;
+import com.the.harbor.api.user.param.DoUserAssetsTrade;
 import com.the.harbor.api.user.param.DoUserFans;
 import com.the.harbor.api.user.param.DoUserFriend;
 import com.the.harbor.api.user.param.UserCertificationReq;
@@ -52,6 +53,8 @@ import com.the.harbor.api.user.param.UserWealthQueryResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
+import com.the.harbor.base.enumeration.hyuser.SystemUser;
+import com.the.harbor.base.enumeration.hyuserassets.AssetsType;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.Response;
@@ -74,6 +77,7 @@ import com.the.harbor.commons.util.Pinyin;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.util.UUIDUtil;
 import com.the.harbor.commons.web.model.ResponseData;
+import com.the.harbor.web.system.utils.UserAssetsTradeMQSend;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.util.DubboServiceUtil;
@@ -359,6 +363,22 @@ public class UserController {
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
 		ModelAndView view = new ModelAndView("user/memberCenter");
+		return view;
+	}
+
+	@RequestMapping("/buyhaibei.html")
+	public ModelAndView buyhaibei(HttpServletRequest request) {
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		long timestamp = DateUtil.getCurrentTimeMillis();
+		String nonceStr = WXHelpUtil.createNoncestr();
+		String jsapiTicket = WXHelpUtil.getJSAPITicket();
+		String url = WXRequestUtil.getFullURL(request);
+		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
+		ModelAndView view = new ModelAndView("user/buyhaibei");
 		return view;
 	}
 
@@ -1210,6 +1230,94 @@ public class UserController {
 
 		cacheClient.set("test_lisener", param);
 		responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+		return responseData;
+	}
+
+	@RequestMapping("/createHaibeiPayOrder")
+	@ResponseBody
+	public ResponseData<JSONObject> createHaibeiPayOrder(HttpServletRequest request) {
+		ResponseData<JSONObject> responseData = null;
+		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			String count = request.getParameter("count");
+			String price = request.getParameter("price");
+			String nonceStr = request.getParameter("nonceStr");
+			String timeStamp = request.getParameter("timeStamp");
+			if (StringUtil.isBlank(count)) {
+				throw new BusinessException("购买数量为空");
+			}
+			if (StringUtil.isBlank(price)) {
+				throw new BusinessException("购买价格为空");
+			}
+			if (StringUtil.isBlank(nonceStr)) {
+				throw new BusinessException("随机串为空");
+			}
+			if (StringUtil.isBlank(timeStamp)) {
+				throw new BusinessException("时间戳为空");
+			}
+			String summary = "购买海贝" + count + "个";
+			// 调用服务生成支付流水
+			CreatePaymentOrderReq createPaymentOrderReq = new CreatePaymentOrderReq();
+			createPaymentOrderReq.setBusiType(BusiType.PAY_FOR_HAIBI.getValue());
+			createPaymentOrderReq.setPayAmount(Long.parseLong(price));
+			createPaymentOrderReq.setPayType(PayType.WEIXIN.getValue());
+			createPaymentOrderReq.setSummary(summary);
+			createPaymentOrderReq.setUserId(userInfo.getUserId());
+			CreatePaymentOrderResp resp = DubboConsumerFactory.getService(IPaymentSV.class)
+					.createPaymentOrder(createPaymentOrderReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
+						resp.getResponseHeader().getResultMessage());
+			}
+			// 组织支付认证信息
+			String payOrderId = resp.getPayOrderId();
+			String host = "192.168.1.1";
+			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId, Integer.parseInt(price), host,
+					userInfo.getWxOpenid(), GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
+			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
+
+			JSONObject d = new JSONObject();
+			d.put("package", pkg);
+			d.put("paySign", paySign);
+			d.put("payOrderId", payOrderId);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/rechargeHaibei")
+	@ResponseBody
+	public ResponseData<String> rechargeHaibei(HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			String count = request.getParameter("count");
+			String payOrderId = request.getParameter("payOrderId");
+			if (StringUtil.isBlank(count)) {
+				throw new BusinessException("海贝充值为空");
+			}
+			if (StringUtil.isBlank(payOrderId)) {
+				throw new BusinessException("支付订单为空");
+			}
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			DoUserAssetsTrade t = new DoUserAssetsTrade();
+			t.setAssetsType(AssetsType.HAIBEI.getValue());
+			t.setBusiType(BusiType.PAY_FOR_HAIBI.getValue());
+			// 因为用户支付现金给系统，这里由系统支付给活动发起方
+			t.setFromUserId(SystemUser.SYSTEM.getValue());
+			t.setHandleType(DoUserAssetsTrade.HandleType.TRANSFER.name());
+			t.setSourceNo(payOrderId);
+			t.setSummary("购买海贝[" + count + "]个");
+			t.setToUserId(userInfo.getUserId());
+			t.setTradeBalance(Long.parseLong(count));
+			UserAssetsTradeMQSend.sendMQ(t);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "海贝充值消息已经发生，请等待系统充值", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
 		return responseData;
 	}
 }

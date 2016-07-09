@@ -13,7 +13,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>海贝充值</title>
+<title>购买海贝</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
@@ -23,6 +23,8 @@
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -33,10 +35,10 @@
 <section class="mycenter">
 	<section class="sec_item">
 		<div class="item">
-			<span>海贝充值</span>
+			<span>请选择购买数量</span>
 		</div>
 		<div class="item">
-			<span>购买个数</span><label id="LABEL_BUY_HAIBEI"></label>
+			<label id="LABEL_BUY_HAIBEI"></label>
 		</div>
 		<div class="item">
 			<span>应付金额</span><label><em  id="EM_BUY_PRICE"></em>元</label>
@@ -45,7 +47,6 @@
 			<span>支付方式</span><label><i class="i_weixin"></i>微信支付</label>
 		</div>
 	</section>
-	<div class="message-err" id="DIV_TIPS"></div>
 	<section class="but_baoc">
 		<p>
 			<input type="button" value="立即购买" id="BTN_BUY"/>
@@ -80,8 +81,9 @@ wx.config({
 });
 
 	(function($) {
-		$.BuyHaibeiPage = function() {
+		$.BuyHaibeiPage = function(data) {
 			this.settings = $.extend(true, {}, $.BuyHaibeiPage.defaults);
+			this.params= data?data:{}
 		}
 		$.extend($.BuyHaibeiPage, {
 			defaults : {},
@@ -89,7 +91,7 @@ wx.config({
 			prototype : {
 				init : function() {
 					this.bindEvents(); 
-					this.getMemberCanByMonths();
+					this.getHaibeiCanBuy();
 				},
 
 				bindEvents : function() {
@@ -101,12 +103,10 @@ wx.config({
 				
 				gotoPay: function(){
 					var _this = this;
-					var jq=$("[name='RADIO_MONTH'].on");
+					var jq=$("[name='RADIO_HAIBEI'].on");
 					if(!jq){
-						this.showError("请选择购买数量");
+						weUI.alert({content:"请选择购买月份"});
 						return ;
-					}else{
-						this.hideMessage();
 					}
 					var count = jq.attr("count");
 					var price = jq.attr("prices"); 
@@ -115,54 +115,53 @@ wx.config({
 						type : "post",
 						data: {
 							count: count,
-							price: price, 
-							nonceStr: "<c:out value="${nonceStr}"/>",
-							timeStamp: <c:out value="${timestamp}"/>
+							price: price,
+							nonceStr: _this.getPropertyValue("nonceStr"),
+							timeStamp: _this.getPropertyValue("timestamp")
 						},
 						success : function(transport) {
 							var d = transport.data; 
-							
 							wx.chooseWXPay({
-							    timestamp: <c:out value="${timestamp}"/>, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-							    nonceStr: '<c:out value="${nonceStr}"/>', // 支付签名随机串，不长于 32 位
+							    timestamp: _this.getPropertyValue("timestamp"), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+							    nonceStr: _this.getPropertyValue("nonceStr"), // 支付签名随机串，不长于 32 位
 							    package: d.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
 							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 							    paySign: d.paySign, // 支付签名
 							    success: function (res) {
-							        _this.userMemberRenewal(payMonth,d.payOrderId);
+							        _this.rechargeHaibei(count,d.payOrderId);
 							    },
 							    fail: function(res){
-							    	 _this.showError("支付失败")
+							    	weUI.alert({content:"支付失败"});
 							    }, 
 							    cancel: function(res){
-							    	 _this.showError("支付取消")
+							    	weUI.alert({content:"您取消支付"});
 							    }
 							});
 						},
 						failure : function(transport) {
-							_this.showError(transport.statusInfo);
+							weUI.alert({content:transport.statusInfo});
 						}
-
 					});
 				},
 				
-				userMemberRenewal : function(payMonth,payOrderId) {
+				rechargeHaibei : function(count,payOrderId) {
 					var _this = this;
 					ajaxController.ajax({
-						url : "../user/userMemberRenewal",
+						url : "../user/rechargeHaibei",
 						type : "post",
 						data: {
-							userId:"<c:out value="${userMember.userId}"/>",
-							openId:"<c:out value="${openId}"/>",
-							payMonth: payMonth,
+							count: count,
 							payOrderId: payOrderId
 						},
 						success : function(transport) {
-							var d = transport.data; 
-							alert(d.enName+",您成功购买"+payMonth+"个月会员,有效期["+d.expDate+"]")
+							var d = transport.data;  
+							weUI.alert({content:"您成功购买"+count+"个海贝",ok: function(){
+								window.location.href="../user/userWealth.html";
+								weUI.closeAlert();
+							}});
 						},
 						failure : function(transport) {
-							_this.showError("会员支付成功，但是处理失败");
+							weUI.alert({content:transport.statusInfo});
 						}
 
 					});
@@ -176,45 +175,42 @@ wx.config({
 						type : "post",
 						success : function(transport) {
 							var d = transport.data; 
-							_this.memberprices =d?d:[]; 
-							_this.renderMemberPrices(); 
-						},
-						failure : function(transport) {
+							_this.haibeiprices =d?d:[]; 
+							_this.renderHaibeiPrices(); 
 						}
-
 					});
 
 				},
 				
-				renderMemberPrices: function(){
+				renderHaibeiPrices: function(){
 					var _this = this;
 					var template = $.templates("#BuyHaibeiImpl");
-                    var htmlOutput = template.render(this.memberprices?this.memberprices:[]);
-                    $("#LABEL_BUY_MONTHS").html(htmlOutput);
+                    var htmlOutput = template.render(this.haibeiprices?this.haibeiprices:[]);
+                    $("#LABEL_BUY_HAIBEI").html(htmlOutput);
                     
-                    //初始化第一条月份费用显示 
-                    if(this.memberprices && this.memberprices.length>0){
-                    	var firstmonth =this.memberprices[0].months; 
-                    	var p = this.getMonthsPrice(firstmonth);
+                    //初始化第一条
+                    if(this.haibeiprices && this.haibeiprices.length>0){
+                    	var count =this.haibeiprices[0].count; 
+                    	var p = this.getHaibeiPrice(count);
                     	$("#EM_BUY_PRICE").text(p?p.priceYuan:"");
                     }
                     
-                    $("[name='RADIO_MONTH']").bind("click",function(){
-                    	var months = $(this).attr("months");
-                    	var p = _this.getMonthsPrice(months);
-                    	$("[name='RADIO_MONTH']").removeClass("on");
+                    $("[name='RADIO_HAIBEI']").bind("click",function(){
+                    	var count = $(this).attr("count");
+                    	var p = _this.getHaibeiPrice(count);
+                    	$("[name='RADIO_HAIBEI']").removeClass("on");
                     	$(this).addClass("on");
                     	//切换需要支付的金额
                     	$("#EM_BUY_PRICE").text(p?p.priceYuan:"");
                     });
 				},
 				
-				getMonthsPrice: function(months){
-					var pa=$.grep(this.memberprices,function(d,i){
-						return d.months==months;
+				getHaibeiPrice: function(count){
+					var pa=$.grep(this.haibeiprices,function(d,i){
+						return d.count==count;
 					});
 					if(!pa || pa.length==0){
-						weUI.alert({content:"会员定价信息出错，请刷新页面重试"});
+						weUI.alert({content:"海贝折扣定价信息出错，请刷新页面重试"});
 						return ;
 					}
 					return pa[0];
@@ -231,12 +227,15 @@ wx.config({
 		var b = new $.HarborBuilder();
 		b.buildFooter();
 		
-		var p = new $.BuyHaibeiPage();
+		var p = new $.BuyHaibeiPage({
+			timestamp : <c:out value="${timestamp}"/>,
+			nonceStr : '<c:out value="${nonceStr}"/>',
+		});
 		p.init();
 	});
 </script>
 
 <script id="BuyHaibeiImpl" type="text/x-jsrender">
-<a {{if #index==0}} class="on" {{/if}} name="RADIO_HAIBEI" prices="{{:prices}}" count="{{:count}}" discount="{{:discount}}">{{:count}}个</a>
+<a {{if #index==0}} class="on" {{/if}} name="RADIO_HAIBEI" prices="{{:prices}}" count="{{:count}}">{{:count}}个</a>
 </script>
 </html>

@@ -23,6 +23,8 @@
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -128,12 +130,12 @@ wx.config({
 							payMonth: payMonth,
 							price: price,
 							nonceStr: _this.getPropertyValue("nonceStr"),
-							timeStamp: _this.getPropertyValue("timeStamp")
+							timeStamp: _this.getPropertyValue("timestamp")
 						},
 						success : function(transport) {
 							var d = transport.data; 
 							wx.chooseWXPay({
-							    timestamp: _this.getProertyValue("timestamp"), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+							    timestamp: _this.getPropertyValue("timestamp"), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
 							    nonceStr: _this.getPropertyValue("nonceStr"), // 支付签名随机串，不长于 32 位
 							    package: d.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
 							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
@@ -186,10 +188,7 @@ wx.config({
 							var d = transport.data; 
 							_this.memberprices =d?d:[]; 
 							_this.renderMemberPrices(); 
-						},
-						failure : function(transport) {
 						}
-
 					});
 
 				},
@@ -239,11 +238,11 @@ wx.config({
 		var b = new $.HarborBuilder();
 		b.buildFooter();
 		
-		var p = new $.MemberCenterPage();
-		p.init({
+		var p = new $.MemberCenterPage({
 			timestamp : <c:out value="${timestamp}"/>,
 			nonceStr : '<c:out value="${nonceStr}"/>',
 		});
+		p.init();
 	});
 </script>
 
