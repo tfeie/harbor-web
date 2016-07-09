@@ -139,6 +139,7 @@
 							content:"您确定要打赏1海贝吗?",
 							ok: function(){
 								 _this.rewardBe(1);
+								 weUI.closeConfirm();
 							}
 						})
 					}); 
