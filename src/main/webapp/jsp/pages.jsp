@@ -138,11 +138,7 @@
 				<span>主题详情</span><label>onodetail.jsp <a href="../go/onodetail.html">Go</a></label>
 			</p>
 			<p class="on1">
-				<span>GO</span><label>go/groupindex.jsp  <a href="../go/groupindex.html">Go</a></label>
-			</p>
-			<p class="on1">
-				<span>one on one</span><label>go/oneononeindex.jsp  <a
-					href="../go/oneononeindex.html">Go</a></label>
+				<span>GO</span><label>go/goindex.jsp  <a href="../go/goindex.html">Go</a></label>
 			</p>
 			<p class="on1">
 				<span>group评价</span><label>go/comments.jsp <a href="../go/comments.html">Go</a></label>
