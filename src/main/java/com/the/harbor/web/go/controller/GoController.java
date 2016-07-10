@@ -493,6 +493,12 @@ public class GoController {
 		ModelAndView view = new ModelAndView("go/onodetail");
 		return view;
 	}
+	
+	@RequestMapping("/goindex.html")
+	public ModelAndView goindex(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("go/goindex");
+		return view;
+	}
 
 	@RequestMapping("/groupindex.html")
 	public ModelAndView groupindex(HttpServletRequest request) {
