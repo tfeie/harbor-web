@@ -500,18 +500,6 @@ public class GoController {
 		return view;
 	}
 
-	@RequestMapping("/groupindex.html")
-	public ModelAndView groupindex(HttpServletRequest request) {
-		ModelAndView view = new ModelAndView("go/groupindex");
-		return view;
-	}
-
-	@RequestMapping("/oneononeindex.html")
-	public ModelAndView oneononeindex(HttpServletRequest request) {
-		ModelAndView view = new ModelAndView("go/oneononeindex");
-		return view;
-	}
-
 	@RequestMapping("/comments.html")
 	public ModelAndView comments(HttpServletRequest request) {
 		WXUserUtil.checkUserRegAndGetUserViewInfo(request);

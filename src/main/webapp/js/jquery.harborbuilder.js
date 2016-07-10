@@ -33,7 +33,7 @@
 		}
 		html+="<footer class=\"footer po-f\">";
 		html+="<a href=\"../be/index.html\"><i class=\"icon-f1\"></i><span>Be</span></a>";
-		html+="<a href=\"../go/groupindex.html\"><i class=\"icon-f2\"></i><span>Go</span></a>";
+		html+="<a href=\"../go/goindex.html\"><i class=\"icon-f2\"></i><span>Go</span></a>";
 		html+="<a href=\"../user/myhaiyou.html\"><i class=\"icon-f3\"></i><span>Frd</span></a>";
 		html+="<a href=\"../user/messagecenter.html\"><i class=\"icon-f4\"><font>6</font></i><span>Msg</span></a>";
 		html+="<a href=\"../user/userCenter.html\"><i class=\"icon-f5\"></i><span>Me</span></a>";
