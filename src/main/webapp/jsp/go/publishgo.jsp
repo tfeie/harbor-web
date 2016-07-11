@@ -24,7 +24,6 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script> 
-<script type="text/javascript" src="<%=_base%>/js/jeDate/jedate.js"></script>
 
 </head>
 <body class="body">
@@ -49,17 +48,17 @@
 		</section>
 		<section class="inp_time">
 			<p>
-				<span><input type="text" value="2016-5-25 星期三 10:41 " id="expectedStartTime" class="datepicker"  /><!-- <input type="text" placeholder="2016-5-25 10:00 " id="expectedStartTime"
-					class="datepicker" /> --></span><label><input type="text"
+				<span><input type="text" placeholder="2016-5-25 10:00 " id="expectedStartTime"
+					class="datepicker" /></span><label><input type="text"
 					placeholder="约一个小时" id="expectedDuration"/></label>
 			</p> 
 		</section>
 		<section class="me_qingke">
 			<p name="payMode" payMode="10">
-				固定费用<input type="text" id="price" placeholder="">/人
+				固定费用<input type="text" id="price" placeholder="150">/人
 			</p>
 			<p name="payMode" payMode="20">
-				A A 预付<input type="text" id="price" placeholder="150">元/人<span>多退少补</span>
+				A A 预付<input type="text" id="price" placeholder="150">/人<span>多退少补</span>
 			</p>
 			<p name="payMode" payMode="30">我请客</p>
 		</section>
