@@ -468,7 +468,7 @@
 							weUI.alert({
 								content: "B&E发布成功",
 								ok: function(){
-									window.location.href="../be/mybe.html";
+									window.location.href="../be/index.html";
 									weUI.closeAlert();
 								}
 							})
