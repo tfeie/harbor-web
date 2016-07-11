@@ -155,7 +155,7 @@
 							height="60">
 						{{/if}}
 						{{if hasimg==false}}
-						<img src="//static.tfeie.com/v2/images/pyq-img.jpg" width="60"
+						<img src="//static.tfeie.com/images/defaultbe.png" width="60"
 							height="60">
 						{{/if}}
 				</div>

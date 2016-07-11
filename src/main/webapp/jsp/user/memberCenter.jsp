@@ -42,7 +42,7 @@
 		</div>
 		<div class="div_cont">
 			<div class="img">
-				<img src="//static.tfeie.com/images/pic1.png" alt="" />
+				<img src="//static.tfeie.com/images/member.png" alt="" />
 			</div>
 		</div>
 	</section>

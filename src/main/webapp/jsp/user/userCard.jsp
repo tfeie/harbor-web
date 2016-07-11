@@ -92,10 +92,7 @@
 	</section>
 	
 	<div id="shareit">
-	 <img class="arrow" src="http://dev.vxtong.com/cases/nuannan/imgs/share-it.png">
-	  <a href="#" id="follow">
-	    <img id="share-text" src="http://dev.vxtong.com/cases/nuannan/imgs/share-text.png">
-	  </a>
+	 <img class="arrow" src="//static.tfeie.com/images/share.jpg">
 	</div>
 	
 </body>
