@@ -81,7 +81,7 @@
 				<p class="aihao" id="SELECTED_SKILL_TAGS"></p>
 			</section>
 			<p class="but">
-				<input type="button" value="分 享" id="BTN_SHARE"><input type="button"
+				<input type="button" value="分 享" id="BTN_SHARE"><input type="button" id="BTN_YUE"
 					value="应 邀" class="on">
 			</p>
 
@@ -109,6 +109,17 @@
 	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 	
 	<script type="text/javascript">
+	function onBridgeReady(){
+		   WeixinJSBridge.invoke('addContact', {
+	            webtype: '1',
+	            username: 'Harbor_and_Beacon'
+	        },
+		       function(res){     
+		           alert(res.err_msg + "," + res.err_desc);
+		       }
+		   ); 
+		};
+	
 	//微信API配置
 	wx.config({
 		debug : false,
@@ -170,6 +181,11 @@
 						
 						$("#shareit").show();
 					});
+					
+					$("#BTN_YUE").on("click", function(){
+						alert("s");
+						onBridgeReady(); 
+					 });
 					
 					$("#shareit").on("click", function(){
 					    $("#shareit").hide(); 
