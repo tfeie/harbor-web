@@ -24,7 +24,7 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script> 
-<script type="text/javascript" src="<%=_base%>/js/jeDate/jedate.js"></script>
+<script type="text/javascript" src="<%=_base%>/js/jedate/jedate.js"></script>
 
 </head>
 <body class="body">
@@ -49,14 +49,14 @@
 		</section>
 		<section class="inp_time">
 			<p>
-				<span><input type="text" value="2016-5-25 星期三 10:41 " id="expectedStartTime" class="datepicker"  /><!-- <input type="text" placeholder="2016-5-25 10:00 " id="expectedStartTime"
+				<span><input class="datainp" id="expectedStartTime" type="text" placeholder="请选择"  readonly><!-- <input type="text" placeholder="2016-5-25 10:00 " id="expectedStartTime"
 					class="datepicker" /> --></span><label><input type="text"
 					placeholder="约一个小时" id="expectedDuration"/></label>
 			</p> 
 		</section>
 		<section class="me_qingke">
 			<p name="payMode" payMode="10">
-				固定费用<input type="text" id="price" placeholder="">/人
+				固定费用<input type="text" id="price" placeholder="">元/人
 			</p>
 			<p name="payMode" payMode="20">
 				A A 预付<input type="text" id="price" placeholder="150">元/人<span>多退少补</span>
@@ -130,6 +130,13 @@
 <script type="text/javascript"
 	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
+jeDate({
+	dateCell:"#expectedStartTime",
+	format:"YYYY-MM-DD hh:mm",
+	//isinitVal:true,
+	isTime:true, //isClear:false,
+	minDate:jeDate.now(0),
+})
 	//微信API配置
 	wx.config({
 		debug : false,
@@ -166,6 +173,7 @@
 						$(this).addClass("on");
 						var goType = $(this).attr("goType");
 						if(goType=="oneonone"){
+							$("#expectedStartTime").hide();
 							$("[name='payMode']").each(function(i,o){
 								var payMode =$(this).attr("payMode");
 								if(payMode=="10"){
@@ -176,6 +184,7 @@
 							});
 							$("[name='SELECTION_MYSTORY']").show();
 						}else if(goType=="group"){
+							$("#expectedStartTime").show();
 							$("[name='payMode']").show();
 							$("[name='SELECTION_MYSTORY']").hide();
 						}
@@ -771,9 +780,9 @@
 								content: "活动提交成功",
 								ok: function(){
 									if(goType=="group"){
-										window.location.href="../go/mygroup.html";
+										window.location.href="../go/goindex.html?goType=" + "group";
 									}else{
-										window.location.href="../go/myono.html";
+										window.location.href="../go/goindex.html?goType=" + "one";
 									}
 									weUI.closeAlert();
 								}
