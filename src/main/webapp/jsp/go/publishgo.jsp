@@ -554,6 +554,7 @@ jeDate({
 					var inviteMembers = $.trim($("#inviteMembers").val());
 					
 					var expectedStartTime = $.trim($("#expectedStartTime").val());
+					expectedStartTime = expectedStartTime + ":00";
 					var expectedDuration = $.trim($("#expectedDuration").val());
 					var payMode = $.trim($("[name='payMode'].on").attr("payMode"));
 					var price =  $.trim($("[name='payMode'].on").find("#price").val());
