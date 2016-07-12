@@ -554,7 +554,6 @@ jeDate({
 					var inviteMembers = $.trim($("#inviteMembers").val());
 					
 					var expectedStartTime = $.trim($("#expectedStartTime").val());
-					expectedStartTime = expectedStartTime + ":00";
 					var expectedDuration = $.trim($("#expectedDuration").val());
 					var payMode = $.trim($("[name='payMode'].on").attr("payMode"));
 					var price =  $.trim($("[name='payMode'].on").find("#price").val());
@@ -612,12 +611,12 @@ jeDate({
 								return expectedStartTime;
 							},
 							fieldRules: {
-								required: true, 
-								datetime: true
+								required: true/* , 
+								datetime: true */
 							},
 							ruleMessages: {
 								required: "请选择预期开始时间",
-								datetime:"预期开始时间格式必须是yyyy-MM-dd hh:mm:ss"
+								/* datetime:"预期开始时间格式必须是yyyy-MM-dd hh:mm:ss" */
 							}
 						});
 					}
