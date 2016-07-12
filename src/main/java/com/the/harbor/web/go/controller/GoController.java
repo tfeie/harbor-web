@@ -496,6 +496,12 @@ public class GoController {
 	
 	@RequestMapping("/goindex.html")
 	public ModelAndView goindex(HttpServletRequest request) {
+		String goType = request.getParameter("goType");
+		if(StringUtil.isBlank(goType)){
+			goType = "group";
+		}
+		
+		request.setAttribute("goType", goType);
 		ModelAndView view = new ModelAndView("go/goindex");
 		return view;
 	}

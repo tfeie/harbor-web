@@ -38,9 +38,7 @@
 	<section class="mainer">
 		<section class="choose_go">
 			<div class="bor_wid">
-				<p>
-					<span class="on" goType="group">Group</span><span goType="ono">One on One</span>
-				</p>
+			
 			</div>
 		</section>
 		<section class="title">
@@ -82,6 +80,15 @@
 		
 			prototype: {
 				init: function(){
+					var goType = '${goType}';
+					if(goType == "group") {
+						var html = "<p><span class=\"on\" goType=\"group\">Group</span><span goType=\"ono\">One on One</span></p>";
+						$(".bor_wid").html(html);
+					}else{
+						var html = "<p><span goType=\"group\">Group</span><span class=\"on\" goType=\"ono\">One on One</span></p>";
+						$(".bor_wid").html(html);
+					}
+					
 					this.bindEvents(); 
 					this.initData();  
 				},
@@ -134,8 +141,17 @@
 				initData: function(){
 					this.getIndexPageSilders();
 					this.getGoSystemTags();
-					this.queryGroupGoes();
-					this.queryOnOGoes();
+					
+					var goType = '${goType}';
+					if(goType == "group") {
+						$("#DIV_GROUP_GOES").show();
+						$("#DIV_ONO_GOES").hide();
+						this.queryGroupGoes();
+					} else {
+						$("#DIV_GROUP_GOES").hide();
+						$("#DIV_ONO_GOES").show();
+						this.queryOnOGoes();
+					}
 				}, 
 				
 				getIndexPageSilders: function(){
