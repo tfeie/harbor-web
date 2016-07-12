@@ -306,7 +306,7 @@ jeDate({
 						if(_this.selectedGoTags.length==5){
 							weUI.alert({content:"最多只能选择5个标签"});
 							return ;
-						}
+						} 
 						var content = "<section class=\"par_name\">";
 						content +="<p class=\"boss\">";
 						content +="<input type=\"text\" id=\"CUSTOMIZE_GO_TAGS\" placeholder=\"请输入一个标签:4个字符以内\">";
