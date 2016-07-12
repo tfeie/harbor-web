@@ -88,7 +88,6 @@
 						var html = "<p><span goType=\"group\">Group</span><span class=\"on\" goType=\"ono\">One on One</span></p>";
 						$(".bor_wid").html(html);
 					}
-					
 					this.bindEvents(); 
 					this.initData();  
 				},

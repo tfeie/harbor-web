@@ -500,7 +500,6 @@ public class GoController {
 		if(StringUtil.isBlank(goType)){
 			goType = "group";
 		}
-		
 		request.setAttribute("goType", goType);
 		ModelAndView view = new ModelAndView("go/goindex");
 		return view;
