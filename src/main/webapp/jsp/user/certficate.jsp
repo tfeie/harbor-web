@@ -43,7 +43,9 @@
 			},
 			
 			bindEvents:function(){
-				
+				$("#BTN_SUBMIT").on("click",function(){
+					this.submit();
+				});
 			},
 			initData: function(){
 				this.intiImg();
@@ -59,10 +61,15 @@
 				
 				var ovimg = '${userInfo.overseasPhoto}';
 				var html = "<img src=\"//static.tfeie.com/images/img5.png\" id=\"img_oversea\"/>";
-				if(cardimg != ""){
+				if(ovimg != ""){
 					html="<img src=\"${userInfo.overseasPhoto}\" id=\"img_oversea\"/>";
 				}
 				$("#IMGOverSeaPicker").html(html);
+				
+			},
+			
+			submit:function(){
+				
 			}
 		}
 	});
@@ -112,6 +119,7 @@
 	<div class="message-err" id="DIV_TIPS"></div>
 	<section class="but_baoc">
 		<p>
+			<input type="hidden" id="isapply" value="1"/>
 			<input type="button" value="提交认证" id="BTN_SUBMIT"/>
 		</p>
 	</section>
