@@ -46,6 +46,11 @@
 				$("#BTN_SUBMIT").on("click",function(){
 					this.submit();
 				});
+				
+				$("[name='authResult']").on("click",function(){
+					$("[name='authResult']").removeClass("on");
+					$(this).addClass("on");
+				});
 			},
 			initData: function(){
 				this.intiImg();
@@ -83,7 +88,7 @@
 <body>
 	<section class="ip_info">
 		<section class="info_img">
-			<span><a href="#"><img src="${userInfo.wxHeadimg}"></a></span>
+			<span><a href="#"><img src="${userInfo.wxHeadimg}" width="50" height="60"></a></span>
 		</section>
 		<section class="ip_text">
 			<p>
@@ -113,8 +118,8 @@
 		</div>
 	</section>
 	<section class="me_qingke">
-			<p name="payMode" class="on" subsStatus="20">通过</p>
-			<p name="payMode" subsStatus="11">不通过</p>
+			<p name="authResult" class="on" subsStatus="20">通过</p>
+			<p name="authResult" subsStatus="11">不通过</p>
 	</section>
 	<div class="message-err" id="DIV_TIPS"></div>
 	<section class="but_baoc">
