@@ -26,8 +26,52 @@
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 </head>
 <script type="text/javascript">
-	var ss = '${userInfo.idcardPhoto}';
-	var s = 0;
+(function() {
+	$.manager = function(data) {
+		this.settings = $.extend(true,{},$.manager.defaults);
+		this.params= data?data:{};
+	};
+	
+	$.extend($.manager,{
+		defaults:{
+			
+		},
+		prototype:{
+			init:function(){
+				this.bindEvents();
+				this.initData();
+			},
+			
+			bindEvents:function(){
+				
+			},
+			initData: function(){
+				this.intiImg();
+			},
+			
+			intiImg:function(){
+				var cardimg = '${userInfo.idcardPhoto}';
+				var html = "<img src=\"//static.tfeie.com/images/img4.jpg\" id=\"img_idcard\"/>";
+				if(cardimg != ""){
+					html="<img src=\"${userInfo.idcardPhoto}\" id=\"img_idcard\"/>";
+				}
+				$("#IMGIDCardPicker").html(html);
+				
+				var ovimg = '${userInfo.overseasPhoto}';
+				var html = "<img src=\"//static.tfeie.com/images/img5.png\" id=\"img_oversea\"/>";
+				if(cardimg != ""){
+					html="<img src=\"${userInfo.overseasPhoto}\" id=\"img_oversea\"/>";
+				}
+				$("#IMGOverSeaPicker").html(html);
+			}
+		}
+	});
+})(jQuery);
+
+ $(document).ready(function(){
+	var p = new $.manager({});
+	p.init();
+});
 </script>
 <body>
 	<section class="ip_info">
@@ -49,15 +93,6 @@
 			</h3>
 		</div>
 		<div class="img" id="IMGIDCardPicker">
-		<c:choose>
-			<c:when test="${userInfo.idcardPhoto != ''}">
-				<img src="${userInfo.idcardPhoto}" id="img_idcard"/>
-			</c:when>
-			<c:otherwise>
-     			<img src="//static.tfeie.com/images/img4.jpg" id="img_idcard"/>
-    		</c:otherwise>
-		</c:choose>
-			
 		</div>
 	</section>
 	<section class="sec_item sec_item_img">
@@ -67,15 +102,7 @@
 			</h3>
 		</div>
 		<div class="img" id="IMGOverSeaPicker">
-		<c:choose>
-			<c:when test="${userInfo.overseasPhoto != ''}">
-				<img src="${userInfo.overseasPhoto}" id="img_oversea"/>
-			</c:when>
-			<c:otherwise>
-     			<img src="//static.tfeie.com/images/img5.png" id="img_oversea"/>
-    		</c:otherwise>
-		</c:choose>
-			
+		
 		</div>
 	</section>
 	<section class="me_qingke">

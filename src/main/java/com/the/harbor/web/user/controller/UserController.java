@@ -1340,22 +1340,7 @@ public class UserController {
 			if (StringUtil.isBlank(status)) {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户状态为空");
 			}
-			//List<UserViewInfo> userViewInfos = DubboConsumerFactory.getService(IUserSV.class).queryUserViewInfosByStatus(status);
-			List<UserViewInfo> userViewInfos = new ArrayList<UserViewInfo>();
-			UserViewInfo info = new UserViewInfo();
-			info.setAbroadCountryName("法国");
-			info.setEnName("Joa");
-			info.setAbroadUniversity("北京理工大学");
-			info.setUserStatusName("未认证");
-			info.setUserId("hy00000063");
-			userViewInfos.add(info);
-			
-			UserViewInfo info1 = new UserViewInfo();
-			info1.setAbroadCountryName("中国");
-			info1.setEnName("zhou sf");
-			info1.setAbroadUniversity("北京大学");
-			info1.setUserStatusName("未认证");
-			info1.setUserId("hy00000064");
+			List<UserViewInfo> userViewInfos = DubboConsumerFactory.getService(IUserSV.class).queryUserViewInfosByStatus(status);
 			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", userViewInfos);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
