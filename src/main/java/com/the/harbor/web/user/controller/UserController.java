@@ -27,6 +27,7 @@ import com.aliyun.mns.client.MNSClient;
 import com.aliyun.mns.common.ClientException;
 import com.aliyun.mns.common.ServiceException;
 import com.aliyun.mns.model.Message;
+import com.the.harbor.api.be.param.Be;
 import com.the.harbor.api.pay.IPaymentSV;
 import com.the.harbor.api.pay.param.CreatePaymentOrderReq;
 import com.the.harbor.api.pay.param.CreatePaymentOrderResp;
@@ -57,6 +58,7 @@ import com.the.harbor.base.enumeration.hyuser.SystemUser;
 import com.the.harbor.base.enumeration.hyuserassets.AssetsType;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
+import com.the.harbor.base.vo.PageInfo;
 import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
@@ -1319,5 +1321,63 @@ public class UserController {
 			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
+	}
+	
+	
+	@RequestMapping("/userList.html")
+	public ModelAndView users(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String status = request.getParameter("status");
+		request.setAttribute("status", status);
+		ModelAndView view = new ModelAndView("user/userList");
+		return view;
+	}
+	
+	@RequestMapping("/queryUsers")
+	public @ResponseBody ResponseData<List<UserViewInfo>> queryUsers(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ResponseData<List<UserViewInfo>> responseData = null;
+		try {
+			String status = request.getParameter("status");
+			if (StringUtil.isBlank(status)) {
+				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户状态为空");
+			}
+			//List<UserViewInfo> userViewInfos = DubboConsumerFactory.getService(IUserSV.class).queryUserViewInfosByStatus(status);
+			List<UserViewInfo> userViewInfos = new ArrayList<UserViewInfo>();
+			UserViewInfo info = new UserViewInfo();
+			info.setAbroadCountryName("法国");
+			info.setEnName("Joa");
+			info.setAbroadUniversity("北京理工大学");
+			info.setUserStatusName("未认证");
+			info.setUserId("hy00000063");
+			userViewInfos.add(info);
+			
+			UserViewInfo info1 = new UserViewInfo();
+			info1.setAbroadCountryName("中国");
+			info1.setEnName("zhou sf");
+			info1.setAbroadUniversity("北京大学");
+			info1.setUserStatusName("未认证");
+			info1.setUserId("hy00000064");
+			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", userViewInfos);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+	
+	@RequestMapping("/toCertficate.html")
+	public ModelAndView toCertficate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String userId = request.getParameter("userId");
+		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByUserId(userId);
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultCode(),
+					resp.getResponseHeader().getResultMessage());
+		}
+		UserViewInfo userInfo = resp.getUserInfo();
+		if (userInfo == null) {
+			throw new BusinessException("USER-100001", "您访问的用户不存在");
+		}
+		request.setAttribute("userInfo", userInfo);
+		ModelAndView view = new ModelAndView("user/certficate");
+		return view;
 	}
 }
