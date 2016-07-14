@@ -105,7 +105,9 @@
 			<p class="on1">
 				<span>消息内容</span><label>mymessagedetail.jsp <a href="../user/mymessagedetail.html">Go</a></label>
 			</p> 
-			
+			<p class="on1">
+				<span>审核</span><label>userList.jsp <a href="../user/userList.html">Go</a></label>
+			</p> 
 			
 		</section>
 
