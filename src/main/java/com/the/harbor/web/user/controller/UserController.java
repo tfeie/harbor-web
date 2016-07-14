@@ -1340,7 +1340,7 @@ public class UserController {
 			if (StringUtil.isBlank(status)) {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户状态为空");
 			}
-			List<UserViewInfo> userViewInfos = DubboConsumerFactory.getService(IUserSV.class).queryUserViewInfosByStatus(status);
+			List<UserViewInfo> userViewInfos = DubboConsumerFactory.getService(IUserSV.class).queryUnAuthUsers();
 			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", userViewInfos);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
