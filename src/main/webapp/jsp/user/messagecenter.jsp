@@ -159,7 +159,7 @@
 <script id="MyNotifyListImpl" type="text/x-jsrender"> 
 		<div class="itms clearfix" name="DIV_NOTIFY" id="DIV_NOTIFY_{{:notifyId}}">
 			<div class="img">
-				{{if senderType=='system'}}
+				{{if senderId=='hy00000000'}}
 				<a href="javascript:void(0)"><img src="//static.tfeie.com/v2/images/tx.png"
 					width="50" height="50"></a>
 				{{else}}

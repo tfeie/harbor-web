@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>我创建的Be</title>
+<title>我<c:if test="${type=='mycreate'}">创建</c:if><c:if test="${type=='myfavor'}">收藏</c:if>的Be</title>
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
@@ -34,9 +34,9 @@
 
 	<nav class="be-nav po-f box-s">
     	<div class="hd clearfix">
-            <a href="../be/mybe.html" class="itms on">Be</a>
-            <a href="../go/mygroup.html" class="itms">Group</a>
-            <a href="../go/myono.html" class="itms">OnO</a>
+            <a href="../be/mybe.html?type=<c:out value="${type}"/>" class="itms on">Be</a>
+            <a href="../go/mygroup.html?type=<c:out value="${type}"/>" class="itms">Group</a>
+            <a href="../go/myono.html?type=<c:out value="${type}"/>" class="itms">OnO</a>
         </div>
 	</nav>
     
@@ -88,6 +88,13 @@
 				
 				getMyBes: function(){
 					var _this = this;
+					var type=_this.getPropertyValue("type");
+					var url ="";
+					if(type=="mycreate"){
+						url = "../be/getMyBes";
+					}else if(type=="myfavor"){
+						url = "../be/getMyFavorBes";
+					}
 					ajaxController.ajax({
 						url: "../be/getMyBes",
 						type: "post", 
@@ -130,6 +137,7 @@
 		b.buildFooter();
 		
 		var p = new $.MyBePage({
+			type: "<c:out value="${type}"/>"
 		});
 		p.init();
 		

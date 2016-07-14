@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>我创建的Group</title>
+<title>我<c:if test="${type=='mycreate'}">创建</c:if><c:if test="${type=='myfavor'}">收藏</c:if>的Group</title>
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
@@ -35,9 +35,9 @@
 
 	<nav class="be-nav po-f box-s">
 		<div class="hd clearfix">
-			<a href="../be/mybe.html" class="itms">Be</a> <a
-				href="../go/mygroup.html" class="itms on">Group</a> <a
-				href="../go/myono.html" class="itms">OnO</a>
+			<a href="../be/mybe.html?type=<c:out value="${type}"/>" class="itms">Be</a> <a
+				href="../go/mygroup.html?type=<c:out value="${type}"/>" class="itms on">Group</a> <a
+				href="../go/myono.html?type=<c:out value="${type}"/>" class="itms">OnO</a>
 		</div>
 	</nav>
 
@@ -77,8 +77,15 @@
 
 				getMyGoes : function() {
 					var _this = this;
+					var type=_this.getPropertyValue("type");
+					var url ="";
+					if(type=="mycreate"){
+						url = "../go/getMyGoes";
+					}else if(type=="myfavor"){
+						url = "../go/getMyFavorGoes";
+					}
 					ajaxController.ajax({
-						url : "../go/getMyGoes",
+						url : url,
 						type : "post",
 						data : {
 							goType: "group",
@@ -121,7 +128,9 @@
 		var b = new $.HarborBuilder();
 		b.buildFooter();
 
-		var p = new $.MyGroupGoPage();
+		var p = new $.MyGroupGoPage({
+			type: "<c:out value="${type}"/>"
+		});
 		p.init();
 
 	});

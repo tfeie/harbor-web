@@ -35,18 +35,28 @@
 			</p>
 			<section class="ip_logo ip2">
 				<p>
-					<span><a href="../user/editUserInfo.html?userId=<c:out value="${userInfo.userId}"/>"><img src="<c:out value="${userInfo.wxHeadimg}"/>"> </a></span>
+					<span><a
+						href="../user/editUserInfo.html?userId=<c:out value="${userInfo.userId}"/>"><img
+							src="<c:out value="${userInfo.wxHeadimg}"/>"> </a></span>
 				</p>
 			</section>
 		</section>
 
 		<section class="ip_name ip2">
 			<p>
-				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2"><c:out value="${userInfo.abroadCountryName}"/></label><c:out value="${userInfo.userStatusName}"/>
+				<span><c:out value="${userInfo.enName}" /></span><label class="lbl2"><c:out
+						value="${userInfo.abroadCountryName}" /></label>
+				<c:out value="${userInfo.userStatusName}" />
 			</p>
 		</section>
 		<section class="ip_shengf ip2">
-			<p><c:out value="${userInfo.industryName}"/>/<c:out value="${userInfo.title}"/>/<c:out value="${userInfo.atCityName}"/></p>
+			<p>
+				<c:out value="${userInfo.industryName}" />
+				/
+				<c:out value="${userInfo.title}" />
+				/
+				<c:out value="${userInfo.atCityName}" />
+			</p>
 			<p>
 				<span><a href="#"><img
 						src="//static.tfeie.com/images/icon19_1.png"></a><a href="#"><img
@@ -65,8 +75,10 @@
 			<ul>
 				<li><a href="#"><span>10</span><label>益友</label></a></li>
 				<li><a href="#"><span>10</span><label>助人</label></a></li>
-				<li><a href="../user/myguanzhu.html"><span><c:out value="${guanzhuCount}"/></span><label>关注</label></a></li>
-				<li><a href="../user/myfans.html"><span><c:out value="${fansCount}"/></span><label>粉丝</label></a></li>
+				<li><a href="../user/myguanzhu.html"><span><c:out
+								value="${guanzhuCount}" /></span><label>关注</label></a></li>
+				<li><a href="../user/myfans.html"><span><c:out
+								value="${fansCount}" /></span><label>粉丝</label></a></li>
 			</ul>
 			<div class="clear"></div>
 		</section>
@@ -77,10 +89,10 @@
 					<a href="#">我参加的</a>
 				</p>
 				<p class="ip2_2">
-					<a href="../be/mybe.html">我发起的</a>
+					<a href="../be/mybe.html?type=mycreate">我发起的</a>
 				</p>
 				<p class="ip2_3">
-					<a href="#">我的收藏</a>
+					<a href="../be/mybe.html?type=myfavor">我的收藏</a>
 				</p>
 			</section>
 		</section>
@@ -111,15 +123,15 @@
 		</section>
 
 	</section>
-	
+
 </body>
 
 <script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
+	$(document).ready(function() {
 		var b = new $.HarborBuilder();
 		b.buildFooter({
-			showBeGoQuick: "hide"
+			showBeGoQuick : "hide"
 		});
 	});
 </script>

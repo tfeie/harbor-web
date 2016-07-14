@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>我创建的OneOnOne活动</title>
+<title>我<c:if test="${type=='mycreate'}">创建</c:if><c:if test="${type=='myfavor'}">收藏</c:if>的OneOnOne活动</title>
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
@@ -31,9 +31,9 @@
 <body class="bg-eeeeee">
 	<nav class="be-nav po-f box-s">
 		<div class="hd clearfix">
-			<a href="../be/mybe.html" class="itms">Be</a> <a
-				href="../go/mygroup.html" class="itms">Group</a> <a
-				href="../go/myono.html" class="itms on">OnO</a>
+			<a href="../be/mybe.html?type=<c:out value="${type}"/>" class="itms">Be</a> <a
+				href="../go/mygroup.html?type=<c:out value="${type}"/>" class="itms">Group</a> <a
+				href="../go/myono.html?type=<c:out value="${type}"/>" class="itms on">OnO</a>
 		</div>
 	</nav>
 	<section class="group-main one-main" id="DIV_MY_GOES">
@@ -71,8 +71,15 @@
 
 				getMyGoes : function() {
 					var _this = this;
+					var type=_this.getPropertyValue("type");
+					var url ="";
+					if(type=="mycreate"){
+						url = "../go/getMyGoes";
+					}else if(type=="myfavor"){
+						url = "../go/getMyFavorGoes";
+					}
 					ajaxController.ajax({
-						url : "../go/getMyGoes",
+						url : url,
 						type : "post",
 						data : {
 							goType: "oneonone",
@@ -113,7 +120,9 @@
 		var b = new $.HarborBuilder();
 		b.buildFooter();
 
-		var p = new $.MyOnOGoPage();
+		var p = new $.MyOnOGoPage({
+			type: "<c:out value="${type}"/>"
+		});
 		p.init();
 
 	});

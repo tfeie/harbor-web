@@ -38,6 +38,8 @@ import com.the.harbor.api.be.param.DoBeLikes.HandleType;
 import com.the.harbor.api.be.param.GiveHBReq;
 import com.the.harbor.api.be.param.QueryMyBeReq;
 import com.the.harbor.api.be.param.QueryMyBeResp;
+import com.the.harbor.api.be.param.QueryMyFavorBeReq;
+import com.the.harbor.api.be.param.QueryMyFavorBeResp;
 import com.the.harbor.api.be.param.QueryOneBeReq;
 import com.the.harbor.api.be.param.QueryOneBeResp;
 import com.the.harbor.api.user.param.UserViewInfo;
@@ -125,8 +127,9 @@ public class BeController {
 
 	@RequestMapping("/mybe.html")
 	public ModelAndView mybe(HttpServletRequest request) {
-		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-		request.setAttribute("userInfo", userInfo);
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		String type = request.getParameter("type");
+		request.setAttribute("type", type);
 		ModelAndView view = new ModelAndView("be/mybe");
 		return view;
 	}
@@ -207,6 +210,30 @@ public class BeController {
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			queryMyBeReq.setUserId(userInfo.getUserId());
 			QueryMyBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryMyBe(queryMyBeReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
+						resp.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
+						resp.getPagInfo());
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE, "查询失败，稍候重试...");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getMyFavorBes")
+	@ResponseBody
+	public ResponseData<PageInfo<Be>> getMyFavorBes(@NotNull(message = "参数为空") QueryMyFavorBeReq queryMyBeReq,
+			HttpServletRequest request) {
+		ResponseData<PageInfo<Be>> responseData = null;
+		try {
+			// 获取用户资料
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			queryMyBeReq.setUserId(userInfo.getUserId());
+			QueryMyFavorBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryMyFavorBe(queryMyBeReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
 						resp.getResponseHeader().getResultMessage());

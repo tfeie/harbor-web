@@ -45,6 +45,8 @@ import com.the.harbor.api.go.param.GroupApplyReq;
 import com.the.harbor.api.go.param.GroupApplyResp;
 import com.the.harbor.api.go.param.QueryGoReq;
 import com.the.harbor.api.go.param.QueryGoResp;
+import com.the.harbor.api.go.param.QueryMyFavorGoReq;
+import com.the.harbor.api.go.param.QueryMyFavorGoResp;
 import com.the.harbor.api.go.param.QueryMyGoReq;
 import com.the.harbor.api.go.param.QueryMyGoResp;
 import com.the.harbor.api.go.param.UpdateGoJoinPayReq;
@@ -89,6 +91,8 @@ public class GoController {
 	@RequestMapping("/mygroup.html")
 	public ModelAndView mygroup(HttpServletRequest request) {
 		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		String type=request.getParameter("type");
+		request.setAttribute("type", type);
 		ModelAndView view = new ModelAndView("go/mygroup");
 		return view;
 	}
@@ -96,6 +100,8 @@ public class GoController {
 	@RequestMapping("/myono.html")
 	public ModelAndView myono(HttpServletRequest request) {
 		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		String type=request.getParameter("type");
+		request.setAttribute("type", type);
 		ModelAndView view = new ModelAndView("go/myono");
 		return view;
 	}
@@ -493,11 +499,11 @@ public class GoController {
 		ModelAndView view = new ModelAndView("go/onodetail");
 		return view;
 	}
-	
+
 	@RequestMapping("/goindex.html")
 	public ModelAndView goindex(HttpServletRequest request) {
 		String goType = request.getParameter("goType");
-		if(StringUtil.isBlank(goType)){
+		if (StringUtil.isBlank(goType)) {
 			goType = "group";
 		}
 		request.setAttribute("goType", goType);
@@ -769,6 +775,30 @@ public class GoController {
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			queryMyGoReq.setUserId(userInfo.getUserId());
 			QueryMyGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryMyGoes(queryMyGoReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
+						rep.getPagInfo());
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getMyFavorGoes")
+	@ResponseBody
+	public ResponseData<PageInfo<Go>> getMyFavorGoes(@NotNull(message = "参数为空") QueryMyFavorGoReq queryMyGoReq,
+			HttpServletRequest request) {
+		ResponseData<PageInfo<Go>> responseData = null;
+		try {
+			// 获取用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			queryMyGoReq.setUserId(userInfo.getUserId());
+			QueryMyFavorGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryMyFavorGoes(queryMyGoReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
 						rep.getResponseHeader().getResultMessage());
