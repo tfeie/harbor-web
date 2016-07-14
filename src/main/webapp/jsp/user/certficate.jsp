@@ -17,13 +17,19 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 	
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>	
 	<script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>	
 </head>
 <script type="text/javascript">
 (function() {
@@ -51,6 +57,13 @@
 				$("[name='authResult']").on("click",function(){
 					$("[name='authResult']").removeClass("on");
 					$(this).addClass("on");
+					
+					var status = $(this).attr("subsStatus");
+					if(status=="11"){
+						$("#AUTH_REMARK").show();
+					}else{
+						$("#AUTH_REMARK").hide();
+					}
 				});
 			},
 			initData: function(){
@@ -76,9 +89,30 @@
 			
 			submit: function(){
 				var status = $.trim($("[name='authResult'].on").attr("subsStatus"));
-				var desc = "审核通过";
+				var remark = $.trim($("#myRemark").val());
+				var valueValidator = new $.ValueValidator();
 				if(status == "11"){
-					desc = "审核不通过";
+					valueValidator.addRule({
+						labelName: "原因",
+						fieldName: "remark",
+						getValue: function(){
+							var remark = $("#myRemark").val();
+							return remark;
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请填写审核不通过原因"
+						}
+					});
+				} else {
+					remark = "";
+				}
+				var res=valueValidator.fireRulesAndReturnFirstError();
+				if(res){
+					weUI.alert({content:res});
+					return;
 				}
 				ajaxController.ajax({
 					url: "../user/submitUserAuth",
@@ -86,13 +120,25 @@
 					data: {
 						userId:"<c:out value="${userInfo.userId}"/>",
 						status: status,
-						remark: desc
+						remark: remark
 					},
 					success: function(transport){
-						alert("审核成功");
+						weUI.alert({
+							content: "审核成功",
+							ok: function(){
+								window.location.href="../user/userList.html";
+								weUI.closeAlert();
+							}
+						})
 					},
 					failure: function(transport){
-						alert("系统繁忙，请稍候重试");
+						weUI.alert({
+							content: "系统繁忙，请稍候重试",
+							ok: function(){
+								window.location.href="../user/userList.html";
+								weUI.closeAlert();
+							}
+						})
 					}
 					
 				});
@@ -142,6 +188,9 @@
 			<p name="authResult" class="on" subsStatus="20">通过</p>
 			<p name="authResult" subsStatus="11">不通过</p>
 	</section>
+	<section class="my_gushi" id="AUTH_REMARK" style="display:none">
+            <p><textarea id="myRemark" placeholder="请填写审核不通原因…"></textarea></p>
+    </section>
 	<div class="message-err" id="DIV_TIPS"></div>
 	<section class="but_baoc">
 		<p>
