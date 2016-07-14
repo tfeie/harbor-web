@@ -56,6 +56,7 @@ import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
 import com.the.harbor.base.enumeration.hyuser.SystemUser;
+import com.the.harbor.base.enumeration.hyuser.UserStatus;
 import com.the.harbor.base.enumeration.hyuserassets.AssetsType;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
@@ -1328,6 +1329,9 @@ public class UserController {
 	@RequestMapping("/userList.html")
 	public ModelAndView users(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String status = request.getParameter("status");
+		if(StringUtil.isBlank(status)){
+			status = UserStatus.UNAUTHORIZED.getValue();
+		}
 		request.setAttribute("status", status);
 		ModelAndView view = new ModelAndView("user/userList");
 		return view;
