@@ -43,8 +43,9 @@
 			},
 			
 			bindEvents:function(){
+				var _this = this;
 				$("#BTN_SUBMIT").on("click",function(){
-					this.submit();
+					_this.submit();
 				});
 				
 				$("[name='authResult']").on("click",function(){
@@ -73,8 +74,28 @@
 				
 			},
 			
-			submit:function(){
-				
+			submit: function(){
+				var status = $.trim($("[name='authResult'].on").attr("subsStatus"));
+				var desc = "审核通过";
+				if(status == "11"){
+					desc = "审核不通过";
+				}
+				ajaxController.ajax({
+					url: "../user/submitUserAuth",
+					type: "post",
+					data: {
+						userId:"<c:out value="${userInfo.userId}"/>",
+						status: status,
+						remark: desc
+					},
+					success: function(transport){
+						alert("审核成功");
+					},
+					failure: function(transport){
+						alert("系统繁忙，请稍候重试");
+					}
+					
+				});
 			}
 		}
 	});

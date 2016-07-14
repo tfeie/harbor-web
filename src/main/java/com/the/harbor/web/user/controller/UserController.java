@@ -35,6 +35,7 @@ import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.DoUserAssetsTrade;
 import com.the.harbor.api.user.param.DoUserFans;
 import com.the.harbor.api.user.param.DoUserFriend;
+import com.the.harbor.api.user.param.UserAuthReq;
 import com.the.harbor.api.user.param.UserCertificationReq;
 import com.the.harbor.api.user.param.UserEditReq;
 import com.the.harbor.api.user.param.UserMemberInfo;
@@ -1365,4 +1366,32 @@ public class UserController {
 		ModelAndView view = new ModelAndView("user/certficate");
 		return view;
 	}
+	
+	/**
+	 * 提交认证
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping("/submitUserAuth")
+	@ResponseBody
+	public ResponseData<String> submitUserCertficate(@NotNull(message = "参数为空") UserAuthReq req) {
+		ResponseData<String> responseData = null;
+		try {
+			if (req == null) {
+				throw new BusinessException("认证材料信息不正确");
+			}
+			Response rep = DubboConsumerFactory.getService(IUserSV.class).submitUserAuthInfo(req);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+						rep.getResponseHeader().getResultMessage(), "");
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "审核成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
 }
