@@ -91,7 +91,7 @@
 				var status = $.trim($("[name='authResult'].on").attr("subsStatus"));
 				var remark = $.trim($("#myRemark").val());
 				var valueValidator = new $.ValueValidator();
-				if(status == "11"){
+				if(status == "13"){
 					valueValidator.addRule({
 						labelName: "原因",
 						fieldName: "remark",
@@ -185,8 +185,8 @@
 		</div>
 	</section>
 	<section class="me_qingke">
-			<p name="authResult" class="on" subsStatus="20">通过</p>
-			<p name="authResult" subsStatus="11">不通过</p>
+			<p name="authResult" class="on" subsStatus="12">通过</p>
+			<p name="authResult" subsStatus="13">不通过</p>
 	</section>
 	<section class="my_gushi" id="AUTH_REMARK" style="display:none">
             <p><textarea id="myRemark" placeholder="请填写审核不通原因…"></textarea></p>

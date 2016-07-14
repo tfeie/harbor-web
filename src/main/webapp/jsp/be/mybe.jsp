@@ -96,7 +96,7 @@
 						url = "../be/getMyFavorBes";
 					}
 					ajaxController.ajax({
-						url: "../be/getMyBes",
+						url: url,
 						type: "post", 
 						data: {  
 							pageNo: 1,
@@ -118,7 +118,7 @@
 					if(data.length>0){
 						opt = $("#MyBeListImpl").render(data);
 					}else{
-						opt="<div class='itms box-s'><div class='js chaochu_2'>您还没有发布任何动态哦~</div></div>";
+						opt="<div class='itms box-s'><div class='js chaochu_2'>没有任何动态哦~</div></div>";
 					}
 					$("#SELECTTION_MY_BE_LIST").html(opt); 
 				},
