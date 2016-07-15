@@ -88,8 +88,9 @@
 						},
 						success : function(transport) {
 							var data = transport.data;
-							//alert(JSON.stringify(data))
-							_this.renderMyGroups(data.result);
+							if(!data){
+								_this.renderMyGroups(data.result);
+							}
 						},
 						failure : function(transport) {
 							_this.renderMyGroups([]);

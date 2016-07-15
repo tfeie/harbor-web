@@ -166,7 +166,12 @@
 				
 				renderBes : function(data) {
 					data = data ? data : [];
-					var opt = $("#BeListImpl").render(data);
+					var opt="";
+					if(data.length>0){
+						opt = $("#BeListImpl").render(data);
+					}else{
+						opt="<li>没有任何内容哦~~</li>";
+					}
 					$("#UL_BES").html(opt);
 				},
 				

@@ -104,7 +104,9 @@
 						},
 						success: function(transport){
 							var data =transport.data; 
-							_this.renderMyBeList(data.result); 
+							if(!data){
+								_this.renderMyBeList(data.result); 
+							}
 						},
 						failure: function(transport){ 
 							_this.renderMyBeList([]); 
