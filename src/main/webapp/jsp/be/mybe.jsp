@@ -103,10 +103,8 @@
 							pageSize: 15
 						},
 						success: function(transport){
-							var data =transport.data; 
-							if(!data){
-								_this.renderMyBeList(data.result); 
-							}
+							var data =transport.data?transport.data:{}; 
+							_this.renderMyBeList(data.result); 
 						},
 						failure: function(transport){ 
 							_this.renderMyBeList([]); 

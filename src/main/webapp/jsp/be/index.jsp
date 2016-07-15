@@ -156,6 +156,7 @@
 						},
 						success: function(transport){
 							var data =transport.data;  
+							var data =transport.data?transport.data:{}; 
 							_this.renderBes(data.result); 
 						},
 						failure: function(transport){ 

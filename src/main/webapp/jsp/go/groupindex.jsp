@@ -162,6 +162,7 @@
 						},
 						success: function(transport){
 							var data =transport.data;  
+							var data =transport.data?transport.data:{}; 
 							_this.renderGroups(data.result); 
 						},
 						failure: function(transport){ 

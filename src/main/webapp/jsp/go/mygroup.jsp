@@ -94,9 +94,8 @@
 						},
 						success : function(transport) {
 							var data = transport.data;
-							if(!data){
-								_this.renderMyGroups(data.result);
-							}
+							var data =transport.data?transport.data:{}; 
+							_this.renderMyGroups(data.result);
 						},
 						failure : function(transport) {
 							_this.renderMyGroups([]);
