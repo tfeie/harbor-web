@@ -27,7 +27,6 @@ import com.aliyun.mns.client.MNSClient;
 import com.aliyun.mns.common.ClientException;
 import com.aliyun.mns.common.ServiceException;
 import com.aliyun.mns.model.Message;
-import com.the.harbor.api.be.param.Be;
 import com.the.harbor.api.pay.IPaymentSV;
 import com.the.harbor.api.pay.param.CreatePaymentOrderReq;
 import com.the.harbor.api.pay.param.CreatePaymentOrderResp;
@@ -60,7 +59,6 @@ import com.the.harbor.base.enumeration.hyuser.UserStatus;
 import com.the.harbor.base.enumeration.hyuserassets.AssetsType;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
-import com.the.harbor.base.vo.PageInfo;
 import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
@@ -85,6 +83,7 @@ import com.the.harbor.web.system.utils.UserAssetsTradeMQSend;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.util.DubboServiceUtil;
+import com.the.harbor.web.util.UserInteractionMQSend;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
 
 @RestController
@@ -989,33 +988,14 @@ public class UserController {
 	 * @param fansUserId
 	 */
 	private void sendDeleteFansMQ(String userId, String fansUserId) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			DoUserFans body = new DoUserFans();
-			body.setFansUserId(fansUserId);
-			body.setUserId(userId);
-			body.setTime(DateUtil.getSysDate());
-			body.setHandleType(DoUserFans.HandleType.CANCEL.name());
-			body.setMqId(UUIDUtil.genId32());
-			body.setMqType(MQType.MQ_HY_USER_FANS.getValue());
-			message.setMessageBody(JSONObject.toJSONString(body));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("User Fans build  message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
+		DoUserFans body = new DoUserFans();
+		body.setFansUserId(fansUserId);
+		body.setUserId(userId);
+		body.setTime(DateUtil.getSysDate());
+		body.setHandleType(DoUserFans.HandleType.CANCEL.name());
+		body.setMqId(UUIDUtil.genId32());
+		body.setMqType(MQType.MQ_HY_USER_FANS.getValue());
+		UserInteractionMQSend.sendMQ(body);
 	}
 
 	/**
@@ -1025,34 +1005,15 @@ public class UserController {
 	 * @param friendUserId
 	 */
 	private void sendAddFriendMQ(String userId, String friendUserId, String applyMq) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			DoUserFriend body = new DoUserFriend();
-			body.setFriendUserId(friendUserId);
-			body.setUserId(userId);
-			body.setTime(DateUtil.getSysDate());
-			body.setHandleType(DoUserFriend.HandleType.APPLY.name());
-			body.setMqId(UUIDUtil.genId32());
-			body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
-			body.setApplyMq(applyMq);
-			message.setMessageBody(JSONObject.toJSONString(body));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("User FRIEND build  message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
+		DoUserFriend body = new DoUserFriend();
+		body.setFriendUserId(friendUserId);
+		body.setUserId(userId);
+		body.setTime(DateUtil.getSysDate());
+		body.setHandleType(DoUserFriend.HandleType.APPLY.name());
+		body.setMqId(UUIDUtil.genId32());
+		body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
+		body.setApplyMq(applyMq);
+		UserInteractionMQSend.sendMQ(body);
 	}
 
 	/**
@@ -1062,33 +1023,14 @@ public class UserController {
 	 * @param friendUserId
 	 */
 	private void sendIgnorOrRejectFriendMQ(String userId, String friendUserId) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			DoUserFriend body = new DoUserFriend();
-			body.setFriendUserId(friendUserId);
-			body.setUserId(userId);
-			body.setTime(DateUtil.getSysDate());
-			body.setHandleType(DoUserFriend.HandleType.REJECT.name());
-			body.setMqId(UUIDUtil.genId32());
-			body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
-			message.setMessageBody(JSONObject.toJSONString(body));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("User FRIEND build  message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
+		DoUserFriend body = new DoUserFriend();
+		body.setFriendUserId(friendUserId);
+		body.setUserId(userId);
+		body.setTime(DateUtil.getSysDate());
+		body.setHandleType(DoUserFriend.HandleType.REJECT.name());
+		body.setMqId(UUIDUtil.genId32());
+		body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
+		UserInteractionMQSend.sendMQ(body);
 	}
 
 	/**
@@ -1098,69 +1040,14 @@ public class UserController {
 	 * @param friendUserId
 	 */
 	private void sendAgreeFriendMQ(String userId, String friendUserId) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			DoUserFriend body = new DoUserFriend();
-			body.setFriendUserId(friendUserId);
-			body.setUserId(userId);
-			body.setTime(DateUtil.getSysDate());
-			body.setHandleType(DoUserFriend.HandleType.AGREE.name());
-			body.setMqId(UUIDUtil.genId32());
-			body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
-			message.setMessageBody(JSONObject.toJSONString(body));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("User FRIEND build  message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
-	}
-
-	/**
-	 * 发送一条取消好友消息
-	 * 
-	 * @param userId
-	 * @param friendUserId
-	 */
-	private void sendRemoveFriendMQ(String userId, String friendUserId) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			DoUserFriend body = new DoUserFriend();
-			body.setFriendUserId(friendUserId);
-			body.setUserId(userId);
-			body.setTime(DateUtil.getSysDate());
-			body.setHandleType(DoUserFriend.HandleType.CANCEL.name());
-			body.setMqId(UUIDUtil.genId32());
-			body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
-			message.setMessageBody(JSONObject.toJSONString(body));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("User FRIEND build  message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
+		DoUserFriend body = new DoUserFriend();
+		body.setFriendUserId(friendUserId);
+		body.setUserId(userId);
+		body.setTime(DateUtil.getSysDate());
+		body.setHandleType(DoUserFriend.HandleType.AGREE.name());
+		body.setMqId(UUIDUtil.genId32());
+		body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
+		UserInteractionMQSend.sendMQ(body);
 	}
 
 	private List<HyTagVo> getSelectedTags(List<HyTagVo> allTags) {
@@ -1324,21 +1211,21 @@ public class UserController {
 		}
 		return responseData;
 	}
-	
-	
+
 	@RequestMapping("/userList.html")
 	public ModelAndView users(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String status = request.getParameter("status");
-		if(StringUtil.isBlank(status)){
+		if (StringUtil.isBlank(status)) {
 			status = UserStatus.UNAUTHORIZED.getValue();
 		}
 		request.setAttribute("status", status);
 		ModelAndView view = new ModelAndView("user/userList");
 		return view;
 	}
-	
+
 	@RequestMapping("/queryUsers")
-	public @ResponseBody ResponseData<List<UserViewInfo>> queryUsers(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public @ResponseBody ResponseData<List<UserViewInfo>> queryUsers(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		ResponseData<List<UserViewInfo>> responseData = null;
 		try {
 			String status = request.getParameter("status");
@@ -1346,14 +1233,15 @@ public class UserController {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户状态为空");
 			}
 			List<UserViewInfo> userViewInfos = DubboConsumerFactory.getService(IUserSV.class).queryUnAuthUsers();
-			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", userViewInfos);
+			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功",
+					userViewInfos);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
-	
+
 	@RequestMapping("/toCertficate.html")
 	public ModelAndView toCertficate(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String userId = request.getParameter("userId");
@@ -1370,9 +1258,10 @@ public class UserController {
 		ModelAndView view = new ModelAndView("user/certficate");
 		return view;
 	}
-	
+
 	/**
 	 * 提交认证
+	 * 
 	 * @param req
 	 * @return
 	 */

@@ -68,6 +68,8 @@ import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.go.controller.GoController;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
+import com.the.harbor.web.util.UserCommentMQSend;
+import com.the.harbor.web.util.UserDianzanMQSend;
 
 @RestController
 @RequestMapping("/be")
@@ -414,7 +416,7 @@ public class BeController {
 			doBeComment.setSysdate(DateUtil.getSysDate());
 			doBeComment.setHandleType(DoBeComment.HandleType.PUBLISH.name());
 			/* 3.发送评论消息 */
-			this.sendDoBeCommentMQ(doBeComment);
+			UserCommentMQSend.sendMQ(doBeComment);
 			/* 4.组织评论内容返回 */
 			BeComment b = this.convertBeComment(doBeComment, userInfo);
 			responseData = new ResponseData<BeComment>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", b);
@@ -561,63 +563,14 @@ public class BeController {
 	 * @param userId
 	 */
 	private void sendBeCancelLikesMQ(String beId, String userId) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			DoBeLikes body = new DoBeLikes();
-			body.setBeId(beId);
-			body.setUserId(userId);
-			body.setTime(DateUtil.getSysDate());
-			body.setHandleType(HandleType.CANCEL.name());
-			body.setMqId(UUIDUtil.genId32());
-			body.setMqType(MQType.MQ_HY_BE_LIKES.getValue());
-			message.setMessageBody(JSONObject.toJSONString(body));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("BE dianzan cancel message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
-	}
-
-	/**
-	 * 发送BE评论消息
-	 * 
-	 * @param doBeComment
-	 */
-	private void sendDoBeCommentMQ(DoBeComment doBeComment) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			doBeComment.setMqId(UUIDUtil.genId32());
-			doBeComment.setMqType(MQType.MQ_HY_BE_COMMENT.getValue());
-			message.setMessageBody(JSONObject.toJSONString(doBeComment));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("BE comments add  message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
+		DoBeLikes body = new DoBeLikes();
+		body.setBeId(beId);
+		body.setUserId(userId);
+		body.setTime(DateUtil.getSysDate());
+		body.setHandleType(HandleType.CANCEL.name());
+		body.setMqId(UUIDUtil.genId32());
+		body.setMqType(MQType.MQ_HY_BE_LIKES.getValue());
+		UserDianzanMQSend.sendMQ(body);
 	}
 
 	/**
@@ -627,33 +580,14 @@ public class BeController {
 	 * @param commentId
 	 */
 	private void sendBeCommentDelMQ(String beId, String commentId) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			DoBeComment body = new DoBeComment();
-			body.setBeId(beId);
-			body.setCommentId(commentId);
-			body.setSysdate(DateUtil.getSysDate());
-			body.setHandleType(DoBeComment.HandleType.CANCEL.name());
-			body.setMqId(UUIDUtil.genId32());
-			body.setMqType(MQType.MQ_HY_BE_COMMENT.getValue());
-			message.setMessageBody(JSONObject.toJSONString(body));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("BE comment delete  message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
+		DoBeComment body = new DoBeComment();
+		body.setBeId(beId);
+		body.setCommentId(commentId);
+		body.setSysdate(DateUtil.getSysDate());
+		body.setHandleType(DoBeComment.HandleType.CANCEL.name());
+		body.setMqId(UUIDUtil.genId32());
+		body.setMqType(MQType.MQ_HY_BE_COMMENT.getValue());
+		UserCommentMQSend.sendMQ(body);
 	}
 
 	@RequestMapping("/queryBes")

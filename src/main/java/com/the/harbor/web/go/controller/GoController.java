@@ -20,11 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.aliyun.mns.client.CloudQueue;
-import com.aliyun.mns.client.MNSClient;
-import com.aliyun.mns.common.ClientException;
-import com.aliyun.mns.common.ServiceException;
-import com.aliyun.mns.model.Message;
 import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderReq;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderResp;
@@ -62,7 +57,6 @@ import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.PageInfo;
 import com.the.harbor.base.vo.Response;
-import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
@@ -81,6 +75,8 @@ import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.util.DubboServiceUtil;
+import com.the.harbor.web.util.UserCommentMQSend;
+import com.the.harbor.web.util.UserGroupJoinConfirmMQSend;
 
 @RestController
 @RequestMapping("/go")
@@ -91,7 +87,7 @@ public class GoController {
 	@RequestMapping("/mygroup.html")
 	public ModelAndView mygroup(HttpServletRequest request) {
 		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-		String type=request.getParameter("type");
+		String type = request.getParameter("type");
 		request.setAttribute("type", type);
 		ModelAndView view = new ModelAndView("go/mygroup");
 		return view;
@@ -100,7 +96,7 @@ public class GoController {
 	@RequestMapping("/myono.html")
 	public ModelAndView myono(HttpServletRequest request) {
 		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-		String type=request.getParameter("type");
+		String type = request.getParameter("type");
 		request.setAttribute("type", type);
 		ModelAndView view = new ModelAndView("go/myono");
 		return view;
@@ -1036,7 +1032,7 @@ public class GoController {
 			doGoComment.setSysdate(DateUtil.getSysDate());
 			doGoComment.setHandleType(DoGoComment.HandleType.PUBLISH.name());
 			/* 3.发送评论消息 */
-			this.sendDoGoCommentMQ(doGoComment);
+			UserCommentMQSend.sendMQ(doGoComment);
 			/* 4.组织评论内容返回 */
 			GoComment b = this.convertGoComment(doGoComment, userInfo);
 			responseData = new ResponseData<GoComment>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", b);
@@ -1045,31 +1041,6 @@ public class GoController {
 			responseData = ExceptionUtil.convert(e, GoComment.class);
 		}
 		return responseData;
-	}
-
-	private void sendDoGoCommentMQ(DoGoComment doGoComment) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			doGoComment.setMqId(UUIDUtil.genId32());
-			doGoComment.setMqType(MQType.MQ_HY_GO_COMMENT.getValue());
-			message.setMessageBody(JSONObject.toJSONString(doGoComment));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("GO comments add  message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
 	}
 
 	private GoComment convertGoComment(DoGoComment doGoComment, UserViewInfo userInfo) {
@@ -1287,7 +1258,7 @@ public class GoController {
 			doGoJoinConfirm.setTopic(topic);
 			doGoJoinConfirm.setPublishUserName(pUser.getEnName());
 			doGoJoinConfirm.setPublishUserId(pUser.getUserId());
-			this.sendDoGoJoinConfirm(doGoJoinConfirm);
+			UserGroupJoinConfirmMQSend.sendMQ(doGoJoinConfirm);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -1313,7 +1284,7 @@ public class GoController {
 			doGoJoinConfirm.setTopic(topic);
 			doGoJoinConfirm.setPublishUserName(pUser.getEnName());
 			doGoJoinConfirm.setPublishUserId(pUser.getUserId());
-			this.sendDoGoJoinConfirm(doGoJoinConfirm);
+			UserGroupJoinConfirmMQSend.sendMQ(doGoJoinConfirm);
 
 			UserViewInfo u = WXUserUtil.getUserViewInfoByUserId(userId);
 			JSONObject d = new JSONObject();
@@ -1333,29 +1304,6 @@ public class GoController {
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
 		}
 		return responseData;
-	}
-
-	private void sendDoGoJoinConfirm(DoGoJoinConfirm doGoJoinConfirm) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			message.setMessageBody(JSONObject.toJSONString(doGoJoinConfirm));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("GO join confirm add  message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
 	}
 
 }
