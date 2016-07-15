@@ -122,7 +122,7 @@
 		$("#IMGOverSeaPicker").bind("click", function() {
 			wx.chooseImage({
 				count : 1,
-				sizeType: ['original', 'compressed'],
+				sizeType: ['original'],
 				success : function(res) {
 					var localId = res.localIds[0]; 
 					wx.uploadImage({
@@ -140,7 +140,7 @@
 								success: function(transport){
 									var imgURL  = transport.data;
 									$("#overseasPhoto").val(imgURL);
-									$("#img_oversea").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
+									$("#img_oversea").attr("src", mediaId).css({"width":"193.8px","height":"120px"});
 								},
 								failure: function(transport){
 									alert("上传失败");
