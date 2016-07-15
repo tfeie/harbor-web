@@ -140,7 +140,7 @@
 						var _id =$(this).attr("_id"); 
 						wx.chooseImage({
 							count : 1,
-							sizeType: ['compressed'],
+							sizeType: ['original'],
 							success : function(res) {
 								var localId = res.localIds[0]; 
 								wx.uploadImage({
