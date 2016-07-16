@@ -175,13 +175,22 @@
 						},
 						failure: function(transport){ 
 							var statusCode = transport.statusCode;
-							weUI.alert({content:transport.statusInfo,ok:function(){
-								if(statusCode=="haibei_not_enough"){
+							var statusInfo = transport.statusInfo;
+							if(statusCode=="user_unregister"){
+								weUI.confirm({content:"您还没有注册,是否先注册后再打赏~",ok: function(){
+									window.location.href="../user/toUserRegister.html";
+								}});
+							}else if(statusCode=="haibei_not_enough"){
+								weUI.confirm({content:"您的海贝余额不足啦，是否先进行充值后再打赏~",ok: function(){
 									window.location.href="../user/buyhaibei.html";
-								}
-								weUI.closeAlert();
-							}});
-							return ;
+								}});
+							}else if(statusCode=="user_unauthoried"){
+								weUI.confirm({content:"您还没有经过认证，暂时不能打赏，是否去认证~",ok: function(){
+									window.location.href="../user/toApplyCertficate.html";
+								}});
+							}else{
+								weUI.alert({content:statusInfo});
+							}
 						}
 					});
 				},
@@ -232,9 +241,21 @@
 							$("#parentUserId").val("");
 							$("#parentCommentId").val("");
 						},
-						failure: function(transport){ 
-							weUI.alert({content:transport.statusInfo});
-							return ;
+						failure: function(transport){
+							var statusCode = transport.statusCode;
+							var statusInfo = transport.statusInfo;
+							if(statusCode=="user_unregister"){
+								weUI.confirm({content:"您还没有注册,是否先注册后再发表评论~",ok: function(){
+									window.location.href="../user/toUserRegister.html";
+								}});
+							}else if(statusCode=="user_unauthoried"){
+								weUI.confirm({content:"您还没有经过认证，暂时不能评论，是否去认证~",ok: function(){
+									window.location.href="../user/toApplyCertficate.html";
+								}});
+							}else{
+								weUI.alert({content:statusInfo});
+							}
+							
 						}
 					});
 				},
@@ -252,8 +273,16 @@
 							$("#DIV_DO_DIANZAN").html("<font>"+count+"</font>");
 						},
 						failure: function(transport){ 
-							weUI.alert({content:transport.statusInfo});
-							return ;
+							var statusCode = transport.statusCode;
+							var statusInfo = transport.statusInfo;
+							if(statusCode=="user_unregister"){
+								weUI.confirm({content:"您还没有注册,是否先注册后再点赞~",ok: function(){
+									window.location.href="../user/toUserRegister.html";
+								}});
+							}else{
+								weUI.alert({content:statusInfo});
+							}
+							
 						}
 					});
 				},
@@ -271,7 +300,15 @@
 							$("#DIV_DO_DIANZAN").html("<font>"+count+"</font>");
 						},
 						failure: function(transport){ 
-							
+							var statusCode = transport.statusCode;
+							var statusInfo = transport.statusInfo;
+							if(statusCode=="user_unregister"){
+								weUI.confirm({content:"您还没有注册,是否先去注册~",ok: function(){
+									window.location.href="../user/toUserRegister.html";
+								}});
+							}else{
+								weUI.alert({content:statusInfo});
+							}
 						}
 					});
 				},
@@ -288,7 +325,15 @@
 							$(_t).html("已关注").off("click");
 						},
 						failure: function(transport){ 
-							weUI.alert({content:transport.statusInfo});
+							var statusCode = transport.statusCode;
+							var statusInfo = transport.statusInfo;
+							if(statusCode=="user_unregister"){
+								weUI.confirm({content:"您还没有注册,是否先注册后再关注~",ok: function(){
+									window.location.href="../user/toUserRegister.html";
+								}});
+							}else{
+								weUI.alert({content:statusInfo});
+							}
 						}
 					});
 				},
