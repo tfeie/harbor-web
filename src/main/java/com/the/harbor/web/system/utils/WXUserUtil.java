@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.api.user.param.UserInfo;
 import com.the.harbor.api.user.param.UserViewInfo;
+import com.the.harbor.base.enumeration.common.BusiErrorCode;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.commons.components.redis.CacheFactory;
 import com.the.harbor.commons.redisdata.def.RedisDataKey;
@@ -34,7 +35,7 @@ public final class WXUserUtil {
 		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
 		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
 		if (wxUserInfo == null) {
-			throw new BusinessException("您没有通过微信网页授权认证,请先认证");
+			throw new BusinessException(BusiErrorCode.WECHAT_UNAUTHORIZED.getValue(),"您没有通过微信网页授权认证,请先认证");
 		}
 		return wxUserInfo;
 	}
@@ -52,7 +53,7 @@ public final class WXUserUtil {
 		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
 		UserViewInfo userInfo = getUserViewInfoByOpenId(wtoken.getOpenId());
 		if (userInfo == null) {
-			throw new BusinessException("您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
+			throw new BusinessException(BusiErrorCode.USER_UNREGISTER.getValue(),"您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
 		}
 		return userInfo;
 	}
