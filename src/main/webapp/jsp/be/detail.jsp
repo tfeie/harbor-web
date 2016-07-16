@@ -170,6 +170,8 @@
 						failure: function(transport){ 
 							var statusCode = transport.statusCode;
 							var statusInfo = transport.statusInfo;
+							alert(statusCode);
+							alert(statusCode=="haibei_not_enough");
 							if(statusCode=="user_unregister"){
 								weUI.confirm({content:"您还没有注册,是否先注册后再打赏~",ok: function(){
 									window.location.href="../user/toUserRegister.html";
