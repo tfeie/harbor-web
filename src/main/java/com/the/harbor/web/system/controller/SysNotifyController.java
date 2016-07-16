@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.the.harbor.api.user.param.UserViewInfo;
+import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hynotify.AccepterType;
 import com.the.harbor.base.enumeration.hynotify.SenderType;
 import com.the.harbor.commons.redisdata.def.DoNotify;
@@ -45,10 +46,12 @@ public class SysNotifyController {
 				this.fillNotifyVo(nofity);
 				notifies.add(nofity);
 			}
-			responseData = new ResponseData<List<HyNotifyVo>>(ResponseData.AJAX_STATUS_SUCCESS, "获取成功成功", notifies);
+			responseData = new ResponseData<List<HyNotifyVo>>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "获取成功成功", notifies);
 		} catch (Exception e) {
 			LOG.error(e);
-			responseData = new ResponseData<List<HyNotifyVo>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = new ResponseData<List<HyNotifyVo>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}

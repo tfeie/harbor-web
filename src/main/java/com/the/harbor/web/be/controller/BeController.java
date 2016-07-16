@@ -93,7 +93,8 @@ public class BeController {
 		queryOneBeReq.setBeId(beId);
 		QueryOneBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryOneBe(queryOneBeReq);
 		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-			throw new BusinessException(ResponseData.AJAX_STATUS_FAILURE, resp.getResponseHeader().getResultMessage());
+			throw new BusinessException(resp.getResponseHeader().getResultCode(),
+					resp.getResponseHeader().getResultMessage());
 		}
 		Be be = resp.getBe();
 		if (be == null) {
@@ -152,7 +153,8 @@ public class BeController {
 		try {
 			List<HyTagVo> allBeTags = HyTagUtil.getAllBeTags();
 			data.put("allBeTags", allBeTags);
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", data);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"获取标签成功", data);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
@@ -190,8 +192,8 @@ public class BeController {
 			BeCreateReq request = JSON.parseObject(beData, BeCreateReq.class);
 			BeCreateResp rep = DubboConsumerFactory.getService(IBeSV.class).createBe(request);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
-						rep.getResponseHeader().getResultMessage(), "");
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
 			}
@@ -213,15 +215,16 @@ public class BeController {
 			queryMyBeReq.setUserId(userInfo.getUserId());
 			QueryMyBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryMyBe(queryMyBeReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
-						resp.getPagInfo());
+						resp.getResponseHeader().getResultCode(), resp.getPagInfo());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE, "查询失败，稍候重试...");
+			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "查询失败，稍候重试...");
 		}
 		return responseData;
 	}
@@ -237,15 +240,16 @@ public class BeController {
 			queryMyBeReq.setUserId(userInfo.getUserId());
 			QueryMyFavorBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryMyFavorBe(queryMyBeReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
-						resp.getPagInfo());
+						resp.getResponseHeader().getResultCode(), resp.getPagInfo());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE, "查询失败，稍候重试...");
+			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "查询失败，稍候重试...");
 		}
 		return responseData;
 	}
@@ -262,7 +266,7 @@ public class BeController {
 			QueryMyBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryMyBe(queryMyBeReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
-						resp.getResponseHeader().getResultMessage());
+						resp.getResponseHeader().getResultCode(), resp.getResponseHeader().getResultMessage());
 			} else {
 				Map<String, String> dayMap = new HashMap<String, String>();
 				PageInfo<Be> pagInfo = resp.getPagInfo();
@@ -292,11 +296,13 @@ public class BeController {
 						be.setMmdd(publishDay);
 					}
 				}
-				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", pagInfo);
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
+						ExceptCodeConstants.SUCCESS, pagInfo);
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE, "查询失败，稍候重试...");
+			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "查询失败，稍候重试...");
 		}
 		return responseData;
 	}
@@ -308,10 +314,11 @@ public class BeController {
 		try {
 			QueryOneBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryOneBe(queryOneBeReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<Be>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<Be>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", resp.getBe());
+				responseData = new ResponseData<Be>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
+						resp.getResponseHeader().getResultCode(), resp.getBe());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -336,7 +343,8 @@ public class BeController {
 				this.sendBeDoLikesMQ(beId, userInfo.getUserId());
 			}
 			long count = HyBeUtil.getBeDianzanCount(beId);
-			responseData = new ResponseData<Long>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", count);
+			responseData = new ResponseData<Long>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS, "操作成功",
+					count);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, Long.class);
@@ -360,7 +368,8 @@ public class BeController {
 				this.sendBeCancelLikesMQ(beId, userInfo.getUserId());
 			}
 			long count = HyBeUtil.getBeDianzanCount(beId);
-			responseData = new ResponseData<Long>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", count);
+			responseData = new ResponseData<Long>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS, "操作成功",
+					count);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, Long.class);
@@ -387,7 +396,8 @@ public class BeController {
 					array.add(d);
 				}
 			}
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", array);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", array);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONArray.class);
@@ -419,7 +429,8 @@ public class BeController {
 			UserCommentMQSend.sendMQ(doBeComment);
 			/* 4.组织评论内容返回 */
 			BeComment b = this.convertBeComment(doBeComment, userInfo);
-			responseData = new ResponseData<BeComment>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", b);
+			responseData = new ResponseData<BeComment>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", b);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, BeComment.class);
@@ -462,10 +473,12 @@ public class BeController {
 					list.add(b);
 				}
 			}
-			responseData = new ResponseData<List<BeComment>>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", list);
+			responseData = new ResponseData<List<BeComment>>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "操作成功", list);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<List<BeComment>>(ResponseData.AJAX_STATUS_FAILURE, "操作失败");
+			responseData = new ResponseData<List<BeComment>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "操作失败");
 		}
 		return responseData;
 	}
@@ -598,15 +611,16 @@ public class BeController {
 		try {
 			BeQueryResp rep = DubboConsumerFactory.getService(IBeSV.class).queryBes(beQueryReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
-						rep.getPagInfo());
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS,
+						ExceptCodeConstants.SUCCESS, "查询成功", rep.getPagInfo());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
@@ -638,7 +652,8 @@ public class BeController {
 					array.add(d);
 				}
 			}
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "获取轮播图成功", array);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"获取轮播图成功", array);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONArray.class);
@@ -656,7 +671,7 @@ public class BeController {
 			giveHBReq.setFromUserId(userInfo.getUserId());
 			Response rep = DubboConsumerFactory.getService(IBeSV.class).giveHaibei(giveHBReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "打赏成功", "");

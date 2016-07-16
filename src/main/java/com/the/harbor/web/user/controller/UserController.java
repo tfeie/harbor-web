@@ -172,10 +172,11 @@ public class UserController {
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
 		} catch (BusinessException e) {
 			LOG.error(e.getErrorMessage(), e);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, e.getMessage());
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, ExceptCodeConstants.SUCCESS,
+					e.getMessage());
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}
@@ -420,7 +421,8 @@ public class UserController {
 			d.put("package", pkg);
 			d.put("paySign", paySign);
 			d.put("payOrderId", payOrderId);
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"处理成功", d);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
@@ -444,7 +446,8 @@ public class UserController {
 						resp.getResponseHeader().getResultMessage());
 			}
 
-			responseData = new ResponseData<UserMemberRenewalResp>(ResponseData.AJAX_STATUS_SUCCESS, "会员续期成功", resp);
+			responseData = new ResponseData<UserMemberRenewalResp>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "会员续期成功", resp);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, UserMemberRenewalResp.class);
@@ -579,10 +582,12 @@ public class UserController {
 			data.put("skillSelectedTags", this.getSelectedTags(skillAllTags));
 			data.put("skillAllTags", skillAllTags);
 			data.put("interestAllTags", interestAllTags);
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", data);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"获取标签成功", data);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
@@ -595,8 +600,8 @@ public class UserController {
 			UserSystemTagSubmitReq request = JSON.parseObject(submitString, UserSystemTagSubmitReq.class);
 			Response rep = DubboConsumerFactory.getService(IUserSV.class).submitUserSelectedSystemTags(request);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
-						rep.getResponseHeader().getResultMessage(), "");
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
 			}
@@ -649,10 +654,11 @@ public class UserController {
 			data.put("selectedSkillTags", selectedSkillTags);
 			data.put("skillAllTags", skillAllTags);
 			data.put("interestAllTags", interestAllTags);
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", data);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"获取标签成功", data);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
 		}
 		return responseData;
 	}
@@ -705,7 +711,8 @@ public class UserController {
 					arr.add(d);
 				}
 			}
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", arr);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"查询成功", arr);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONArray.class);
@@ -738,7 +745,8 @@ public class UserController {
 					arr.add(d);
 				}
 			}
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", arr);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"查询成功", arr);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONArray.class);
@@ -904,10 +912,11 @@ public class UserController {
 				a.add(o);
 			}
 
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", a);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", a);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_FAILURE, "操作失败");
+			responseData = ExceptionUtil.convert(e, JSONArray.class);
 		}
 		return responseData;
 	}
@@ -937,7 +946,8 @@ public class UserController {
 					arr.add(d);
 				}
 			}
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", arr);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", arr);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONArray.class);
@@ -1171,7 +1181,8 @@ public class UserController {
 			d.put("package", pkg);
 			d.put("paySign", paySign);
 			d.put("payOrderId", payOrderId);
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"处理成功", d);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
@@ -1233,11 +1244,12 @@ public class UserController {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户状态为空");
 			}
 			List<UserViewInfo> userViewInfos = DubboConsumerFactory.getService(IUserSV.class).queryUnAuthUsers();
-			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功",
-					userViewInfos);
+			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "获取标签成功", userViewInfos);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}

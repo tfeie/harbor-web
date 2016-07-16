@@ -7,7 +7,20 @@
 			AJAX_STATUS_SUCCESS: "1",
 			AJAX_STATUS_FAILURE: "0",
 			STATUS_CODE: "statusCode",
-			STATUS_INFO: "statusInfo"
+			STATUS_INFO: "statusInfo",
+			BusiErrorURLs: [{
+				errorCode: "haibei_not_enough",
+				url: "../user/buyhaibei.html"
+			},{
+				errorCode: "user_unregister",
+				url: "../user/toUserRegister.html"
+			},{
+				errorCode: "user_unauthoried",
+				url: "../user/toApplyCertficate.html"
+			},{
+				errorCode: "user_not_member",
+				url: "../user/memberCenter.html"
+			}]
 		},
 	
 		prototype: {
@@ -39,6 +52,36 @@
 				var q="ajax_req_random="+new Date().getTime();
 				settings.url += (settings.url.indexOf('?') >= 0 ? '&' : '?') + q;
 				$.ajax(settings); 
+			},
+			
+			getErrorURL: function(errorCode){
+				var _this = this;
+				var arr=$.grep(_this.settings.BusiErrorURLs,function(o,indx){
+					return o.errorCode==errorCode;
+				});
+				return arr.length>0?arr[0]:false;
+			},
+			doCommonFail: function(transport){
+				var _this = this;
+				var statusCode = transport.statusCode;
+				var o =_this.getErrorURL(statusCode);
+				
+				weUI.alert({content:transport.statusInfo,ok:function(){
+					if(statusCode=="haibei_not_enough"){
+						window.location.href="../user/buyhaibei.html";
+					}
+					if(statusCode=="user_unregister"){
+						window.location.href="../user/toUserRegister.html";
+					}
+					if(statusCode=="user_unauthoried"){
+						window.location.href="../user/toApplyCertficate.html";
+					}
+					if(statusCode=="user_not_member"){
+						window.location.href="../user/memberCenter.html";
+					}
+					weUI.closeAlert();
+				}});
+				return ;
 			}
 		}
 		

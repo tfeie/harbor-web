@@ -568,7 +568,8 @@ public class GoController {
 		try {
 			List<HyTagVo> allGoTags = HyTagUtil.getAllGoTags();
 			data.put("allGoTags", allGoTags);
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "获取标签成功", data);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"获取标签成功", data);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
@@ -587,8 +588,8 @@ public class GoController {
 			GoCreateReq request = JSON.parseObject(goData, GoCreateReq.class);
 			GoCreateResp rep = DubboConsumerFactory.getService(IGoSV.class).createGo(request);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
-						rep.getResponseHeader().getResultMessage(), "");
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
 			}
@@ -625,7 +626,7 @@ public class GoController {
 		try {
 			GoOrderCreateResp rep = DubboConsumerFactory.getService(IGoSV.class).orderOneOnOne(goOrderCreateReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", rep.getOrderId());
@@ -644,7 +645,7 @@ public class GoController {
 		try {
 			Response rep = DubboConsumerFactory.getService(IGoSV.class).updateGoOrderPay(updateGoOrderPayReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
@@ -707,7 +708,8 @@ public class GoController {
 			d.put("package", pkg);
 			d.put("paySign", paySign);
 			d.put("payOrderId", payOrderId);
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"处理成功", d);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
@@ -725,7 +727,7 @@ public class GoController {
 			goOrderConfirmReq.setPublishUserId(userInfo.getUserId());
 			Response rep = DubboConsumerFactory.getService(IGoSV.class).confirmGoOrder(goOrderConfirmReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
@@ -749,7 +751,7 @@ public class GoController {
 			Response rep = DubboConsumerFactory.getService(IGoSV.class)
 					.confirmGoOrderMeetLocaltion(goOrderMeetLocaltionConfirmReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
@@ -772,15 +774,16 @@ public class GoController {
 			queryMyGoReq.setUserId(userInfo.getUserId());
 			QueryMyGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryMyGoes(queryMyGoReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
-						rep.getPagInfo());
+				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS,
+						ExceptCodeConstants.SUCCESS, "查询成功", rep.getPagInfo());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
@@ -796,15 +799,16 @@ public class GoController {
 			queryMyGoReq.setUserId(userInfo.getUserId());
 			QueryMyFavorGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryMyFavorGoes(queryMyGoReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
-						rep.getPagInfo());
+				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS,
+						ExceptCodeConstants.SUCCESS, "查询成功", rep.getPagInfo());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
@@ -836,7 +840,8 @@ public class GoController {
 					array.add(d);
 				}
 			}
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "获取轮播图成功", array);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"获取轮播图成功", array);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONArray.class);
@@ -852,15 +857,16 @@ public class GoController {
 		try {
 			QueryGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryGoes(queryGoReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
-						rep.getPagInfo());
+				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS,
+						ExceptCodeConstants.SUCCESS, "查询成功", rep.getPagInfo());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE, "系统繁忙，请重试");
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
@@ -871,7 +877,8 @@ public class GoController {
 		ResponseData<Go> responseData = null;
 		try {
 			Go go = DubboServiceUtil.queryGo(goId);
-			responseData = new ResponseData<Go>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功", go);
+			responseData = new ResponseData<Go>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS, "查询成功",
+					go);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, Go.class);
@@ -896,10 +903,12 @@ public class GoController {
 					list.add(b);
 				}
 			}
-			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", list);
+			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "操作成功", list);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_FAILURE, "操作失败");
+			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "操作失败");
 		}
 		return responseData;
 	}
@@ -933,10 +942,11 @@ public class GoController {
 			Response resp = DubboConsumerFactory.getService(IGoSV.class)
 					.setGoOrderMeetLocaltion(goOrderMeetLocaltionReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
-						resp.getResponseHeader().getResultMessage(), "");
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
+						resp.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"提交成功");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -955,10 +965,11 @@ public class GoController {
 			goOrderFinishReq.setUserId(userInfo.getUserId());
 			Response resp = DubboConsumerFactory.getService(IGoSV.class).finishGoOrder(goOrderFinishReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
-						resp.getResponseHeader().getResultMessage(), "");
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
+						resp.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"提交成功");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -1035,7 +1046,8 @@ public class GoController {
 			UserCommentMQSend.sendMQ(doGoComment);
 			/* 4.组织评论内容返回 */
 			GoComment b = this.convertGoComment(doGoComment, userInfo);
-			responseData = new ResponseData<GoComment>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", b);
+			responseData = new ResponseData<GoComment>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", b);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, GoComment.class);
@@ -1085,10 +1097,12 @@ public class GoController {
 					list.add(b);
 				}
 			}
-			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", list);
+			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "操作成功", list);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_FAILURE, "操作失败");
+			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "操作失败");
 		}
 		return responseData;
 	}
@@ -1121,7 +1135,7 @@ public class GoController {
 			groupApplyReq.setGoId(goId);
 			GroupApplyResp resp = DubboConsumerFactory.getService(IGoSV.class).applyGroup(groupApplyReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
 			} else {
 				if (resp.isNeedPay()) {
@@ -1147,7 +1161,8 @@ public class GoController {
 				d.put("orderId", resp.getOrderId());
 				d.put("payAmount", resp.getPayAmount());
 				d.put("payOrderId", resp.getPayOrderId());
-				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", d);
+				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS,
+						ExceptCodeConstants.SUCCESS, "提交成功", d);
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -1165,7 +1180,7 @@ public class GoController {
 			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			Response resp = DubboConsumerFactory.getService(IGoSV.class).updateGoJoinPay(updateGoJoinPayReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
@@ -1201,7 +1216,8 @@ public class GoController {
 					array.add(d);
 				}
 			}
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", array);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", array);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONArray.class);
@@ -1233,7 +1249,8 @@ public class GoController {
 					array.add(d);
 				}
 			}
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", array);
+			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", array);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONArray.class);
@@ -1298,7 +1315,8 @@ public class GoController {
 				d.put("title", u.getTitle());
 				d.put("atCityName", u.getAtCityName());
 			}
-			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", d);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"处理成功", d);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
