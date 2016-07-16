@@ -135,13 +135,7 @@
 					
 					//打赏按钮 
 					$("#DIV_REWARD_COUNT").on("click",function(){
-						weUI.confirm({
-							content:"您确定要打赏1海贝吗?",
-							ok: function(){
-								 _this.rewardBe(1);
-								 weUI.closeConfirm();
-							}
-						})
+						_this.rewardBe(1);
 					}); 
 					
 					$("#DIV_BE_COMMENTS").delegate("[name='DIV_COMMENT_CONTENT']","click",function(){
