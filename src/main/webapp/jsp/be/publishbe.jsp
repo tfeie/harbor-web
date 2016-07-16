@@ -115,6 +115,7 @@
 						_this.bedetails.push({
 							_id: new Date().getTime(),
 							type: "text",
+							candel: true,
 							detail:""
 						});
 						//渲染详情页面
@@ -269,6 +270,7 @@
 					this.bedetails=[{
 						_id: new Date().getTime(),
 						type: "text",
+						candel: false,
 						detail:""
 					}];
 					this.getAllTags(); 
@@ -530,7 +532,9 @@
 	{{if type=="text"}}
 	<div class="wb-m">
 		<textarea class="In-text" name="BE_DETAIL_TEXTAREA"  _id="{{:_id}}" placeholder="请填写您的B&E...">{{:detail}}</textarea>
+		{{if candel==true}}
 		<i class="icon-gb-wb" name="LI_DEL_BE_DETAIL" _id="{{:_id}}"></i>
+		{{/if}}
 	</div>
 	{{/if}}
 	{{if type=="image"}}
