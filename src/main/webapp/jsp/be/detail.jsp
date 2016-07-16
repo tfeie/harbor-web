@@ -170,8 +170,6 @@
 						failure: function(transport){ 
 							var busiCode = transport.busiCode;
 							var statusInfo = transport.statusInfo;
-							alert(busiCode);
-							alert(busiCode=="haibei_not_enough");
 							if(busiCode=="user_unregister"){
 								weUI.confirm({content:"您还没有注册,是否先注册后再打赏~",ok: function(){
 									window.location.href="../user/toUserRegister.html";

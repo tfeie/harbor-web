@@ -474,9 +474,15 @@
 							})
 						},
 						failure: function(transport){
-							weUI.alert({
-								content: "B&E发布失败"+transport.statusInfo
-							})
+							var busiCode = transport.busiCode;
+							var statusInfo = transport.statusInfo;
+							if(busiCode=="user_unregister"){
+								weUI.confirm({content:"您还没有注册,是否先注册后再发表~",ok: function(){
+									window.location.href="../user/toUserRegister.html";
+								}});
+							}else{
+								weUI.alert({content:statusInfo});
+							}
 						}
 						
 					});
