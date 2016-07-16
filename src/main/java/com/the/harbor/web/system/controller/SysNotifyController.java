@@ -70,7 +70,7 @@ public class SysNotifyController {
 			body.setAccepterType(AccepterType.USER.getValue());
 			body.setAccepterId(userInfo.getUserId());
 			NotifyMQSend.sendNotifyMQ(body);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "消息删除成功", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS, "消息删除成功", "");
 		} catch (Exception e) {
 			LOG.error(e);
 			responseData = ExceptionUtil.convert(e, String.class);

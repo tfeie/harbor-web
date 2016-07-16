@@ -591,7 +591,8 @@ public class GoController {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"提交成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -611,7 +612,8 @@ public class GoController {
 			}
 			String fileName = WXHelpUtil.uploadGoImgToOSS(mediaId, userId);
 			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"上传到OSS成功", fileURL);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -629,7 +631,8 @@ public class GoController {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", rep.getOrderId());
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"提交成功", rep.getOrderId());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -648,7 +651,8 @@ public class GoController {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"提交成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -730,7 +734,8 @@ public class GoController {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"提交成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -754,7 +759,8 @@ public class GoController {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"提交成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -923,7 +929,8 @@ public class GoController {
 			if (goOrder != null && !OrderStatus.CANCEL.getValue().equals(goOrder.getOrderStatus())) {
 				throw new BusinessException("您已经预约过此活动哦~");
 			}
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -1183,7 +1190,8 @@ public class GoController {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"处理成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -1276,7 +1284,8 @@ public class GoController {
 			doGoJoinConfirm.setPublishUserName(pUser.getEnName());
 			doGoJoinConfirm.setPublishUserId(pUser.getUserId());
 			UserGroupJoinConfirmMQSend.sendMQ(doGoJoinConfirm);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"处理成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);

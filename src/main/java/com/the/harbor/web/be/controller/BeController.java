@@ -173,7 +173,8 @@ public class BeController {
 			}
 			String fileName = WXHelpUtil.uploadBeImgToOSS(mediaId, userId);
 			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe2";
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"上传到OSS成功", fileURL);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -195,7 +196,8 @@ public class BeController {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"提交成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -218,8 +220,8 @@ public class BeController {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
-						resp.getResponseHeader().getResultCode(), resp.getPagInfo());
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS,
+						resp.getResponseHeader().getResultCode(), "查询成功", resp.getPagInfo());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -243,8 +245,8 @@ public class BeController {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
-						resp.getResponseHeader().getResultCode(), resp.getPagInfo());
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS,
+						resp.getResponseHeader().getResultCode(), "查询成功", resp.getPagInfo());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -265,8 +267,8 @@ public class BeController {
 			queryMyBeReq.setUserId(userInfo.getUserId());
 			QueryMyBeResp resp = DubboConsumerFactory.getService(IBeSV.class).queryMyBe(queryMyBeReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
-						resp.getResponseHeader().getResultCode(), resp.getResponseHeader().getResultMessage());
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
+						resp.getResponseHeader().getResultMessage());
 			} else {
 				Map<String, String> dayMap = new HashMap<String, String>();
 				PageInfo<Be> pagInfo = resp.getPagInfo();
@@ -296,8 +298,8 @@ public class BeController {
 						be.setMmdd(publishDay);
 					}
 				}
-				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
-						ExceptCodeConstants.SUCCESS, pagInfo);
+				responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS,
+						ExceptCodeConstants.SUCCESS, "查询成功", pagInfo);
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -317,8 +319,8 @@ public class BeController {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<Be>(ResponseData.AJAX_STATUS_SUCCESS, "查询成功",
-						resp.getResponseHeader().getResultCode(), resp.getBe());
+				responseData = new ResponseData<Be>(ResponseData.AJAX_STATUS_SUCCESS,
+						resp.getResponseHeader().getResultCode(), "查询成功", resp.getBe());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -448,7 +450,8 @@ public class BeController {
 			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			/* 3.发送评论消息 */
 			this.sendBeCommentDelMQ(beId, commentId);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", commentId);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", commentId);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -674,7 +677,8 @@ public class BeController {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "打赏成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"打赏成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);

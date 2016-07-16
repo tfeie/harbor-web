@@ -208,10 +208,11 @@ public class UserController {
 			}
 			Response rep = DubboConsumerFactory.getService(IUserSV.class).userRegister(userRegReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
-						rep.getResponseHeader().getResultMessage(), "");
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "注册成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"注册成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -248,10 +249,11 @@ public class UserController {
 			}
 			Response rep = DubboConsumerFactory.getService(IUserSV.class).submitUserCertification(req);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
-						rep.getResponseHeader().getResultMessage(), "");
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "认证信息提交成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"认证信息提交成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -271,7 +273,8 @@ public class UserController {
 			}
 			String fileName = WXHelpUtil.uploadUserAuthFileToOSS(mediaId, userId);
 			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"上传到OSS成功", fileURL);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -289,8 +292,9 @@ public class UserController {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户标识不存在");
 			}
 			String fileName = WXHelpUtil.uploadUserHomeBgToOSS(mediaId, userId);
-			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
+			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe2";
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"上传到OSS成功", fileURL);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -309,7 +313,8 @@ public class UserController {
 			}
 			String fileName = WXHelpUtil.uploadUserHeadIconToOSS(mediaId, userId);
 			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "上传到OSS成功", fileURL);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"上传到OSS成功", fileURL);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -602,10 +607,9 @@ public class UserController {
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
 			}
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "处理成功", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"处理成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -674,10 +678,11 @@ public class UserController {
 			UserEditReq request = JSON.parseObject(userData, UserEditReq.class);
 			Response rep = DubboConsumerFactory.getService(IUserSV.class).userEdit(request);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
-						rep.getResponseHeader().getResultMessage(), "");
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "提交成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"提交成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -770,7 +775,8 @@ public class UserController {
 			}
 			// 构造一条粉丝关注的消息
 			this.sendAddFansMQ(userInfo.getUserId(), userId);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -791,7 +797,8 @@ public class UserController {
 			}
 			// 构造一条粉丝关注的消息
 			this.sendDeleteFansMQ(userInfo.getUserId(), userId);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -826,7 +833,8 @@ public class UserController {
 				throw new BusinessException("TA已经是您的好友哦~");
 			}
 			this.sendAddFriendMQ(userInfo.getUserId(), friendUserId, applyMq);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -843,7 +851,8 @@ public class UserController {
 			// 获取当前登录的用户信息
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			this.sendIgnorOrRejectFriendMQ(userInfo.getUserId(), friendUserId);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -860,7 +869,8 @@ public class UserController {
 			// 获取当前登录的用户信息
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			this.sendAgreeFriendMQ(userInfo.getUserId(), friendUserId);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "操作成功", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -1215,7 +1225,8 @@ public class UserController {
 			t.setToUserId(userInfo.getUserId());
 			t.setTradeBalance(Long.parseLong(count));
 			UserAssetsTradeMQSend.sendMQ(t);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "海贝充值消息已经发生，请等待系统充值", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"海贝充值消息已经发生，请等待系统充值", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -1287,10 +1298,11 @@ public class UserController {
 			}
 			Response rep = DubboConsumerFactory.getService(IUserSV.class).submitUserAuthInfo(req);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE,
-						rep.getResponseHeader().getResultMessage(), "");
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "审核成功", "");
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"审核成功", "");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
