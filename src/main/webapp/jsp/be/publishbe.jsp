@@ -157,6 +157,7 @@
 											},
 											success: function(transport){
 												var imgURL  = transport.data;
+												alert(imgURL);
 												$(s).find("#IMG_BE").attr("src", imgURL);
 												_this.modifyBeDetail(_id,"",imgURL);
 											},
