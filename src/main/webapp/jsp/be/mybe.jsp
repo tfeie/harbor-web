@@ -112,7 +112,7 @@
 						type: "post", 
 						data: {  
 							pageNo: pageNo,
-							pageSize: 1
+							pageSize: 10
 						},
 						success: function(transport){
 							var data =transport.data?transport.data:{}; 
