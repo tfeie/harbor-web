@@ -42,7 +42,11 @@
     
     <section class="betwo-main" id="SELECTTION_MY_BE_LIST">
     	
+    	<div id="UL_GOTO_NEXTPAGE" style="display:none">
+			<p align="center">点击加载下一页</p>
+		</div>
     </section>	
+    
 </body>
 
 <script type="text/javascript"
@@ -80,13 +84,21 @@
 						 
 					}); 
 					
+					$("#UL_GOTO_NEXTPAGE").on("click",function(){
+						_this.gotoNextPage();
+					});
+					
 				},
 				
 				initData: function(){
-					this.getMyBes();
+					this.getMyBes(1);
 				}, 
+				gotoNextPage: function(){
+					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
+					this.getMyBes(nextPageNo);
+				},
 				
-				getMyBes: function(){
+				getMyBes: function(pageNo){
 					var _this = this;
 					var type=_this.getPropertyValue("type");
 					var url ="";
@@ -99,12 +111,19 @@
 						url: url,
 						type: "post", 
 						data: {  
-							pageNo: 1,
-							pageSize: 15
+							pageNo: pageNo,
+							pageSize: 1
 						},
 						success: function(transport){
 							var data =transport.data?transport.data:{}; 
-							_this.renderMyBeList(data.result); 
+							var pageNo = data.pageNo;
+							var pageCount = data.pageCount;
+							_this.renderMyBeList(data.result,pageNo,pageCount); 
+							if(pageNo<pageCount){
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1);
+							}else{
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").hide();
+							}
 						},
 						failure: function(transport){ 
 							_this.renderMyBeList([]); 
@@ -112,7 +131,7 @@
 					});
 				},
 				 
-				renderMyBeList: function(data){ 
+				renderMyBeList: function(data,pageNo,pageCount){ 
 					data= data?data:[];
 					var opt="";
 					if(data.length>0){
@@ -120,7 +139,7 @@
 					}else{
 						opt="<div class='itms box-s'><div class='js chaochu_2'>没有任何动态哦~</div></div>";
 					}
-					$("#SELECTTION_MY_BE_LIST").html(opt); 
+					$("#UL_GOTO_NEXTPAGE").before(opt); 
 				},
 				
 				getPropertyValue: function(propertyName){
