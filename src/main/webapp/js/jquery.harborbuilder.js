@@ -34,7 +34,7 @@
 		html+="<footer class=\"footer po-f\">";
 		html+="<a href=\"../be/index.html\"><i class=\"icon-f1\"></i><span>Be</span></a>";
 		html+="<a href=\"../go/goindex.html\"><i class=\"icon-f2\"></i><span>Go</span></a>";
-		html+="<a href=\"../user/myhaiyou.html\"><i class=\"icon-f3\"></i><span>Frd</span></a>";
+		html+="<a href=\"javascript:void(0)\" onclick=\"alert('敬请期待')\"><i class=\"icon-f3\"></i><span>?</span></a>";
 		html+="<a href=\"../user/messagecenter.html\"><i class=\"icon-f4\" id=\"_FOOTER_MSG_COUNT\"></i><span id=\"_FOOTER_MSG\">Msg</span></a>";
 		html+="<a href=\"../user/userCenter.html\"><i class=\"icon-f5\"></i><span>Me</span></a>";
 		html+="</footer>";

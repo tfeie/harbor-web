@@ -58,7 +58,7 @@
 				<c:out value="${userInfo.atCityName}" />
 			</p>
 			<p>
-				<span><a href="#"><img
+				<span style="display:none"><a href="#"><img
 						src="//static.tfeie.com/images/icon19_1.png"></a><a href="#"><img
 						src="//static.tfeie.com/images/icon19_2.png"></a><a href="#"><img
 						src="//static.tfeie.com/images/icon19_3.png"></a><a href="#"><img
@@ -73,8 +73,8 @@
 
 		<section class="ip2_pengyou">
 			<ul>
-				<li><a href="#"><span>10</span><label>益友</label></a></li>
-				<li><a href="#"><span>10</span><label>助人</label></a></li>
+				<li><a href="#"><span>0</span><label>益友</label></a></li>
+				<li><a href="#"><span>0</span><label>助人</label></a></li>
 				<li><a href="../user/myguanzhu.html"><span><c:out
 								value="${guanzhuCount}" /></span><label>关注</label></a></li>
 				<li><a href="../user/myfans.html"><span><c:out
@@ -102,8 +102,11 @@
 				<p class="ip2_4">
 					<a href="../be/mytimeline.html">我的时间线</a>
 				</p>
-				<p class="ip2_5">
+				<p class="ip2_5" style="display:none">
 					<a href="../user/getUserCard.html">我的名片</a>
+				</p>
+				<p class="ip2_5">
+					<a href="javascript:void(0)">新功能ing</a>
 				</p>
 				<p class="ip2_6">
 					<a href="../user/userWealth.html">财富</a>
@@ -116,8 +119,14 @@
 				<p class="ip2_7">
 					<a href="../user/memberCenter.html">会员中心</a>
 				</p>
-				<p class="ip2_8">
+				<p class="ip2_7" style="display:none">
+					<a href="javascript:void(0)">新功能ing</a>
+				</p>
+				<p class="ip2_8" style="display:none">
 					<a href="#">设置</a>
+				</p>
+				<p class="ip2_8">
+					<a href="javascript:void(0)">新功能ing</a>
 				</p>
 			</section>
 		</section>

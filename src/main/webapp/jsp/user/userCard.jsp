@@ -58,7 +58,7 @@
 </head>
 <body class="barn">
 	<section class="mingpian">
-		<section class="uk">
+		<section class="uk" style="display:none">
 			<p><c:out value="${userInfo.hyId}"/></p>
 		</section>
 		<section class="touxing_logo">
