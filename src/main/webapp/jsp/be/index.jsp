@@ -89,7 +89,7 @@
 						$(this).addClass("on");
 						_this.queryBes(tagId,"");
 					});
-					$("#UL_BES").delegate("[name='BE_LI']","click",function(){
+					$("#UL_BES").delegate("[name='DIV_BE_CONTENT']","click",function(){
 						var beId =$(this).attr("beId");
 						window.location.href="../be/detail.html?beId="+beId;
 					});
@@ -319,7 +319,7 @@
 							
 							<span>{{:enName}}</span> <label class="lbl2">{{:abroadCountryName}}</label> <em>{{:userStatusName}}</em>
 						</div>
-						<div class="member">
+						<div class="member" beId="{{:beId}}" name="DIV_BE_CONTENT">
 							<div class="div_title">
 								{{if hastext==true}}
 								<h3>
