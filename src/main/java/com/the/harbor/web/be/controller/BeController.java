@@ -181,7 +181,7 @@ public class BeController {
 		ResponseData<JSONObject> responseData = null;
 		JSONObject data = new JSONObject();
 		try {
-			List<HyTagVo> allBeTags = HyTagUtil.getAllBeIndexPageTags();
+			List<HyTagVo> allBeTags = HyTagUtil.getAllBeTags();
 			data.put("allBeTags", allBeTags);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"获取标签成功", data);

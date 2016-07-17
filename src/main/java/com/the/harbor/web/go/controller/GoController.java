@@ -599,7 +599,7 @@ public class GoController {
 		ResponseData<JSONObject> responseData = null;
 		JSONObject data = new JSONObject();
 		try {
-			List<HyTagVo> allGoTags = HyTagUtil.getAllGoIndexPageTags();
+			List<HyTagVo> allGoTags = HyTagUtil.getAllGoTags();
 			data.put("allGoTags", allGoTags);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"获取标签成功", data);
