@@ -88,7 +88,11 @@
 						$("[name='BE_TAG']").removeClass("on");
 						$(this).addClass("on");
 						_this.queryBes(tagId,"");
-					})
+					});
+					$("#UL_BES").delegate("[name='BE_LI']","click",function(){
+						var beId =$(this).attr("beId");
+						window.location.href="../be/detail.html?beId="+beId;
+					});
 					
 				},
 				
@@ -233,7 +237,7 @@
 </script>
 
 <script id="BeListImpl" type="text/x-jsrender"> 
-<li>
+<li name="BE_LI" beId="{{:beId}}">
 					<section class="list">
 						<div class="member_info">
 							<div class="img">

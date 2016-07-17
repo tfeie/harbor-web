@@ -27,7 +27,36 @@
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
 <script src="//static.tfeie.com/v2/js/tap.js"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<style>
+#shareit {
+	-webkit-user-select: none;
+	display: none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.85);
+	text-align: center;
+	top: 0;
+	left: 0;
+	z-index: 105;
+}
 
+#shareit img {
+	max-width: 100%;
+}
+
+.arrow {
+	position: absolute;
+	right: 10%;
+	top: 5%;
+}
+
+#share-text {
+	margin-top: 400px;
+}
+</style>
 </head>
 
 <body class="bg-eeeeee">
@@ -87,6 +116,12 @@
 			</div>
 		</div>
 	</footer>
+	
+	<div id="shareit">
+	  <a href="#" id="follow">
+	     <img class="arrow" src="//static.tfeie.com/images/share.jpg">
+	  </a>
+	</div>
 </body>
 
 <script type="text/javascript"
@@ -100,6 +135,16 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script> 
 <script type="text/javascript">
+//微信API配置
+wx.config({
+	debug : false,
+	appId : '<c:out value="${appId}"/>',
+	timestamp : <c:out value="${timestamp}"/>,
+	nonceStr : '<c:out value="${nonceStr}"/>',
+	signature : '<c:out value="${signature}"/>',
+	jsApiList : [ 'checkJsApi', 'onMenuShareTimeline','onMenuShareAppMessage']
+});
+
 	(function($){
 		$.BeDetailPage = function(data){
 			this.settings = $.extend(true,{},$.BeDetailPage.defaults);
@@ -117,6 +162,44 @@
 				
 				bindEvents: function(){
 					var _this = this; 
+					
+					$("#DIV_BE_DETAIL").delegate("#DIV_DO_SHARE","click",function(){
+						alert(1);
+						wx.onMenuShareTimeline({
+						    title: _this.getPropertyValue("topic"),
+						    link:  _this.getPropertyValue("url"), 
+						    //imgUrl: _this.getPropertyValue("shareImg"), 
+						    success: function () {  
+						    	weUI.alert({content:"分享成功",ok: function(){
+						    		weUI.closeAlert();
+						    	}});
+						    },
+						    cancel: function () {  
+						    	$("#shareit").hide(); 
+						    }
+						});	
+						wx.onMenuShareAppMessage({
+						    title: _this.getPropertyValue("topic"),
+						    link:  _this.getPropertyValue("url"), 
+						    //imgUrl: _this.getPropertyValue("shareImg"), 
+						    success: function () {  
+						    	weUI.alert({content:"分享成功",ok: function(){
+						    		$("#shareit").hide(); 
+						    		weUI.closeAlert();
+						    	}});
+						    },
+						    cancel: function () {  
+						    	$("#shareit").hide(); 
+						    }
+						});	
+						
+						$("#shareit").show();
+					});
+					
+					$("#shareit").on("click", function(){
+					    $("#shareit").hide(); 
+					 })
+					 
 					
 					//添加图片按钮事件
 					$("#BTN_SEND").on("click",function(){
@@ -417,7 +500,9 @@
 
 	$(document).ready(function(){ 
 		var p = new $.BeDetailPage({
-			beId: "<c:out value="${beId}"/>"
+			beId: "<c:out value="${beId}"/>",
+			topic: "<c:out value="${topic}"/>",
+			url: "<c:out value="${url}"/>"
 		});
 		p.init();
 		
@@ -445,7 +530,7 @@
 			{{/for}} 
 			</div>
 			<div class="btn-bottom">
-				<div class="btn-fx box-s"></div>
+				<div class="btn-fx box-s" id="DIV_DO_SHARE"></div>
 				<div class="btn-z  box-s" id="DIV_DO_DIANZAN" beId = "{{:beId}}">
 					<font>{{:dianzanCount}}</font>
 				</div>

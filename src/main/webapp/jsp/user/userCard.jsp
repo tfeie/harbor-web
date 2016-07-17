@@ -92,7 +92,9 @@
 	</section>
 	
 	<div id="shareit">
-	 <img class="arrow" src="//static.tfeie.com/images/share.jpg">
+	  <a href="#" id="follow">
+	     <img class="arrow" src="//static.tfeie.com/images/share.jpg">
+	  </a>
 	</div>
 	
 </body>

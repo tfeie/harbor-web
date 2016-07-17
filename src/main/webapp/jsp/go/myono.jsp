@@ -64,6 +64,19 @@
 			prototype : {
 				init : function() {
 					this.initData();
+					this.initEvents();
+				},
+				initEvents: function(){
+					var _this = this;
+					$("#DIV_MY_GOES").delegate("[name='GROUP_DETL']","click",function(){
+						var goId =$(this).attr("goId");
+						var goType =$(this).attr("goType");
+						if(goType=="group"){
+							window.location.href="../go/invite.html?goId="+goId;
+						}else{
+							window.location.href="../go/onodetail.html?goId="+goId;
+						}
+					});
 				},
 				initData : function() {
 					this.getMyGoes();
@@ -130,7 +143,7 @@
 
 
 <script id="MyGroupsImpl" type="text/x-jsrender"> 	
-		<div class="itms box-s">
+		<div class="itms box-s" name="GROUP_DETL" goId="{{:goId}}" goType="{{:goType}}">
 			<div class="tie">
 				<p>{{:topic}}</p>
 			</div>
