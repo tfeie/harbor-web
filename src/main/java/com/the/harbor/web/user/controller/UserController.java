@@ -69,6 +69,7 @@ import com.the.harbor.commons.components.redis.interfaces.ICacheClient;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
+import com.the.harbor.commons.redisdata.util.HyNotifyUtil;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.redisdata.util.HyUserUtil;
 import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
@@ -1113,9 +1114,8 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping("/lisener")
-	public @ResponseBody String sendMessage(HttpServletRequest request, HttpServletResponse response) {
-		String user = request.getParameter("user");
+	@RequestMapping("/listenerUserNotify")
+	public @ResponseBody String listenerUserNotify(HttpServletRequest request, HttpServletResponse response) {
 		response.setContentType("text/event-stream; charset=utf-8");
 		response.setHeader("Cache-Control", "no-cache");
 		try {
@@ -1123,13 +1123,14 @@ public class UserController {
 		} catch (InterruptedException e) {
 			LOG.error(e.getMessage());
 		}
-		ICacheClient cacheClient = CacheFactory.getClient();
-		String odata = cacheClient.get("test_lisener");
-		if (!StringUtil.isBlank(odata)) {
-			return "data:" + odata + "\n\n";
-		} else {
-			return null;
+		int notifyCount = 0;
+		try{
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			notifyCount = HyNotifyUtil.getUnReadNotifyCount(userInfo.getUserId());
+		}catch(Exception ex){
+			
 		}
+		return "data:" + notifyCount + "\n\n";
 	}
 
 	@RequestMapping("/saveData")
