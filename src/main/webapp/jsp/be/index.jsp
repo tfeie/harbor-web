@@ -16,6 +16,8 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
@@ -112,7 +114,6 @@
 				
 				giveHB: function(beId){
 					var _this=this;
-					var beId =_this.getPropertyValue("beId");
 					ajaxController.ajax({
 						url: "../be/giveHaibei",
 						type: "post", 
@@ -343,7 +344,7 @@
 
 						<div class="b_more">
 							<span class="span_time">{{:createTimeInterval}}</span> <span class="span_pl"><a class="list btn-pl" href="../be/detail.html?beId={{:beId}}">{{:commentCount}}</a></span>
-							<span class="span_bk" name="SPN_DASHANG"><a id="a_givehb_{{:beId}}">{{:giveHaibeiCount}}</a></span> <span class="span_z" name="SPN_DIANZAN"><a id="a_dianzan_{{:beId}}">{{:dianzanCount}}</a></span>
+							<span class="span_bk" name="SPN_DASHANG" beId="{{:beId}}"><a id="a_givehb_{{:beId}}">{{:giveHaibeiCount}}</a></span> <span class="span_z" name="SPN_DIANZAN" beId="{{:beId}}"><a id="a_dianzan_{{:beId}}">{{:dianzanCount}}</a></span>
 						</div>
 
 					</section>

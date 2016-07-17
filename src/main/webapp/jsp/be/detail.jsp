@@ -164,7 +164,6 @@ wx.config({
 					var _this = this; 
 					
 					$("#DIV_BE_DETAIL").delegate("#DIV_DO_SHARE","click",function(){
-						alert(1);
 						wx.onMenuShareTimeline({
 						    title: _this.getPropertyValue("topic"),
 						    link:  _this.getPropertyValue("url"), 
