@@ -219,7 +219,7 @@
 				getBeSystemTags: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../be/getBeSystemTags",
+						url: "../be/getBeIndexPageTags",
 						type: "post",  
 						success: function(transport){
 							var data =transport.data;  

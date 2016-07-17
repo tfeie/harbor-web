@@ -174,6 +174,23 @@ public class BeController {
 		}
 		return responseData;
 	}
+	
+	@RequestMapping("/getBeIndexPageTags")
+	@ResponseBody
+	public ResponseData<JSONObject> getBeIndexPageTags() {
+		ResponseData<JSONObject> responseData = null;
+		JSONObject data = new JSONObject();
+		try {
+			List<HyTagVo> allBeTags = HyTagUtil.getAllBeIndexPageTags();
+			data.put("allBeTags", allBeTags);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"获取标签成功", data);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
 
 	@RequestMapping("/uploadBeImgToOSS")
 	public ResponseData<String> uploadBeImgToOSS(HttpServletRequest request) {

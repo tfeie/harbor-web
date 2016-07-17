@@ -510,7 +510,7 @@ public class GoController {
 		ModelAndView view = new ModelAndView("go/goindex");
 		return view;
 	}
-	
+
 	@RequestMapping("/myjointgoes.html")
 	public ModelAndView myjointgoes(HttpServletRequest request) {
 		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
@@ -583,6 +583,23 @@ public class GoController {
 		JSONObject data = new JSONObject();
 		try {
 			List<HyTagVo> allGoTags = HyTagUtil.getAllGoTags();
+			data.put("allGoTags", allGoTags);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"获取标签成功", data);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getGoIndexPageTags")
+	@ResponseBody
+	public ResponseData<JSONObject> getGoIndexPageTags() {
+		ResponseData<JSONObject> responseData = null;
+		JSONObject data = new JSONObject();
+		try {
+			List<HyTagVo> allGoTags = HyTagUtil.getAllGoIndexPageTags();
 			data.put("allGoTags", allGoTags);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"获取标签成功", data);

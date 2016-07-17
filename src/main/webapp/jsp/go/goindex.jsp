@@ -208,7 +208,7 @@
 				getGoSystemTags: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../go/getGoSystemTags",
+						url: "../go/getGoIndexPageTags",
 						type: "post",  
 						success: function(transport){
 							var data =transport.data;  
