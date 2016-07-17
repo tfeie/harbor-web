@@ -70,7 +70,7 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script src="${_base}/js/jquery.harborbuilder.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
 <script type="text/javascript">
 	(function($){
 		$.BeIndexPage = function(data){
