@@ -87,7 +87,7 @@
 			
 			<!--我的海友-->
 			<div class="bd">
-				<div class="myhy">
+				<div class="myhy" style="display:none">
 					<div class="btn-search"></div>
 					<div class="search-main">
 						<div class="m">

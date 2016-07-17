@@ -50,8 +50,15 @@
 		<section class="inp_time">
 			<p>
 				<span><input class="datainp" id="expectedStartTime" type="text" placeholder="请选择"  readonly><!-- <input type="text" placeholder="2016-5-25 10:00 " id="expectedStartTime"
-					class="datepicker" /> --></span><label><input type="text"
-					placeholder="约一个小时" id="expectedDuration"/></label>
+					class="datepicker" /> --></span><label>
+							<select id="expectedDuration" class="chooes_2">
+								<option value="">请选择</option>
+								<option value="约1个小时">约1小时</option>
+								<option value="约2小时">约2小时</option>
+								<option value="半天">半天</option>
+								<option value="一天">一天</option>
+							</select>
+					</label>
 			</p> 
 		</section>
 		<section class="me_qingke">
@@ -59,7 +66,7 @@
 				固定费用<input type="text" id="price" placeholder="">元/人
 			</p>
 			<p name="payMode" payMode="20">
-				A A 预付<input type="text" id="price" placeholder="150">元/人<span>多退少补</span>
+				A A 预付<input type="text" id="price" placeholder="">元/人<span>多退少补</span>
 			</p>
 			<p name="payMode" payMode="30">我请客</p>
 		</section>
@@ -631,7 +638,7 @@ jeDate({
 							cnlength: 10
 						},
 						ruleMessages: {
-							required: "请填写预期持续时间",
+							required: "请选择预期持续时间",
 							cnlength:"长度约为5个汉字。如:约1.5小时"
 						}
 					}).addRule({

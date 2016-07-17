@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
 <%
 	String _base = request.getContextPath();
 	request.setAttribute("_base", _base);
@@ -13,7 +12,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>G&O首页</title>
+<title>我参加的Group & One On One</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
@@ -43,14 +42,6 @@
 			
 			</div>
 		</section>
-		<section class="title">
-			<div class="tit_nav">
-				<div class="title_owl" id="DIV_GO_TAGS"></div>
-			</div>
-			<div class="search">
-			</div>
-		</section> 
-
 		<section class="group_oneon" >
 			<section class="lat_group on" id="DIV_GROUP_GOES">
 			</section>
@@ -96,19 +87,6 @@
 				
 				bindEvents: function(){
 					var _this = this;  
-					//点击标签
-					$("#DIV_GO_TAGS").delegate("[name='GO_TAG']","click",function(){
-						var tagId = $(this).attr("tagId");
-						$("[name='GO_TAG']").removeClass("on");
-						$(this).addClass("on");
-						var goType=$(".bor_wid p span.on").attr("goType");
-						if(goType=="group"){
-							_this.queryGroupGoes(tagId,"");
-						}else{
-							_this.queryOnOGoes(tagId,"");
-						}
-					});
-					
 					//点击活动分类标签
 					$(".bor_wid p span").on("click",function(){
 						$(this).parents("p").find("span").removeClass("on")
@@ -141,7 +119,6 @@
 				
 				initData: function(){
 					this.getIndexPageSilders();
-					this.getGoSystemTags();
 					
 					var goType = '${goType}';
 					if(goType == "group") {
@@ -179,31 +156,10 @@
 					})
 				},
 				
-				getGoSystemTags: function(){
-					var _this = this;
-					ajaxController.ajax({
-						url: "../go/getGoSystemTags",
-						type: "post",  
-						success: function(transport){
-							var data =transport.data;  
-							_this.allGoTags =  data.allGoTags;
-							//设置第一个元素选中
-							if(_this.allGoTags.length>0){
-								var firstTag = _this.allGoTags[0];
-								firstTag.selected=true;
-							}
-							_this.renderGoTags(); 
-						},
-						failure: function(transport){ 
-							_this.renderGoTags(); 
-						}
-					});
-				},
-				
 				queryGroupGoes: function(goTag,searchKey){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../go/queryGoes",
+						url: "../go/queryMyJointGoes",
 						type: "post",  
 						data : {
 							goType: "group",
@@ -226,7 +182,7 @@
 				queryOnOGoes: function(goTag,searchKey){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../go/queryGoes",
+						url: "../go/queryMyJointGoes",
 						type: "post",  
 						data : {
 							goType: "oneonone",
@@ -308,14 +264,6 @@
 		<section class="item">
 			<a href="{{:linkURL}}"><img src="{{:imgURL}}" /></a>
 		</section>
-</script>
-
-<script id="GoTagsImpl" type="text/x-jsrender"> 
-{{for allGoTags}}
-<div class="item">
-	<a href="javascript:void(0)" name="GO_TAG" tagId="{{:tagId}}" tagName="{{:tagName}}">{{:tagName}}</a>
-</div>
-{{/for}} 
 </script>
 
 <script id="GroupsImpl" type="text/x-jsrender"> 

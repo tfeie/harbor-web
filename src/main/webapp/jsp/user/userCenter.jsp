@@ -86,7 +86,7 @@
 		<section class="ip2_my">
 			<section class="ip2_wid">
 				<p class="ip2_1">
-					<a href="#">我参加的</a>
+					<a href="../go/myjointgoes.html?goType=group">我参加的</a>
 				</p>
 				<p class="ip2_2">
 					<a href="../be/mybe.html?type=mycreate">我发起的</a>

@@ -110,7 +110,7 @@
 	</section>
 	<footer class="foot_fixed">
 		<section class="sec_01">
-			<a href="#"><span>感兴趣</span></a>
+			<a href="javascript:void(0)" id="BTN_GO_FAVOR"><span>感兴趣</span></a>
 		</section>
 		<section class="sec_02">
 			<a href="javascript:void(0)" id="BTN_GO_APPLY"><span>立即预约</span></a>
@@ -146,12 +146,45 @@
 					$("#BTN_GO_APPLY").on("click", function() {
 						_this.checkGoOrder();
 					});
+					
+					$("#BTN_GO_FAVOR").on("click", function() {
+						_this.doFavor();
+					});
+					
+					
 				},
 
 				getPropertyValue : function(propertyName) {
 					if (!propertyName)
 						return;
 					return this.params[propertyName];
+				},
+				
+				doFavor: function(){
+					var _this = this;
+					var goId=_this.getPropertyValue("goId");
+					ajaxController.ajax({
+						url : "../go/doInterest",
+						type : "post",
+						data : {
+							goId : goId
+						},
+						success : function(transport) {
+							var busiCode = transport.busiCode;
+							var statusInfo = transport.statusInfo;
+							if(busiCode=="user_unregister"){
+								weUI.confirm({content:"您还没有注册,是否先注册~",ok: function(){
+									window.location.href="../user/toUserRegister.html";
+								}});
+							}else{
+								weUI.alert({content:"收藏成功"});
+							}
+						},
+						failure : function(transport) {
+							weUI.alert({content:transport.statusInfo });
+						}
+
+					});
 				},
 				
 				checkGoOrder : function() {

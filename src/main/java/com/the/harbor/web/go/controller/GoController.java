@@ -24,6 +24,7 @@ import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderReq;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderResp;
 import com.the.harbor.api.go.param.DoGoComment;
+import com.the.harbor.api.go.param.DoGoFavorite;
 import com.the.harbor.api.go.param.DoGoJoinConfirm;
 import com.the.harbor.api.go.param.Go;
 import com.the.harbor.api.go.param.GoComment;
@@ -44,6 +45,8 @@ import com.the.harbor.api.go.param.QueryMyFavorGoReq;
 import com.the.harbor.api.go.param.QueryMyFavorGoResp;
 import com.the.harbor.api.go.param.QueryMyGoReq;
 import com.the.harbor.api.go.param.QueryMyGoResp;
+import com.the.harbor.api.go.param.QueryMyJointGoReq;
+import com.the.harbor.api.go.param.QueryMyJointGoResp;
 import com.the.harbor.api.go.param.UpdateGoJoinPayReq;
 import com.the.harbor.api.go.param.UpdateGoOrderPayReq;
 import com.the.harbor.api.user.param.UserViewInfo;
@@ -76,6 +79,7 @@ import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.util.DubboServiceUtil;
 import com.the.harbor.web.util.UserCommentMQSend;
+import com.the.harbor.web.util.UserFavorMQSend;
 import com.the.harbor.web.util.UserGroupJoinConfirmMQSend;
 
 @RestController
@@ -504,6 +508,18 @@ public class GoController {
 		}
 		request.setAttribute("goType", goType);
 		ModelAndView view = new ModelAndView("go/goindex");
+		return view;
+	}
+	
+	@RequestMapping("/myjointgoes.html")
+	public ModelAndView myjointgoes(HttpServletRequest request) {
+		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		String goType = request.getParameter("goType");
+		if (StringUtil.isBlank(goType)) {
+			goType = "group";
+		}
+		request.setAttribute("goType", goType);
+		ModelAndView view = new ModelAndView("go/myjointgoes");
 		return view;
 	}
 
@@ -1329,6 +1345,50 @@ public class GoController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/doInterest")
+	@ResponseBody
+	public ResponseData<String> doInterest(@NotBlank(message = "参数为空") String goId, HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			UserViewInfo pUser = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			if (!HyGoUtil.checkUserGoFavorite(goId, pUser.getUserId())) {
+				DoGoFavorite body = new DoGoFavorite();
+				body.setHandleType(DoGoFavorite.HandleType.DO.name());
+				body.setGoId(goId);
+				body.setUserId(pUser.getUserId());
+				UserFavorMQSend.sendMQ(body);
+			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"处理成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/queryMyJointGoes")
+	@ResponseBody
+	public ResponseData<PageInfo<Go>> queryMyJointGoes(@NotNull(message = "参数为空") QueryMyJointGoReq queryGoReq,
+			HttpServletRequest request) {
+		ResponseData<PageInfo<Go>> responseData = null;
+		try {
+			QueryMyJointGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryMyJointGoes(queryGoReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS,
+						ExceptCodeConstants.SUCCESS, "查询成功", rep.getPagInfo());
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}

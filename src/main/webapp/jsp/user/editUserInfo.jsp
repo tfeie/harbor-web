@@ -17,8 +17,12 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
+	type="text/css" />
+<link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
+	type="text/css" />
 <link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/weui.min.css">
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -28,6 +32,7 @@
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/json2.js"></script>
+<script src="//static.tfeie.com/v2/js/tap.js"></script>
 </head>
 <body class="body">
 	<section class="top_info">
@@ -89,9 +94,9 @@
 				</ul>
 			</section>
 		</section>
-		<section class="par_name">
+		<section class="par_name" style="display:none">
 			<p class="boss">
-				<input type="text" id="mobilePhone" value="<c:out value="${userInfo.mobilePhone}"/>" placeholder="您的移动电话号码">
+				<input type="hidden" id="mobilePhone" value="<c:out value="${userInfo.mobilePhone}"/>" placeholder="您的移动电话号码">
 			</p>
 		</section>
 
@@ -130,43 +135,8 @@
 			</p>
 		</section>
 	</section>
-	<footer class="footer">
-		<ul>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f1.png" />
-					</div>
-					<div class="text">Be</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f2.png" />
-					</div>
-					<div class="text">Go</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f3.png" />
-					</div>
-					<div class="text">Frd</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
-					</div>
-					<div class="text">Msg</div>
-			</a></li>
-			<li class="on"><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f5.png" />
-					</div>
-					<div class="text">Me</div>
-			</a></li>
-		</ul>
-	</footer>
+	
 </body> 
-<script type="text/javascript"
-		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
 <script type="text/javascript"
@@ -175,6 +145,9 @@
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script type="text/javascript"
 	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript"
+		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
 	
 	<script type="text/javascript">
 	//微信API配置
@@ -948,7 +921,7 @@
 						abroadUniversity: abroadUniversity,
 						maritalStatus: maritalStatus,
 						constellation: constellation,
-						signature: signature,
+						signature: signature==""?"这个人很懒，什么都没有留下...":signature,
 						mobilePhone: mobilePhone,
 						company: company,
 						industry: industry,
@@ -996,6 +969,9 @@
 	
 
 	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter({showBeGoQuick: "hide"});
+		
 		var p = new $.UserEditPage({
 			userId: "<c:out value="${userInfo.userId}"/>",
 			wxOpenid: "<c:out value="${openId}"/>",

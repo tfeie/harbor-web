@@ -36,8 +36,8 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				"/go/toPay.html", "/go/toConfirm.html", "/go/mygroup.html", "/go/myono.html", "/go/comments.html",
 				"/go/goindex.html", "/go/invite.html", "/go/toFeedback.html", "/go/toHainiuFeedback.html",
 				"/go/confirmlist.html", "/go/toHainiuAppointment.html", "/go/toAppointment.html",
-				"/go/toHainiuConfirm.html", "/be/publishbe.html", "/be/mybe.html", "/be/mytimeline.html",
-				"/be/index.html" };
+				"/go/myjointgoes.html", "/go/toHainiuConfirm.html", "/be/publishbe.html", "/be/mybe.html",
+				"/be/mytimeline.html", "/be/index.html" };
 		String uri = request.getRequestURI();
 		boolean doFilter = false;
 		for (String s : shouldFilter) {
@@ -46,7 +46,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				break;
 			}
 		}
-		// initSession(request);
+		//initSession(request);
 
 		if (doFilter) {
 			LOG.debug("当前地址在需要认证的地址列表中，需要进行认证。开始判断session是否有会话信息");

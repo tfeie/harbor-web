@@ -103,7 +103,17 @@
 			</section>
 			<section class="yaoy">
 				<p>
-					<span><c:out value="${go.payModeName}" /></span>
+					<span>
+					<c:if test="${go.payMode=='10' }">
+						<c:out value="${go.fixPriceYuan}" />元
+					</c:if>
+					<c:if test="${go.payMode=='20' }">
+						AA <c:out value="${go.fixPriceYuan}" />元/人
+					</c:if>
+					<c:if test="${go.payMode=='30' }">
+						<c:out value="${go.payModeName}" />
+					</c:if>
+					</span>
 					<c:if test="${joint==false}">
 					<button id="BTN_BAOMING">
 						<img src="//static.tfeie.com/images/img58.png">我要报名

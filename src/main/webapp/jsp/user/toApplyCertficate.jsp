@@ -17,13 +17,22 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
+	type="text/css" />
+<link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
-	<script type="text/javascript"
+<script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/json2.js"></script>
+<script src="//static.tfeie.com/v2/js/tap.js"></script>
 </head>
 
 <body>
@@ -68,46 +77,19 @@
 			<input type="button" value="提交认证" id="BTN_SUBMIT"/>
 		</p>
 	</section>
-	<footer class="footer">
-		<ul>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f1.png" />
-					</div>
-					<div class="text">Be</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f2.png" />
-					</div>
-					<div class="text">Go</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f3.png" />
-					</div>
-					<div class="text">Frd</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
-					</div>
-					<div class="text">Msg</div>
-			</a></li>
-			<li class="on"><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f5.png" />
-					</div>
-					<div class="text">Me</div>
-			</a></li>
-		</ul>
-	</footer>
-
 </body>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script type="text/javascript"
 	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript"
 		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+
 <script type="text/javascript">
 	wx.config({
 		debug : false,
@@ -296,6 +278,8 @@
 	
 
 	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter({showBeGoQuick: "hide"});
 		var p = new $.UserCertificatePage();
 		p.init();
 	});
