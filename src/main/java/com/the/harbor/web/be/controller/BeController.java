@@ -113,11 +113,10 @@ public class BeController {
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
-		request.setAttribute("url",
-				GlobalSettings.getHarborDomain() + "/be/detail.html?beId=" + be.getUserId());
+		request.setAttribute("url", GlobalSettings.getHarborDomain() + "/be/detail.html?beId=" + be.getUserId());
 		request.setAttribute("topic", be.getContentSummary());
 		request.setAttribute("userInfo", userInfo);
-		
+
 		request.setAttribute("beId", beId);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("be/detail");
@@ -680,9 +679,8 @@ public class BeController {
 
 	@RequestMapping("/giveHaibei")
 	@ResponseBody
-	public ResponseData<String> giveHaibei(@NotBlank(message = "参数为空") GiveHBReq giveHBReq,
-			HttpServletRequest request) {
-		ResponseData<String> responseData = null;
+	public ResponseData<Long> giveHaibei(@NotBlank(message = "参数为空") GiveHBReq giveHBReq, HttpServletRequest request) {
+		ResponseData<Long> responseData = null;
 		try {
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			giveHBReq.setFromUserId(userInfo.getUserId());
@@ -691,12 +689,13 @@ public class BeController {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
 			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"打赏成功", "");
+				long count = HyBeUtil.getBeRewardHBCount(giveHBReq.getBeId());
+				responseData = new ResponseData<Long>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"打赏成功", count);
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = ExceptionUtil.convert(e, String.class);
+			responseData = ExceptionUtil.convert(e, Long.class);
 		}
 		return responseData;
 	}
