@@ -1119,7 +1119,7 @@ public class UserController {
 		response.setContentType("text/event-stream; charset=utf-8");
 		response.setHeader("Cache-Control", "no-cache");
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			LOG.error(e.getMessage());
 		}
