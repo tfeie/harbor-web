@@ -56,6 +56,9 @@
 			</section>
 			<section class="lat_group on" id="DIV_ONO_GOES" style="display: none">
 			</section>
+			<div id="UL_GOTO_NEXTPAGE" style="display:none">
+				<p align="center">点击加载下一页</p>
+			</div>
 		</section>
 		
 		
@@ -101,6 +104,8 @@
 						var tagId = $(this).attr("tagId");
 						$("[name='GO_TAG']").removeClass("on");
 						$(this).addClass("on");
+						_this.lastTagId=_this.currentTagId
+						_this.currentTagId=tagId;
 						var goType=$(".bor_wid p span.on").attr("goType");
 						if(goType=="group"){
 							_this.queryGroupGoes(tagId,"");
@@ -137,12 +142,21 @@
 						
 					});
 					
+					$("#UL_GOTO_NEXTPAGE").on("click",function(){
+						var tagId=$("#DIV_GO_TAGS").find("[name='GO_TAG'].on").attr("tagId");
+						tagId=tagId?tagId:"";
+						_this.lastTagId=_this.currentTagId
+						_this.currentTagId=tagId;
+						_this.gotoNextPage(tagId);
+					});
+					
 				},
 				
 				initData: function(){
 					this.getIndexPageSilders();
 					this.getGoSystemTags();
-					
+					this.lastTagId="";
+					this.currentTagId="";
 					var goType = '${goType}';
 					if(goType == "group") {
 						$("#DIV_GROUP_GOES").show();
@@ -179,6 +193,18 @@
 					})
 				},
 				
+				gotoNextPage: function(){
+					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
+					var goType = $("#UL_GOTO_NEXTPAGE").attr("goType");
+					var goTag="";
+					var searchKey="";
+					if(goType=="group"){
+						this.queryGroupGoes(goTag,searchKey,nextPageNo);
+					}else if(goType=="ono"){
+						this.queryOnOGoes(goTag,searchKey,nextPageNo);
+					}
+				},
+				
 				getGoSystemTags: function(){
 					var _this = this;
 					ajaxController.ajax({
@@ -200,7 +226,7 @@
 					});
 				},
 				
-				queryGroupGoes: function(goTag,searchKey){
+				queryGroupGoes: function(goTag,searchKey,pageNo){
 					var _this = this;
 					ajaxController.ajax({
 						url: "../go/queryGoes",
@@ -209,12 +235,19 @@
 							goType: "group",
 							goTag: goTag?goTag:"",
 							searchKey: searchKey?searchKey:"",
-							pageNo : 1,
-							pageSize : 10
+							pageNo : pageNo?pageNo:1,
+							pageSize : 5
 						},
 						success: function(transport){
 							var data =transport.data;  
 							var data =transport.data?transport.data:{}; 
+							var pageNo = data.pageNo;
+							var pageCount = data.pageCount;
+							if(pageNo<pageCount){
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","group");
+							}else{
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("goType","group").hide();
+							}
 							_this.renderGroups(data.result); 
 						},
 						failure: function(transport){ 
@@ -223,7 +256,7 @@
 					});
 				},
 				
-				queryOnOGoes: function(goTag,searchKey){
+				queryOnOGoes: function(goTag,searchKey,pageNo){
 					var _this = this;
 					ajaxController.ajax({
 						url: "../go/queryGoes",
@@ -232,11 +265,18 @@
 							goType: "oneonone",
 							goTag: goTag?goTag:"",
 							searchKey: searchKey?searchKey:"",
-							pageNo : 1,
-							pageSize : 10
+							pageNo : pageNo?pageNo:1,
+							pageSize : 5
 						},
 						success: function(transport){
-							var data =transport.data;  
+							var data =transport.data; 
+							var pageNo = data.pageNo;
+							var pageCount = data.pageCount;
+							if(pageNo<pageCount){
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","oneonone");
+							}else{
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("goType","oneonone").hide();
+							}
 							_this.renderOneOnOne(data.result); 
 						},
 						failure: function(transport){ 
@@ -253,7 +293,14 @@
 					}else{
 						opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
 					}
-					$("#DIV_GROUP_GOES").html(opt);
+					//alert(this.currentTagId+"/"+this.lastTagId);
+
+					if(this.currentTagId==this.lastTagId){
+						$("#DIV_GROUP_GOES").append(opt);
+					}else{
+						$("#DIV_GROUP_GOES").html(opt);
+					}
+					
 				},
 				
 				renderOneOnOne : function(data) {
@@ -264,7 +311,12 @@
 					}else{
 						opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
 					}
-					$("#DIV_ONO_GOES").html(opt);
+					//alert(this.currentTagId+"/"+this.lastTagId);
+					if(this.currentTagId==this.lastTagId){
+						$("#DIV_ONO_GOES").append(opt);
+					}else{
+						$("#DIV_ONO_GOES").html(opt);
+					}
 				}, 
 				
 				renderGoTags: function(){

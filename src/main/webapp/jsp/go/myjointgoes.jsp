@@ -47,6 +47,9 @@
 			</section>
 			<section class="lat_group on" id="DIV_ONO_GOES" style="display: none">
 			</section>
+			<div id="UL_GOTO_NEXTPAGE" style="display:none">
+				<p align="center">点击加载下一页</p>
+			</div>
 		</section>
 		
 		
@@ -92,13 +95,12 @@
 						$(this).parents("p").find("span").removeClass("on")
 		        	    $(this).addClass("on")
 		        	    var goType=$(".bor_wid p span.on").attr("goType");
-						var tagId=$("[name='GO_TAG'].on").attr("tagId");
 						if(goType=="group"){
-							_this.queryGroupGoes(tagId,"");
+							_this.queryGroupGoes("");
 							$("#DIV_GROUP_GOES").show();
 							$("#DIV_ONO_GOES").hide();
 						}else{
-							_this.queryOnOGoes(tagId,"");
+							_this.queryOnOGoes("");
 							$("#DIV_GROUP_GOES").hide();
 							$("#DIV_ONO_GOES").show();
 						}
@@ -113,6 +115,10 @@
 							window.location.href="../go/onodetail.html?goId="+goId;
 						}
 						
+					});
+					
+					$("#UL_GOTO_NEXTPAGE").on("click",function(){
+						_this.gotoNextPage();
 					});
 					
 				},
@@ -156,21 +162,37 @@
 					})
 				},
 				
-				queryGroupGoes: function(goTag,searchKey){
+				gotoNextPage: function(){
+					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
+					var goType = $("#UL_GOTO_NEXTPAGE").attr("goType");
+					var searchKey="";
+					if(goType=="group"){
+						this.queryGroupGoes(searchKey,nextPageNo);
+					}else if(goType=="ono"){
+						this.queryOnOGoes(searchKey,nextPageNo);
+					}
+				},
+				
+				queryGroupGoes: function(searchKey,pageNo){
 					var _this = this;
 					ajaxController.ajax({
 						url: "../go/queryMyJointGoes",
 						type: "post",  
 						data : {
 							goType: "group",
-							goTag: goTag?goTag:"",
 							searchKey: searchKey?searchKey:"",
-							pageNo : 1,
+							pageNo : pageNo?pageNo:1,
 							pageSize : 10
 						},
 						success: function(transport){
-							var data =transport.data;  
 							var data =transport.data?transport.data:{}; 
+							var pageNo = data.pageNo;
+							var pageCount = data.pageCount;
+							if(pageNo<pageCount){
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","group");
+							}else{
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("goType","group").hide();
+							}
 							_this.renderGroups(data.result); 
 						},
 						failure: function(transport){ 
@@ -179,20 +201,26 @@
 					});
 				},
 				
-				queryOnOGoes: function(goTag,searchKey){
+				queryOnOGoes: function(searchKey,pageNo){
 					var _this = this;
 					ajaxController.ajax({
 						url: "../go/queryMyJointGoes",
 						type: "post",  
 						data : {
 							goType: "oneonone",
-							goTag: goTag?goTag:"",
 							searchKey: searchKey?searchKey:"",
-							pageNo : 1,
+							pageNo : pageNo?pageNo:1,
 							pageSize : 10
 						},
 						success: function(transport){
 							var data =transport.data;  
+							var pageNo = data.pageNo;
+							var pageCount = data.pageCount;
+							if(pageNo<pageCount){
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","oneonone");
+							}else{
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("goType","oneonone").hide();
+							}
 							_this.renderOneOnOne(data.result); 
 						},
 						failure: function(transport){ 
@@ -206,10 +234,12 @@
 					var opt="";
 					if(data.length>0){
 						 opt = $("#GroupsImpl").render(data);
+						 $("#DIV_GROUP_GOES").append(opt);
 					}else{
 						opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
+						$("#DIV_GROUP_GOES").html(opt);
 					}
-					$("#DIV_GROUP_GOES").html(opt);
+					
 				},
 				
 				renderOneOnOne : function(data) {
@@ -217,10 +247,12 @@
 					var opt="";
 					if(data.length>0){
 						 opt = $("#OneOnOnImpl").render(data);
+						 $("#DIV_ONO_GOES").append(opt);
 					}else{
 						opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
+						$("#DIV_ONO_GOES").html(opt);
 					}
-					$("#DIV_ONO_GOES").html(opt);
+					
 				}, 
 				
 				renderGoTags: function(){
