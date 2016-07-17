@@ -93,6 +93,14 @@
 						var beId =$(this).attr("beId");
 						window.location.href="../be/detail.html?beId="+beId;
 					});
+					$("#UL_BES").delegate("[name='SPN_DASHANG']","click",function(){
+						var beId =$(this).attr("beId");
+						_this.giveHB(beId);
+					});
+					$("#UL_BES").delegate("[name='SPN_DIANZAN']","click",function(){
+						var beId =$(this).attr("beId");
+						_this.doDianzan(beId);
+					});
 					
 				},
 				
@@ -101,6 +109,70 @@
 					this.getBeSystemTags();
 					this.queryBes();
 				}, 
+				
+				giveHB: function(beId){
+					var _this=this;
+					var beId =_this.getPropertyValue("beId");
+					ajaxController.ajax({
+						url: "../be/giveHaibei",
+						type: "post", 
+						data: {
+							beId: beId,
+							count: 1
+						},
+						success: function(transport){ 
+							var count = transport.data;
+							$("#a_givehb_"+beId).text(count);
+						},
+						failure: function(transport){ 
+							var busiCode = transport.busiCode;
+							var statusInfo = transport.statusInfo;
+							if(busiCode=="user_unregister"){
+								weUI.confirm({content:"您还没有注册,是否先注册后再打赏~",ok: function(){
+									window.location.href="../user/toUserRegister.html";
+								}});
+							}else if(busiCode=="haibei_not_enough"){
+								weUI.confirm({content:"您的海贝余额不足啦，是否先进行充值后再打赏~",ok: function(){
+									window.location.href="../user/buyhaibei.html";
+								}});
+							}else if(busiCode=="user_unauthoried"){
+								weUI.confirm({content:"您还没有经过认证，暂时不能打赏，是否去认证~",ok: function(){
+									window.location.href="../user/toApplyCertficate.html";
+								}});
+							}else{
+								weUI.alert({content:statusInfo});
+							}
+						}
+					});
+				},
+				
+				doDianzan: function(beId){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../be/dianzan",
+						type: "post", 
+						data: { 
+							beId: beId
+						},
+						success: function(transport){
+							var count = transport.data;
+							$("#a_dianzan_"+beId).text(count);
+						},
+						failure: function(transport){ 
+							var busiCode = transport.busiCode;
+							var statusInfo = transport.statusInfo;
+							if(busiCode=="user_unregister"){
+								weUI.confirm({content:"您还没有注册,是否先注册后再点赞~",ok: function(){
+									window.location.href="../user/toUserRegister.html";
+								}});
+							}else{
+								weUI.alert({content:statusInfo});
+							}
+							
+						}
+					});
+				},
+				
 				
 				getIndexPageSilders: function(){
 					var _this = this;
@@ -271,7 +343,7 @@
 
 						<div class="b_more">
 							<span class="span_time">{{:createTimeInterval}}</span> <span class="span_pl"><a class="list btn-pl" href="../be/detail.html?beId={{:beId}}">{{:commentCount}}</a></span>
-							<span class="span_bk"><a>{{:giveHaibeiCount}}</a></span> <span class="span_z"><a>{{:dianzanCount}}</a></span>
+							<span class="span_bk" name="SPN_DASHANG"><a id="a_givehb_{{:beId}}">{{:giveHaibeiCount}}</a></span> <span class="span_z" name="SPN_DIANZAN"><a id="a_dianzan_{{:beId}}">{{:dianzanCount}}</a></span>
 						</div>
 
 					</section>

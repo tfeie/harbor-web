@@ -248,7 +248,8 @@ wx.config({
 							count: count
 						},
 						success: function(transport){ 
-							_this.getRewardUsers(); 
+							var count = transport.data;
+							_this.getRewardUsers(count); 
 						},
 						failure: function(transport){ 
 							var busiCode = transport.busiCode;
@@ -440,7 +441,7 @@ wx.config({
 					$("#DIV_BE_DETAIL").html(opt); 
 				},
 				
-				getRewardUsers: function(){
+				getRewardUsers: function(count){
 					var _this = this;
 					ajaxController.ajax({
 						url: "../be/getRewardUsers",
@@ -451,7 +452,7 @@ wx.config({
 						success: function(transport){
 							var data =transport.data; 
 							_this.renderBeRewardUsers(data); 
-							$("#DIV_REWARD_COUNT").html(data.length);
+							$("#DIV_REWARD_COUNT").html(count);
 						},
 						failure: function(transport){ 
 							_this.renderBeRewardUsers([]); 
