@@ -345,7 +345,7 @@
 					if(queryTags && queryTags.length>0){
 						var currentTag = queryTags[0];
 						currentTag.selected = true;
-						
+						alert(currentTag.polyTagId);
 						//追加到已选列表
 						var newTag = {
 							tagId: currentTag.tagId,
