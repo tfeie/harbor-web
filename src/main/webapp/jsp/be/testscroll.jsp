@@ -14,7 +14,7 @@
 <title>Beauty & Excellence</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
-<link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css" 
 	href="//static.tfeie.com/css/owl.carousel.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
