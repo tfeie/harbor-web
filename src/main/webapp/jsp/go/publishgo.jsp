@@ -401,7 +401,7 @@ jeDate({
 				getAllTags: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../go/getGoSystemTags",
+						url: "../go/getGroupSystemTags",
 						type: "post", 
 						data: { 
 						},
@@ -472,7 +472,8 @@ jeDate({
 							tagId: currentTag.tagId,
 							tagType: currentTag.tagType,
 							tagName: currentTag.tagName,
-							tagCat: currentTag.tagCat
+							tagCat: currentTag.tagCat,
+							polyTagId: currentTag.polyTagId
 						};
 						_this.selectedGoTags.push(newTag);
 					}

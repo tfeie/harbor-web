@@ -13,7 +13,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>G&O首页</title>
+<title>Group & One on One</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
@@ -45,7 +45,8 @@
 		</section>
 		<section class="title">
 			<div class="tit_nav">
-				<div class="title_owl" id="DIV_GO_TAGS"></div>
+				<div class="title_owl" id="DIV_GROUP_TAGS"></div>
+				<div class="title_owl" id="DIV_ONO_TAGS" style="display:none"></div>
 			</div>
 			<div class="search">
 			</div>
@@ -100,18 +101,22 @@
 				bindEvents: function(){
 					var _this = this;  
 					//点击标签
-					$("#DIV_GO_TAGS").delegate("[name='GO_TAG']","click",function(){
+					$("#DIV_ONO_TAGS").delegate("[name='GO_TAG']","click",function(){
 						var tagId = $(this).attr("tagId");
 						$("[name='GO_TAG']").removeClass("on");
 						$(this).addClass("on");
 						_this.lastTagId=_this.currentTagId
 						_this.currentTagId=tagId;
-						var goType=$(".bor_wid p span.on").attr("goType");
-						if(goType=="group"){
-							_this.queryGroupGoes(tagId,"");
-						}else{
-							_this.queryOnOGoes(tagId,"");
-						}
+						_this.queryOnOGoes(tagId,"");
+					});
+					
+					$("#DIV_GROUP_TAGS").delegate("[name='GO_TAG']","click",function(){
+						var tagId = $(this).attr("tagId");
+						$("[name='GO_TAG']").removeClass("on");
+						$(this).addClass("on");
+						_this.lastTagId=_this.currentTagId
+						_this.currentTagId=tagId;
+						_this.queryGroupGoes(tagId,"");
 					});
 					
 					//点击活动分类标签
@@ -124,11 +129,14 @@
 							_this.queryGroupGoes(tagId,"");
 							$("#DIV_GROUP_GOES").show();
 							$("#DIV_ONO_GOES").hide();
+							$("#DIV_ONO_TAGS").hide();
+							$("#DIV_GROUP_TAGS").show();
 						}else{
 							_this.queryOnOGoes(tagId,"");
 							$("#DIV_GROUP_GOES").hide();
 							$("#DIV_ONO_GOES").show();
-							_this.getAllOnOIndexPageTags();
+							$("#DIV_ONO_TAGS").show();
+							$("#DIV_GROUP_TAGS").hide();
 						}
 					});
 					
@@ -156,6 +164,7 @@
 				initData: function(){
 					this.getIndexPageSilders();
 					this.getAllGroupIndexPageTags();
+					this.getAllOnOIndexPageTags();
 					this.lastTagId="";
 					this.currentTagId="";
 					var goType = '${goType}';
@@ -213,16 +222,16 @@
 						type: "post",  
 						success: function(transport){
 							var data =transport.data;  
-							_this.allGoTags =  data.allGoTags;
+							var allGoTags =  data.allGoTags;
 							//设置第一个元素选中
-							if(_this.allGoTags.length>0){
-								var firstTag = _this.allGoTags[0];
+							if(allGoTags.length>0){
+								var firstTag = allGoTags[0];
 								firstTag.selected=true;
 							}
-							_this.renderGoTags(); 
+							_this.renderGroupTags(allGoTags); 
 						},
 						failure: function(transport){ 
-							_this.renderGoTags(); 
+							_this.renderGroupTags([]); 
 						}
 					});
 				},
@@ -234,16 +243,16 @@
 						type: "post",  
 						success: function(transport){
 							var data =transport.data;  
-							_this.allGoTags =  data.allGoTags;
+							var allGoTags =  data.allGoTags;
 							//设置第一个元素选中
-							if(_this.allGoTags.length>0){
-								var firstTag = _this.allGoTags[0];
+							if(allGoTags.length>0){
+								var firstTag = allGoTags[0];
 								firstTag.selected=true;
 							}
-							_this.renderGoTags(); 
+							_this.renderOnOTags(allGoTags); 
 						},
 						failure: function(transport){ 
-							_this.renderGoTags(); 
+							_this.renderOnOTags([]); 
 						}
 					});
 				},
@@ -255,7 +264,7 @@
 						type: "post",  
 						data : {
 							goType: "group",
-							goTag: goTag?goTag:"",
+							polyTagId: goTag?goTag:"",
 							searchKey: searchKey?searchKey:"",
 							pageNo : pageNo?pageNo:1,
 							pageSize : 5
@@ -341,17 +350,25 @@
 					}
 				}, 
 				
-				renderGoTags: function(){
+				renderGroupTags: function(allGoTags){
 					var data= {
-						allGoTags: this.allGoTags
+						allGoTags: allGoTags
 					}
 					var opt=$("#GoTagsImpl").render(data);
-					$("#DIV_GO_TAGS").html(opt); 
-					this.owlCarousel();
+					$("#DIV_GROUP_TAGS").html(opt); 
+					$("#DIV_GROUP_TAGS").owlCarousel({
+						items : 5,
+						dots : false
+					})
 				},
 				
-				owlCarousel: function(){
-					$(".title_owl").owlCarousel({
+				renderOnOTags: function(allGoTags){
+					var data= {
+						allGoTags: allGoTags
+					}
+					var opt=$("#GoTagsImpl").render(data);
+					$("#DIV_ONO_TAGS").html(opt); 
+					$("#DIV_ONO_TAGS").owlCarousel({
 						items : 5,
 						dots : false
 					})
@@ -384,6 +401,9 @@
 </script>
 
 <script id="GoTagsImpl" type="text/x-jsrender"> 
+<div class="item">
+	<a href="javascript:void(0)" name="GO_TAG" tagId="" tagName="全部">全部</a>
+</div>
 {{for allGoTags}}
 <div class="item">
 	<a href="javascript:void(0)" name="GO_TAG" tagId="{{:tagId}}" tagName="{{:tagName}}">{{:tagName}}</a>

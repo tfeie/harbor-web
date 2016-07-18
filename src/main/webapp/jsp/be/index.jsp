@@ -245,14 +245,14 @@
 				
 				queryBes: function(beTag,searchKey,pageNo){
 					var _this = this;
-					if(beTag=="-1" || beTag=="-2"){
+					if(beTag=="-1"){
 						beTag="";
 					}
 					ajaxController.ajax({
 						url: "../be/queryBes",
 						type: "post",  
 						data : {
-							beTag: beTag?beTag:"",
+							polyTagId: beTag?beTag:"",
 							searchKey: searchKey?searchKey:"",
 							pageNo : pageNo,
 							pageSize : 5
@@ -338,9 +338,6 @@
 <script id="BeTagsImpl" type="text/x-jsrender"> 
 <div class="item">
 						<a href="javascript:void(0)" class="on" tagId="-1" name="BE_TAG">推荐</a>
-					</div>
-					<div class="item">
-						<a href="javascript:void(0)" tagId="-2" name="BE_TAG">热点</a>
 					</div>
 {{for allBeTags}}
 <div class="item">
