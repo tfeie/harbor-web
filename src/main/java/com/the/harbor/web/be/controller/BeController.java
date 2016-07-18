@@ -158,9 +158,9 @@ public class BeController {
 		return view;
 	}
 
-	@RequestMapping("/getBeSystemTags")
+	@RequestMapping("/getAllBeTags")
 	@ResponseBody
-	public ResponseData<JSONObject> getBeSystemTags() {
+	public ResponseData<JSONObject> getAllBeTags() {
 		ResponseData<JSONObject> responseData = null;
 		JSONObject data = new JSONObject();
 		try {
@@ -174,14 +174,14 @@ public class BeController {
 		}
 		return responseData;
 	}
-	
-	@RequestMapping("/getBeIndexPageTags")
+
+	@RequestMapping("/getAllBeIndexPageTags")
 	@ResponseBody
-	public ResponseData<JSONObject> getBeIndexPageTags() {
+	public ResponseData<JSONObject> getAllBeIndexPageTags() {
 		ResponseData<JSONObject> responseData = null;
 		JSONObject data = new JSONObject();
 		try {
-			List<HyTagVo> allBeTags = HyTagUtil.getAllBeTags();
+			List<HyTagVo> allBeTags = HyTagUtil.getAllBeIndexPageTags();
 			data.put("allBeTags", allBeTags);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"获取标签成功", data);
@@ -716,7 +716,7 @@ public class BeController {
 		}
 		return responseData;
 	}
-	
+
 	@RequestMapping("/testscroll.html")
 	public ModelAndView testscroll(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("be/testscroll");

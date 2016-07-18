@@ -122,7 +122,7 @@
 				
 				initData: function(){
 					this.getIndexPageSilders();
-					this.getBeSystemTags();
+					this.getAllBeIndexPageTags();
 					this.lastTagId="-1";
 					this.currentTagId="-1";
 					this.queryBes("-1","",1);
@@ -216,10 +216,10 @@
 					})
 				},
 				
-				getBeSystemTags: function(){
+				getAllBeIndexPageTags: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../be/getBeIndexPageTags",
+						url: "../be/getAllBeIndexPageTags",
 						type: "post",  
 						success: function(transport){
 							var data =transport.data;  

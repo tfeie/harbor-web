@@ -576,13 +576,13 @@ public class GoController {
 		return view;
 	}
 
-	@RequestMapping("/getGoSystemTags")
+	@RequestMapping("/getGroupSystemTags")
 	@ResponseBody
-	public ResponseData<JSONObject> getGoSystemTags() {
+	public ResponseData<JSONObject> getGroupSystemTags() {
 		ResponseData<JSONObject> responseData = null;
 		JSONObject data = new JSONObject();
 		try {
-			List<HyTagVo> allGoTags = HyTagUtil.getAllGoTags();
+			List<HyTagVo> allGoTags = HyTagUtil.getAllGroupTags();
 			data.put("allGoTags", allGoTags);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"获取标签成功", data);
@@ -593,13 +593,47 @@ public class GoController {
 		return responseData;
 	}
 
-	@RequestMapping("/getGoIndexPageTags")
+	@RequestMapping("/getOnOSystemTags")
 	@ResponseBody
-	public ResponseData<JSONObject> getGoIndexPageTags() {
+	public ResponseData<JSONObject> getOnOSystemTags() {
 		ResponseData<JSONObject> responseData = null;
 		JSONObject data = new JSONObject();
 		try {
-			List<HyTagVo> allGoTags = HyTagUtil.getAllGoTags();
+			List<HyTagVo> allGoTags = HyTagUtil.getAllOnOTags();
+			data.put("allGoTags", allGoTags);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"获取标签成功", data);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getAllGroupIndexPageTags")
+	@ResponseBody
+	public ResponseData<JSONObject> getAllGroupIndexPageTags() {
+		ResponseData<JSONObject> responseData = null;
+		JSONObject data = new JSONObject();
+		try {
+			List<HyTagVo> allGoTags = HyTagUtil.getAllGroupIndexPageTags();
+			data.put("allGoTags", allGoTags);
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"获取标签成功", data);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getAllOnOIndexPageTags")
+	@ResponseBody
+	public ResponseData<JSONObject> getAllOnOIndexPageTags() {
+		ResponseData<JSONObject> responseData = null;
+		JSONObject data = new JSONObject();
+		try {
+			List<HyTagVo> allGoTags = HyTagUtil.getAllOnOIndexPageTags();
 			data.put("allGoTags", allGoTags);
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"获取标签成功", data);

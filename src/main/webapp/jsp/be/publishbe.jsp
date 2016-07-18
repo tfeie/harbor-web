@@ -273,7 +273,7 @@
 						candel: false,
 						detail:""
 					}];
-					this.getAllTags(); 
+					this.getAllBeTags(); 
 				},
 				
 				initRenders: function(){
@@ -281,10 +281,10 @@
 					this.renderBeDetails();
 				},
 				
-				getAllTags: function(){
+				getAllBeTags: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../be/getBeSystemTags",
+						url: "../be/getAllBeTags",
 						type: "post", 
 						data: { 
 						},
@@ -351,7 +351,8 @@
 							tagId: currentTag.tagId,
 							tagType: currentTag.tagType,
 							tagName: currentTag.tagName,
-							tagCat: currentTag.tagCat
+							tagCat: currentTag.tagCat,
+							polyTagId: currentTag.polyTagId
 						};
 						_this.selectedBeTags.push(newTag);
 					}

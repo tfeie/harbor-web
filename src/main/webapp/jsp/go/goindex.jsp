@@ -128,6 +128,7 @@
 							_this.queryOnOGoes(tagId,"");
 							$("#DIV_GROUP_GOES").hide();
 							$("#DIV_ONO_GOES").show();
+							_this.getAllOnOIndexPageTags();
 						}
 					});
 					
@@ -154,7 +155,7 @@
 				
 				initData: function(){
 					this.getIndexPageSilders();
-					this.getGoSystemTags();
+					this.getAllGroupIndexPageTags();
 					this.lastTagId="";
 					this.currentTagId="";
 					var goType = '${goType}';
@@ -205,10 +206,31 @@
 					}
 				},
 				
-				getGoSystemTags: function(){
+				getAllGroupIndexPageTags: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../go/getGoIndexPageTags",
+						url: "../go/getAllGroupIndexPageTags",
+						type: "post",  
+						success: function(transport){
+							var data =transport.data;  
+							_this.allGoTags =  data.allGoTags;
+							//设置第一个元素选中
+							if(_this.allGoTags.length>0){
+								var firstTag = _this.allGoTags[0];
+								firstTag.selected=true;
+							}
+							_this.renderGoTags(); 
+						},
+						failure: function(transport){ 
+							_this.renderGoTags(); 
+						}
+					});
+				},
+				
+				getAllOnOIndexPageTags: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../go/getAllOnOIndexPageTags",
 						type: "post",  
 						success: function(transport){
 							var data =transport.data;  
@@ -320,9 +342,8 @@
 				}, 
 				
 				renderGoTags: function(){
-					var allGoTags =this.allGoTags;
-					data= {
-						allGoTags:allGoTags
+					var data= {
+						allGoTags: this.allGoTags
 					}
 					var opt=$("#GoTagsImpl").render(data);
 					$("#DIV_GO_TAGS").html(opt); 
