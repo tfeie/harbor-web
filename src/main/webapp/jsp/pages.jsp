@@ -43,7 +43,9 @@
 			<p class="on1">
 				<span>我的时间线</span><label>be/mytimeline.jsp-ok <a href="../be/mytimeline.html">Go</a></label>
 			</p> 
-			
+			<p class="on1">
+				<span>测试滑动条</span><label>be/estscroll.jsp-ok <a href="../be/testscroll.html">Go</a></label>
+			</p>
 		</section>
 		<section class="shouji">
 			<p class="title">

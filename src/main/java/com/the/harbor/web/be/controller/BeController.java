@@ -716,5 +716,11 @@ public class BeController {
 		}
 		return responseData;
 	}
+	
+	@RequestMapping("/testscroll.html")
+	public ModelAndView testscroll(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("be/testscroll");
+		return view;
+	}
 
 }
