@@ -708,7 +708,7 @@ public class BeController {
 			} else {
 				long count = HyBeUtil.getBeRewardHBCount(giveHBReq.getBeId());
 				responseData = new ResponseData<Long>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"打赏成功", count);
+						"打赏成功", count+1);
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);

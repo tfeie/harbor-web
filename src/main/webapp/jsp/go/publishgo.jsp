@@ -466,7 +466,7 @@ jeDate({
 					if(queryTags && queryTags.length>0){
 						var currentTag = queryTags[0];
 						currentTag.selected = true;
-						
+						alert(currentTag.polyTagId)
 						//追加到已选列表
 						var newTag = {
 							tagId: currentTag.tagId,
@@ -777,6 +777,7 @@ jeDate({
 						goDetails: _this.godetails,
 						goTags: _this.selectedGoTags
 					} 
+					alert(JSON.stringify(data));
 					ajaxController.ajax({
 						url: "../go/submitNewGo",
 						type: "post", 
