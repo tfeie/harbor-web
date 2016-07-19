@@ -18,10 +18,6 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
-<link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
-	type="text/css" />
-<link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
-	type="text/css" />
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
@@ -33,7 +29,6 @@
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/json2.js"></script>
-<script src="//static.tfeie.com/v2/js/tap.js"></script>
 </head>
 <body class="body">
 	<section class="ip_info oc">
@@ -101,7 +96,7 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 
 
 

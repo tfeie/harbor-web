@@ -91,40 +91,7 @@
 			</p>
 		</section>
 	</section>
-	<footer class="footer">
-		<ul>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f1.png" />
-					</div>
-					<div class="text">Be</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f2.png" />
-					</div>
-					<div class="text">Go</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f3.png" />
-					</div>
-					<div class="text">Frd</div>
-			</a></li>
-			<li><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f4.png" /><i>6</i>
-					</div>
-					<div class="text">Msg</div>
-			</a></li>
-			<li class="on"><a href="">
-					<div class="img">
-						<img src="//static.tfeie.com/images/f5.png" />
-					</div>
-					<div class="text">Me</div>
-			</a></li>
-		</ul>
-	</footer>
+
 </body>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
@@ -132,6 +99,8 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
+
 
 	<script type="text/javascript">
 	(function($){
@@ -202,6 +171,9 @@
 	
 
 	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter({showBeGoQuick: "hide"});
+		
 		var p = new $.UserViewPreviewPage({
 			userId: "<c:out value="${userInfo.userId}"/>"
 		});
