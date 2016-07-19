@@ -49,7 +49,7 @@
 				
 			</ul>
 			<div id="UL_GOTO_NEXTPAGE" style="display:none">
-				<p align="center">点击加载下一页</p>
+				<p align="center">加载下一页</p>
 			</div>
 		</section>
 		
@@ -112,6 +112,18 @@
 						_this.currentTagId=tagId;
 						_this.gotoNextPage(tagId);
 					});
+					
+					$(window).scroll(function() {
+						var scrollTop = $(document).scrollTop();//获取垂直滚动的距离
+			            var docheight = $(document).height();
+			            var winheight = $(window).height();
+
+			            if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+			            	var tagId=$("#DIV_BE_TAGS").find("[name='BE_TAG'].on").attr("tagId");
+			            	_this.gotoNextPage(tagId);
+			            }
+
+					})
 					
 				},
 				
@@ -235,7 +247,12 @@
 				gotoNextPage: function(tagId){
 					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
 					var searchKey="";
-					this.queryBes(tagId,searchKey,nextPageNo);
+					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
+					//alert(nextPageNo+"/"+pageCount);
+					if(nextPageNo>0 && nextPageNo<=pageCount){
+						this.queryBes(tagId,searchKey,nextPageNo);
+					}
+					
 				},
 				
 				queryBes: function(beTag,searchKey,pageNo){
@@ -258,9 +275,9 @@
 							var pageCount = data.pageCount;
 							_this.renderBes(data.result,pageNo,pageCount); 
 							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1);
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").hide();
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","0").attr("pageCount","0").hide();
 							}
 						},
 						failure: function(transport){ 
