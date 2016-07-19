@@ -37,6 +37,8 @@ import com.the.harbor.api.user.param.DoUserFriend;
 import com.the.harbor.api.user.param.UserAuthReq;
 import com.the.harbor.api.user.param.UserCertificationReq;
 import com.the.harbor.api.user.param.UserEditReq;
+import com.the.harbor.api.user.param.UserInviteInfo;
+import com.the.harbor.api.user.param.UserInviteReq;
 import com.the.harbor.api.user.param.UserMemberInfo;
 import com.the.harbor.api.user.param.UserMemberQuery;
 import com.the.harbor.api.user.param.UserMemberRenewalReq;
@@ -55,6 +57,7 @@ import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
 import com.the.harbor.base.enumeration.hyuser.SystemUser;
+import com.the.harbor.base.enumeration.hyuser.UserInviteStatus;
 import com.the.harbor.base.enumeration.hyuser.UserStatus;
 import com.the.harbor.base.enumeration.hyuserassets.AssetsType;
 import com.the.harbor.base.enumeration.mns.MQType;
@@ -77,6 +80,7 @@ import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.Pinyin;
+import com.the.harbor.commons.util.SignUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.util.UUIDUtil;
 import com.the.harbor.commons.web.model.ResponseData;
@@ -139,6 +143,19 @@ public class UserController {
 		if (userInfo != null) {
 			throw new BusinessException("您的微信已经注册");
 		}
+		String flag = request.getParameter("flag");
+		String code = null;
+		String sign = null;
+		String userId = null;
+		if("share".equals(flag)){
+			code = request.getParameter("inviteCode");
+			sign = request.getParameter("sign");
+			userId = request.getParameter("userId");
+			request.setAttribute("flag", flag);
+			request.setAttribute("sign", sign);
+			request.setAttribute("inviteCode", code);
+			request.setAttribute("userId", userId);
+		}
 		WeixinUserInfo wxUserInfo = WXUserUtil.getWeixinUserInfo(request);
 		request.setAttribute("wxUserInfo", wxUserInfo);
 		ModelAndView view = new ModelAndView("user/toUserRegister");
@@ -184,7 +201,7 @@ public class UserController {
 
 	@RequestMapping("/submitUserRegister")
 	public ResponseData<String> submitUserRegister(@NotNull(message = "参数为空") String userData,
-			@NotNull(message = "验证码为空") String randomCode) {
+			@NotNull(message = "验证码为空") String randomCode,HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
 			if (StringUtil.isBlank(userData)) {
@@ -206,6 +223,19 @@ public class UserController {
 			}
 			if (!randomCode.equals(code)) {
 				throw new BusinessException("输入的验证码不正确");
+			}
+			
+			String flag = request.getParameter("flag");
+			String inviteCode = request.getParameter("inviteCode");
+			String sign = request.getParameter("sign");
+			String userId = request.getParameter("shareuserId");
+			if("share".equals(flag)) {
+				// 校验数据
+				String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
+				if(!newsign.equals(sign)){
+					throw new BusinessException("签名校验错误");
+				}
+				userRegReq.setInviteCode(inviteCode);
 			}
 			Response rep = DubboConsumerFactory.getService(IUserSV.class).userRegister(userRegReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
@@ -498,13 +528,30 @@ public class UserController {
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
 		String url = WXRequestUtil.getFullURL(request);
 		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		
+		// 获取邀请码
+		UserInviteReq req = new UserInviteReq();
+		UserInviteInfo userInvite = new UserInviteInfo();
+		userInvite.setUserId(userInfo.getUserId());
+		userInvite.setStatus(UserInviteStatus.INVITE_VALID.getValue());
+		req.setUserInviteInfo(userInvite);
+		List<UserInviteInfo> userInviteList = DubboConsumerFactory.getService(IUserSV.class).quertUserInvite(req);
+		String code = "";
+		String sign = "";
+		if(!CollectionUtil.isEmpty(userInviteList)){
+			code = userInviteList.get(0).getInviteCode();
+			sign = SignUtil.getUserInviteSign(userInfo.getUserId(), code);
+		}
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
 		request.setAttribute("url",
-				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?userId=" + userInfo.getUserId());
+				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?userId=" + userInfo.getUserId() 
+				+ "&inviteCode=" + code + "&sign=" + sign);
 		request.setAttribute("userInfo", userInfo);
+		request.setAttribute("inviteCode", code);
+		request.setAttribute("sign", sign);
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}
@@ -525,6 +572,15 @@ public class UserController {
 		if (userInfo == null) {
 			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
 		}
+		
+		// 获取邀请码
+		String inviteCode = request.getParameter("inviteCode");
+		String sign = request.getParameter("sign");
+		String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
+		if(!sign.equals(newsign)){
+			throw new BusinessException("数据签名错误");
+		}
+		
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -535,8 +591,11 @@ public class UserController {
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
 		request.setAttribute("url",
-				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?userId=" + userInfo.getUserId());
+				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?userId=" + userInfo.getUserId() 
+				+ "&inviteCode=" + inviteCode + "&sign=" + sign);
 		request.setAttribute("userInfo", userInfo);
+		request.setAttribute("inviteCode", inviteCode);
+		request.setAttribute("sign", sign);
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}
@@ -1304,6 +1363,44 @@ public class UserController {
 			} else {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 						"审核成功", "");
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+	
+	/**
+	 * 更新邀请码状态为正在使用
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/updateUserInvite")
+	@ResponseBody
+	public ResponseData<String> updateUserInvite(HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			String inviteCode = request.getParameter("inviteCode");
+			String sign = request.getParameter("sign");
+			String userId = request.getParameter("userId");
+			
+			String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
+			if(!newsign.equals(sign)){
+				throw new BusinessException("签名校验错误");
+			}
+			UserInviteReq req = new UserInviteReq();
+			UserInviteInfo info = new UserInviteInfo();
+			info.setInviteCode(inviteCode);
+			info.setStatus(UserInviteStatus.INVITE_USING.getValue());
+			req.setUserInviteInfo(info);
+			Response rep = DubboConsumerFactory.getService(IUserSV.class).updateUserInvite(req);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			} else {
+				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+						"分享成功", "1");
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);

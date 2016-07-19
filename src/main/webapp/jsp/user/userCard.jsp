@@ -82,7 +82,7 @@
 			</section>
 			<p class="but">
 				<input type="button" value="分 享" id="BTN_SHARE"><input type="button"
-					value="应 邀" class="on">
+					value="应 邀"  id="BTN_ACCEPT">
 			</p>
 
 			<div class="clear"></div>
@@ -159,9 +159,10 @@
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
-						    	weUI.alert({content:"分享成功",ok: function(){
+						    	_this.updateUserInvite();
+						    	/* weUI.alert({content:"分享成功",ok: function(){
 						    		$("#shareit").hide(); 
-						    	}});
+						    	}}); */
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
@@ -173,7 +174,11 @@
 					
 					$("#shareit").on("click", function(){
 					    $("#shareit").hide(); 
-					 })
+					 });
+					 
+					 $("#BTN_ACCEPT").bind("click",function(){
+						 window.location.href="../user/toUserRegister.html?flag=share&inviteCode=" + _this.getPropertyValue("inviteCode") + "&sign=" + _this.getPropertyValue("sign") + "&userId" + _this.getPropertyValue("userId");
+					 });
 				},
 				
 				getAllTags: function(){
@@ -195,6 +200,28 @@
 						failure: function(transport){  
 							_this.renderSelectedSkillTags([]);
 							_this.renderSelectedInterestTags([]);
+						}
+					});
+				},
+				
+				updateUserInvite: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/updateUserInvite",
+						type: "post", 
+						data: {
+							userId: this.getPropertyValue("userId"),
+							inviteCode:this.getPropertyValue("inviteCode"),
+							sign:this.getPropertyValue("sign")
+						},
+						success: function(transport){
+							var data =transport.data;
+							weUI.alert({content:"分享成功",ok: function(){
+					    		$("#shareit").hide(); 
+					    	}});
+						},
+						failure: function(transport){  
+							$("#shareit").hide(); 
 						}
 					});
 				},
@@ -223,7 +250,9 @@
 			userId: "<c:out value="${userInfo.userId}"/>",
 			enName: "<c:out value="${userInfo.enName}"/>",
 			shareImg: "<c:out value="${userInfo.wxHeadimg}"/>",
-			url: "<c:out value="${url}"/>"
+			url: "<c:out value="${url}"/>",
+			inviteCode:"<c:out value="${inviteCode}"/>",
+			sign:"<c:out value="${sign}"/>"
 		});
 		p.init();
 	});	

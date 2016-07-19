@@ -88,6 +88,10 @@
 						type="hidden" id="wxNickname"
 						value="<c:out value="${wxUserInfo.nickname}"/>" /> <input
 						type="button" value="确认注册" id="HREF_CONFIRM" />
+					<input type="hidden" id="flag" value="<c:out value="${flag}"/>" />
+					<input type="hidden" id="sign" value="<c:out value="${sign}"/>" />
+					<input type="hidden" id="inviteCode" value="<c:out value="${inviteCode}"/>" />
+					<input type="hidden" id="shareuserId" value="<c:out value="${userId}"/>" />
 				</p>
 			</section>
 		</div>
@@ -249,6 +253,12 @@
 					var wxOpenid= $.trim($("#wxOpenid").val());
 					var wxHeadimg= $.trim($("#wxHeadimg").val());
 					var wxNickname= $.trim($("#wxNickname").val());
+					
+					var flag = $.trim($("#flag").val());
+					var sign = $.trim($("#sign").val());
+					var inviteCode = $.trim($("#inviteCode").val());
+					var shareuserId = $.trim($("#shareuserId").val());
+					
 					var userData = {
 						sex: sex,
 						enName: enName,
@@ -263,7 +273,11 @@
 						type: "post",
 						data: {
 							randomCode: randomCode,
-							userData: JSON.stringify(userData)
+							userData: JSON.stringify(userData),
+							flag:flag,
+							sign:sign,
+							inviteCode:inviteCode,
+							shareuserId:shareuserId
 						},
 						success: function(transport){
 							_this.showSuccess("注册成功"); 
