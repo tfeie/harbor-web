@@ -53,6 +53,9 @@
 		<div id="DIV_MY_TIMELINE">
 		
 		</div>
+		<div id="UL_GOTO_NEXTPAGE" style="display:none">
+				<p align="center">点击加载下一页</p>
+			</div>
 	</section> 
 </body>
 
@@ -91,29 +94,60 @@
 						 
 					}); 
 					
+					$("#UL_GOTO_NEXTPAGE").on("click",function(){
+						_this.gotoNextPage();
+					});
+					
+					$(window).scroll(function() {
+						var scrollTop = $(document).scrollTop();//获取垂直滚动的距离
+			            var docheight = $(document).height();
+			            var winheight = $(window).height();
+
+			            if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+			            	_this.gotoNextPage();
+			            }
+
+					})
+					
 				},
 				
 				initData: function(){
 					this.getMyTimeLine();
 				}, 
 				
-				getMyTimeLine: function(){
+				getMyTimeLine: function(pageNo){
 					var _this = this;
 					ajaxController.ajax({
 						url: "../be/getMyTimeLine",
 						type: "post", 
 						data: { 
-							pageNo: 1,
+							pageNo: pageNo?pageNo:1,
 							pageSize: 15
 						},
 						success: function(transport){
-							var data =transport.data; 
+							var data =transport.data?transport.data:{}; 
+							var pageNo = data.pageNo;
+							var pageCount = data.pageCount;
+							if(pageNo<pageCount){
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
+							}else{
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount).hide();
+							}
 							_this.renderMyTimeLineList(data.result); 
 						},
 						failure: function(transport){ 
 							_this.renderMyBeList([]); 
 						}
 					});
+				},
+				
+				gotoNextPage: function(){
+					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
+					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
+					if(nextPageNo<=pageCount){
+						this.getMyTimeLine(nextPageNo);
+					}
+					
 				},
 				 
 				renderMyTimeLineList: function(data){ 

@@ -42,8 +42,9 @@
 	</nav>
 
 	<section class="group-main" id="DIV_MY_GOES">
-		
-
+		<div id="UL_GOTO_NEXTPAGE" style="display:none">
+				<p align="center">点击加载下一页</p>
+			</div>
 	</section>
 
 </body>
@@ -83,12 +84,27 @@
 							window.location.href="../go/onodetail.html?goId="+goId;
 						}
 					});
+					
+					$("#UL_GOTO_NEXTPAGE").on("click",function(){
+						_this.gotoNextPage();
+					});
+					
+					$(window).scroll(function() {
+						var scrollTop = $(document).scrollTop();//获取垂直滚动的距离
+			            var docheight = $(document).height();
+			            var winheight = $(window).height();
+
+			            if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+			            	_this.gotoNextPage();
+			            }
+
+					})
 				},
 				initData : function() {
 					this.getMyGoes();
 				},
 
-				getMyGoes : function() {
+				getMyGoes : function(pageNo) {
 					var _this = this;
 					var type=_this.getPropertyValue("type");
 					var url ="";
@@ -102,12 +118,19 @@
 						type : "post",
 						data : {
 							goType: "group",
-							pageNo : 1,
+							pageNo : pageNo?pageNo:1,
 							pageSize : 10
 						},
 						success : function(transport) {
 							var data = transport.data;
 							var data =transport.data?transport.data:{}; 
+							var pageNo = data.pageNo;
+							var pageCount = data.pageCount;
+							if(pageNo<pageCount){
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
+							}else{
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount).hide();
+							}
 							_this.renderMyGroups(data.result);
 						},
 						failure : function(transport) {
@@ -125,8 +148,18 @@
 						opt="<div class='itms box-s'><div class='js chaochu_2'>您没有任何Group活动哦~</div></div>";
 					}
 					
-					$("#DIV_MY_GOES").html(opt);
+					$("#UL_GOTO_NEXTPAGE").before(opt);
 				},
+				
+				gotoNextPage: function(){
+					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
+					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
+					if(nextPageNo<=pageCount){
+						this.getMyGoes(nextPageNo);
+					}
+					
+				},
+				 
 
 				getPropertyValue : function(propertyName) {
 					if (!propertyName)

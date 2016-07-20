@@ -121,6 +121,17 @@
 						_this.gotoNextPage();
 					});
 					
+					$(window).scroll(function() {
+						var scrollTop = $(document).scrollTop();//获取垂直滚动的距离
+			            var docheight = $(document).height();
+			            var winheight = $(window).height();
+
+			            if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+			            	_this.gotoNextPage();
+			            }
+
+					})
+					
 				},
 				
 				initData: function(){
@@ -165,10 +176,12 @@
 				gotoNextPage: function(){
 					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
 					var goType = $("#UL_GOTO_NEXTPAGE").attr("goType");
+					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
+
 					var searchKey="";
-					if(goType=="group"){
+					if(goType=="group" && nextPageNo<=pageCount){
 						this.queryGroupGoes(searchKey,nextPageNo);
-					}else if(goType=="ono"){
+					}else if(goType=="ono" && nextPageNo<=pageCount){
 						this.queryOnOGoes(searchKey,nextPageNo);
 					}
 				},
@@ -189,9 +202,9 @@
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
 							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","group");
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","group").attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("goType","group").hide();
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","group").attr("pageCount",pageCount).hide();
 							}
 							_this.renderGroups(data.result); 
 						},
@@ -217,9 +230,9 @@
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
 							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","oneonone");
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","oneonone").attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("goType","oneonone").hide();
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("goType","oneonone").attr("pageCount",pageCount).hide();
 							}
 							_this.renderOneOnOne(data.result); 
 						},

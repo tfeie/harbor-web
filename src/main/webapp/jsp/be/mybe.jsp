@@ -43,9 +43,10 @@
     <section class="betwo-main" id="SELECTTION_MY_BE_LIST">
     	
     	<div id="UL_GOTO_NEXTPAGE" style="display:none">
-			<p align="center">点击加载下一页</p>
-		</div>
-    </section>	
+				<p align="center">点击加载下一页</p>
+			</div>
+    </section>
+   
     
 </body>
 
@@ -88,6 +89,17 @@
 						_this.gotoNextPage();
 					});
 					
+					$(window).scroll(function() {
+						var scrollTop = $(document).scrollTop();//获取垂直滚动的距离
+			            var docheight = $(document).height();
+			            var winheight = $(window).height();
+
+			            if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+			            	_this.gotoNextPage();
+			            }
+
+					})
+					
 				},
 				
 				initData: function(){
@@ -95,7 +107,11 @@
 				}, 
 				gotoNextPage: function(){
 					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
-					this.getMyBes(nextPageNo);
+					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
+					if(nextPageNo<=pageCount){
+						this.getMyBes(nextPageNo);
+					}
+					
 				},
 				
 				getMyBes: function(pageNo){
@@ -111,7 +127,7 @@
 						url: url,
 						type: "post", 
 						data: {  
-							pageNo: pageNo,
+							pageNo: pageNo?pageNo:1,
 							pageSize: 10
 						},
 						success: function(transport){
@@ -120,9 +136,9 @@
 							var pageCount = data.pageCount;
 							_this.renderMyBeList(data.result,pageNo,pageCount); 
 							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1);
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").hide();
+								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("pageCount",pageCount).hide();
 							}
 						},
 						failure: function(transport){ 
