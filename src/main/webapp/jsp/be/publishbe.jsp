@@ -405,6 +405,7 @@
 						d.detail = val;
 					}else {
 						d.imageUrl = url;
+						d.imgThumbnailUrl=url+"@!be_thumbnail";
 					}
 				},
 				
@@ -540,7 +541,7 @@
 	{{/if}}
 	{{if type=="image"}}
 	<div class="img-up">
-		<label name="LBL_BE_UPLOAD_IMG" _id="{{:_id}}"><img id="IMG_BE" src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/v2/images/sctp.png{{else}}{{:imageUrl}}{{/if}}" width="100%"></label> 
+		<label name="LBL_BE_UPLOAD_IMG" _id="{{:_id}}"><img id="IMG_BE" src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/v2/images/sctp.png{{else}}{{:imgThumbnailUrl}}{{/if}}" width="100%"></label> 
 		<i class="icon-gb-img" name="LI_DEL_BE_DETAIL" _id="{{:_id}}"></i>
 	</div>
 	{{/if}}
