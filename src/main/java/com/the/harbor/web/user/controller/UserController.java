@@ -79,6 +79,7 @@ import com.the.harbor.commons.redisdata.util.SMSRandomCodeUtil;
 import com.the.harbor.commons.util.CollectionUtil;
 import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
+import com.the.harbor.commons.util.Java3DESUtil;
 import com.the.harbor.commons.util.Pinyin;
 import com.the.harbor.commons.util.SignUtil;
 import com.the.harbor.commons.util.StringUtil;
@@ -144,17 +145,24 @@ public class UserController {
 			throw new BusinessException("您的微信已经注册");
 		}
 		String flag = request.getParameter("flag");
-		String code = null;
-		String sign = null;
-		String userId = null;
 		if("share".equals(flag)){
-			code = request.getParameter("inviteCode");
-			sign = request.getParameter("sign");
-			userId = request.getParameter("userId");
+			try {
+			String param = request.getParameter("inviteCode");
+			String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
+			JSONObject json = JSONObject.parseObject(jsonparam);
+			String inviteCode = json.getString("inviteCode");
+			String userId = json.getString("userId");
+			String sign = json.getString("sign");
+			String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
+			if(!newsign.equals(sign)){
+				throw new BusinessException("数据签名错误");
+			}
 			request.setAttribute("flag", flag);
-			request.setAttribute("sign", sign);
-			request.setAttribute("inviteCode", code);
-			request.setAttribute("userId", userId);
+			param = java.net.URLEncoder.encode(param);
+			request.setAttribute("inviteCode", param);
+			} catch(Exception ex){
+				throw new BusinessException("邀请码错误");
+			}
 		}
 		WeixinUserInfo wxUserInfo = WXUserUtil.getWeixinUserInfo(request);
 		request.setAttribute("wxUserInfo", wxUserInfo);
@@ -226,14 +234,23 @@ public class UserController {
 			}
 			
 			String flag = request.getParameter("flag");
-			String inviteCode = request.getParameter("inviteCode");
-			String sign = request.getParameter("sign");
-			String userId = request.getParameter("shareuserId");
+			String param = request.getParameter("inviteCode");
 			if("share".equals(flag)) {
 				// 校验数据
+				String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
+				JSONObject json = JSONObject.parseObject(jsonparam);
+				String inviteCode = json.getString("inviteCode");
+				String userId = json.getString("userId");
+				String sign = json.getString("sign");
 				String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
 				if(!newsign.equals(sign)){
-					throw new BusinessException("签名校验错误");
+					throw new BusinessException("数据签名错误");
+				}
+				
+				// 验证邀请码是否有效
+				UserInviteInfo userInvite = DubboConsumerFactory.getService(IUserSV.class).checkUserInviteCode(inviteCode);
+				if(userInvite == null){
+					throw new BusinessException("邀请码已被使用，不能重复使用");
 				}
 				userRegReq.setInviteCode(inviteCode);
 			}
@@ -535,33 +552,58 @@ public class UserController {
 		userInvite.setUserId(userInfo.getUserId());
 		userInvite.setStatus(UserInviteStatus.INVITE_VALID.getValue());
 		req.setUserInviteInfo(userInvite);
-		List<UserInviteInfo> userInviteList = DubboConsumerFactory.getService(IUserSV.class).quertUserInvite(req);
+		List<UserInviteInfo> userInviteList = DubboConsumerFactory.getService(IUserSV.class).queryUserInvite(req);
 		String code = "";
 		String sign = "";
+		String param = "";
 		if(!CollectionUtil.isEmpty(userInviteList)){
 			code = userInviteList.get(0).getInviteCode();
 			sign = SignUtil.getUserInviteSign(userInfo.getUserId(), code);
 		}
+		try {
+			JSONObject json = new JSONObject();
+			json.put("userId", userInfo.getUserId());
+			json.put("inviteCode", code);
+			json.put("sign", sign);
+			param = Java3DESUtil.encryptThreeDESECB(json.toJSONString());
+			param = java.net.URLEncoder.encode(param);
+		} catch(Exception ex){
+			throw new BusinessException("邀请码加密错误");
+		}
+
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
 		request.setAttribute("url",
-				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?userId=" + userInfo.getUserId() 
-				+ "&inviteCode=" + code + "&sign=" + sign);
+				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?inviteCode=" + param);
 		request.setAttribute("userInfo", userInfo);
-		request.setAttribute("inviteCode", code);
-		request.setAttribute("sign", sign);
+		request.setAttribute("inviteCode", param);
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}
 
 	@RequestMapping("/getUserCardDetail.html")
 	public ModelAndView getUserCardDetail(HttpServletRequest request) {
-		String userId = request.getParameter("userId");
+		// 获取邀请码
+		String param = request.getParameter("inviteCode");
+		if (StringUtil.isBlank(param)) {
+			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
+		}
+		String userId = "";
+		try{
+			String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
+			JSONObject json = JSONObject.parseObject(jsonparam);
+			userId = json.getString("userId");
+			param = java.net.URLEncoder.encode(param);
+		} catch(Exception ex){
+			throw new BusinessException("邀请码解密错误");
+		}
+		
 		if (StringUtil.isBlank(userId)) {
 			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
 		}
+		
 		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByUserId(userId);
 		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 			throw new BusinessException(resp.getResponseHeader().getResultCode(),
@@ -571,14 +613,6 @@ public class UserController {
 		System.out.println("获取到的用户信息=" + JSON.toJSONString(userInfo));
 		if (userInfo == null) {
 			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
-		}
-		
-		// 获取邀请码
-		String inviteCode = request.getParameter("inviteCode");
-		String sign = request.getParameter("sign");
-		String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
-		if(!sign.equals(newsign)){
-			throw new BusinessException("数据签名错误");
 		}
 		
 		long timestamp = DateUtil.getCurrentTimeMillis();
@@ -591,11 +625,10 @@ public class UserController {
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
 		request.setAttribute("url",
-				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?userId=" + userInfo.getUserId() 
-				+ "&inviteCode=" + inviteCode + "&sign=" + sign);
+				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?inviteCode=" + param);
 		request.setAttribute("userInfo", userInfo);
-		request.setAttribute("inviteCode", inviteCode);
-		request.setAttribute("sign", sign);
+		request.setAttribute("inviteCode", param);
+
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}

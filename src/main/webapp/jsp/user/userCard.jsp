@@ -159,10 +159,9 @@
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
-						    	_this.updateUserInvite();
-						    	/* weUI.alert({content:"分享成功",ok: function(){
+						    	weUI.alert({content:"分享成功",ok: function(){
 						    		$("#shareit").hide(); 
-						    	}}); */
+						    	}});
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
@@ -177,7 +176,7 @@
 					 });
 					 
 					 $("#BTN_ACCEPT").bind("click",function(){
-						 window.location.href="../user/toUserRegister.html?flag=share&inviteCode=" + _this.getPropertyValue("inviteCode") + "&sign=" + _this.getPropertyValue("sign") + "&userId" + _this.getPropertyValue("userId");
+						 window.location.href="../user/toUserRegister.html?flag=share&inviteCode=" + _this.getPropertyValue("inviteCode");
 					 });
 				},
 				
@@ -204,29 +203,6 @@
 					});
 				},
 				
-				updateUserInvite: function(){
-					var _this = this;
-					ajaxController.ajax({
-						url: "../user/updateUserInvite",
-						type: "post", 
-						data: {
-							userId: this.getPropertyValue("userId"),
-							inviteCode:this.getPropertyValue("inviteCode"),
-							sign:this.getPropertyValue("sign")
-						},
-						success: function(transport){
-							var data =transport.data;
-							weUI.alert({content:"分享成功",ok: function(){
-					    		$("#shareit").hide(); 
-					    	}});
-						},
-						failure: function(transport){  
-							$("#shareit").hide(); 
-						}
-					});
-				},
-
-				
 				renderSelectedSkillTags: function(tags){ 
 					var opt=$("#SelectedTagImpl").render(tags);
 					$("#SELECTED_SKILL_TAGS").html(opt);
@@ -251,8 +227,7 @@
 			enName: "<c:out value="${userInfo.enName}"/>",
 			shareImg: "<c:out value="${userInfo.wxHeadimg}"/>",
 			url: "<c:out value="${url}"/>",
-			inviteCode:"<c:out value="${inviteCode}"/>",
-			sign:"<c:out value="${sign}"/>"
+			inviteCode:"<c:out value="${inviteCode}"/>"
 		});
 		p.init();
 	});	
