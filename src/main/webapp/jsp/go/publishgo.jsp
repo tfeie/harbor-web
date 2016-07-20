@@ -274,7 +274,7 @@ jeDate({
 											},
 											success: function(transport){
 												var imgURL  = transport.data;
-												$(s).find("#IMG_GO").attr("src", imgURL);
+												$(s).find("#IMG_GO").attr("src", imgURL+"@!go_thumbnail");
 												_this.modifyGoDetail(_id,"",imgURL);
 											},
 											failure: function(transport){
@@ -526,6 +526,7 @@ jeDate({
 						d.detail = val;
 					}else {
 						d.imageUrl = url;
+						d.imgThumbnailUrl=url+"@!go_thumbnail";
 					}
 				},
 				
@@ -875,7 +876,7 @@ jeDate({
 		{{if type=="image"}}
 			<section class="jia_img items">
 				<p name="P_GO_UPLOAD_IMG" _id="{{:_id}}">
-					<img id="IMG_GO" src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/images/img51-1.png{{else}}{{:imageUrl}}{{/if}}">
+					<img id="IMG_GO" src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/images/img51-1.png{{else}}{{:imgThumbnailUrl}}{{/if}}">
 				</p>
 				<section class="yingchang on" name="SECTION_DEL_GO_DETAIL" _id="{{:_id}}">
 					<img src="//static.tfeie.com/images/img50.png" />
