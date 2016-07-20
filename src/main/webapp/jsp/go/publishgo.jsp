@@ -859,7 +859,7 @@ jeDate({
 <script id="GoDetailsImpl" type="text/x-jsrender">
 	{{for godetails}} 
 		{{if type=="text"}}
-			<section class="zhuti_hanhua add_mask items">
+			<section class="zhuti_hanhua items">
 				<p>
 					<textarea name="GO_DETAIL_TEXTAREA"  _id="{{:_id}}" placeholder="请说说这个主题能掏些什么干货…
 一.主题
@@ -873,7 +873,7 @@ jeDate({
 			</section>
 		{{/if}}
 		{{if type=="image"}}
-			<section class="jia_img add_mask items">
+			<section class="jia_img items">
 				<p name="P_GO_UPLOAD_IMG" _id="{{:_id}}">
 					<img id="IMG_GO" src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/images/img51-1.png{{else}}{{:imageUrl}}{{/if}}">
 				</p>
