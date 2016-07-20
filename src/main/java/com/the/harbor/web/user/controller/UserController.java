@@ -145,23 +145,23 @@ public class UserController {
 			throw new BusinessException("您的微信已经注册");
 		}
 		String flag = request.getParameter("flag");
-		if("share".equals(flag)){
+		if ("share".equals(flag)) {
 			try {
-			String param = request.getParameter("inviteCode");
-			LOG.debug("邀约注册参数：" + param);
-			String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
-			JSONObject json = JSONObject.parseObject(jsonparam);
-			String inviteCode = json.getString("inviteCode");
-			String userId = json.getString("userId");
-			String sign = json.getString("sign");
-			String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
-			if(!newsign.equals(sign)){
-				throw new BusinessException("数据签名错误");
-			}
-			request.setAttribute("flag", flag);
-			param = java.net.URLEncoder.encode(param);
-			request.setAttribute("inviteCode", param);
-			} catch(Exception ex){
+				String param = request.getParameter("inviteCode");
+				LOG.debug("邀约注册参数：" + param);
+				String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
+				JSONObject json = JSONObject.parseObject(jsonparam);
+				String inviteCode = json.getString("inviteCode");
+				String userId = json.getString("userId");
+				String sign = json.getString("sign");
+				String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
+				if (!newsign.equals(sign)) {
+					throw new BusinessException("数据签名错误");
+				}
+				request.setAttribute("flag", flag);
+				param = java.net.URLEncoder.encode(param);
+				request.setAttribute("inviteCode", param);
+			} catch (Exception ex) {
 				throw new BusinessException("邀请码错误");
 			}
 		}
@@ -210,7 +210,7 @@ public class UserController {
 
 	@RequestMapping("/submitUserRegister")
 	public ResponseData<String> submitUserRegister(@NotNull(message = "参数为空") String userData,
-			@NotNull(message = "验证码为空") String randomCode,HttpServletRequest request) {
+			@NotNull(message = "验证码为空") String randomCode, HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
 			if (StringUtil.isBlank(userData)) {
@@ -233,10 +233,10 @@ public class UserController {
 			if (!randomCode.equals(code)) {
 				throw new BusinessException("输入的验证码不正确");
 			}
-			
+
 			String flag = request.getParameter("flag");
 			String param = request.getParameter("inviteCode");
-			if("share".equals(flag)) {
+			if ("share".equals(flag)) {
 				// 校验数据
 				String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
 				JSONObject json = JSONObject.parseObject(jsonparam);
@@ -244,13 +244,14 @@ public class UserController {
 				String userId = json.getString("userId");
 				String sign = json.getString("sign");
 				String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
-				if(!newsign.equals(sign)){
+				if (!newsign.equals(sign)) {
 					throw new BusinessException("数据签名错误");
 				}
-				
+
 				// 验证邀请码是否有效
-				UserInviteInfo userInvite = DubboConsumerFactory.getService(IUserSV.class).checkUserInviteCode(inviteCode);
-				if(userInvite == null){
+				UserInviteInfo userInvite = DubboConsumerFactory.getService(IUserSV.class)
+						.checkUserInviteCode(inviteCode);
+				if (userInvite == null) {
 					throw new BusinessException("邀请码已被使用，不能重复使用");
 				}
 				userRegReq.setInviteCode(inviteCode);
@@ -321,7 +322,7 @@ public class UserController {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户标识不存在");
 			}
 			String fileName = WXHelpUtil.uploadUserAuthFileToOSS(mediaId, userId);
-			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
+			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName;
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"上传到OSS成功", fileURL);
 		} catch (Exception e) {
@@ -341,7 +342,7 @@ public class UserController {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户标识不存在");
 			}
 			String fileName = WXHelpUtil.uploadUserHomeBgToOSS(mediaId, userId);
-			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe2";
+			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName;
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"上传到OSS成功", fileURL);
 		} catch (Exception e) {
@@ -361,7 +362,7 @@ public class UserController {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户标识不存在");
 			}
 			String fileName = WXHelpUtil.uploadUserHeadIconToOSS(mediaId, userId);
-			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
+			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName;
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"上传到OSS成功", fileURL);
 		} catch (Exception e) {
@@ -546,7 +547,7 @@ public class UserController {
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
 		String url = WXRequestUtil.getFullURL(request);
 		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
-		
+
 		// 获取邀请码
 		UserInviteReq req = new UserInviteReq();
 		UserInviteInfo userInvite = new UserInviteInfo();
@@ -557,7 +558,7 @@ public class UserController {
 		String code = "";
 		String sign = "";
 		String param = "";
-		if(!CollectionUtil.isEmpty(userInviteList)){
+		if (!CollectionUtil.isEmpty(userInviteList)) {
 			code = userInviteList.get(0).getInviteCode();
 			sign = SignUtil.getUserInviteSign(userInfo.getUserId(), code);
 		}
@@ -568,7 +569,7 @@ public class UserController {
 			json.put("sign", sign);
 			param = Java3DESUtil.encryptThreeDESECB(json.toJSONString());
 			param = java.net.URLEncoder.encode(param);
-		} catch(Exception ex){
+		} catch (Exception ex) {
 			throw new BusinessException("邀请码加密错误");
 		}
 
@@ -592,19 +593,19 @@ public class UserController {
 			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
 		}
 		String userId = "";
-		try{
+		try {
 			String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
 			JSONObject json = JSONObject.parseObject(jsonparam);
 			userId = json.getString("userId");
 			param = java.net.URLEncoder.encode(param);
-		} catch(Exception ex){
+		} catch (Exception ex) {
 			throw new BusinessException("邀请码解密错误");
 		}
-		
+
 		if (StringUtil.isBlank(userId)) {
 			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
 		}
-		
+
 		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByUserId(userId);
 		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 			throw new BusinessException(resp.getResponseHeader().getResultCode(),
@@ -615,7 +616,7 @@ public class UserController {
 		if (userInfo == null) {
 			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
 		}
-		
+
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -1217,11 +1218,11 @@ public class UserController {
 			LOG.error(e.getMessage());
 		}
 		int notifyCount = 0;
-		try{
+		try {
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			notifyCount = HyNotifyUtil.getUnReadNotifyCount(userInfo.getUserId());
-		}catch(Exception ex){
-			
+		} catch (Exception ex) {
+
 		}
 		return "data:" + notifyCount + "\n\n";
 	}
@@ -1404,9 +1405,10 @@ public class UserController {
 		}
 		return responseData;
 	}
-	
+
 	/**
 	 * 更新邀请码状态为正在使用
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -1418,9 +1420,9 @@ public class UserController {
 			String inviteCode = request.getParameter("inviteCode");
 			String sign = request.getParameter("sign");
 			String userId = request.getParameter("userId");
-			
+
 			String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
-			if(!newsign.equals(sign)){
+			if (!newsign.equals(sign)) {
 				throw new BusinessException("签名校验错误");
 			}
 			UserInviteReq req = new UserInviteReq();

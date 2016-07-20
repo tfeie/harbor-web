@@ -678,7 +678,7 @@ public class GoController {
 				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户标识不存在");
 			}
 			String fileName = WXHelpUtil.uploadGoImgToOSS(mediaId, userId);
-			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName + "@!pipe1";
+			String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName;
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"上传到OSS成功", fileURL);
 		} catch (Exception e) {
