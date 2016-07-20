@@ -53,17 +53,8 @@ public class WXAuthFilter extends OncePerRequestFilter {
 			// 判断会话中，是否有已经获取的openId
 			if (request.getSession().getAttribute(WXConstants.SESSION_WX_WEB_AUTH) == null) {
 				/* 1.如果会话中没有OPEN_ID，则需要进行授权认证 */
-				LOG.info("当前请求会话中没有已经认证过的信息，进行微信网页授权认证");
-				String fullUrl = WXRequestUtil.getFullURL(request);
-				String redirectURL = "";
-				int index = fullUrl.indexOf("?");
-				if(index != -1){
-					String beforUrl = fullUrl.substring(0, index);
-					String param = uri.substring(index+1);
-					redirectURL = URLEncoder.encode(beforUrl, "utf-8");
-				} else {
-					redirectURL = URLEncoder.encode(fullUrl, "utf-8");;
-				}
+				LOG.info("当前请求会话中没有已经认证过的信息，进行微信网页授权认证:" + WXRequestUtil.getFullURL(request));				
+				String redirectURL = URLEncoder.encode(WXRequestUtil.getFullURL(request), "utf-8");
 				String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid="
 						+ GlobalSettings.getWeiXinAppId()
 						+ "&response_type=code&scope=snsapi_userinfo&state=haigui&redirect_uri=" + redirectURL
