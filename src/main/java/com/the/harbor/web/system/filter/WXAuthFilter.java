@@ -49,11 +49,11 @@ public class WXAuthFilter extends OncePerRequestFilter {
 		//initSession(request);
 
 		if (doFilter) {
-			LOG.debug("当前地址在需要认证的地址列表中，需要进行认证。开始判断session是否有会话信息");
+			LOG.info("当前地址在需要认证的地址列表中，需要进行认证。开始判断session是否有会话信息");
 			// 判断会话中，是否有已经获取的openId
 			if (request.getSession().getAttribute(WXConstants.SESSION_WX_WEB_AUTH) == null) {
 				/* 1.如果会话中没有OPEN_ID，则需要进行授权认证 */
-				LOG.debug("当前请求会话中没有已经认证过的信息，进行微信网页授权认证");
+				LOG.info("当前请求会话中没有已经认证过的信息，进行微信网页授权认证");
 				String redirectURL = URLEncoder.encode(WXRequestUtil.getFullURL(request), "utf-8");
 				String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid="
 						+ GlobalSettings.getWeiXinAppId()
@@ -63,19 +63,19 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				String code = request.getParameter("code");
 				/* 2.根据是否有网页授权码来处理 */
 				if (StringUtil.isBlank(code)) {
-					LOG.debug("没有从请求地址中获取授权CODE，执行重定向授权");
+					LOG.info("没有从请求地址中获取授权CODE，执行重定向授权");
 					/* 2.1 如果没有传入网页授权CODE，则表示没有经过网页授权，需要跳转到授权页面 */
 					response.sendRedirect(authorURL);
 					return;
 				} else {
-					LOG.debug("根据传入的CODE=" + code + "获取access_token和openId");
+					LOG.info("根据传入的CODE=" + code + "获取access_token和openId");
 					/*
 					 * 2.2 如果传入了code，则根据code获取特殊的网页授权access_code。如果不能获取，
 					 * 则表示CODE不正确或者已经过期
 					 */
 					WeixinOauth2Token wtoken = WXRequestUtil.refreshAccessToken(code);
 					if (wtoken == null) {
-						LOG.debug("根据传入的CODE=" + code + "没有获取access_token和openId，执行重定向授权");
+						LOG.info("根据传入的CODE=" + code + "没有获取access_token和openId，执行重定向授权");
 						response.sendRedirect(authorURL);
 						return;
 					}
