@@ -518,7 +518,7 @@ wx.config({
 					<p> {{:detail}} </p>
 				{{/if}}
 				{{if type=="image"}}
-					<img src="{{:imageUrl}}" width="100%">
+					<img src="{{:imgThumbnailUrl}}" width="100%">
 				{{/if}}
 				{{if #index==0}}
 					<div class="bq clearfix">
