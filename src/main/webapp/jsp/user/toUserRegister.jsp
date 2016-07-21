@@ -48,9 +48,7 @@
 			<span><i class="on" id="I_SEX_1"><input type="hidden"
 					value="1" /><img src="//static.tfeie.com/images/boy.png" /></i></span> <span><i
 				id="I_SEX_2"><input type="hidden" value="2" /><img
-					src="//static.tfeie.com/images/girl.png" /></i></span> <span><i
-				id="I_SEX_0"><input type="hidden" value="0" /><img
-					src="//static.tfeie.com/images/other.png" /></i></span>
+					src="//static.tfeie.com/images/girl.png" /></i></span>
 		</div>
 		<div class="div_input">
 			<div class="item">

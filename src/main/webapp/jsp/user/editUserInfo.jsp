@@ -1020,9 +1020,6 @@
 		<span sex="2" class="{{if sex==2}}on{{/if}}">
 			<img src="//static.tfeie.com/images/girl.png" />
 		</span>
-		<span class="in {{if sex==0}}on{{/if}}" sex="0">
-			<img src="//static.tfeie.com/images/other.png" />
-		</span>
 	</p>
 	</script>
 	

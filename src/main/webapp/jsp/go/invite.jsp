@@ -99,7 +99,7 @@
 		</section>
 		<section class="yanbaoming">
 			<section class="sec_btn2 fabu" style="display:none" id="SEL_SHOW_RESULT">
-				<input type="button" value="报名成功，进入群聊">
+				<input type="button" value="报名成功，等待审核">
 			</section>
 			<section class="yaoy">
 				<p>
