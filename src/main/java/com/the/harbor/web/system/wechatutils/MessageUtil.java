@@ -1,6 +1,7 @@
 package com.the.harbor.web.system.wechatutils;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
@@ -37,15 +38,6 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 public class MessageUtil {
 	
     private static Log log = LogFactory.getLog(MessageUtil.class);
-
-    
-	/**
-	 * 绑定账户类型
-	 */
-	public static final String BIND_ACC_TYPE_WECHAT = "WECHAT";// 微信绑定
-	
-	/** 微信广告类 菜单前缀*/
-	public static final String WX_AD_MENU_PERFIX = "AD_M_";
 	
 	/**
 	 * @ClassName: RequestMsgType
@@ -125,67 +117,6 @@ public class MessageUtil {
 		public static final String EVENT_TYPE_VIEW = "VIEW";
 	}
 
-	/**
-	 * @ClassName: EventKey
-	 * @Description: 事件KEY值定义
-	 * */
-	public class EventKey {
-		/** 账单查询 */
-		public static final String MVNE_ACCOUNT_SEARCH = "MVNE_ACCOUNT_SEARCH";
-
-		/** 账户余额查询 */
-		public static final String MVNE_USER_BALANCE_SEARCH = "MVNE_USER_BALANCE_SEARCH";
-
-		/** 使用量查询 */
-		public static final String MVNE_USAGE_REST_QUERY = "MVNE_USAGE_REST_QUERY";
-
-		/** 产品订购查询 */
-		public static final String MVNE_PRODUCT_ORDER_QUERY = "MVNE_PRODUCT_ORDER_QUERY";
-		
-		/** 产品订购与退订 */
-		public static final String MVNE_PRODUCT_ORDER_UNSUBSCRIBE = "MVNE_PRODUCT_ORDER_UNSUBSCRIBE";
-
-		/** 修改服务密码 */
-		public static final String MVNE_CHANGE_SERVICE_PWD = "MVNE_CHANGE_SERVICE_PWD";
-
-		/** 充值缴费 */
-		public static final String MVNE_RECHARGE = "MVNE_RECHARGE";
-
-		/**  */
-		public static final String MVNE_COMBO_MARGIN_SEARCH = "MVNE_COMBO_MARGIN_SEARCH";
-
-		/** 余量查询 */
-		public static final String MVNE_RESOURCE_BALANCE_SEARCH = "MVNE_RESOURCE_BALANCE_SEARCH";
-
-		/** 虚商简介 */
-		public static final String MVNE_INTRODUCTION = "MVNE_INTRODUCTION";
-		
-		/** 其他信息1 */
-		public static final String MVNE_OTHER_INFO_1 = "MVNE_OTHER_INFO_1";
-		
-		/** 其他信息2 */
-		public static final String MVNE_OTHER_INFO_2 = "MVNE_OTHER_INFO_2";
-		
-		/** 其他信息3 */
-		public static final String MVNE_OTHER_INFO_3 = "MVNE_OTHER_INFO_3";
-	}
-	
-	public class AdMenuKey
-	{
-	    /** 中间菜单定义*/
-        public static final String AD_M_MID_1 = "AD_M_MID_1";
-        public static final String AD_M_MID_2 = "AD_M_MID_2";
-        public static final String AD_M_MID_3 = "AD_M_MID_3";
-        public static final String AD_M_MID_4 = "AD_M_MID_4";
-        public static final String AD_M_MID_5 = "AD_M_MID_5";
-	   
-	    /** 右侧菜单定义*/
-        public static final String AD_M_RIT_1 = "AD_M_RIT_1";
-        public static final String AD_M_RIT_2 = "AD_M_RIT_2";
-        public static final String AD_M_RIT_3 = "AD_M_RIT_3";
-        public static final String AD_M_RIT_4 = "AD_M_RIT_4";
-        public static final String AD_M_RIT_5 = "AD_M_RIT_5";
-	}
 
 	/**
 	 * 解析微信发来的请求（XML）
@@ -351,19 +282,14 @@ public class MessageUtil {
 		}
 	});
 	
-    /*// 将配置中心的json转换成对应的消息
+    // 将配置中心的json转换成对应的消息
     public static String getConfigMsg(String cfjson, String eventKey, String fromUserName, String toUserName) {
         // 从配置中心读取该菜单 配置的返回消息
         // step 1.从配置中心读取配置 生成消息Map<String,BaseMessage>
-        String menuConfig = UniConfig.getValue(cfjson, eventKey);
-        if (StringUtil.isBlank(menuConfig)) {
-            throw new BusinessException("无法找到"+cfjson+"的配置:"+eventKey);
-        }
-        JSONObject json = new JSONObject(menuConfig);
-        String type = json.get("MsgType").toString();
-        if (type.equals(MessageUtil.ResponseMsgType.RESP_MESSAGE_TYPE_TEXT)) {// 将配置解析为文本消息
+    	String type = "text";
+        if (type.equals(MessageUtil.ResponseMsgType.RESP_MESSAGE_TYPE_TEXT)) {
             TextMessage textMessage = new TextMessage(fromUserName, toUserName);
-            String content = json.optString("Content", "");
+            String content = "自动回复测试";
             try {
                 content = new String(content.getBytes("ISO8859_1"), "UTF-8");
             } catch (UnsupportedEncodingException e) {
@@ -371,47 +297,18 @@ public class MessageUtil {
             }
             textMessage.setContent(content);
             return MessageUtil.textMessageToXml(textMessage);
-        } else if (type.equals(MessageUtil.ResponseMsgType.RESP_MESSAGE_TYPE_NEWS)) {// 将配置解析为新闻消息
-            NewsMessage newsMessage = new NewsMessage(fromUserName, toUserName);
-            int articleCount = json.optInt("ArticleCount", 0);
-            newsMessage.setArticleCount(articleCount);
-            JSONArray articleJArray = json.optJSONArray("Articles");
-            List<Article> articles = new ArrayList<Article>();
-            for (int i = 0; articleJArray != null && i < articleJArray.length(); i++) {
-                JSONObject articlejson = articleJArray.getJSONObject(i);
-                Article article = new Article();
-                String title = articlejson.optString("Title", "");
-                String desc = articlejson.optString("Description", "");
-                try {
-                    title = new String(title.getBytes("ISO8859_1"), "UTF-8");
-                    desc = new String(desc.getBytes("ISO8859_1"), "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    title = "";
-                    desc = "";
-                }
-                article.setTitle(title);
-                article.setDescription(desc);
-                article.setPicUrl(articlejson.optString("PicUrl", ""));
-                article.setUrl(articlejson.optString("Url", ""));
-                articles.add(article);
-            }
-            newsMessage.setArticles(articles);
-            return MessageUtil.newsMessageToXml(newsMessage);
-        } else if (type.equals(MessageUtil.ResponseMsgType.RESP_MESSAGE_TYPE_IMAGE)) {// 将配置解析为 图片消息
-            ImageMessage imageMessage = new ImageMessage(fromUserName, toUserName);
-            String mediaId = json.optString("MediaId", "");
-            Media media = new Media(mediaId);
-            imageMessage.setImage(media);
-            ;
-            return MessageUtil.imageMessageToXml(imageMessage);
-        } else if (type.equals(MessageUtil.ResponseMsgType.RESP_MESSAGE_TYPE_VOICE)) {// 将配置解析为语音消息
-            VoiceMessage voiceMessage = new VoiceMessage(fromUserName, toUserName);
-            String mediaId = json.optString("MediaId", "");
-            Media media = new Media(mediaId);
-            voiceMessage.setVoice(media);
-            return MessageUtil.voiceMessageToXml(voiceMessage);
-        } else {// 其他类型消息处理
+        } else if (type.equals(MessageUtil.ResponseMsgType.RESP_MESSAGE_TYPE_NEWS)) {
+        	// 将配置解析为新闻消息
+        	return "";
+        } else if (type.equals(MessageUtil.ResponseMsgType.RESP_MESSAGE_TYPE_IMAGE)) {
+        	// 将配置解析为 图片消息
+        	return "";
+        } else if (type.equals(MessageUtil.ResponseMsgType.RESP_MESSAGE_TYPE_VOICE)) {
+        	// 将配置解析为语音消息
+        	return "";
+        } else {
+        	// 其他类型消息处理
             return "";
         }
-    }*/
+    }
 }

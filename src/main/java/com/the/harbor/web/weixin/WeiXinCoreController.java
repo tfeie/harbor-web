@@ -130,7 +130,7 @@ public class WeiXinCoreController {
         }else {// 其他类型消息统一从这里回复 有业务之后再拆分
         	if (MessageUtil.RequestMsgType.REQ_MESSAGE_TYPE_TEXT.equals(requestObject.getMsgType())){
         		log.info("++++++++++++++自动回复开始fromUserName:"+requestObject.getFromUserName()+"toUserName:"+requestObject.getToUserName()+"content:"+requestObject.getContent());
-            	
+        		respMessage = MessageUtil.getConfigMsg("", "", requestObject.getToUserName(), requestObject.getFromUserName());
             	log.info("++++++++++++++自动回复结束:"+respMessage);
             }
         	if (StringUtil.isBlank(respMessage)){
