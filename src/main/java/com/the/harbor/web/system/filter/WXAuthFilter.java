@@ -57,7 +57,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				String redirectURL = URLEncoder.encode(WXRequestUtil.getFullURL(request), "utf-8");
 				String authorURL = GlobalSettings.getWeiXinConnectAuthorizeAPI() + "?appid="
 						+ GlobalSettings.getWeiXinAppId()
-						+ "&response_type=code&scope=snsapi_userinfo&state=haigui&redirect_uri=" + redirectURL
+						+ "&response_type=code&scope=snsapi_base&state=haigui&redirect_uri=" + redirectURL
 						+ "#wechat_redirect";
 				/* 1.获取地址中传递的微信用户网页授权CODE */
 				String code = request.getParameter("code");
