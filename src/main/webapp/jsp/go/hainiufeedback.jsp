@@ -82,7 +82,7 @@
 			<section class="yes_no">
 				<p>TA说您对他有帮助吗？</p>
 				<p>
-					有帮助
+					<c:out value="${goOrder.helpValueName}" escapeXml="false" />
 				</p>
 			</section>
 			<div class="clear"></div>
@@ -99,7 +99,7 @@
 			</section>
 			<section class="yes_no num">
 				<p>
-					10个
+					<c:out value="${goOrder.giveHb}" escapeXml="false" />个
 				</p>
 			</section>
 			<div class="clear"></div>
