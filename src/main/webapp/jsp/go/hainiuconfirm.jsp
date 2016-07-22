@@ -129,7 +129,7 @@
 							content: "处理成功",
 							ok: function(){
 								weUI.closeAlert();
-								window.location.href="../go/oneononeindex.html";
+								window.location.href="../go/goindex.html";
 							}
 						}); 
 					},
