@@ -146,17 +146,13 @@ wx.config({
 						    	weUI.alert({
 									content: "支付成功，请等待海牛确认.您可以浏览下其它活动",
 									ok: function(){
-										window.location.href="../go/oneononeindex.html";
+										window.location.href="../go/goindex.html";
 									}
 								})
 						    },
 						    fail: function(res){
 						    	weUI.alert({
-									content: "活动支付失败",
-									ok: function(){
-										 _this.updateGoOrderStatus(d.payOrderId,"FAIL");
-										 weUI.closeAlert();
-									}
+									content: "活动支付失败"
 								})
 						    }, 
 						    cancel: function(res){
