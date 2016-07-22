@@ -125,8 +125,6 @@ wx.config({
 					price: _this.getPropertyValue("price"),	
 					nonceStr: _this.getPropertyValue("nonceStr"),	
 					timeStamp: _this.getPropertyValue("timeStamp"),	
-					openId: _this.getPropertyValue("openId"),	
-					userId: _this.getPropertyValue("userId"),	
 					goId: _this.getPropertyValue("goId"),	
 					goOrderId: _this.getPropertyValue("goOrderId")
 				};
@@ -209,11 +207,9 @@ wx.config({
 
 $(document).ready(function(){
 	var p = new $.GoPayPage({
-		userId: "<c:out value="${userInfo.userId}"/>",
 		price:  "<c:out value="${price}"/>",
 		nonceStr:  "<c:out value="${nonceStr}"/>",
 		timeStamp:  "<c:out value="${timestamp}"/>",
-		openId:  "<c:out value="${openId}"/>",
 		goId:  "<c:out value="${goId}"/>",
 		orderStatus:  "<c:out value="${orderStatus}"/>",
 		goOrderId:  "<c:out value="${goOrderId}"/>"

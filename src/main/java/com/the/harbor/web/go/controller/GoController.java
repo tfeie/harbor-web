@@ -338,7 +338,7 @@ public class GoController {
 	public ModelAndView toPay(HttpServletRequest request) {
 		String goOrderId = request.getParameter("goOrderId");
 		if (StringUtil.isBlank(goOrderId)) {
-			throw new BusinessException("支付失败:您需要同时指定活动信息和活动预约单信息");
+			throw new BusinessException("支付失败:活动预约单号为空");
 		}
 		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		// 校验当前用户对于此活动的状态来执行处理
@@ -657,10 +657,9 @@ public class GoController {
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"提交成功", "");
 			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"提交成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -700,10 +699,9 @@ public class GoController {
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"提交成功", rep.getOrderId());
 			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"提交成功", rep.getOrderId());
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -713,17 +711,18 @@ public class GoController {
 
 	@RequestMapping("/updateGoOrderPay")
 	@ResponseBody
-	public ResponseData<String> updateGoOrderPay(@NotNull(message = "参数为空") UpdateGoOrderPayReq updateGoOrderPayReq) {
+	public ResponseData<String> updateGoOrderPay(@NotNull(message = "参数为空") UpdateGoOrderPayReq updateGoOrderPayReq,
+			HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
+			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			Response rep = DubboConsumerFactory.getService(IGoSV.class).updateGoOrderPay(updateGoOrderPayReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"提交成功", "");
 			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"提交成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -739,22 +738,15 @@ public class GoController {
 			String price = request.getParameter("price");
 			String nonceStr = request.getParameter("nonceStr");
 			String timeStamp = request.getParameter("timeStamp");
-			String openId = request.getParameter("openId");
-			String userId = request.getParameter("userId");
 			String goId = request.getParameter("goId");
 			String goOrderId = request.getParameter("goOrderId");
-			if (StringUtil.isBlank(openId)) {
-				throw new BusinessException("USER-100001", "生成支付流水失败:没有微信绑定信息");
-			}
-			if (StringUtil.isBlank(userId)) {
-				throw new BusinessException("USER-100001", "生成支付流水失败:用户标识不存在");
-			}
 			if (StringUtil.isBlank(goId)) {
 				throw new BusinessException("GO-100001", "生成支付流水失败:活动标识不存在");
 			}
 			if (StringUtil.isBlank(goOrderId)) {
 				throw new BusinessException("GO-100001", "生成支付流水失败:活动预约流水不存在");
 			}
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			String summary = "One on One活动预约支付";
 			// 调用服务生成支付流水
 			CreateGoPaymentOrderReq createGoPaymentOrderReq = new CreateGoPaymentOrderReq();
@@ -762,7 +754,7 @@ public class GoController {
 			createGoPaymentOrderReq.setPayAmount(Long.parseLong(AmountUtils.changeY2F(price)));
 			createGoPaymentOrderReq.setPayType(PayType.WEIXIN.getValue());
 			createGoPaymentOrderReq.setSummary(summary);
-			createGoPaymentOrderReq.setUserId(userId);
+			createGoPaymentOrderReq.setUserId(userInfo.getUserId());
 			createGoPaymentOrderReq.setGoOrderId(goOrderId);
 			CreateGoPaymentOrderResp resp = DubboConsumerFactory.getService(IGoSV.class)
 					.createGoPaymentOrder(createGoPaymentOrderReq);
@@ -774,7 +766,7 @@ public class GoController {
 			String payOrderId = resp.getPayOrderId();
 			String host = "192.168.1.1";
 			String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId,
-					Integer.parseInt(AmountUtils.changeY2F(price)), host, openId,
+					Integer.parseInt(AmountUtils.changeY2F(price)), host, userInfo.getWxOpenid(),
 					GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
 			String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
 
@@ -877,10 +869,9 @@ public class GoController {
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS,
-						ExceptCodeConstants.SUCCESS, "查询成功", rep.getPagInfo());
 			}
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"查询成功", rep.getPagInfo());
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
@@ -935,10 +926,9 @@ public class GoController {
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS,
-						ExceptCodeConstants.SUCCESS, "查询成功", rep.getPagInfo());
 			}
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"查询成功", rep.getPagInfo());
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
@@ -1021,10 +1011,9 @@ public class GoController {
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"提交成功");
 			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"提交成功");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -1044,10 +1033,9 @@ public class GoController {
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"提交成功");
 			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"提交成功");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -1097,23 +1085,6 @@ public class GoController {
 			if (StringUtil.isBlank(doGoComment.getGoId())) {
 				throw new BusinessException("GO标识为空");
 			}
-			// 判断是否参加了活动
-			/**
-			 * CheckUserOrderGoReq checkUserOrderGoReq = new
-			 * CheckUserOrderGoReq();
-			 * checkUserOrderGoReq.setGoId(doGoComment.getGoId());
-			 * checkUserOrderGoReq.setGoOrderId(doGoComment.getOrderId());
-			 * checkUserOrderGoReq.setUserId(userInfo.getUserId());
-			 * 
-			 * CheckUserOrderGoResp resp =
-			 * DubboConsumerFactory.getService(IGoSV.class)
-			 * .checkUserOrderGo(checkUserOrderGoReq); if
-			 * (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().
-			 * getResultCode())) { throw new
-			 * BusinessException(resp.getResponseHeader().getResultMessage()); }
-			 * if (!resp.isCheckflag()) { throw new
-			 * BusinessException("您没有参与此活动，不能评价哦~"); }
-			 **/
 			/* 2.组织消息 */
 			doGoComment.setCommentId(UUIDUtil.genId32());
 			doGoComment.setPublishUserId(userInfo.getUserId());
@@ -1259,10 +1230,9 @@ public class GoController {
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"处理成功", "");
 			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"处理成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -1435,10 +1405,9 @@ public class GoController {
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS,
-						ExceptCodeConstants.SUCCESS, "查询成功", rep.getPagInfo());
 			}
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"查询成功", rep.getPagInfo());
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
