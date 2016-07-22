@@ -93,7 +93,7 @@ public class WeiXinCoreController {
         // response.setCharacterEncoding("UTF-8");
         String respMessage = "";
         MenuClickRequest requestObject = MessageUtil.parseObject(request);
-        log.info("微信请求参数：" + JSONObject.toJSONString(requestObject));
+        log.info("微信请求参数： " + JSONObject.toJSONString(requestObject));
         if (requestObject == null) {
             log.error("请求异常,未能得到请求参数.");
             return;
