@@ -580,6 +580,8 @@ public class UserController {
 				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?inviteCode=" + param);
 		request.setAttribute("userInfo", userInfo);
 		request.setAttribute("inviteCode", param);
+		request.setAttribute("initcode", code);
+
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}
@@ -596,6 +598,7 @@ public class UserController {
 			String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
 			JSONObject json = JSONObject.parseObject(jsonparam);
 			userId = json.getString("userId");
+			request.setAttribute("initcode", json.getString("code"));
 			param = java.net.URLEncoder.encode(param);
 		} catch(Exception ex){
 			throw new BusinessException("邀请码解密错误");
@@ -1436,6 +1439,48 @@ public class UserController {
 				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 						"分享成功", "1");
 			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+	
+	@RequestMapping("/toUserInviteCode.html")
+	public ModelAndView toUserInviteCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView view = new ModelAndView("user/userInviteCode");
+		return view;
+	}
+	
+	@RequestMapping("/checkUserInviteCode")
+	@ResponseBody
+	public ResponseData<String> checkUserInviteCode(HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			String param = request.getParameter("inviteCode");
+			if (StringUtil.isBlank(param)) {
+				throw new BusinessException("邀请码为空");
+			}
+			UserInviteReq req = new UserInviteReq();
+			UserInviteInfo userInvite = new UserInviteInfo();
+			userInvite.setStatus(UserInviteStatus.INVITE_VALID.getValue());
+			userInvite.setInviteCode(param);
+			req.setUserInviteInfo(userInvite);
+			List<UserInviteInfo> rep = DubboConsumerFactory.getService(IUserSV.class).queryUserInvite(req);
+			if(CollectionUtil.isEmpty(rep)) {
+				throw new BusinessException("邀请码不正确或已失效");
+			}
+			
+			String sign = SignUtil.getUserInviteSign("", param);
+			JSONObject json = new JSONObject();
+			json.put("userId", "");
+			json.put("inviteCode", param);
+			json.put("sign", sign);
+			String descparam = Java3DESUtil.encryptThreeDESECB(json.toJSONString());
+			descparam = java.net.URLEncoder.encode(descparam);
+			
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"邀请码校验成功", descparam);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);

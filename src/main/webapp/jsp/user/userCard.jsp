@@ -156,6 +156,7 @@
 						});	
 						wx.onMenuShareAppMessage({
 						    title: _this.getPropertyValue("enName")+"在海归海湾的名片",
+						    desc: "邀请码：" + _this.getPropertyValue("initcode"),
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
@@ -176,7 +177,8 @@
 					 });
 					 
 					 $("#BTN_ACCEPT").bind("click",function(){
-						 window.location.href="../user/toUserRegister.html?flag=share&inviteCode=" + _this.getPropertyValue("inviteCode");
+						 window.location.href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzAxMjg3NDQ0Ng==&scene=110#wechat_redirect";
+						// window.location.href="../user/toUserRegister.html?flag=share&inviteCode=" + _this.getPropertyValue("inviteCode");
 					 });
 				},
 				
@@ -227,6 +229,7 @@
 			enName: "<c:out value="${userInfo.enName}"/>",
 			shareImg: "<c:out value="${userInfo.wxHeadimg}"/>",
 			url: "<c:out value="${url}"/>",
+			initcode:"<c:out value="${initcode}"/>",
 			inviteCode:"<c:out value="${inviteCode}"/>"
 		});
 		p.init();
