@@ -128,7 +128,10 @@ wx.config({
 							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 							    paySign: d.paySign, // 支付签名
 							    success: function (res) {
-							        _this.rechargeHaibei(count,d.payOrderId);
+							    	weUI.alert({content:"您成功购买"+count+"个海贝，一会将充入您的账户~",ok: function(){
+										window.location.href="../user/userWealth.html";
+										weUI.closeAlert();
+									}});
 							    },
 							    fail: function(res){
 							    	weUI.alert({content:"支付失败"});
@@ -142,30 +145,6 @@ wx.config({
 							weUI.alert({content:transport.statusInfo});
 						}
 					});
-				},
-				
-				rechargeHaibei : function(count,payOrderId) {
-					var _this = this;
-					ajaxController.ajax({
-						url : "../user/rechargeHaibei",
-						type : "post",
-						data: {
-							count: count,
-							payOrderId: payOrderId
-						},
-						success : function(transport) {
-							var d = transport.data;  
-							weUI.alert({content:"您成功购买"+count+"个海贝",ok: function(){
-								window.location.href="../user/userWealth.html";
-								weUI.closeAlert();
-							}});
-						},
-						failure : function(transport) {
-							weUI.alert({content:transport.statusInfo});
-						}
-
-					});
-
 				},
 				
 				getHaibeiCanBuy : function() {
