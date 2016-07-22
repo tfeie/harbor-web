@@ -26,6 +26,7 @@ import com.the.harbor.api.go.param.CreateGoPaymentOrderResp;
 import com.the.harbor.api.go.param.DoGoComment;
 import com.the.harbor.api.go.param.DoGoFavorite;
 import com.the.harbor.api.go.param.DoGoJoinConfirm;
+import com.the.harbor.api.go.param.GiveHBReq;
 import com.the.harbor.api.go.param.Go;
 import com.the.harbor.api.go.param.GoComment;
 import com.the.harbor.api.go.param.GoCreateReq;
@@ -1436,4 +1437,24 @@ public class GoController {
 		return responseData;
 	}
 
+	@RequestMapping("/giveHaibei")
+	@ResponseBody
+	public ResponseData<String> giveHaibei(@NotNull(message = "参数为空") GiveHBReq giveHBReq, HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			UserViewInfo user = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			giveHBReq.setUserId(user.getUserId());
+			Response rep = DubboConsumerFactory.getService(IGoSV.class).giveHaibei(giveHBReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
 }

@@ -82,7 +82,7 @@
 			<section class="yes_no">
 				<p>TA 对您有帮助吗？</p>
 				<p>
-					<span class="on">有帮助</span><span>不知道</span>
+					<span name="SPAN_HELP_VALUE" value="10">有帮助</span><span name="SPAN_HELP_VALUE" value="20">不知道</span>
 				</p>
 			</section>
 			<div class="clear"></div>
@@ -99,7 +99,7 @@
 			</section>
 			<section class="yes_no num">
 				<p>
-					<span class="on">10</span><span>50</span><span>100</span><span>0</span>
+					<span name="SPAN_GIVEHB" value="10">10</span><span name="SPAN_GIVEHB" value="50">50</span><span name="SPAN_GIVEHB" value="100">100</span><span name="SPAN_GIVEHB" value="0">0</span>
 				</p>
 			</section>
 			<div class="clear"></div>
@@ -174,8 +174,88 @@
 						$("#parentUserId").val(userId);
 						$("#COMMENT_CONTENT").attr("placeholder","回复 "+enName+":").focus
 					});
+					
+					//评价有无帮助
+					$("[name='SPAN_HELP_VALUE']").on("click",function(){
+						$("[name='SPAN_HELP_VALUE']").removeClass("on");
+						$(this).addClass("on");
+						var helpValue=$(this).attr("value");
+						_this.submitGoHelp(helpValue);
+					});
+					
+					//打赏海贝
+					$("[name='SPAN_GIVEHB']").on("click", function(){
+						$("[name='SPAN_HELP_VALUE']").removeClass("on");
+						$(this).addClass("on");
+						var count=$(this).attr("value");
+						if(count==0){
+							return false;
+						}
+						weUI.confirm({
+							content: "确定要打赏"+count+"个海贝吗?",
+							ok: function(){
+								_this.giveHaibei(count);
+								weUI.closeConfirm();
+							}
+						})
+					});
 
 				},
+				
+				giveHaibei: function(count){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../go/giveHaibei",
+						type: "post", 
+						data: { 
+							goOrderId: _this.getPropertyValue("goOrderId")，
+							count: count,
+							goType:_this.getPropertyValue("goType")
+						},
+						success: function(transport){
+							
+						},
+						failure: function(transport){
+							var busiCode = transport.busiCode;
+							var statusInfo = transport.statusInfo;
+							if(busiCode=="user_unregister"){
+								weUI.confirm({content:"您还没有注册,是否先注册后再打赏~",ok: function(){
+									window.location.href="../user/toUserRegister.html";
+								}});
+							}else if(busiCode=="haibei_not_enough"){
+								weUI.confirm({content:"您的海贝余额不足啦，是否先进行充值后再打赏~",ok: function(){
+									window.location.href="../user/buyhaibei.html";
+								}});
+							}else if(busiCode=="user_unauthoried"){
+								weUI.confirm({content:"您还没有经过认证，暂时不能打赏，是否去认证~",ok: function(){
+									window.location.href="../user/toApplyCertficate.html";
+								}});
+							}else{
+								weUI.alert({content:statusInfo});
+							}
+						}
+					});
+				},
+				
+				submitGoHelp: function(helpValue){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../go/submitGoHelp",
+						type: "post", 
+						data: { 
+							goOrderId: _this.getPropertyValue("goOrderId")，
+							helpValue: helpValue,
+							goType:_this.getPropertyValue("goType")
+						},
+						success: function(transport){
+							
+						},
+						failure: function(transport){
+							weUI.alert({content:"点评失败,请重试..."});
+							return ;
+						}
+					});
+				}，
 				
 				getComments: function(){
 					var _this = this;
@@ -279,6 +359,7 @@
 	$(document).ready(function() {
 		var p = new $.GoXiaoBaiFeedBackPage({
 			goId : "<c:out value="${goOrder.goId}"/>",
+			goType : "<c:out value="${goOrder.goType}"/>",
 			goOrderId : "<c:out value="${goOrder.orderId}"/>"
 
 		});
