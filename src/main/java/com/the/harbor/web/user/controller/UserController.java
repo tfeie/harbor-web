@@ -238,6 +238,7 @@ public class UserController {
 			String param = request.getParameter("inviteCode");
 			if("share".equals(flag)) {
 				// 校验数据
+				param = java.net.URLDecoder.decode("param");
 				String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
 				JSONObject json = JSONObject.parseObject(jsonparam);
 				String inviteCode = json.getString("inviteCode");
