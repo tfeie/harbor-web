@@ -12,7 +12,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>名片</title> 
+<title>名片</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
