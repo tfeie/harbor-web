@@ -24,6 +24,9 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script> 
 <style>
+         #bg{ display: block;  position: absolute;  top: 0%;  left: 0%;  width: 100%;  height: 100%;  background-color: black;  z-index:1001;  -moz-opacity: 0.7;  opacity:.70;  filter: alpha(opacity=70);}
+
+
 #shareit {
 	-webkit-user-select: none;
 	display: block;
@@ -138,19 +141,20 @@
 						_this.doDianzan(beId);
 					});
 					
-					$("#imgbaner").delegate("[id='guideit']","click",function(){
+					$("#imgbaner").delegate("[id='bg']","click",function(){
 						$(this).hide();
 						var flag = 0;
-						$("#guideit").each(function(){
+						$("#bg").each(function(){
 							if($(this).is(":visible")){
 								flag = 1;
 							}
 						});
 						if(flag == 0) {
-							$(".footer").show();
+							/* $(".footer").show();
 							$(".sec_list").show();
 							$(".banner").show();
-							$(".sec_menu").show();
+							$(".sec_menu").show(); */
+							$(".sec_list").show();
 						}
 					});
 					
@@ -183,11 +187,11 @@
 					this.currentTagId="-1";
 					this.queryBes("-1","",1);
 					this.initGuide();
-					
-				 	$(".sec_list").hide();
+					 $(".sec_list").hide();
+				 	/* $(".sec_list").hide();
 					$(".banner").hide();
 					$(".sec_menu").hide();
-					$(".footer").hide();
+					$(".footer").hide(); */
 				}, 
 				
 				initGuide:function(){
@@ -470,10 +474,15 @@
 
 </script>
 <script id="guideImpl" type="text/x-jsrender"> 
-<div id="guideit">
-	  <a href="#" id="follow">
-	     <img class="arrow" src="{{:url}}">
-	  </a>
-	</div>
+{{if #index == '2'}}
+	<div id="bg" >
+          <img class="arrow" src="{{:url}}">
+        </div>
+{{else}}
+	<div id="bg" style="display:none">
+          <img  class="arrow" src="{{:url}}">
+        </div>
+{{/if}}
+	
 </script>
 </html>
