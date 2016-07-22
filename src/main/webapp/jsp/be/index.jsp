@@ -147,7 +147,7 @@
 							}
 						});
 						if(flag == 0) {
-							//$(".title").show();
+							$(".footer").show();
 							$(".sec_list").show();
 							$(".banner").show();
 							$(".sec_menu").show();
@@ -187,7 +187,7 @@
 				 	$(".sec_list").hide();
 					$(".banner").hide();
 					$(".sec_menu").hide();
-					//$(".title").hide();
+					$(".footer").hide();
 				}, 
 				
 				initGuide:function(){
