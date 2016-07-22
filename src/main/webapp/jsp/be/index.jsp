@@ -188,7 +188,6 @@
 					$(".banner").hide();
 					$(".sec_menu").hide();
 					//$(".title").hide();
-
 				}, 
 				
 				initGuide:function(){
