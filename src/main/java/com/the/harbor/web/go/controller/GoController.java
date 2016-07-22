@@ -752,7 +752,7 @@ public class GoController {
 			String summary = "One on One活动预约支付";
 			// 调用服务生成支付流水
 			CreateGoPaymentOrderReq createGoPaymentOrderReq = new CreateGoPaymentOrderReq();
-			createGoPaymentOrderReq.setBusiType(BusiType.PAY_FOR_GO.getValue());
+			createGoPaymentOrderReq.setBusiType(BusiType.PAY_FOR_ONO.getValue());
 			createGoPaymentOrderReq.setPayAmount(Long.parseLong(AmountUtils.changeY2F(price)));
 			createGoPaymentOrderReq.setPayType(PayType.WEIXIN.getValue());
 			createGoPaymentOrderReq.setSummary(summary);
