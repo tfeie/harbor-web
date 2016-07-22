@@ -141,7 +141,7 @@ wx.config({
 							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 							    paySign: d.paySign, // 支付签名
 							    success: function (res) {
-							        _this.userMemberRenewal(payMonth,d.payOrderId);
+							    	weUI.alert({content:"您成功购买"+payMonth+"个月会员,稍候查看"});
 							    },
 							    fail: function(res){
 							    	weUI.alert({content:"支付失败"});
@@ -156,27 +156,6 @@ wx.config({
 						}
 
 					});
-				},
-				
-				userMemberRenewal : function(payMonth,payOrderId) {
-					var _this = this;
-					ajaxController.ajax({
-						url : "../user/userMemberRenewal",
-						type : "post",
-						data: {
-							payMonth: payMonth,
-							payOrderId: payOrderId
-						},
-						success : function(transport) {
-							var d = transport.data;  
-							weUI.alert({content:"您成功购买"+payMonth+"个月会员,有效期["+d.expDate+"]"});
-						},
-						failure : function(transport) {
-							weUI.alert({content:"支付成功，会员续期失败,稍候重试"});
-						}
-
-					});
-
 				},
 				
 				getMemberCanByMonths : function() {

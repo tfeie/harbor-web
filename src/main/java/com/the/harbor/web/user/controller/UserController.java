@@ -41,8 +41,6 @@ import com.the.harbor.api.user.param.UserInviteInfo;
 import com.the.harbor.api.user.param.UserInviteReq;
 import com.the.harbor.api.user.param.UserMemberInfo;
 import com.the.harbor.api.user.param.UserMemberQuery;
-import com.the.harbor.api.user.param.UserMemberRenewalReq;
-import com.the.harbor.api.user.param.UserMemberRenewalResp;
 import com.the.harbor.api.user.param.UserRegReq;
 import com.the.harbor.api.user.param.UserSystemTagQueryReq;
 import com.the.harbor.api.user.param.UserSystemTagQueryResp;
@@ -479,31 +477,6 @@ public class UserController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
-		}
-		return responseData;
-	}
-
-	@RequestMapping("/userMemberRenewal")
-	@ResponseBody
-	public ResponseData<UserMemberRenewalResp> userMemberRenewal(@NotNull(message = "参数为空") UserMemberRenewalReq req,
-			HttpServletRequest request) {
-		ResponseData<UserMemberRenewalResp> responseData = null;
-		try {
-			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-			req.setOpenId(userInfo.getWxOpenid());
-			req.setUserId(userInfo.getUserId());
-
-			UserMemberRenewalResp resp = DubboConsumerFactory.getService(IUserSV.class).userMemberRenewal(req);
-			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
-				throw new BusinessException(resp.getResponseHeader().getResultCode(),
-						resp.getResponseHeader().getResultMessage());
-			}
-
-			responseData = new ResponseData<UserMemberRenewalResp>(ResponseData.AJAX_STATUS_SUCCESS,
-					ExceptCodeConstants.SUCCESS, "会员续期成功", resp);
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			responseData = ExceptionUtil.convert(e, UserMemberRenewalResp.class);
 		}
 		return responseData;
 	}
