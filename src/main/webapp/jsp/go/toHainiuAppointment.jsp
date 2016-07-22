@@ -24,6 +24,7 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
+<script type="text/javascript" src="<%=_base%>/js/jedate/jedate.js"></script>
 </head>
 <body>
 	<section class="hailiuqueren yuejian">
@@ -85,12 +86,12 @@
 		<section class="wenti-jies">
 			<section class="inp_time">
 				<p>
-					<span><input type="text" placeholder="2016-5-25 10:00 "
+					<span><input type="text"  class="datainp" readonly
 						id="expectedTime1" class="datepicker" value="<c:out value="${goOrder.expectedTime2}" escapeXml="false" />"/></span><label><input
 						type="text" placeholder="请输入地点1" id="expectedLocation1" value="<c:out value="${goOrder.expectedLocation1}" escapeXml="false" />"/></label>
 				</p>
 				<p>
-					<span><input type="text" placeholder="2016-5-25 10:00 "
+					<span><input type="text" class="datainp" readonly
 						id="expectedTime2" class="datepicker" value="<c:out value="${goOrder.expectedTime2}" escapeXml="false" />"/></span><label><input
 						type="text" placeholder="请输入地点2" id="expectedLocation2" value="<c:out value="${goOrder.expectedLocation2}" escapeXml="false" />"/></label>
 				</p>
@@ -136,7 +137,12 @@
 				}); 
 				
 				$("#BTN_CONFIRM_MEET_END").on("click", function() {
-					_this.confirmMeetEnd();
+					weUI.confirm({
+						content:"确认结束活动吗?",
+						ok: function(){
+							_this.confirmMeetEnd();
+						}
+					});
 				});
 				
 				
@@ -151,9 +157,7 @@
 						goOrderId: _this.getPropertyValue("goOrderId")
 					},
 					success: function(transport){
-						weUI.alert({
-							content:"活动已结束"
-						});
+						window.localtion.href="../go/comments.html?goId="+_this.getPropertyValue("goId");
 					},
 					failure: function(transport){ 
 						weUI.alert({content: transport.statusInfo});
@@ -175,12 +179,10 @@
 						return expectedTime1;
 					},
 					fieldRules: {
-						required: true, 
-						datetime: true
+						required: true
 					},
 					ruleMessages: {
-						required: "请填写第一个预期开始时间",
-						datetime:"预期开始时间格式必须是yyyy-MM-dd hh:mm:ss"
+						required: "请填写第一个预期开始时间"
 					}
 				}).addRule({
 					labelName: "见面地点1",
@@ -203,12 +205,10 @@
 						return expectedTime2;
 					},
 					fieldRules: {
-						required: true, 
-						datetime: true
+						required: true
 					},
 					ruleMessages: {
-						required: "请填写第二个预期开始时间",
-						datetime:"预期开始时间格式必须是yyyy-MM-dd hh:mm:ss"
+						required: "请填写第二个预期开始时间"
 					}
 				}).addRule({
 					labelName: "见面地点2",
@@ -241,7 +241,7 @@
 						expectedLocation2: expectedLocation2
 					},
 					success: function(transport){
-						weUI.alert({content:"约见地点设置成功"});
+						weUI.alert({content:"约见地点设置成功,等待小白确认"});
 					},
 					failure: function(transport){ 
 						weUI.alert({content: transport.statusInfo});
@@ -259,10 +259,23 @@
 })(jQuery);
 
 $(document).ready(function(){
+	jeDate({
+		dateCell:"#expectedTime1",
+		format:"YYYY-MM-DD hh:mm",
+		isTime:true, 
+		minDate:jeDate.now(0)
+	});
+	
+	jeDate({
+		dateCell:"#expectedTime2",
+		format:"YYYY-MM-DD hh:mm",
+		isTime:true,
+		minDate:jeDate.now(0)
+	});
+
 	var p = new $.GoHainiuAppointmentPage({ 
 		goId:  "<c:out value="${goOrder.goId}"/>",
 		goOrderId:  "<c:out value="${goOrder.orderId}"/>"
-		
 	});
 	p.init();
 });
