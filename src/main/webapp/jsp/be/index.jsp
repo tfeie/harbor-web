@@ -141,23 +141,6 @@
 						_this.doDianzan(beId);
 					});
 					
-					$("#imgbaner").delegate("[id='bg']","click",function(){
-						$(this).hide();
-						var flag = 0;
-						$("#bg").each(function(){
-							if($(this).is(":visible")){
-								flag = 1;
-							}
-						});
-						if(flag == 0) {
-							/* $(".footer").show();
-							$(".sec_list").show();
-							$(".banner").show();
-							$(".sec_menu").show(); */
-							$(".sec_list").show();
-						}
-					});
-					
 					$("#UL_GOTO_NEXTPAGE").on("click",function(){
 						var tagId=$("#DIV_BE_TAGS").find("[name='BE_TAG'].on").attr("tagId");
 						_this.lastTagId=_this.currentTagId
@@ -186,28 +169,7 @@
 					this.lastTagId="-1";
 					this.currentTagId="-1";
 					this.queryBes("-1","",1);
-					this.initGuide();
-					 $(".sec_list").hide();
-				 	/* $(".sec_list").hide();
-					$(".banner").hide();
-					$(".sec_menu").hide();
-					$(".footer").hide(); */
 				}, 
-				
-				initGuide:function(){
-					var d = [];
-					var map={};
-					map["url"]="http://static.tfeie.com/images/guide3.png";
-					d.push(map);
-					var map1={};
-					map1["url"]="http://static.tfeie.com/images/guide2.png";
-					d.push(map1);
-					var map2={};
-					map2["url"]="http://static.tfeie.com/images/guide1.png";
-					d.push(map2);
-					var opt=$("#guideImpl").render(d);
-					$("#imgbaner").html(opt);
-				},
 				
 				giveHB: function(beId){
 					var _this=this;
@@ -473,16 +435,5 @@
 			</li>
 
 </script>
-<script id="guideImpl" type="text/x-jsrender"> 
-{{if #index == '2'}}
-	<div id="bg" >
-          <img class="arrow" src="{{:url}}">
-        </div>
-{{else}}
-	<div id="bg" style="display:none">
-          <img  class="arrow" src="{{:url}}">
-        </div>
-{{/if}}
-	
-</script>
+
 </html>
