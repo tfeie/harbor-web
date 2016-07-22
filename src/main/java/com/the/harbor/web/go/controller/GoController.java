@@ -690,9 +690,12 @@ public class GoController {
 
 	@RequestMapping("/orderOneOnOne")
 	@ResponseBody
-	public ResponseData<String> orderOneOnOne(@NotNull(message = "参数为空") GoOrderCreateReq goOrderCreateReq) {
+	public ResponseData<String> orderOneOnOne(@NotNull(message = "参数为空") GoOrderCreateReq goOrderCreateReq,
+			HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			goOrderCreateReq.setUserId(userInfo.getUserId());
 			GoOrderCreateResp rep = DubboConsumerFactory.getService(IGoSV.class).orderOneOnOne(goOrderCreateReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),

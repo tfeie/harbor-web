@@ -151,7 +151,6 @@
 				}
 				
 				var data = {
-					userId: _this.getPropertyValue("userId"),
 					goId: _this.getPropertyValue("goId"),
 					selfIntro: selfIntro, 
 					questions: questions
@@ -187,7 +186,6 @@
 
 $(document).ready(function(){
 	var p = new $.OrderGoPage({
-		userId: "<c:out value="${userInfo.userId}"/>",
 		goId:  "<c:out value="${goId}"/>"
 	});
 	p.init();
