@@ -29,6 +29,24 @@
 			closeAlert: function(){
 				$("#_weui_dialog_alert_").hide();
 			},
+			
+			showXToast: function(title){
+				var t= _getWXXToast();
+				t.show();
+			},
+			
+			hideXToast: function(){
+				$("#weui_x_toast").hide();
+			},
+			
+			showLoadingToast: function(title){
+				var t= _getWXLoadingToast();
+				t.show();
+			},
+			
+			hideLoadingToast: function(){
+				$("#weui_loading_toast").hide();
+			}
 		}
 		
 	});
@@ -63,6 +81,53 @@
 			options.cancel && options.cancel.call(this);
 		});
 		return $("#_weui_dialog_confirm_");
+	}
+	
+	var _getWXXToast= function(title){
+		var html="<div id=\"weui_x_toast\" style=\"display: none;\">";
+		html+="<div class=\"weui_mask_transparent\"></div>";
+		html+="<div class=\"weui_toast\">";
+		html+="<i class=\"weui_icon_toast\"></i>";
+		html+="<p class=\"weui_toast_content\">"+title+"</p>";
+		html+="</div>";
+		html+="</div>";
+		var toast = $("#weui_x_toast");
+		if(toast.length==0){
+			$(document.body).append(toast);
+		}else{
+			toast.find(".weui_toast_content").html(title);
+		}
+		return $("#weui_x_toast");
+	}
+	
+	var _getWXLoadingToast= function(title){
+		var html="<div id=\"weui_loading_toast\" style=\"display: none;\">";
+		html+="<div class=\"weui_mask_transparent\"></div>";
+		html+="<div class=\"weui_toast\">";
+		html+="<div class=\"weui_loading\">";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_0\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_1\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_2\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_3\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_4\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_5\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_6\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_7\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_8\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_9\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_10\"></div>";
+		html+="<div class=\"weui_loading_leaf weui_loading_leaf_11\"></div>";
+		html+="</div>";
+		html+="<p class=\"weui_toast_content\">"+title+"</p>";
+		html+="</div>";
+		html+="</div>";
+		var toast = $("#weui_loading_toast");
+		if(toast.length==0){
+			$(document.body).append(toast);
+		}else{
+			toast.find(".weui_toast_content").html(title);
+		}
+		return $("#weui_loading_toast");
 	}
 	
 	var _getWXAlertDialog=function(options){
