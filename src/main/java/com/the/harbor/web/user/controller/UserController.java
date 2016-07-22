@@ -27,10 +27,11 @@ import com.aliyun.mns.client.MNSClient;
 import com.aliyun.mns.common.ClientException;
 import com.aliyun.mns.common.ServiceException;
 import com.aliyun.mns.model.Message;
-import com.the.harbor.api.pay.IPaymentSV;
-import com.the.harbor.api.pay.param.CreatePaymentOrderReq;
-import com.the.harbor.api.pay.param.CreatePaymentOrderResp;
 import com.the.harbor.api.user.IUserSV;
+import com.the.harbor.api.user.param.CreateUserBuyHBOrderReq;
+import com.the.harbor.api.user.param.CreateUserBuyHBOrderResp;
+import com.the.harbor.api.user.param.CreateUserBuyMemberOrderReq;
+import com.the.harbor.api.user.param.CreateUserBuyMemberOrderResp;
 import com.the.harbor.api.user.param.DoUserFans;
 import com.the.harbor.api.user.param.DoUserFriend;
 import com.the.harbor.api.user.param.UserAuthReq;
@@ -53,7 +54,6 @@ import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.api.user.param.UserViewResp;
 import com.the.harbor.api.user.param.UserWealthQueryResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
-import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
 import com.the.harbor.base.enumeration.hyuser.UserInviteStatus;
 import com.the.harbor.base.enumeration.hyuser.UserStatus;
@@ -450,14 +450,15 @@ public class UserController {
 			String timeStamp = request.getParameter("timeStamp");
 			String summary = GlobalSettings.getWeiXinMerchantName() + payMonth + "个月会员";
 			// 调用服务生成支付流水
-			CreatePaymentOrderReq createPaymentOrderReq = new CreatePaymentOrderReq();
-			createPaymentOrderReq.setBusiType(BusiType.PAY_FOR_MEMBER.getValue());
+			CreateUserBuyMemberOrderReq createPaymentOrderReq = new CreateUserBuyMemberOrderReq();
 			createPaymentOrderReq.setPayAmount(Long.parseLong(price));
 			createPaymentOrderReq.setPayType(PayType.WEIXIN.getValue());
 			createPaymentOrderReq.setSummary(summary);
 			createPaymentOrderReq.setUserId(userInfo.getUserId());
-			CreatePaymentOrderResp resp = DubboConsumerFactory.getService(IPaymentSV.class)
-					.createPaymentOrder(createPaymentOrderReq);
+			createPaymentOrderReq.setFromSign(nonceStr);
+			createPaymentOrderReq.setBuyMonths(Integer.parseInt(payMonth));
+			CreateUserBuyMemberOrderResp resp = DubboConsumerFactory.getService(IUserSV.class)
+					.createUserBuyMember(createPaymentOrderReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
@@ -1263,14 +1264,15 @@ public class UserController {
 			}
 			String summary = "购买海贝" + count + "个";
 			// 调用服务生成支付流水
-			CreatePaymentOrderReq createPaymentOrderReq = new CreatePaymentOrderReq();
-			createPaymentOrderReq.setBusiType(BusiType.PAY_FOR_HAIBI.getValue());
+			CreateUserBuyHBOrderReq createPaymentOrderReq = new CreateUserBuyHBOrderReq();
 			createPaymentOrderReq.setPayAmount(Long.parseLong(price));
 			createPaymentOrderReq.setPayType(PayType.WEIXIN.getValue());
 			createPaymentOrderReq.setSummary(summary);
 			createPaymentOrderReq.setUserId(userInfo.getUserId());
-			CreatePaymentOrderResp resp = DubboConsumerFactory.getService(IPaymentSV.class)
-					.createPaymentOrder(createPaymentOrderReq);
+			createPaymentOrderReq.setBuyAmount(Integer.parseInt(count));
+			createPaymentOrderReq.setFromSign(nonceStr);
+			CreateUserBuyHBOrderResp resp = DubboConsumerFactory.getService(IUserSV.class)
+					.createUserBuyHB(createPaymentOrderReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
