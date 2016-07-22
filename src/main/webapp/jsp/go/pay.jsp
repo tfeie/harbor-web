@@ -143,7 +143,12 @@ wx.config({
 						    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 						    paySign: d.paySign, // 支付签名
 						    success: function (res) {
-						        _this.updateGoOrderStatus(d.payOrderId,"SUCCESS");
+						    	weUI.alert({
+									content: "支付成功，请等待海牛确认.您可以浏览下其它活动",
+									ok: function(){
+										window.location.href="../go/oneononeindex.html";
+									}
+								})
 						    },
 						    fail: function(res){
 						    	weUI.alert({
@@ -167,33 +172,6 @@ wx.config({
 						})
 					}
 
-				});
-			},
-			
-			updateGoOrderStatus: function(payOrderId,payStatus){
-				var _this = this;
-				ajaxController.ajax({
-					url: "../go/updateGoOrderPay",
-					type: "post", 
-					data: {
-						goOrderId: _this.getPropertyValue("goOrderId"),
-						payOrderId: payOrderId,
-						payStatus: payStatus
-					},
-					success: function(transport){
-						weUI.alert({
-							content: "支付成功，请等待海牛确认.您可以浏览下其它活动",
-							ok: function(){
-								window.location.href="../go/oneononeindex.html";
-							}
-						})
-					},
-					failure: function(transport){
-						weUI.alert({
-							content: transport.statusInfo
-						})
-					}
-					
 				});
 			},
 			
