@@ -190,8 +190,8 @@ wx.config({
 						var needPay = d.needPay;
 						var payAmount=d.payAmount;
 						var payOrderId=d.payOrderId;
-						//调用支付接口
 						if(needPay){
+							//需要支付的话，调用支付接口
 							wx.chooseWXPay({
 							    timestamp: _this.getPropertyValue("timeStamp"), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
 							    nonceStr: _this.getPropertyValue("nonceStr"), // 支付签名随机串，不长于 32 位
@@ -216,7 +216,12 @@ wx.config({
 									})
 							    }
 							});
-						} 
+						}else{
+							//不需要支付，则提示成功
+							$("#BTN_BAOMING").hide();
+							$("#APPLY_SUCCESS").show();
+							$("#SEL_SHOW_RESULT").show();
+						}
 						
 					},
 					failure: function(transport){
