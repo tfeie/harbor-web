@@ -45,9 +45,9 @@
 }
 
 .arrow {
-	position: absolute;
-	right: 10%;
-	top: 5%;
+	position:absolute;
+	top:1%;
+	right: 1%;
 }
 
 #share-text {
@@ -229,7 +229,7 @@
 			enName: "<c:out value="${userInfo.enName}"/>",
 			shareImg: "<c:out value="${userInfo.wxHeadimg}"/>",
 			url: "<c:out value="${url}"/>",
-			initcode:"<c:out value="${initcode}"/>",
+			initcode:"<c:out value="${initcode}"/>"?"${initcode}":"邀请码已用完",
 			inviteCode:"<c:out value="${inviteCode}"/>"
 		});
 		p.init();

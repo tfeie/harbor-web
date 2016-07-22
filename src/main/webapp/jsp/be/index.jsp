@@ -23,7 +23,35 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script> 
+<style>
+#shareit {
+	-webkit-user-select: none;
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.85);
+	text-align: center;
+	top: 0;
+	left: 0;
+	z-index: 105;
+}
 
+#shareit img {
+	max-width: 100%;
+}
+
+.arrow {
+	position:absolute;
+	top:1%;
+	right: 0%;
+}
+
+#share-text {
+	margin-top: 400px;
+}
+
+</style>
 
 </head>
 <body>
@@ -56,6 +84,10 @@
 			
 
 	</section>
+	<div id="imgbaner">
+	
+	</div>
+	 
 </body>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script> 
@@ -106,12 +138,29 @@
 						_this.doDianzan(beId);
 					});
 					
+					$("#imgbaner").delegate("[id='guideit']","click",function(){
+						$(this).hide();
+						var flag = 0;
+						$("#guideit").each(function(){
+							if($(this).is(":visible")){
+								flag = 1;
+							}
+						});
+						if(flag == 0) {
+							//$(".title").show();
+							$(".sec_list").show();
+							$(".banner").show();
+							$(".sec_menu").show();
+						}
+					});
+					
 					$("#UL_GOTO_NEXTPAGE").on("click",function(){
 						var tagId=$("#DIV_BE_TAGS").find("[name='BE_TAG'].on").attr("tagId");
 						_this.lastTagId=_this.currentTagId
 						_this.currentTagId=tagId;
 						_this.gotoNextPage(tagId);
 					});
+					
 					
 					$(window).scroll(function() {
 						var scrollTop = $(document).scrollTop();//获取垂直滚动的距离
@@ -133,8 +182,29 @@
 					this.lastTagId="-1";
 					this.currentTagId="-1";
 					this.queryBes("-1","",1);
+					this.initGuide();
 					
+				 	$(".sec_list").hide();
+					$(".banner").hide();
+					$(".sec_menu").hide();
+					//$(".title").hide();
+
 				}, 
+				
+				initGuide:function(){
+					var d = [];
+					var map={};
+					map["url"]="http://static.tfeie.com/images/guide3.png";
+					d.push(map);
+					var map1={};
+					map1["url"]="http://static.tfeie.com/images/guide2.png";
+					d.push(map1);
+					var map2={};
+					map2["url"]="http://static.tfeie.com/images/guide1.png";
+					d.push(map2);
+					var opt=$("#guideImpl").render(d);
+					$("#imgbaner").html(opt);
+				},
 				
 				giveHB: function(beId){
 					var _this=this;
@@ -399,5 +469,12 @@
 					</section>
 			</li>
 
+</script>
+<script id="guideImpl" type="text/x-jsrender"> 
+<div id="guideit">
+	  <a href="#" id="follow">
+	     <img class="arrow" src="{{:url}}">
+	  </a>
+	</div>
 </script>
 </html>
