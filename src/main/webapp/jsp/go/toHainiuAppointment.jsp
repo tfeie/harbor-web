@@ -166,7 +166,13 @@
 						goOrderId: _this.getPropertyValue("goOrderId")
 					},
 					success: function(transport){
-						window.localtion.href="../go/comments.html?goId="+_this.getPropertyValue("goId");
+						weUI.alert({content:"服务已结束，可以相互点评啦",
+							ok: function(){
+								window.localtion.href="../go/toHainiuFeedback.html?goOrderId="+_this.getPropertyValue("goOrderId");
+								weUI.closeAlert();
+							}
+						});
+						
 					},
 					failure: function(transport){ 
 						weUI.alert({content: transport.statusInfo});
