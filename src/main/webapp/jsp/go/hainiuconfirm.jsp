@@ -119,6 +119,7 @@
 					goOrderId: _this.getPropertyValue("goOrderId"),
 					ackFlag: ackFlag
 				};
+				
 				ajaxController.ajax({
 					url: "../go/confirmGoOrder",
 					type: "post", 
@@ -129,7 +130,7 @@
 							content: "处理成功",
 							ok: function(){
 								weUI.closeAlert();
-								window.location.href="../go/goindex.html";
+								window.location.href="../go/mycreateonodetail.html?goId="+_this.getPropertyValue("goId");
 							}
 						}); 
 					},
@@ -152,7 +153,8 @@
 
 $(document).ready(function(){
 	var p = new $.GoWaitConfirmPage({
-		goOrderId:  "<c:out value="${goOrder.orderId}"/>"
+		goOrderId:  "<c:out value="${goOrder.orderId}"/>",
+		goId:  "<c:out value="${goOrder.goId}"/>"
 		
 	});
 	p.init();
