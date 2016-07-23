@@ -154,6 +154,8 @@ public class UserController {
 			if (!newsign.equals(sign)) {
 				throw new BusinessException("分享连接已被使用，速速找好友邀请吧~");
 			}
+			inviteParam = java.net.URLEncoder.encode(inviteParam,"utf-8");
+			request.setAttribute("inviteCode", inviteParam);
 			request.setAttribute("inviteCode", jsonparam);
 		}
 		WeixinUserInfo wxUserInfo = WXUserUtil.getWeixinUserInfo(request);
@@ -230,6 +232,8 @@ public class UserController {
 				if (StringUtil.isBlank(inviteParam)) {
 					throw new BusinessException("目前只开通邀约注册，请通过分享连接进入注册~");
 				}
+				inviteParam = java.net.URLDecoder.decode(inviteParam,"utf-8");
+
 				String jsonparam = Java3DESUtil.decryptThreeDESECB(inviteParam);
 				JSONObject json = JSONObject.parseObject(jsonparam);
 				String inviteCode = json.getString("inviteCode");
@@ -528,7 +532,7 @@ public class UserController {
 			json.put("inviteCode", code);
 			json.put("sign", sign);
 			param = Java3DESUtil.encryptThreeDESECB(json.toJSONString());
-			param = java.net.URLEncoder.encode(param);
+			param = java.net.URLEncoder.encode(param,"utf-8");
 		} catch (Exception ex) {
 			throw new BusinessException("邀请码加密错误");
 		}
@@ -560,7 +564,7 @@ public class UserController {
 			JSONObject json = JSONObject.parseObject(jsonparam);
 			userId = json.getString("userId");
 			request.setAttribute("initcode", json.getString("code"));
-			param = java.net.URLEncoder.encode(param);
+			param = java.net.URLEncoder.encode(param,"utf-8");
 		} catch (Exception ex) {
 			throw new BusinessException("邀请码解密错误");
 		}
