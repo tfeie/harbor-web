@@ -1418,6 +1418,8 @@ public class GoController {
 			HttpServletRequest request) {
 		ResponseData<PageInfo<Go>> responseData = null;
 		try {
+			UserViewInfo user = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			queryGoReq.setUserId(user.getUserId());
 			QueryMyJointGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryMyJointGoes(queryGoReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
