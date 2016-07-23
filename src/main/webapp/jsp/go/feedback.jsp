@@ -185,7 +185,7 @@
 					
 					//打赏海贝
 					$("[name='SPAN_GIVEHB']").on("click", function(){
-						$("[name='SPAN_HELP_VALUE']").removeClass("on");
+						$("[name='SPAN_GIVEHB']").removeClass("on");
 						$(this).addClass("on");
 						var count=$(this).attr("value");
 						if(count==0){
@@ -208,7 +208,7 @@
 						url: "../go/giveHaibei",
 						type: "post", 
 						data: { 
-							goOrderId: _this.getPropertyValue("goOrderId")，
+							goOrderId: _this.getPropertyValue("goOrderId"),
 							count: count,
 							goType:_this.getPropertyValue("goType")
 						},
@@ -243,7 +243,7 @@
 						url: "../go/submitGoHelp",
 						type: "post", 
 						data: { 
-							goOrderId: _this.getPropertyValue("goOrderId")，
+							goOrderId: _this.getPropertyValue("goOrderId"),
 							helpValue: helpValue,
 							goType:_this.getPropertyValue("goType")
 						},
@@ -255,7 +255,7 @@
 							return ;
 						}
 					});
-				}，
+				},
 				
 				getComments: function(){
 					var _this = this;
