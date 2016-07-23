@@ -168,6 +168,9 @@
 						}else if(orderStatus=="30"){
 							//待约见，设置约见地点
 							window.location.href="../go/toHainiuAppointment.html?goOrderId="+orderId;
+						}else if(orderStatus=="40"){
+							//活动结束，评论
+							window.location.href="../go/toHainiuFeedback.html?goOrderId="+orderId;
 						}
 					});
 					

@@ -137,12 +137,7 @@
 				}); 
 				
 				$("#BTN_CONFIRM_MEET_END").on("click", function() {
-					weUI.confirm({
-						content:"确认结束活动吗?",
-						ok: function(){
-							_this.confirmMeetEnd();
-						}
-					});
+					_this.confirmMeetEnd();
 				});
 				
 				

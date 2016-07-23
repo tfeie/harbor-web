@@ -69,14 +69,7 @@
 					//删除消息按钮事件
 					$("#DIV_MY_NOTIFY").delegate("[name='DEL_NOTIFY']","click",function(){
 						 var notifyId = $(this).attr("notifyId");
-						 weUI.confirm({
-							 content: "您是否已经处理了消息内容?",
-							 ok:function(){
-								 _this.delNotify(notifyId);
-								 weUI.closeConfirm();
-							 }
-						 })
-						
+						 _this.delNotify(notifyId);
 					}); 
 					
 				},
