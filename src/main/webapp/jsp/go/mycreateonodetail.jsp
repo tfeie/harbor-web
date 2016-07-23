@@ -165,6 +165,9 @@
 						if(orderStatus=="20"){
 							//待海牛确认
 							window.location.href="../go/toHainiuConfirm.html?goOrderId="+orderId;
+						}else if(orderStatus=="30"){
+							//待约见，设置约见地点
+							window.location.href="../go/toHainiuAppointment.html?goOrderId="+orderId;
 						}
 					});
 					
