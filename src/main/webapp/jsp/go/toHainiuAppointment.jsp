@@ -241,7 +241,12 @@
 						expectedLocation2: expectedLocation2
 					},
 					success: function(transport){
-						weUI.alert({content:"约见地点设置成功,等待小白确认"});
+						weUI.alert({content:"约见地点设置成功,等待小白确认",
+							ok: function(){
+								window.location.href="../go/mycreateonodetail.html?goId="+_this.getPropertyValue("goId");
+								weUI.closeAlert();
+							}
+						});
 					},
 					failure: function(transport){ 
 						weUI.alert({content: transport.statusInfo});
