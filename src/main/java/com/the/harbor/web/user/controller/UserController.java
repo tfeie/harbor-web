@@ -1341,7 +1341,7 @@ public class UserController {
 
 	@RequestMapping("/toUserInviteCode.html")
 	public ModelAndView toUserInviteCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView view = new ModelAndView("user/userInviteCode");
+		ModelAndView view = new ModelAndView("user/inviteRegisterCode");
 		return view;
 	}
 
