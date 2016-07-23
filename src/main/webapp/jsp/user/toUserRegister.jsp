@@ -90,7 +90,7 @@
 						type="hidden" id="wxNickname"
 						value="<c:out value="${wxUserInfo.nickname}"/>" /> <input
 						type="button" value="确认注册" id="HREF_CONFIRM" />
-					<input type="hidden" id="inviteCode" value="<c:out value="${inviteCode}"/>" />
+					<input type="hidden" id="pcode" value="<c:out value="${pcode}"/>" />
 				</p>
 			</section>
 		</div>
@@ -253,7 +253,7 @@
 					var wxHeadimg= $.trim($("#wxHeadimg").val());
 					var wxNickname= $.trim($("#wxNickname").val());
 
-					var inviteCode = $.trim($("#inviteCode").val());
+					var pcode = $.trim($("#pcode").val());
 					
 					var userData = {
 						sex: sex,
@@ -270,7 +270,7 @@
 						data: {
 							randomCode: randomCode,
 							userData: JSON.stringify(userData),
-							inviteCode:inviteCode
+							pcode: pcode
 						},
 						success: function(transport){
 							window.location.href="../user/setUserSkills.html"

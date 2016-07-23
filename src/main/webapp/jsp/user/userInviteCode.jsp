@@ -101,7 +101,7 @@
 					},
 					success: function(transport){
 						var data =transport.data;
-						window.location.href="../user/toUserRegister.html?flag=share&inviteCode=" + data;
+						window.location.href="../user/toUserRegister.html?pcode=" + data;
 						//关闭窗口
 						weUI.closeConfirm();
 					},

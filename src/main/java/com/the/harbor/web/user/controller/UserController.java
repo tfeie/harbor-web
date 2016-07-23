@@ -140,23 +140,22 @@ public class UserController {
 			throw new BusinessException("您的微信已经注册");
 		}
 		boolean invite = HyCfgUtil.checkUserRegisterByInvite();
-		String inviteParam = request.getParameter("inviteCode");
+		String pcode = request.getParameter("pcode");
 		if (invite) {
-			if (StringUtil.isBlank(inviteParam)) {
+			if (StringUtil.isBlank(pcode)) {
 				throw new BusinessException("目前只开通邀约注册，速速找好友邀请吧~");
 			}
-			String jsonparam = Java3DESUtil.decryptThreeDESECB(inviteParam);
+			String jsonparam = Java3DESUtil.decryptThreeDESECB(pcode);
 			JSONObject json = JSONObject.parseObject(jsonparam);
 			String inviteCode = json.getString("inviteCode");
 			String userId = json.getString("userId");
 			String sign = json.getString("sign");
 			String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
 			if (!newsign.equals(sign)) {
-				throw new BusinessException("分享连接已被使用，速速找好友邀请吧~");
+				throw new BusinessException("分享连接失效或者已被使用，速速找好友邀请吧~");
 			}
-			inviteParam = java.net.URLEncoder.encode(inviteParam,"utf-8");
-			request.setAttribute("inviteCode", inviteParam);
-			request.setAttribute("inviteCode", jsonparam);
+			pcode = java.net.URLEncoder.encode(pcode);
+			request.setAttribute("pcode", pcode);
 		}
 		WeixinUserInfo wxUserInfo = WXUserUtil.getWeixinUserInfo(request);
 		request.setAttribute("wxUserInfo", wxUserInfo);
@@ -227,14 +226,14 @@ public class UserController {
 				throw new BusinessException("输入的验证码不正确");
 			}
 			boolean invite = HyCfgUtil.checkUserRegisterByInvite();
-			String inviteParam = request.getParameter("inviteCode");
+			String pcode = request.getParameter("pcode");
 			if (invite) {
-				if (StringUtil.isBlank(inviteParam)) {
+				if (StringUtil.isBlank(pcode)) {
 					throw new BusinessException("目前只开通邀约注册，请通过分享连接进入注册~");
 				}
-				inviteParam = java.net.URLDecoder.decode(inviteParam,"utf-8");
+				pcode = java.net.URLDecoder.decode(pcode);
 
-				String jsonparam = Java3DESUtil.decryptThreeDESECB(inviteParam);
+				String jsonparam = Java3DESUtil.decryptThreeDESECB(pcode);
 				JSONObject json = JSONObject.parseObject(jsonparam);
 				String inviteCode = json.getString("inviteCode");
 				String userId = json.getString("userId");
@@ -1351,24 +1350,24 @@ public class UserController {
 	public ResponseData<String> checkUserInviteCode(HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
-			String param = request.getParameter("inviteCode");
-			if (StringUtil.isBlank(param)) {
-				throw new BusinessException("邀请码为空");
+			String inviteCode = request.getParameter("inviteCode");
+			if (StringUtil.isBlank(inviteCode)) {
+				throw new BusinessException("请输入您的邀请码");
 			}
 			UserInviteReq req = new UserInviteReq();
 			UserInviteInfo userInvite = new UserInviteInfo();
 			userInvite.setStatus(UserInviteStatus.NOT_USE.getValue());
-			userInvite.setInviteCode(param);
+			userInvite.setInviteCode(inviteCode);
 			req.setUserInviteInfo(userInvite);
 			List<UserInviteInfo> rep = DubboConsumerFactory.getService(IUserSV.class).queryUserInvite(req);
 			if (CollectionUtil.isEmpty(rep)) {
 				throw new BusinessException("邀请码不正确或已经被使用");
 			}
 
-			String sign = SignUtil.getUserInviteSign("", param);
+			String sign = SignUtil.getUserInviteSign("", inviteCode);
 			JSONObject json = new JSONObject();
 			json.put("userId", "");
-			json.put("inviteCode", param);
+			json.put("inviteCode", inviteCode);
 			json.put("sign", sign);
 			String descparam = Java3DESUtil.encryptThreeDESECB(json.toJSONString());
 			descparam = java.net.URLEncoder.encode(descparam);
