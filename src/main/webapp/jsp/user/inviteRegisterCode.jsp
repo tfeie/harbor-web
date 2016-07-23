@@ -28,7 +28,7 @@
 	<section class="sec_item">
 		<div class="div_cont">
 			<div class="img">
-				<img src="http://www.diansan.com/wp-content/uploads/2015/09/invite_02.png" alt="" />
+				<img src="//static.tfeie.com/images/invite.png" alt="" />
 			</div>
 		</div>
 	</section>

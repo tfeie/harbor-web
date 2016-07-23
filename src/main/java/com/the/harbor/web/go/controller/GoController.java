@@ -31,6 +31,7 @@ import com.the.harbor.api.go.param.Go;
 import com.the.harbor.api.go.param.GoComment;
 import com.the.harbor.api.go.param.GoCreateReq;
 import com.the.harbor.api.go.param.GoCreateResp;
+import com.the.harbor.api.go.param.GoJoin;
 import com.the.harbor.api.go.param.GoOrder;
 import com.the.harbor.api.go.param.GoOrderConfirmReq;
 import com.the.harbor.api.go.param.GoOrderCreateReq;
@@ -48,6 +49,8 @@ import com.the.harbor.api.go.param.QueryMyGoReq;
 import com.the.harbor.api.go.param.QueryMyGoResp;
 import com.the.harbor.api.go.param.QueryMyJointGoReq;
 import com.the.harbor.api.go.param.QueryMyJointGoResp;
+import com.the.harbor.api.go.param.QueryOrderGoRecordReq;
+import com.the.harbor.api.go.param.QueryOrderGoRecordResp;
 import com.the.harbor.api.go.param.SubmitGoHelpReq;
 import com.the.harbor.api.go.param.UpdateGoJoinPayReq;
 import com.the.harbor.api.go.param.UpdateGoOrderPayReq;
@@ -55,6 +58,7 @@ import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.dict.ParamCode;
 import com.the.harbor.base.enumeration.dict.TypeCode;
+import com.the.harbor.base.enumeration.hygo.GoType;
 import com.the.harbor.base.enumeration.hygoorder.OrderStatus;
 import com.the.harbor.base.enumeration.hypaymentorder.BusiType;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
@@ -1454,6 +1458,100 @@ public class GoController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+	
+	@RequestMapping("/mycreateonodetail.html")
+	public ModelAndView mycreateonodetail(HttpServletRequest request) {
+		String goId = request.getParameter("goId");
+		if (StringUtil.isBlank(goId)) {
+			throw new BusinessException("活动信息不存在");
+		}
+		Go go = DubboServiceUtil.queryGo(goId);
+		if (go == null) {
+			throw new BusinessException("活动信息不存在");
+		}
+		request.setAttribute("go", go);
+		ModelAndView view = new ModelAndView("go/mycreateonodetail");
+		return view;
+	}
+
+	/**
+	 * 我发表的ONO活动预约单信息
+	 * 
+	 * @param goId
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getMyOnoOrderRecords")
+	@ResponseBody
+	public ResponseData<List<GoOrder>> getMyOnoOrderRecords(@NotBlank(message = "活动ID不为空") String goId,
+			HttpServletRequest request) {
+		ResponseData<List<GoOrder>> responseData = null;
+		try {
+			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			QueryOrderGoRecordReq req = new QueryOrderGoRecordReq();
+			req.setGoId(goId);
+			req.setGoType(GoType.ONE_ON_ONE.getValue());
+			QueryOrderGoRecordResp rep = DubboConsumerFactory.getService(IGoSV.class).queryOrderGoRecords(req);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			List<GoOrder> list = rep.getGoOrders();
+			List<GoOrder> ls = new ArrayList<GoOrder>();
+			if (!CollectionUtil.isEmpty(list)) {
+				for (GoOrder goOrder : list) {
+					if (com.the.harbor.base.enumeration.hygoorder.OrderStatus.WAIT_CONFIRM.getValue()
+							.equals(goOrder.getOrderStatus())
+							|| com.the.harbor.base.enumeration.hygoorder.OrderStatus.WAIT_MEET.getValue()
+									.equals(goOrder.getOrderStatus())
+							|| com.the.harbor.base.enumeration.hygoorder.OrderStatus.FINISH.getValue()
+									.equals(goOrder.getOrderStatus())) {
+						ls.add(goOrder);
+					}
+				}
+			}
+			responseData = new ResponseData<List<GoOrder>>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "操作成功", ls);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<List<GoOrder>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	/**
+	 * 我发表的ONO活动预约单信息
+	 * 
+	 * @param goId
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getMyGroupJoinRecords")
+	@ResponseBody
+	public ResponseData<List<GoJoin>> getMyGroupJoinRecords(@NotBlank(message = "活动ID不为空") String goId,
+			HttpServletRequest request) {
+		ResponseData<List<GoJoin>> responseData = null;
+		try {
+			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			QueryOrderGoRecordReq req = new QueryOrderGoRecordReq();
+			req.setGoId(goId);
+			req.setGoType(GoType.GROUP.getValue());
+			QueryOrderGoRecordResp rep = DubboConsumerFactory.getService(IGoSV.class).queryOrderGoRecords(req);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			List<GoJoin> list = rep.getGoJoins();
+			responseData = new ResponseData<List<GoJoin>>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", list);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<List<GoJoin>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}
