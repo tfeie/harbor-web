@@ -234,8 +234,17 @@ public class GoController {
 		if (!OrderStatus.WAIT_MEET.getValue().equals(goOrder.getOrderStatus())) {
 			throw new BusinessException("预约单状态不正确，不能设定约定地点");
 		}
+	
 		// 判断小白是否已经选择了时间地点
 		boolean confirm = !StringUtil.isBlank(goOrder.getConfirmLocation());
+		boolean on1 = false;
+		boolean on2 = false;
+		if (confirm) {
+			on1 = goOrder.getExpectedLocation1().equals(goOrder.getConfirmLocation());
+			on2 = goOrder.getExpectedLocation2().equals(goOrder.getConfirmLocation());
+		}
+		request.setAttribute("on1", on1);
+		request.setAttribute("on2", on2);
 		request.setAttribute("confirm", confirm);
 		request.setAttribute("userInfo", joinUserInfo);
 		request.setAttribute("goOrder", goOrder);
@@ -327,9 +336,14 @@ public class GoController {
 		// 判断海牛是否设置了时间地点
 		boolean setMeetLocalFlag = !(StringUtil.isBlank(goOrder.getExpectedLocation1())
 				|| StringUtil.isBlank(goOrder.getExpectedLocation2()));
-		// 如果已经设置判断是哪一个
-		boolean on1 = goOrder.getExpectedLocation1().equals(goOrder.getConfirmLocation());
-		boolean on2 = goOrder.getExpectedLocation2().equals(goOrder.getConfirmLocation());
+		// 如果已经设置判断
+		boolean on1 = false;
+		boolean on2 = false;
+		if (setMeetLocalFlag) {
+			on1 = goOrder.getExpectedLocation1().equals(goOrder.getConfirmLocation());
+			on2 = goOrder.getExpectedLocation2().equals(goOrder.getConfirmLocation());
+		}
+
 		request.setAttribute("confirm", confirm);
 		request.setAttribute("on1", on1);
 		request.setAttribute("on2", on2);
@@ -1461,7 +1475,7 @@ public class GoController {
 		}
 		return responseData;
 	}
-	
+
 	@RequestMapping("/mycreateonodetail.html")
 	public ModelAndView mycreateonodetail(HttpServletRequest request) {
 		String goId = request.getParameter("goId");

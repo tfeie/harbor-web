@@ -303,8 +303,7 @@
 <script id="OnOCommentsImpl" type="text/x-jsrender"> 
 <li>
 							<div class="img">
-								<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}" width="40"
-						height="40"></a>
+								<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}"></a>
 							</div>
 							<div class="text">
 								<h2>

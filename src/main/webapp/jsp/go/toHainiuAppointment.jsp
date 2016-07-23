@@ -21,7 +21,6 @@
 	href="//static.tfeie.com/css/weui.min.css">	
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
 <script type="text/javascript" src="<%=_base%>/js/jedate/jedate.js"></script>
@@ -84,7 +83,8 @@
 		</section>
 
 		<section class="wenti-jies">
-			<section class="inp_time">
+			<section class="inp_time" <c:if test="${confirm==true}">style="display:none" </c:if>>
+				
 				<p>
 					<span><input type="text"  class="datainp" readonly
 						id="expectedTime1" class="datepicker" value="<c:out value="${goOrder.expectedTime2}" escapeXml="false" />"/></span><label><input
@@ -95,7 +95,21 @@
 						id="expectedTime2" class="datepicker" value="<c:out value="${goOrder.expectedTime2}" escapeXml="false" />"/></span><label><input
 						type="text" placeholder="请输入地点2" id="expectedLocation2" value="<c:out value="${goOrder.expectedLocation2}" escapeXml="false" />"/></label>
 				</p>
+			</section>	
+			<section class="yuejian-bott" <c:if test="${confirm==false}">style="display:none" </c:if>>
+			
+					<p name="P_CONFIRM" <c:if test="${on1==true}">class="on"</c:if>>
+						<c:out value="${goOrder.expectedTime1}" escapeXml="false" />
+						<c:out value="${goOrder.expectedLocation1}" escapeXml="false" />
+					</p>
+					<p name="P_CONFIRM" <c:if test="${on2==true}">class="on"</c:if>>
+						<c:out value="${goOrder.expectedTime2}" escapeXml="false" />
+						<c:out value="${goOrder.expectedLocation2}" escapeXml="false" />
+					</p>
+				
 			</section>
+			
+			
 			<c:if test="${confirm==false}">
 			<section class="yuejian-but">
 				<button id="BTN_CONFITM_MEET_LOCAL">设置约见地点</button>
@@ -103,8 +117,8 @@
 			</c:if>
 		</section>
 
-		<section class="sec_btn2 yuejian">
-			<input type="button" value="确认服务结束" id="BTN_CONFIRM_MEET_END">
+		<section class="sec_btn2 <c:if test="${goOrder.orderStatus=='40'}">yuejian</c:if>">
+			<input type="button" <c:if test="${goOrder.orderStatus!='40'}">value="确认服务结束" id="BTN_CONFIRM_MEET_END"</c:if><c:if test="${goOrder.orderStatus=='40'}">value="活动已结束" </c:if>>
 		</section>
 	</section>
 </body>
