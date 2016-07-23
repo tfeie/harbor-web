@@ -143,7 +143,7 @@ public class UserController {
 		String inviteParam = request.getParameter("inviteCode");
 		if (invite) {
 			if (StringUtil.isBlank(inviteParam)) {
-				throw new BusinessException("目前只开通邀约注册，请通过分享连接进入注册~");
+				throw new BusinessException("目前只开通邀约注册，速速找好友邀请吧~");
 			}
 			String jsonparam = Java3DESUtil.decryptThreeDESECB(inviteParam);
 			JSONObject json = JSONObject.parseObject(jsonparam);
@@ -152,7 +152,7 @@ public class UserController {
 			String sign = json.getString("sign");
 			String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
 			if (!newsign.equals(sign)) {
-				throw new BusinessException("分享连接已经失效或者被使用，速速找好友邀请吧~");
+				throw new BusinessException("分享连接已被使用，速速找好友邀请吧~");
 			}
 			request.setAttribute("inviteCode", jsonparam);
 		}
