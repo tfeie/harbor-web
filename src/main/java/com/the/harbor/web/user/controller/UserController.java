@@ -67,6 +67,7 @@ import com.the.harbor.commons.components.redis.interfaces.ICacheClient;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
+import com.the.harbor.commons.redisdata.util.HyCfgUtil;
 import com.the.harbor.commons.redisdata.util.HyNotifyUtil;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.redisdata.util.HyUserUtil;
@@ -138,26 +139,22 @@ public class UserController {
 		if (userInfo != null) {
 			throw new BusinessException("您的微信已经注册");
 		}
-		String flag = request.getParameter("flag");
-		if ("share".equals(flag)) {
-			try {
-				String param = request.getParameter("inviteCode");
-				LOG.debug("邀约注册参数：" + param);
-				String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
-				JSONObject json = JSONObject.parseObject(jsonparam);
-				String inviteCode = json.getString("inviteCode");
-				String userId = json.getString("userId");
-				String sign = json.getString("sign");
-				String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
-				if (!newsign.equals(sign)) {
-					throw new BusinessException("数据签名错误");
-				}
-				request.setAttribute("flag", flag);
-				param = java.net.URLEncoder.encode(param);
-				request.setAttribute("inviteCode", param);
-			} catch (Exception ex) {
-				throw new BusinessException("邀请码错误");
+		boolean invite = HyCfgUtil.checkUserRegisterByInvite();
+		String inviteParam = request.getParameter("inviteCode");
+		if (invite) {
+			if (StringUtil.isBlank(inviteParam)) {
+				throw new BusinessException("目前只开通邀约注册，请通过分享连接进入注册~");
 			}
+			String jsonparam = Java3DESUtil.decryptThreeDESECB(inviteParam);
+			JSONObject json = JSONObject.parseObject(jsonparam);
+			String inviteCode = json.getString("inviteCode");
+			String userId = json.getString("userId");
+			String sign = json.getString("sign");
+			String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
+			if (!newsign.equals(sign)) {
+				throw new BusinessException("分享连接已经失效或者被使用，速速找好友邀请吧~");
+			}
+			request.setAttribute("inviteCode", jsonparam);
 		}
 		WeixinUserInfo wxUserInfo = WXUserUtil.getWeixinUserInfo(request);
 		request.setAttribute("wxUserInfo", wxUserInfo);
@@ -227,27 +224,20 @@ public class UserController {
 			if (!randomCode.equals(code)) {
 				throw new BusinessException("输入的验证码不正确");
 			}
-
-			String flag = request.getParameter("flag");
-			String param = request.getParameter("inviteCode");
-			if ("share".equals(flag)) {
-				// 校验数据
-				param = java.net.URLDecoder.decode(param);
-				String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
+			boolean invite = HyCfgUtil.checkUserRegisterByInvite();
+			String inviteParam = request.getParameter("inviteCode");
+			if (invite) {
+				if (StringUtil.isBlank(inviteParam)) {
+					throw new BusinessException("目前只开通邀约注册，请通过分享连接进入注册~");
+				}
+				String jsonparam = Java3DESUtil.decryptThreeDESECB(inviteParam);
 				JSONObject json = JSONObject.parseObject(jsonparam);
 				String inviteCode = json.getString("inviteCode");
 				String userId = json.getString("userId");
 				String sign = json.getString("sign");
 				String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
 				if (!newsign.equals(sign)) {
-					throw new BusinessException("数据签名错误");
-				}
-
-				// 验证邀请码是否有效
-				UserInviteInfo userInvite = DubboConsumerFactory.getService(IUserSV.class)
-						.checkUserInviteCode(inviteCode);
-				if (userInvite == null) {
-					throw new BusinessException("邀请码已被使用，不能重复使用");
+					throw new BusinessException("邀请码已经失效或者被使用，速速找好友邀请吧~");
 				}
 				userRegReq.setInviteCode(inviteCode);
 			}
@@ -255,10 +245,9 @@ public class UserController {
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"注册成功", "");
 			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"注册成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -523,7 +512,7 @@ public class UserController {
 		UserInviteReq req = new UserInviteReq();
 		UserInviteInfo userInvite = new UserInviteInfo();
 		userInvite.setUserId(userInfo.getUserId());
-		userInvite.setStatus(UserInviteStatus.INVITE_VALID.getValue());
+		userInvite.setStatus(UserInviteStatus.NOT_USE.getValue());
 		req.setUserInviteInfo(userInvite);
 		List<UserInviteInfo> userInviteList = DubboConsumerFactory.getService(IUserSV.class).queryUserInvite(req);
 		String code = "";
@@ -1347,45 +1336,6 @@ public class UserController {
 		return responseData;
 	}
 
-	/**
-	 * 更新邀请码状态为正在使用
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/updateUserInvite")
-	@ResponseBody
-	public ResponseData<String> updateUserInvite(HttpServletRequest request) {
-		ResponseData<String> responseData = null;
-		try {
-			String inviteCode = request.getParameter("inviteCode");
-			String sign = request.getParameter("sign");
-			String userId = request.getParameter("userId");
-
-			String newsign = SignUtil.getUserInviteSign(userId, inviteCode);
-			if (!newsign.equals(sign)) {
-				throw new BusinessException("签名校验错误");
-			}
-			UserInviteReq req = new UserInviteReq();
-			UserInviteInfo info = new UserInviteInfo();
-			info.setInviteCode(inviteCode);
-			info.setStatus(UserInviteStatus.INVITE_USING.getValue());
-			req.setUserInviteInfo(info);
-			Response rep = DubboConsumerFactory.getService(IUserSV.class).updateUserInvite(req);
-			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
-				throw new BusinessException(rep.getResponseHeader().getResultCode(),
-						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"分享成功", "1");
-			}
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			responseData = ExceptionUtil.convert(e, String.class);
-		}
-		return responseData;
-	}
-
 	@RequestMapping("/toUserInviteCode.html")
 	public ModelAndView toUserInviteCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView view = new ModelAndView("user/userInviteCode");
@@ -1403,12 +1353,12 @@ public class UserController {
 			}
 			UserInviteReq req = new UserInviteReq();
 			UserInviteInfo userInvite = new UserInviteInfo();
-			userInvite.setStatus(UserInviteStatus.INVITE_VALID.getValue());
+			userInvite.setStatus(UserInviteStatus.NOT_USE.getValue());
 			userInvite.setInviteCode(param);
 			req.setUserInviteInfo(userInvite);
 			List<UserInviteInfo> rep = DubboConsumerFactory.getService(IUserSV.class).queryUserInvite(req);
 			if (CollectionUtil.isEmpty(rep)) {
-				throw new BusinessException("邀请码不正确或已失效");
+				throw new BusinessException("邀请码不正确或已经被使用");
 			}
 
 			String sign = SignUtil.getUserInviteSign("", param);
@@ -1418,7 +1368,6 @@ public class UserController {
 			json.put("sign", sign);
 			String descparam = Java3DESUtil.encryptThreeDESECB(json.toJSONString());
 			descparam = java.net.URLEncoder.encode(descparam);
-
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"邀请码校验成功", descparam);
 		} catch (Exception e) {

@@ -16,6 +16,8 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -25,6 +27,8 @@
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/json2.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <style>
 .off_send_yzm{ white-space: nowrap; display: block; text-align: center; line-height: 2.5em;background: #D1D1D1; color:#fff; border-radius: 5px; margin-left:0.8em; width:10em;}
 </style>
@@ -86,7 +90,6 @@
 						type="hidden" id="wxNickname"
 						value="<c:out value="${wxUserInfo.nickname}"/>" /> <input
 						type="button" value="确认注册" id="HREF_CONFIRM" />
-					<input type="hidden" id="flag" value="<c:out value="${flag}"/>" />
 					<input type="hidden" id="inviteCode" value="<c:out value="${inviteCode}"/>" />
 				</p>
 			</section>
@@ -249,8 +252,7 @@
 					var wxOpenid= $.trim($("#wxOpenid").val());
 					var wxHeadimg= $.trim($("#wxHeadimg").val());
 					var wxNickname= $.trim($("#wxNickname").val());
-					
-					var flag = $.trim($("#flag").val());
+
 					var inviteCode = $.trim($("#inviteCode").val());
 					
 					var userData = {
@@ -268,14 +270,13 @@
 						data: {
 							randomCode: randomCode,
 							userData: JSON.stringify(userData),
-							flag:flag,
 							inviteCode:inviteCode
 						},
 						success: function(transport){
-							_this.showSuccess("注册成功"); 
+							window.location.href="../user/setUserSkills.html"
 						},
 						failure: function(transport){
-							_this.showError(transport.statusInfo);
+							weUI.alert({content:transport.statusInfo});
 						}
 						
 					});
