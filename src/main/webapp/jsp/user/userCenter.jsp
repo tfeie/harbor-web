@@ -102,7 +102,7 @@
 				<p class="ip2_4">
 					<a href="../be/mytimeline.html">我的时间线</a>
 				</p>
-				<p class="ip2_5" style="display:none">
+				<p class="ip2_5">
 					<a href="../user/getUserCard.html">我的名片</a>
 				</p>
 				<p class="ip2_5">
