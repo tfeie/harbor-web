@@ -113,7 +113,7 @@
 					</c:if>
 					<label id="APPLY_SUCCESS" style="display:none">报名成功</label>
 					<c:if test="${joint==true}">
-					<label id="APPLY_SUCCESS"><a href="../go/comments.html?goId=<c:out value="${go.goId}" />">已参加,进入点评</a></label>
+					<label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />">已参加,进入点评</a></label>
 					</c:if>
 				</p>
 			</section>
@@ -197,13 +197,14 @@ wx.config({
 							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 							    paySign: d.paySign, // 支付签名
 							    success: function (res) {
-							    	_this.updateGoJoinPay(orderId,payOrderId,"SUCCESS");
+							    	$("#BTN_BAOMING").hide();
+									$("#APPLY_SUCCESS").show();
+									$("#SEL_SHOW_RESULT").show();
 							    },
 							    fail: function(res){
 							    	weUI.alert({
 										content: "活动支付失败",
 										ok: function(){
-											_this.updateGoJoinPay(orderId,payOrderId,"FAIL");
 											 weUI.closeAlert();
 										}
 									})
@@ -220,30 +221,6 @@ wx.config({
 							$("#APPLY_SUCCESS").show();
 							$("#SEL_SHOW_RESULT").show();
 						}
-						
-					},
-					failure: function(transport){
-						weUI.alert({
-							content: transport.statusInfo
-						})
-					}
-					
-				});
-			},
-			updateGoJoinPay: function(goOrderId,payOrderId,payStatus){
-				var _this = this; 
-				ajaxController.ajax({
-					url: "../go/updateGoJoinPay",
-					type: "post", 
-					data: {
-						goOrderId: goOrderId,
-						payOrderId: payOrderId,
-						payStatus: payStatus
-					} ,
-					success: function(transport){
-						$("#BTN_BAOMING").hide();
-						$("#APPLY_SUCCESS").show();
-						$("#SEL_SHOW_RESULT").show();
 						
 					},
 					failure: function(transport){

@@ -48,6 +48,23 @@ public final class DubboServiceUtil {
 		return resp.getGo();
 	}
 
+	public static GoJoin queryGoJoin(String userId, String goId) {
+		GoJoinQueryReq req = new GoJoinQueryReq();
+		req.setGoId(goId);
+		req.setUserId(userId);
+		GoJoinQueryResp resp = null;
+		try {
+			resp = DubboConsumerFactory.getService(IGoSV.class).queryGoJoin(req);
+		} catch (Exception ex) {
+			GenericException ge = ExceptionUtil.convert2GenericException(ex);
+			throw ge;
+		}
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultMessage());
+		}
+		return resp.getGoJoin();
+	}
+
 	public static GoOrder queryGoOrder(String userId, String goId) {
 		GoOrderQueryReq goOrderQueryReq = new GoOrderQueryReq();
 		goOrderQueryReq.setGoId(goId);

@@ -614,6 +614,12 @@ public class GoController {
 		}
 		boolean joint = HyGoUtil.checkUserHadJointGroup(goId, userInfo.getUserId());
 		boolean applied = HyGoUtil.checkUserHadAppliedGroup(goId, userInfo.getUserId());
+		if(joint){
+			GoJoin goJoin = DubboServiceUtil.queryGoJoin(userInfo.getUserId(), goId);
+			if(goJoin!=null){
+				request.setAttribute("orderId",goJoin.getOrderId());
+			}
+		}
 		request.setAttribute("applied", applied);
 		request.setAttribute("joint", joint);
 		request.setAttribute("go", go);
@@ -1246,33 +1252,32 @@ public class GoController {
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
-			} else {
-				if (resp.isNeedPay()) {
-					if (StringUtil.isBlank(nonceStr)) {
-						throw new BusinessException("支付随机串为空");
-					}
-					if (StringUtil.isBlank(timeStamp)) {
-						throw new BusinessException("申请时间戳为空");
-					}
-					String summary = "Group活动报名支付";
-					String payOrderId = resp.getPayOrderId();
-					String host = "192.168.1.1";
-					String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId,
-							Integer.parseInt(AmountUtils.changeY2F(resp.getPayAmount())), host, userInfo.getWxOpenid(),
-							GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
-					String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
-
-					d.put("package", pkg);
-					d.put("paySign", paySign);
-					d.put("payOrderId", payOrderId);
-				}
-				d.put("needPay", resp.isNeedPay());
-				d.put("orderId", resp.getOrderId());
-				d.put("payAmount", resp.getPayAmount());
-				d.put("payOrderId", resp.getPayOrderId());
-				responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS,
-						ExceptCodeConstants.SUCCESS, "提交成功", d);
 			}
+			if (resp.isNeedPay()) {
+				if (StringUtil.isBlank(nonceStr)) {
+					throw new BusinessException("支付随机串为空");
+				}
+				if (StringUtil.isBlank(timeStamp)) {
+					throw new BusinessException("申请时间戳为空");
+				}
+				String summary = "Group活动报名支付";
+				String payOrderId = resp.getPayOrderId();
+				String host = "192.168.1.1";
+				String pkg = WXHelpUtil.getPackageOfWXJSSDKChoosePayAPI(summary, payOrderId,
+						Integer.parseInt(AmountUtils.changeY2F(resp.getPayAmount())), host, userInfo.getWxOpenid(),
+						GlobalSettings.getHarborWXPayNotifyURL(), nonceStr);
+				String paySign = WXHelpUtil.getPaySignOfWXJSSDKChoosePayAPI(timeStamp, nonceStr, pkg);
+
+				d.put("package", pkg);
+				d.put("paySign", paySign);
+				d.put("payOrderId", payOrderId);
+			}
+			d.put("needPay", resp.isNeedPay());
+			d.put("orderId", resp.getOrderId());
+			d.put("payAmount", resp.getPayAmount());
+			d.put("payOrderId", resp.getPayOrderId());
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"提交成功", d);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
