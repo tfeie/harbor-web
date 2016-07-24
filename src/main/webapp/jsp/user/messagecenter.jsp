@@ -88,12 +88,14 @@
 						},
 						success: function(transport){
 							var dom=$("#DIV_NOTIFY_"+notifyId);
-							dom.fadeOut("200",function(){dom.detach();});
-							var len = $("[name='DIV_NOTIFY']").length;
-							if(len==0){
-								var opt="<div class=\"itms clearfix\">没有任何消息哦~</div>";
-								$("#DIV_MY_NOTIFY").append(opt); 
-							}
+							dom.fadeOut("200",function(){
+								dom.detach();
+								var len = $("[name='DIV_NOTIFY']").length;
+								if(len==0){
+									var opt="<div class=\"itms clearfix\">没有任何消息哦~</div>";
+									$("#DIV_MY_NOTIFY").append(opt); 
+								}
+							});
 						},
 						failure: function(transport){ 
 							 weUI.alert({content:transport.statusInfo});
