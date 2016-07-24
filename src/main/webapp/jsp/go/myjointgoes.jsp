@@ -17,11 +17,6 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
-<link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
-	type="text/css" />
-<link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
-	type="text/css" />
-<link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -39,7 +34,7 @@
 	<section class="mainer">
 		<section class="choose_go">
 			<div class="bor_wid">
-			
+				<p><span goType="group" <c:if test="${goType=='group' }">class="on"</c:if>>Group</span><span  <c:if test="${goType=='ono' }">class="on"</c:if> goType="ono">One on One</span></p>
 			</div>
 		</section>
 		<section class="group_oneon" >
@@ -63,7 +58,7 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
 	(function($){
 		$.GoIndexPage = function(data){
@@ -76,14 +71,6 @@
 		
 			prototype: {
 				init: function(){
-					var goType = this.getPropertyValue("goType");
-					if(goType == "group") {
-						var html = "<p><span class=\"on\" goType=\"group\">Group</span><span goType=\"ono\">One on One</span></p>";
-						$(".bor_wid").html(html);
-					}else{
-						var html = "<p><span goType=\"group\">Group</span><span class=\"on\" goType=\"ono\">One on One</span></p>";
-						$(".bor_wid").html(html);
-					}
 					this.bindEvents(); 
 					this.initData();  
 				},
@@ -96,11 +83,11 @@
 		        	    $(this).addClass("on")
 		        	    var goType=$(".bor_wid p span.on").attr("goType");
 						if(goType=="group"){
-							_this.queryGroupGoes("");
+							_this.queryGroupGoes({searchKey:"",pageNo:1,newload:true});
 							$("#DIV_GROUP_GOES").show();
 							$("#DIV_ONO_GOES").hide();
 						}else{
-							_this.queryOnOGoes("");
+							_this.queryOnOGoes({searchKey:"",pageNo:1,newload:true});
 							$("#DIV_GROUP_GOES").hide();
 							$("#DIV_ONO_GOES").show();
 						}
@@ -136,16 +123,15 @@
 				
 				initData: function(){
 					this.getIndexPageSilders();
-					
-					var goType = '${goType}';
+					var goType = this.getPropertyValue("goType");
 					if(goType == "group") {
 						$("#DIV_GROUP_GOES").show();
 						$("#DIV_ONO_GOES").hide();
-						this.queryGroupGoes();
+						this.queryGroupGoes({searchKey:"",pageNo:1,newload:true});
 					} else {
 						$("#DIV_GROUP_GOES").hide();
 						$("#DIV_ONO_GOES").show();
-						this.queryOnOGoes();
+						this.queryOnOGoes({searchKey:"",pageNo:1,newload:true});
 					}
 				}, 
 				
@@ -180,21 +166,21 @@
 
 					var searchKey="";
 					if(goType=="group" && nextPageNo<=pageCount){
-						this.queryGroupGoes(searchKey,nextPageNo);
+						this.queryGroupGoes({searchKey: searchKey,pageNo:nextPageNo,newload:false});
 					}else if(goType=="ono" && nextPageNo<=pageCount){
-						this.queryOnOGoes(searchKey,nextPageNo);
+						this.queryOnOGoes({searchKey: searchKey,pageNo:nextPageNo,newload:false});
 					}
 				},
 				
-				queryGroupGoes: function(searchKey,pageNo){
+				queryGroupGoes: function(p){
 					var _this = this;
 					ajaxController.ajax({
 						url: "../go/queryMyJointGoes",
 						type: "post",  
 						data : {
 							goType: "group",
-							searchKey: searchKey?searchKey:"",
-							pageNo : pageNo?pageNo:1,
+							searchKey: p.searchKey?p.searchKey:"",
+							pageNo : p.pageNo?p.pageNo:1,
 							pageSize : 10
 						},
 						success: function(transport){
@@ -206,23 +192,23 @@
 							}else{
 								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","group").attr("pageCount",pageCount).hide();
 							}
-							_this.renderGroups(data.result); 
+							_this.renderGroups(data.result,p.newload); 
 						},
 						failure: function(transport){ 
-							_this.renderGroups(); 
+							_this.renderGroups([],p.newload); 
 						}
 					});
 				},
 				
-				queryOnOGoes: function(searchKey,pageNo){
+				queryOnOGoes: function(p){
 					var _this = this;
 					ajaxController.ajax({
 						url: "../go/queryMyJointGoes",
 						type: "post",  
 						data : {
 							goType: "oneonone",
-							searchKey: searchKey?searchKey:"",
-							pageNo : pageNo?pageNo:1,
+							searchKey: p.searchKey?p.searchKey:"",
+							pageNo : p.pageNo?p.pageNo:1,
 							pageSize : 10
 						},
 						success: function(transport){
@@ -234,36 +220,42 @@
 							}else{
 								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("goType","oneonone").attr("pageCount",pageCount).hide();
 							}
-							_this.renderOneOnOne(data.result); 
+							_this.renderOneOnOne(data.result,p.newload); 
 						},
 						failure: function(transport){ 
-							_this.renderOneOnOne(); 
+							_this.renderOneOnOne([],p.newload); 
 						}
 					});
 				},
 				
-				renderGroups : function(data) {
+				renderGroups : function(data,newload) {
 					data = data ? data : [];
 					var opt="";
 					if(data.length>0){
 						 opt = $("#GroupsImpl").render(data);
-						 $("#DIV_GROUP_GOES").append(opt);
 					}else{
 						opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
+					}
+					if(newload){
 						$("#DIV_GROUP_GOES").html(opt);
+					}else{
+						 $("#DIV_GROUP_GOES").append(opt);
 					}
 					
 				},
 				
-				renderOneOnOne : function(data) {
+				renderOneOnOne : function(data,newload) {
 					data = data ? data : [];
 					var opt="";
 					if(data.length>0){
 						 opt = $("#OneOnOnImpl").render(data);
-						 $("#DIV_ONO_GOES").append(opt);
 					}else{
 						opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
+					}
+					if(newload){
 						$("#DIV_ONO_GOES").html(opt);
+					}else{
+						 $("#DIV_ONO_GOES").append(opt);
 					}
 					
 				}, 
