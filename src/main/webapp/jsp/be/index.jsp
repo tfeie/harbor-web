@@ -79,11 +79,9 @@
 			<ul id="UL_BES">
 				
 			</ul>
-			<div id="UL_GOTO_NEXTPAGE" style="display:none">
-				<p align="center">加载下一页</p>
-			</div>
+			
 		</section>
-		
+		<div id="UL_GOTO_NEXTPAGE" style="display:none"></div>
 			
 
 	</section>
@@ -124,9 +122,7 @@
 						var tagId = $(this).attr("tagId");
 						$("[name='BE_TAG']").removeClass("on");
 						$(this).addClass("on");
-						_this.lastTagId=_this.currentTagId
-						_this.currentTagId=tagId;
-						_this.queryBes(tagId,"",1);
+						_this.queryBes({tagId: tagId,searchKey: "",pageNo: 1,newload: true});
 					});
 					$("#UL_BES").delegate("[name='DIV_BE_CONTENT']","click",function(){
 						var beId =$(this).attr("beId");
@@ -166,9 +162,7 @@
 				initData: function(){
 					this.getIndexPageSilders();
 					this.getAllBeIndexPageTags();
-					this.lastTagId="-1";
-					this.currentTagId="-1";
-					this.queryBes("-1","",1);
+					this.queryBes({tagId: "",searchKey: "",pageNo: 1,newload: true});
 				}, 
 				
 				giveHB: function(beId){
@@ -283,57 +277,57 @@
 					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
 					var searchKey="";
 					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
-					//alert(nextPageNo+"/"+pageCount);
 					if(nextPageNo>0 && nextPageNo<=pageCount){
-						this.queryBes(tagId,searchKey,nextPageNo);
+						this.queryBes({tagId: tagId,searchKey: searchKey,pageNo: nextPageNo,newload: false});
 					}
 					
 				},
 				
-				queryBes: function(beTag,searchKey,pageNo){
+				queryBes: function(p){
 					var _this = this;
-					if(beTag=="-1"){
-						beTag="";
-					}
+					weUI.showLoadingToast("加载中...");
 					ajaxController.ajax({
 						url: "../be/queryBes",
 						type: "post",  
 						data : {
-							polyTagId: beTag?beTag:"",
-							searchKey: searchKey?searchKey:"",
-							pageNo : pageNo,
-							pageSize : 5
+							polyTagId: p.tagId?p.tagId:"",
+							searchKey: p.searchKey?p.searchKey:"",
+							pageNo : p.pageNo?p.pageNo: 1,
+							pageSize : 2
 						},
 						success: function(transport){
+							weUI.hideLoadingToast();
 							var data =transport.data?transport.data:{}; 
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
-							_this.renderBes(data.result,pageNo,pageCount); 
-							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
+							_this.renderBes(data.result,p.newload); 
+							if(pageNo<=pageCount){
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","0").attr("pageCount","0").hide();
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",0).attr("pageCount",0);
 							}
 						},
 						failure: function(transport){ 
-							_this.renderBes([],0,0); 
+							weUI.hideLoadingToast();
+							_this.renderBes([],p.newload); 
 						}
 					});
 				},
 				
-				renderBes : function(data,pageNo,pageCount) {
+				renderBes : function(data,newload) {
 					data = data ? data : [];
 					var opt="";
 					if(data.length>0){
 						opt = $("#BeListImpl").render(data);
 					}else{
-						opt="<li>没有任何内容哦~~</li>";
+						if(newload){
+							opt="<li>没有任何内容哦~~</li>";
+						}
 					}
-					//alert(this.currentTagId+"/"+this.lastTagId)
-					if(this.currentTagId==this.lastTagId){
-						$("#UL_BES").append(opt);
-					}else{
+					if(newload){
 						$("#UL_BES").html(opt);
+					}else{
+						$("#UL_BES").append(opt);
 					}
 					
 				},
@@ -384,7 +378,7 @@
 
 <script id="BeTagsImpl" type="text/x-jsrender"> 
 <div class="item">
-						<a href="javascript:void(0)" class="on" tagId="-1" name="BE_TAG">推荐</a>
+						<a href="javascript:void(0)" class="on" tagId="" name="BE_TAG">推荐</a>
 					</div>
 {{for allBeTags}}
 <div class="item">
