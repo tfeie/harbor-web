@@ -166,7 +166,13 @@
 						goOrderId: _this.getPropertyValue("goOrderId")
 					},
 					success: function(transport){
-						window.localtion.href="../go/toHainiuFeedback.html?goOrderId="+_this.getPropertyValue("goOrderId");
+						weUI.alert({
+							content : "活动已结束，等待小白评价~",
+							ok: function(){
+								window.location.href="../go/myono.html?type=mycreate";
+								weUI.closeAlert();
+							}
+						});
 					},
 					failure: function(transport){ 
 						weUI.alert({content: transport.statusInfo});

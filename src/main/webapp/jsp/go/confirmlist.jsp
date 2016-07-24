@@ -125,7 +125,7 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script> 
-
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
 	(function($) {
 		$.GoGroupConfirmPage = function(data) {
@@ -299,6 +299,9 @@
 	})(jQuery);
 
 	$(document).ready(function() {
+		var b = new $.HarborBuilder();
+		b.buildFooter();
+		
 		var p = new $.GoGroupConfirmPage({
 			goId : "<c:out value="${go.goId}"/>",
 			goOrderId: "<c:out value="${goOrderId}"/>",

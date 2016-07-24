@@ -166,8 +166,13 @@
 						},
 						success : function(transport) {
 							weUI.alert({
-								content : "您已经确认约见地点"
+								content : "您已经确认约见地点",
+								ok: function(){
+									window.location.href="../go/myjointgoes.html?goType=ono";
+									weUI.closeAlert();
+								}
 							});
+							
 						},
 						failure : function(transport) {
 							weUI.alert({

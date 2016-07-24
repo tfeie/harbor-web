@@ -99,7 +99,7 @@
 		</section>
 		<section class="yanbaoming">
 			<section class="sec_btn2 fabu" style="display:none" id="SEL_SHOW_RESULT">
-				<input type="button" value="报名成功，等待审核">
+				<input type="button" value="报名成功，等待审核" id="BTN_GOTO_MYJOIN">
 			</section>
 			<section class="yaoy">
 				<p>
@@ -167,6 +167,12 @@ wx.config({
 				$("#BTN_BAOMING").on("click",function(){
 					_this.applyGroup();
 				});
+				
+				$("#BTN_GOTO_MYJOIN").on("click",function(){
+					window.location.href="../go/myjointgoes.html?goType=group";
+				});
+				
+				
 			},
 			
 			getPropertyValue: function(propertyName){
