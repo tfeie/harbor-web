@@ -615,7 +615,7 @@ public class GoController {
 		boolean joint = HyGoUtil.checkUserHadJointGroup(goId, userInfo.getUserId());
 		boolean applied = HyGoUtil.checkUserHadAppliedGroup(goId, userInfo.getUserId());
 		if(joint){
-			GoJoin goJoin = DubboServiceUtil.queryGoJoin(userInfo.getUserId(), goId);
+			GoJoin goJoin = DubboServiceUtil.QueryUserJoinGo(userInfo.getUserId(), goId);
 			if(goJoin!=null){
 				request.setAttribute("orderId",goJoin.getOrderId());
 			}

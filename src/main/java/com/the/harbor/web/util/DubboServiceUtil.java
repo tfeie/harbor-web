@@ -48,13 +48,13 @@ public final class DubboServiceUtil {
 		return resp.getGo();
 	}
 
-	public static GoJoin queryGoJoin(String userId, String goId) {
+	public static GoJoin QueryUserJoinGo(String userId, String goId) {
 		GoJoinQueryReq req = new GoJoinQueryReq();
 		req.setGoId(goId);
 		req.setUserId(userId);
 		GoJoinQueryResp resp = null;
 		try {
-			resp = DubboConsumerFactory.getService(IGoSV.class).queryGoJoin(req);
+			resp = DubboConsumerFactory.getService(IGoSV.class).queryUserJoinGo(req);
 		} catch (Exception ex) {
 			GenericException ge = ExceptionUtil.convert2GenericException(ex);
 			throw ge;
