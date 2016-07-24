@@ -293,7 +293,7 @@
 							polyTagId: p.tagId?p.tagId:"",
 							searchKey: p.searchKey?p.searchKey:"",
 							pageNo : p.pageNo?p.pageNo: 1,
-							pageSize : 2
+							pageSize : 10
 						},
 						success: function(transport){
 							weUI.hideLoadingToast();
