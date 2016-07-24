@@ -543,6 +543,12 @@ public class GoController {
 		return view;
 	}
 
+	/**
+	 * GROUP活动参与方评价页面hainiugroupcomments.jsp
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/comments.html")
 	public ModelAndView comments(HttpServletRequest request) {
 		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
@@ -561,6 +567,37 @@ public class GoController {
 		request.setAttribute("go", go);
 		request.setAttribute("goOrderId", goOrderId);
 		ModelAndView view = new ModelAndView("go/comments");
+		return view;
+	}
+
+	/**
+	 * GROUP活动发起方方评价页面
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/hainiugroupcomments.html")
+	public ModelAndView hainiugroupcomments(HttpServletRequest request) {
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		String goOrderId = request.getParameter("goOrderId");
+		if (StringUtil.isBlank(goOrderId)) {
+			throw new BusinessException("活动预约单不存在");
+		}
+		GoJoin goJoin = DubboServiceUtil.queryGoJoin(goOrderId);
+		if (goJoin == null) {
+			throw new BusinessException("活动预约单不存在");
+		}
+		Go go = DubboServiceUtil.queryGo(goJoin.getGoId());
+		if (go == null) {
+			throw new BusinessException("您查看的活动信息不存在");
+		}
+		if (!go.getUserId().equals(userInfo.getUserId())) {
+			throw new BusinessException("您不是活动发起方,不能点评哦~");
+		}
+		request.setAttribute("go", go);
+		request.setAttribute("goJoin", goJoin);
+		request.setAttribute("goOrderId", goOrderId);
+		ModelAndView view = new ModelAndView("go/hainiugroupcomments");
 		return view;
 	}
 
@@ -1076,6 +1113,7 @@ public class GoController {
 				b.setWxHeadimg(userInfo.getWxHeadimg());
 				b.setEnName(userInfo.getEnName());
 				b.setAbroadCountryName(userInfo.getAbroadCountryName());
+				b.setAbroadCountryRGB(userInfo.getAbroadCountryRGB());
 			}
 
 		}
@@ -1088,6 +1126,7 @@ public class GoController {
 				b.setPenName(puser.getEnName());
 				b.setPuserStatusName(puser.getUserStatusName());
 				b.setPwxHeadimg(puser.getWxHeadimg());
+				b.setAbroadCountryRGB(puser.getAbroadCountryRGB());
 			}
 		}
 	}

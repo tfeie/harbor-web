@@ -156,7 +156,7 @@
 					
 					$("#BEEN_CONFIRM_LIST").delegate("[name='BTN_GOTO_COMMENT']","click",function(){
 						var orderId =$(this).attr("goOrderId");
-						window.location.href="../go/comments.html?goOrderId="+orderId;
+						window.location.href="../go/hainiugroupcomments.html?goOrderId="+orderId;
 					});
 					
 					

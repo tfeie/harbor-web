@@ -550,6 +550,7 @@ public class BeController {
 				b.setWxHeadimg(userInfo.getWxHeadimg());
 				b.setEnName(userInfo.getEnName());
 				b.setAbroadCountryName(userInfo.getAbroadCountryName());
+				b.setAbroadCountryRGB(userInfo.getAbroadCountryRGB());
 			}
 
 		}
@@ -562,6 +563,7 @@ public class BeController {
 				b.setPenName(puser.getEnName());
 				b.setPuserStatusName(puser.getUserStatusName());
 				b.setPwxHeadimg(puser.getWxHeadimg());
+				b.setAbroadCountryRGB(puser.getAbroadCountryRGB());
 			}
 		}
 	}
