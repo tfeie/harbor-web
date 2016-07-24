@@ -17,6 +17,8 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -38,15 +40,11 @@
 			</div>
 		</section>
 		<section class="group_oneon" >
-			<section class="lat_group on" id="DIV_GROUP_GOES">
+			<section class="lat_group on" id="DIV_GOES">
 			</section>
-			<section class="lat_group on" id="DIV_ONO_GOES" style="display: none">
-			</section>
-			<div id="UL_GOTO_NEXTPAGE" style="display:none">
-				<p align="center">点击加载下一页</p>
-			</div>
 		</section>
-		
+		<div id="UL_GOTO_NEXTPAGE" style="display:none">
+		</div>
 		
 	</section>
 </body>
@@ -84,12 +82,8 @@
 		        	    var goType=$(".bor_wid p span.on").attr("goType");
 						if(goType=="group"){
 							_this.queryGroupGoes({searchKey:"",pageNo:1,newload:true});
-							$("#DIV_GROUP_GOES").show();
-							$("#DIV_ONO_GOES").hide();
 						}else{
 							_this.queryOnOGoes({searchKey:"",pageNo:1,newload:true});
-							$("#DIV_GROUP_GOES").hide();
-							$("#DIV_ONO_GOES").show();
 						}
 					});
 					
@@ -125,12 +119,8 @@
 					this.getIndexPageSilders();
 					var goType = this.getPropertyValue("goType");
 					if(goType == "group") {
-						$("#DIV_GROUP_GOES").show();
-						$("#DIV_ONO_GOES").hide();
 						this.queryGroupGoes({searchKey:"",pageNo:1,newload:true});
 					} else {
-						$("#DIV_GROUP_GOES").hide();
-						$("#DIV_ONO_GOES").show();
 						this.queryOnOGoes({searchKey:"",pageNo:1,newload:true});
 					}
 				}, 
@@ -174,6 +164,7 @@
 				
 				queryGroupGoes: function(p){
 					var _this = this;
+					weUI.showLoadingToast("加载中...");
 					ajaxController.ajax({
 						url: "../go/queryMyJointGoes",
 						type: "post",  
@@ -184,17 +175,19 @@
 							pageSize : 10
 						},
 						success: function(transport){
+							weUI.hideLoadingToast();
 							var data =transport.data?transport.data:{}; 
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
-							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","group").attr("pageCount",pageCount);
+							if(pageNo<=pageCount){
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",pageNo+1).attr("goType","group").attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","group").attr("pageCount",pageCount).hide();
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",0).attr("goType","group").attr("pageCount",pageCount);
 							}
 							_this.renderGroups(data.result,p.newload); 
 						},
 						failure: function(transport){ 
+							weUI.hideLoadingToast();
 							_this.renderGroups([],p.newload); 
 						}
 					});
@@ -202,6 +195,7 @@
 				
 				queryOnOGoes: function(p){
 					var _this = this;
+					weUI.showLoadingToast("加载中...");
 					ajaxController.ajax({
 						url: "../go/queryMyJointGoes",
 						type: "post",  
@@ -212,17 +206,19 @@
 							pageSize : 10
 						},
 						success: function(transport){
+							weUI.hideLoadingToast();
 							var data =transport.data;  
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
-							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("goType","oneonone").attr("pageCount",pageCount);
+							if(pageNo<=pageCount){
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",pageNo+1).attr("goType","oneonone").attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("goType","oneonone").attr("pageCount",pageCount).hide();
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo","").attr("goType","oneonone").attr("pageCount",pageCount);
 							}
 							_this.renderOneOnOne(data.result,p.newload); 
 						},
 						failure: function(transport){ 
+							weUI.hideLoadingToast();
 							_this.renderOneOnOne([],p.newload); 
 						}
 					});
@@ -234,12 +230,14 @@
 					if(data.length>0){
 						 opt = $("#GroupsImpl").render(data);
 					}else{
-						opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
+						if(newload){
+							opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
+						}
 					}
 					if(newload){
-						$("#DIV_GROUP_GOES").html(opt);
+						$("#DIV_GOES").html(opt);
 					}else{
-						 $("#DIV_GROUP_GOES").append(opt);
+						 $("#DIV_GOES").append(opt);
 					}
 					
 				},
@@ -250,12 +248,14 @@
 					if(data.length>0){
 						 opt = $("#OneOnOnImpl").render(data);
 					}else{
-						opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
+						if(newload){
+							opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
+						}
 					}
 					if(newload){
-						$("#DIV_ONO_GOES").html(opt);
+						$("#DIV_GOES").html(opt);
 					}else{
-						 $("#DIV_ONO_GOES").append(opt);
+						 $("#DIV_GOES").append(opt);
 					}
 					
 				}, 

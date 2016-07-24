@@ -128,7 +128,7 @@
 							if(pageNo<=pageCount){
 								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",pageNo-1).attr("pageCount",pageCount);
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",0).attr("pageCount",pageCount);
 							}
 						},
 						failure: function(transport){ 
@@ -144,7 +144,9 @@
 					if(data.length>0){
 						opt = $("#MyBeListImpl").render(data);
 					}else{
-						opt="<div class='itms box-s'><div class='js chaochu_2'>没有任何动态哦~</div></div>";
+						if(newload){
+							opt="<div class='itms box-s'><div class='js chaochu_2'>没有任何动态哦~</div></div>";
+						}
 					}
 					if(newload){
 						$("#SELECTTION_MY_BE_LIST").html(opt); 
