@@ -81,9 +81,18 @@
 						var goId =$(this).attr("goId");
 						var goType =$(this).attr("goType");
 						if(goType=="group"){
-							window.location.href="../go/invite.html?goId="+goId;
+							if(type=="mycreate"){
+								window.location.href="../go/confirmlist.html?goId="+goId;
+							}else{
+								window.location.href="../go/invite.html?goId="+goId;
+							}
+							
 						}else{
-							window.location.href="../go/onodetail.html?goId="+goId;
+							if(type=="mycreate"){
+								window.location.href="../go/mycreateonodetail.html?goId="+goId;
+							}else{
+								window.location.href="../go/onodetail.html?goId="+goId;
+							}
 						}
 					});
 					
