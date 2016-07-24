@@ -280,6 +280,7 @@
 					
 					var data = {
 						goId: _this.getPropertyValue("goId"), 
+						orderId: _this.getPropertyValue("goOrderId"),
 						content: content,
 						parentCommentId: parentCommentId,
 						parentUserId: parentUserId
