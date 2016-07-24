@@ -348,7 +348,7 @@
 									<span class="bg-lan" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
 								</div>
 							</div>
-							<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>
+							<div class="jj">{{:employmentInfo}}</div>
 						</div>
 					</div>
 				{{/for}}
@@ -371,7 +371,7 @@
 										<span class="bg-lan" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
 									</div>
 								</div>
-								<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>
+								<div class="jj">{{:employmentInfo}}</div>
 								<div class="hyy">Hi，Nice to meet you.</div>
 							</div>
 						</div>

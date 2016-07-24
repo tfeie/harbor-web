@@ -164,7 +164,7 @@
 									<div class="xx">{{:enName}}</div>
 									 <div class="yrz"><span class="bg-cen" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font></div>
 								</div>
-								<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>
+								<div class="jj">{{:employmentInfo}}</div>
 							</div>
 						</div>
 					</div>

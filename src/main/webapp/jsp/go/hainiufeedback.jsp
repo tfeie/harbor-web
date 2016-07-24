@@ -56,15 +56,7 @@
 					<span><c:out value="${userInfo.enName}" escapeXml="false" /></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}" escapeXml="false" /></label><i><c:out value="${userInfo.userStatusName}" escapeXml="false" /></i>
 				</p>
 				<p>
-				<c:if test="${userInfo.industryName!=null}">
-						<c:out value="${userInfo.industryName}" escapeXml="false" />
-					/
-					</c:if>
-					<c:if test="${userInfo.title!=null}">
-						<c:out value="${userInfo.title}" escapeXml="false" />
-					/
-					</c:if>
-					<c:out value="${userInfo.atCityName}" escapeXml="false" />
+						<c:out value="${userInfo.employmentInfo}" escapeXml="false" />
 				</p>
 			</section>
 

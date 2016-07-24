@@ -203,7 +203,7 @@
 						<div class="xx">
 							{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
 						</div>
-						<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>
+						<div class="jj">{{:employmentInfo}}</div>
 					</div>
 				</div>
 			</div>

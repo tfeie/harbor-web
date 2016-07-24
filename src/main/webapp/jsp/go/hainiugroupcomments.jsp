@@ -41,15 +41,8 @@
 					<c:out value="${goJoin.userStatusName}" />
 				</p>
 				<p>
-					<c:if test="${goJoin.industryName!=null}">
-						<c:out value="${goJoin.industryName}" escapeXml="false" />
-					/
-					</c:if>
-					<c:if test="${goJoin.title!=null}">
-						<c:out value="${goJoin.title}" escapeXml="false" />
-					/
-					</c:if>
-					<c:out value="${goJoin.atCityName}" escapeXml="false" />
+						<c:out value="${goJoin.employmentInfo}" escapeXml="false" />
+					
 				</p>
 			</section>
 			<div class="clear"></div>

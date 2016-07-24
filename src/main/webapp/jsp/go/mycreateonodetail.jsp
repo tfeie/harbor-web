@@ -46,7 +46,7 @@
 		</section>
 		<section class="ip_shengf ip3">
 			<p>
-				<span><c:out value="${go.industryName}"/>/<c:out value="${go.title}"/>/<c:out value="${go.atCityName}"/></span><span class="span2"><c:out value="${go.orgModeName}"/></span>
+				<span><c:out value="${go.employmentInfo}"/></span><span class="span2"><c:out value="${go.orgModeName}"/></span>
 			</p>
 		</section>
 
@@ -324,15 +324,14 @@
 					<p>
 						<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
 					</p>
-					<p>{{:industryName}}/{{:title}}/{{:atCityName}}</p>
+					<p>{{:employmentInfo}}</p>
 				</section>
 				<section class="but_queren">
-					{{:orderStatusName}} <input type="button" value="下一步" name="BTN_NEXT"
+					 <input type="button" value="{{:orderStatusName}},Next" name="BTN_NEXT"
 						class="inpbut" orderId="{{:orderId}}" orderStatus="{{:orderStatus}}"/>
 				</section>
 				<div class="clear"></div>
 		</section>
-
 
 </script>
 

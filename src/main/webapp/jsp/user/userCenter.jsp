@@ -51,11 +51,8 @@
 		</section>
 		<section class="ip_shengf ip2">
 			<p>
-				<c:out value="${userInfo.industryName}" />
-				/
-				<c:out value="${userInfo.title}" />
-				/
-				<c:out value="${userInfo.atCityName}" />
+				<c:out value="${userInfo.employmentInfo}" />
+
 			</p>
 			<p>
 				<span style="display:none"><a href="#"><img

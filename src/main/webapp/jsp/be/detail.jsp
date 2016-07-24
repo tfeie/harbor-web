@@ -77,7 +77,7 @@
 							<span class="bg-lan" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></span><font><c:out value="${userInfo.userStatusName}"/></font>
 						</div>
 					</div>
-					<div class="jj"><c:out value="${userInfo.industryName}"/>/<c:out value="${userInfo.title}"/>/<c:out value="${userInfo.atCityName}"/></div>
+					<div class="jj"><c:out value="${userInfo.employmentInfo}"/></div>
 				</div>
 			</div>
 		</div>

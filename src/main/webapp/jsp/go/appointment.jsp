@@ -71,15 +71,7 @@
 							value="${userInfo.userStatusName}" escapeXml="false" /></label>
 				</p>
 				<p class="on">
-					<c:if test="${userInfo.industryName!=null}">
-						<c:out value="${userInfo.industryName}" escapeXml="false" />
-					/
-					</c:if>
-					<c:if test="${userInfo.title!=null}">
-						<c:out value="${userInfo.title}" escapeXml="false" />
-					/
-					</c:if>
-					<c:out value="${userInfo.atCityName}" escapeXml="false" />
+						<c:out value="${userInfo.employmentInfo}" escapeXml="false" />
 				</p>
 			</section>
 			<div class="clear"></div>

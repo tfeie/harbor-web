@@ -45,15 +45,7 @@
 							<c:out value="${go.userStatusName}" />
 						</p>
 						<p>
-							<c:if test="${go.industryName!=null}">
-								<c:out value="${go.industryName}" escapeXml="false" />
-					/
-					</c:if>
-							<c:if test="${go.title!=null}">
-								<c:out value="${go.title}" escapeXml="false" />
-					/
-					</c:if>
-							<c:out value="${go.atCityName}" escapeXml="false" />
+							<c:out value="${go.employmentInfo}" escapeXml="false" />
 						</p>
 					</section>
 					<div class="clear"></div>

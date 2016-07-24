@@ -46,15 +46,9 @@
 							<c:out value="${go.userStatusName}" />
 						</p>
 						<p>
-							<c:if test="${go.industryName!=null}">
-								<c:out value="${go.industryName}" escapeXml="false" />
-					/
-					</c:if>
-							<c:if test="${go.title!=null}">
-								<c:out value="${go.title}" escapeXml="false" />
-					/
-					</c:if>
-							<c:out value="${go.atCityName}" escapeXml="false" />
+							
+								<c:out value="${go.employmentInfo}" escapeXml="false" />
+					
 						</p>
 					</section>
 					<div class="clear"></div>
@@ -321,7 +315,7 @@
 					<p>
 						<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
 					</p>
-					<p>{{:industryName}}/{{:title}}/{{:atCityName}}</p>
+					<p>{{:employmentInfo}</p>
 				</section>
 				<section class="but_queren">
 					<input type="button" value="拒绝" name="BTN_REJECT" userId="{{:userId}}"/><input type="button" value="通过" name="BTN_PASS"
@@ -342,7 +336,7 @@
 			<p>
 						<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
 					</p>
-					<p>{{:industryName}}/{{:title}}/{{:atCityName}}</p>
+					<p>{{:employmentInfo}}</p>
 		</section>
 		<section class="but_queren">
 			<input type="button" value="互评" name="BTN_GOTO_COMMENT"

@@ -49,7 +49,7 @@
 			</p>
 		</section>
 		<section class="ip_shengf">
-			<p><c:out value="${userInfo.industryName}"/>/<c:out value="${userInfo.title}"/>/<c:out value="${userInfo.atCity}"/></p>
+			<p><c:out value="${userInfo.employmentInfo}"/></p>
 		</section>
 
 		<section class="ip_eng">

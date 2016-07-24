@@ -321,7 +321,7 @@
 								<p>
 									<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
 								</p>
-								<p>{{:industryName}}/{{:title}}/{{:atCityName}}</p>
+								<p>{{:employmentInfo}}</p>
 							</section>
 							<div class="clear"></div>
 						</section>
@@ -373,7 +373,7 @@
 										class="online"><a href="#">{{:orgModeName}}</a></em>
 								</p>
 								<p>
-									{{:industryName}}/{{:title}}/{{:atCityName}}<em>{{:joinCount}}人见过</em>
+									{{:employmentInfo}}<em>{{:joinCount}}人见过</em>
 								</p>
 							</section>
 							<div class="clear"></div>

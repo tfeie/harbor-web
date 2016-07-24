@@ -46,7 +46,7 @@
 		</section>
 		<section class="ip_shengf ip3">
 			<p>
-				<span><c:out value="${go.industryName}"/>/<c:out value="${go.title}"/>/<c:out value="${go.atCityName}"/></span><span class="span2"><c:out value="${go.orgModeName}"/></span>
+				<span><c:out value="${go.employmentInfo}"/></span><span class="span2"><c:out value="${go.orgModeName}"/></span>
 			</p>
 		</section>
 
