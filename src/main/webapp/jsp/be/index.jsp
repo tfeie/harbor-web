@@ -176,7 +176,12 @@
 						},
 						success: function(transport){ 
 							var count = transport.data;
-							$("#a_givehb_"+beId).text(count);
+							var n =$("#a_givehb_"+beId).text();
+							$("#a_givehb_"+beId).text(count+parseInt(n));
+							weUI.showXToast("打赏成功");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
 						},
 						failure: function(transport){ 
 							var busiCode = transport.busiCode;
@@ -211,6 +216,10 @@
 						success: function(transport){
 							var count = transport.data;
 							$("#a_dianzan_"+beId).text(count);
+							weUI.showXToast("已点赞");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
 						},
 						failure: function(transport){ 
 							var busiCode = transport.busiCode;
