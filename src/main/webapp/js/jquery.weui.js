@@ -40,7 +40,7 @@
 			},
 			
 			showLoadingToast: function(title){
-				var t= _getWXLoadingToast();
+				var t= _getWXLoadingToast(title);
 				t.show();
 			},
 			
@@ -93,7 +93,7 @@
 		html+="</div>";
 		var toast = $("#weui_x_toast");
 		if(toast.length==0){
-			$(document.body).append(toast);
+			$(document.body).append(html);
 		}else{
 			toast.find(".weui_toast_content").html(title);
 		}
@@ -101,7 +101,8 @@
 	}
 	
 	var _getWXLoadingToast= function(title){
-		var html="<div id=\"weui_loading_toast\" style=\"display: none;\">";
+		title="加载中";
+		var html="<div id=\"weui_loading_toast\" class=\"weui_loading_toast\" style=\"display: none;\">";
 		html+="<div class=\"weui_mask_transparent\"></div>";
 		html+="<div class=\"weui_toast\">";
 		html+="<div class=\"weui_loading\">";
@@ -123,7 +124,7 @@
 		html+="</div>";
 		var toast = $("#weui_loading_toast");
 		if(toast.length==0){
-			$(document.body).append(toast);
+			$(document.body).append(html);
 		}else{
 			toast.find(".weui_toast_content").html(title);
 		}
