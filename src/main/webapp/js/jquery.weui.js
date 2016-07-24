@@ -31,7 +31,7 @@
 			},
 			
 			showXToast: function(title){
-				var t= _getWXXToast();
+				var t= _getWXXToast(title);
 				t.show();
 			},
 			
@@ -84,6 +84,7 @@
 	}
 	
 	var _getWXXToast= function(title){
+		title=title?title:"";
 		var html="<div id=\"weui_x_toast\" style=\"display: none;\">";
 		html+="<div class=\"weui_mask_transparent\"></div>";
 		html+="<div class=\"weui_toast\">";
@@ -101,7 +102,7 @@
 	}
 	
 	var _getWXLoadingToast= function(title){
-		title="加载中";
+		title=title?title:"";
 		var html="<div id=\"weui_loading_toast\" class=\"weui_loading_toast\" style=\"display: none;\">";
 		html+="<div class=\"weui_mask_transparent\"></div>";
 		html+="<div class=\"weui_toast\">";

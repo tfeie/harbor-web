@@ -34,7 +34,7 @@
 	<section class="mainer">
 		<section class="choose_go">
 			<div class="bor_wid">
-			
+			<p><span goType="group" <c:if test="${goType=='group' }">class="on"</c:if>>Group</span><span  <c:if test="${goType=='ono' }">class="on"</c:if> goType="ono">One on One</span></p>
 			</div>
 		</section>
 		<section class="title">
@@ -80,14 +80,6 @@
 		
 			prototype: {
 				init: function(){
-					var goType = this.getPropertyValue("goType");
-					if(goType == "group") {
-						var html = "<p><span class=\"on\" goType=\"group\">Group</span><span goType=\"ono\">One on One</span></p>";
-						$(".bor_wid").html(html);
-					}else{
-						var html = "<p><span goType=\"group\">Group</span><span class=\"on\" goType=\"ono\">One on One</span></p>";
-						$(".bor_wid").html(html);
-					}
 					this.bindEvents(); 
 					this.initData();  
 				},

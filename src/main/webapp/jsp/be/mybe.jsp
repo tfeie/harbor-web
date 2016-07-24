@@ -22,11 +22,12 @@
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/style.css">
+<link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
-<script src="//static.tfeie.com/v2/js/tap.js"></script>
+
 
 </head>
 
@@ -42,11 +43,9 @@
     
     <section class="betwo-main" id="SELECTTION_MY_BE_LIST">
     	
-    	<div id="UL_GOTO_NEXTPAGE" style="display:none">
-				<p align="center">点击加载下一页</p>
-			</div>
+    	
     </section>
-   
+   	<div id="UL_GOTO_NEXTPAGE" style="display:none"></div>
     
 </body>
 
@@ -60,7 +59,7 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
 	(function($){
 		$.MyBePage = function(data){
@@ -79,16 +78,6 @@
 				
 				bindEvents: function(){
 					var _this = this; 
-					
-					//添加图片按钮事件
-					$("#SPAN_ADD_IMAGE").on("click",function(){
-						 
-					}); 
-					
-					$("#UL_GOTO_NEXTPAGE").on("click",function(){
-						_this.gotoNextPage();
-					});
-					
 					$(window).scroll(function() {
 						var scrollTop = $(document).scrollTop();//获取垂直滚动的距离
 			            var docheight = $(document).height();
@@ -103,18 +92,17 @@
 				},
 				
 				initData: function(){
-					this.getMyBes(1);
+					this.getMyBes({pageNo: 1,newload: true});
 				}, 
 				gotoNextPage: function(){
 					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
 					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
 					if(nextPageNo<=pageCount){
-						this.getMyBes(nextPageNo);
+						this.getMyBes({pageNo:nextPageNo,newload:false});
 					}
-					
 				},
 				
-				getMyBes: function(pageNo){
+				getMyBes: function(p){
 					var _this = this;
 					var type=_this.getPropertyValue("type");
 					var url ="";
@@ -123,31 +111,34 @@
 					}else if(type=="myfavor"){
 						url = "../be/getMyFavorBes";
 					}
+					weUI.showLoadingToast("加载中...");
 					ajaxController.ajax({
 						url: url,
 						type: "post", 
 						data: {  
-							pageNo: pageNo?pageNo:1,
+							pageNo: p.pageNo?p.pageNo:1,
 							pageSize: 10
 						},
 						success: function(transport){
+							weUI.hideLoadingToast();
 							var data =transport.data?transport.data:{}; 
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
-							_this.renderMyBeList(data.result,pageNo,pageCount); 
-							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
+							_this.renderMyBeList(data.result,p.newload); 
+							if(pageNo<=pageCount){
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("pageCount",pageCount).hide();
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",pageNo-1).attr("pageCount",pageCount);
 							}
 						},
 						failure: function(transport){ 
-							_this.renderMyBeList([]); 
+							weUI.hideLoadingToast();
+							_this.renderMyBeList([],p.newload); 
 						}
 					});
 				},
 				 
-				renderMyBeList: function(data,pageNo,pageCount){ 
+				renderMyBeList: function(data,newload){ 
 					data= data?data:[];
 					var opt="";
 					if(data.length>0){
@@ -155,7 +146,12 @@
 					}else{
 						opt="<div class='itms box-s'><div class='js chaochu_2'>没有任何动态哦~</div></div>";
 					}
-					$("#UL_GOTO_NEXTPAGE").before(opt); 
+					if(newload){
+						$("#SELECTTION_MY_BE_LIST").html(opt); 
+					}else{
+						$("#SELECTTION_MY_BE_LIST").append(opt); 
+					}
+					
 				},
 				
 				getPropertyValue: function(propertyName){
@@ -175,8 +171,6 @@
 			type: "<c:out value="${type}"/>"
 		});
 		p.init();
-		
-		
 	});
 </script>
 
