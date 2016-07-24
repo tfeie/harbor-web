@@ -41,7 +41,7 @@
 
 		<section class="ip_name ip2">
 			<p>
-				<span><c:out value="${go.enName}"/></span><label class="lbl2"><c:out value="${go.abroadCountryName}"/></label><c:out value="${go.userStatusName}"/>
+				<span><c:out value="${go.enName}"/></span><label class="lbl2" style="background:<c:out value="${go.abroadCountryRGB}" />"><c:out value="${go.abroadCountryName}"/></label><c:out value="${go.userStatusName}"/>
 			</p>
 		</section>
 		<section class="ip_shengf ip3">
@@ -307,7 +307,7 @@
 							</div>
 							<div class="text">
 								<h2>
-									{{:enName}}<label class="lbl2">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i><span class="frt">{{:createTimeInteval}}
+									{{:enName}}<label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i><span class="frt">{{:createTimeInteval}}
 									</span>
 								</h2>
 								<p>{{:content}}</p>
@@ -322,7 +322,7 @@
 				</section>
 				<section class="ip_text oz">
 					<p>
-						<span>{{:enName}}</span><label class="lbl2">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
+						<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
 					</p>
 					<p>{{:industryName}}/{{:title}}/{{:atCityName}}</p>
 				</section>

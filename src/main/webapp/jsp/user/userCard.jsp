@@ -68,7 +68,7 @@
 		</section>
 		<section class="per_info">
 			<p class="name">
-				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2"><c:out value="${userInfo.abroadCountryName}"/></label><i><c:out value="${userInfo.userStatusName}"/></i>
+				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></label><i><c:out value="${userInfo.userStatusName}"/></i>
 			</p>
 			<p class="pengyou">
 				<a href="#">益友 10</a><a href="#" class="on">助人 10</a><a href="#">公益贝

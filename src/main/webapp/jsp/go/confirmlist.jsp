@@ -41,7 +41,7 @@
 					</section>
 					<section class="ip_text">
 						<p>
-							<span><c:out value="${go.enName}" /></span><label class="lbl2"><c:out
+							<span><c:out value="${go.enName}" /></span><label class="lbl2" style="background:<c:out value="${go.abroadCountryRGB}" />"><c:out
 									value="${go.abroadCountryName}" /></label>
 							<c:out value="${go.userStatusName}" />
 						</p>
@@ -109,7 +109,7 @@
 		<section class="daiqueren">
 			<p>已确认</p>
 		</section>
-		<section class="queren_back in" id="BEEN_CONFIRM_LIST">
+		<section class="queren_back" id="BEEN_CONFIRM_LIST">
 			
 			
 		</section>
@@ -153,6 +153,13 @@
 						var userId =$(this).attr("userId");
 						_this.agree(userId);
 					});
+					
+					$("#BEEN_CONFIRM_LIST").delegate("[name='BTN_GOTO_COMMENT']","click",function(){
+						var orderId =$(this).attr("goOrderId");
+						window.location.href="../go/comments.html?goOrderId="+orderId;
+					});
+					
+					
 
 				},
 				
@@ -276,7 +283,7 @@
 					if(data.length>0){
 						opt=$("#BeenConfirmImpl").render(data);
 					}else{
-						opt="<section class=\"daique_info\" name=\"BEEN_CONFIRM_DETAIL\">没有人申请哦~</section>"
+						opt="<section class=\"daique_info\" name=\"BEEN_CONFIRM_DETAIL\">没有确认记录哦~</section>"
 					}
 					
 					$("#BEEN_CONFIRM_LIST").html(opt); 
@@ -294,6 +301,7 @@
 	$(document).ready(function() {
 		var p = new $.GoGroupConfirmPage({
 			goId : "<c:out value="${go.goId}"/>",
+			goOrderId: "<c:out value="${goOrderId}"/>",
 			topic : "<c:out value="${go.topic}"/>"
 
 		});
@@ -308,7 +316,7 @@
 				</section>
 				<section class="ip_text oz">
 					<p>
-						<span>{{:enName}}</span><label class="lbl2">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
+						<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
 					</p>
 					<p>{{:industryName}}/{{:title}}/{{:atCityName}}</p>
 				</section>
@@ -329,11 +337,14 @@
 		</section>
 		<section class="ip_text oz">
 			<p>
-						<span>{{:enName}}</span><label class="lbl2">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
+						<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
 					</p>
 					<p>{{:industryName}}/{{:title}}/{{:atCityName}}</p>
 		</section>
-
+		<section class="but_queren">
+			<input type="button" value="互评" name="BTN_GOTO_COMMENT"
+						class="inpbut" goOrderId="{{:orderId}}"/>
+		</section>
 		<div class="clear"></div>
 	</section>
 

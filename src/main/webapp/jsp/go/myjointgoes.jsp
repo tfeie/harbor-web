@@ -319,7 +319,7 @@
 							</section>
 							<section class="ip_text">
 								<p>
-									<span>{{:enName}}</span><label class="lbl2">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
+									<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
 								</p>
 								<p>{{:industryName}}/{{:title}}/{{:atCityName}}</p>
 							</section>
@@ -369,7 +369,7 @@
 							</section>
 							<section class="ip_text">
 								<p>
-									<span>{{:enName}}</span><label class="lbl2">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i><em
+									<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i><em
 										class="online"><a href="#">{{:orgModeName}}</a></em>
 								</p>
 								<p>

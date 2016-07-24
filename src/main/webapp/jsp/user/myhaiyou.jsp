@@ -345,7 +345,7 @@
 							<div class="name-xx">
 								<div class="xx">{{:enName}}</div>
 								<div class="yrz">
-									<span class="bg-lan">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+									<span class="bg-lan" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
 								</div>
 							</div>
 							<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>
@@ -368,7 +368,7 @@
 								<div class="name-xx">
 									<div class="xx">{{:enName}}</div>
 									<div class="yrz">
-										<span class="bg-lan">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+										<span class="bg-lan" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
 									</div>
 								</div>
 								<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>

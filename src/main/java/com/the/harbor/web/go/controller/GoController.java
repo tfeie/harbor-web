@@ -234,7 +234,7 @@ public class GoController {
 		if (!OrderStatus.WAIT_MEET.getValue().equals(goOrder.getOrderStatus())) {
 			throw new BusinessException("预约单状态不正确，不能设定约定地点");
 		}
-	
+
 		// 判断小白是否已经选择了时间地点
 		boolean confirm = !StringUtil.isBlank(goOrder.getConfirmLocation());
 		boolean on1 = false;
@@ -546,15 +546,20 @@ public class GoController {
 	@RequestMapping("/comments.html")
 	public ModelAndView comments(HttpServletRequest request) {
 		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-		String goId = request.getParameter("goId");
-		if (StringUtil.isBlank(goId)) {
-			throw new BusinessException("您查看的活动信息不存在");
+		String goOrderId = request.getParameter("goOrderId");
+		if (StringUtil.isBlank(goOrderId)) {
+			throw new BusinessException("活动预约单不存在");
 		}
-		Go go = DubboServiceUtil.queryGo(goId);
+		GoJoin goJoin = DubboServiceUtil.queryGoJoin(goOrderId);
+		if (goJoin == null) {
+			throw new BusinessException("活动预约单不存在");
+		}
+		Go go = DubboServiceUtil.queryGo(goJoin.getGoId());
 		if (go == null) {
 			throw new BusinessException("您查看的活动信息不存在");
 		}
 		request.setAttribute("go", go);
+		request.setAttribute("goOrderId", goOrderId);
 		ModelAndView view = new ModelAndView("go/comments");
 		return view;
 	}
@@ -1259,33 +1264,39 @@ public class GoController {
 
 	@RequestMapping("/getGroupJoinBeenConfirms")
 	@ResponseBody
-	public ResponseData<JSONArray> getGroupJoinBeenConfirms(@NotBlank(message = "活动标识为空") String goId) {
-		ResponseData<JSONArray> responseData = null;
+	public ResponseData<List<GoJoin>> getGroupJoinBeenConfirms(@NotBlank(message = "活动标识为空") String goId,
+			HttpServletRequest request) {
+		ResponseData<List<GoJoin>> responseData = null;
 		try {
-			JSONArray array = new JSONArray();
-			// 获取BE的点赞用户列表
-			Set<String> users = HyGoUtil.getGroupConfirmedUsers(goId);
-			for (String userId : users) {
-				// 获取用户信息
-				UserViewInfo u = WXUserUtil.getUserViewInfoByUserId(userId);
-				if (u != null) {
-					JSONObject d = new JSONObject();
-					d.put("userId", u.getUserId());
-					d.put("wxHeadimg", u.getWxHeadimg());
-					d.put("enName", u.getEnName());
-					d.put("abroadCountryName", u.getAbroadCountryName());
-					d.put("userStatusName", u.getUserStatusName());
-					d.put("industryName", u.getIndustryName());
-					d.put("title", u.getTitle());
-					d.put("atCityName", u.getAtCityName());
-					array.add(d);
+			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			QueryOrderGoRecordReq req = new QueryOrderGoRecordReq();
+			req.setGoId(goId);
+			req.setGoType(GoType.GROUP.getValue());
+			QueryOrderGoRecordResp rep = DubboConsumerFactory.getService(IGoSV.class).queryOrderGoRecords(req);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			List<GoJoin> list = rep.getGoJoins();
+			List<GoJoin> ls = new ArrayList<GoJoin>();
+			if (!CollectionUtil.isEmpty(list)) {
+				for (GoJoin goOrder : list) {
+					if (com.the.harbor.base.enumeration.hygojoin.OrderStatus.APPLIED.getValue()
+							.equals(goOrder.getOrderStatus())
+							|| com.the.harbor.base.enumeration.hygojoin.OrderStatus.AGREE.getValue()
+									.equals(goOrder.getOrderStatus())
+							|| com.the.harbor.base.enumeration.hygojoin.OrderStatus.FINISH.getValue()
+									.equals(goOrder.getOrderStatus())) {
+						ls.add(goOrder);
+					}
 				}
 			}
-			responseData = new ResponseData<JSONArray>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-					"操作成功", array);
+			responseData = new ResponseData<List<GoJoin>>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", ls);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			responseData = ExceptionUtil.convert(e, JSONArray.class);
+			responseData = new ResponseData<List<GoJoin>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}

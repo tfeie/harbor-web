@@ -159,7 +159,7 @@
 		</section>
 		<section class="ip_text">
 			<p>
-				<span>${userInfo.enName}</span><label class="lbl2">${userInfo.abroadCountryName}</label><i>${userInfo.userStatusName}</i>
+				<span>${userInfo.enName}</span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />">${userInfo.abroadCountryName}</label><i>${userInfo.userStatusName}</i>
 			</p>
 			<p>${userInfo.industryName}/${userInfo.title}/${userInfo.atCityName}</p>
 		</section>

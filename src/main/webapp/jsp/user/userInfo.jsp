@@ -45,7 +45,7 @@
 
 		<section class="ip_name">
 			<p>
-				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2"><c:out value="${userInfo.abroadCountryName}"/></label><c:out value="${userInfo.userStatusName}"/>
+				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></label><c:out value="${userInfo.userStatusName}"/>
 			</p>
 		</section>
 		<section class="ip_shengf">

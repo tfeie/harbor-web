@@ -35,7 +35,7 @@ public final class WXUserUtil {
 		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
 		WeixinUserInfo wxUserInfo = WXRequestUtil.getWxUserInfo(wtoken.getAccessToken(), wtoken.getOpenId());
 		if (wxUserInfo == null) {
-			throw new BusinessException(BusiErrorCode.WECHAT_UNAUTHORIZED.getValue(),"您没有通过微信网页授权认证,请先认证");
+			throw new BusinessException(BusiErrorCode.WECHAT_UNAUTHORIZED.getValue(), "您没有通过微信网页授权认证,请先认证");
 		}
 		return wxUserInfo;
 	}
@@ -53,7 +53,8 @@ public final class WXUserUtil {
 		WeixinOauth2Token wtoken = WXRequestUtil.getWeixinOauth2TokenFromSession(request);
 		UserViewInfo userInfo = getUserViewInfoByOpenId(wtoken.getOpenId());
 		if (userInfo == null) {
-			throw new BusinessException(BusiErrorCode.USER_UNREGISTER.getValue(),"您的微信还没注册成湾民,请先注册", true, "../user/toUserRegister.html");
+			throw new BusinessException(BusiErrorCode.USER_UNREGISTER.getValue(), "您的微信还没注册成湾民,请先注册", true,
+					"../user/toUserRegister.html");
 		}
 		return userInfo;
 	}

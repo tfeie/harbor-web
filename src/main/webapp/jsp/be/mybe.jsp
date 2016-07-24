@@ -184,7 +184,7 @@
                    <a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}" width="40" height="40"></a>
                     <div class="name-xx">
                         <div class="xx">{{:enName}}</div>
-                        <div class="yrz"><span class="bg-cen">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font></div>
+                        <div class="yrz"><span class="bg-cen" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font></div>
                     </div>
                 </div>
                 <div class="c">

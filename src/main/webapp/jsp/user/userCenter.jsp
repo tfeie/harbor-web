@@ -44,7 +44,7 @@
 
 		<section class="ip_name ip2">
 			<p>
-				<span><c:out value="${userInfo.enName}" /></span><label class="lbl2"><c:out
+				<span><c:out value="${userInfo.enName}" /></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out
 						value="${userInfo.abroadCountryName}" /></label>
 				<c:out value="${userInfo.userStatusName}" />
 			</p>

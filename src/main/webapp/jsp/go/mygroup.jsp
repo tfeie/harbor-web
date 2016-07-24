@@ -216,7 +216,7 @@
 				</div>
 				<div class="name-xx">
 					<div class="xx">
-						{{:enName}}<span class="bg-lv">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+						{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
 					</div>
 					<div class="jj">{{:industryName}}/{{:title}}/{{:atCityName}}</div>
 				</div>

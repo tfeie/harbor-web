@@ -118,7 +118,7 @@
 				<div class="time">2016-07-23</div>
 				<div class="c">
 					<a href="#">
-						<div class="name">{{:enName}}<span class="bg-lv">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font></div>
+						<div class="name">{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font></div>
 						<div class="xx"><a href="#">{{:signature}}</a> </div>
 					</a>
 				</div>

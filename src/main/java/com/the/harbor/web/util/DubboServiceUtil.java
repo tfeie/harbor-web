@@ -2,6 +2,9 @@ package com.the.harbor.web.util;
 
 import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.Go;
+import com.the.harbor.api.go.param.GoJoin;
+import com.the.harbor.api.go.param.GoJoinQueryReq;
+import com.the.harbor.api.go.param.GoJoinQueryResp;
 import com.the.harbor.api.go.param.GoOrder;
 import com.the.harbor.api.go.param.GoOrderQueryReq;
 import com.the.harbor.api.go.param.GoOrderQueryResp;
@@ -77,6 +80,23 @@ public final class DubboServiceUtil {
 			throw new BusinessException(resp.getResponseHeader().getResultMessage());
 		}
 		return resp.getGoOrder();
+	}
+
+	public static GoJoin queryGoJoin(String goOrderId) {
+		GoJoinQueryReq goJoinQueryReq = new GoJoinQueryReq();
+		goJoinQueryReq.setGoOrderId(goOrderId);
+		GoJoinQueryResp resp = null;
+		try {
+			resp = DubboConsumerFactory.getService(IGoSV.class).queryGoJoin(goJoinQueryReq);
+		} catch (Exception ex) {
+			GenericException ge = ExceptionUtil.convert2GenericException(ex);
+			throw ge;
+		}
+
+		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+			throw new BusinessException(resp.getResponseHeader().getResultMessage());
+		}
+		return resp.getGoJoin();
 	}
 
 	public static UserViewInfo queryUserViewByOpenId(String openId) {

@@ -36,7 +36,7 @@
 			</section>
 			<section class="ip_text">
 				<p>
-					<span><c:out value="${go.enName}" /></span><label class="lbl2"><c:out
+					<span><c:out value="${go.enName}" /></span><label class="lbl2" style="background:<c:out value="${go.abroadCountryRGB}" />"><c:out
 							value="${go.abroadCountryName}" /></label>
 					<c:out value="${go.userStatusName}" />
 				</p>
