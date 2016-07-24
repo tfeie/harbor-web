@@ -18,19 +18,12 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
-<link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
-	type="text/css" />
-<link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
-	type="text/css" />
-<link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/owl.carousel.js"></script>
-<script src="//static.tfeie.com/v2/js/tap.js"></script>
+
 </head>
 <section class="mycenter">
 
@@ -82,7 +75,7 @@
 	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
 wx.config({
 	debug : false,

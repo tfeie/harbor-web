@@ -22,11 +22,12 @@
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/style.css">
+<link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
-<script src="//static.tfeie.com/v2/js/tap.js"></script>
+
 
 </head>
 <body class="bg-eeeeee">
@@ -54,7 +55,7 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
 	(function($){
 		$.MyFansPage = function(data){

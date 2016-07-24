@@ -16,7 +16,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
 <title>发布Be</title>
-
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/style.css">
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
@@ -27,7 +28,6 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
-<script src="//static.tfeie.com/v2/js/tap.js"></script>
 
 </head>
 
@@ -65,7 +65,7 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript"
 	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
