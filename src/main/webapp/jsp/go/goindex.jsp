@@ -102,14 +102,16 @@
 						$(this).parents("p").find("span").removeClass("on")
 		        	    $(this).addClass("on")
 		        	    var goType=$(".bor_wid p span.on").attr("goType");
-						var tagId=$("[name='GO_TAG'].on").attr("tagId");
+						
 						if(goType=="group"){
 							$("#DIV_GROUP_TAGS").show();
 							$("#DIV_ONO_TAGS").hide();
+							var tagId=$("#DIV_GROUP_TAGS").find("[name='GO_TAG'].on").attr("tagId");
 							_this.queryGroupGoes({tagId: tagId, searchKey: "", pageNo: 1, newload: true});
 						}else{
 							$("#DIV_GROUP_TAGS").hide();
 							$("#DIV_ONO_TAGS").show();
+							var tagId=$("#DIV_ONO_TAGS").find("[name='GO_TAG'].on").attr("tagId");
 							_this.queryOnOGoes({tagId: tagId, searchKey: "", pageNo: 1, newload: true});
 						}
 					});
