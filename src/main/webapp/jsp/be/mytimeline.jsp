@@ -20,16 +20,17 @@
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
-<link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
+
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css"> 
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/style.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
-<script src="//static.tfeie.com/v2/js/tap.js"></script>
+
 </head>
 
-<body>
+<body style="background:#ffffff">
 	<section class="wdsjx-main">
 		<div class="top-img">
 			<font><c:out value="${userInfo.hyId}"/></font><img
@@ -54,8 +55,7 @@
 		
 		</div>
 		<div id="UL_GOTO_NEXTPAGE" style="display:none">
-				<p align="center">点击加载下一页</p>
-			</div>
+		</div>
 	</section> 
 </body>
 
@@ -69,7 +69,7 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
 	(function($){
 		$.MyTimeLinePage = function(data){
@@ -112,31 +112,34 @@
 				},
 				
 				initData: function(){
-					this.getMyTimeLine();
+					this.getMyTimeLine({pageNo: 1, newload: true});
 				}, 
 				
-				getMyTimeLine: function(pageNo){
+				getMyTimeLine: function(p){
 					var _this = this;
+					weUI.showLoadingToast("加载中...");
 					ajaxController.ajax({
 						url: "../be/getMyTimeLine",
 						type: "post", 
 						data: { 
-							pageNo: pageNo?pageNo:1,
+							pageNo: p.pageNo?p.pageNo:1,
 							pageSize: 15
 						},
 						success: function(transport){
+							weUI.hideLoadingToast();
 							var data =transport.data?transport.data:{}; 
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
-							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
+							if(pageNo<=pageCount){
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount).hide();
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",0).attr("pageCount",pageCount);
 							}
-							_this.renderMyTimeLineList(data.result); 
+							_this.renderMyTimeLineList(data.result,p.newload); 
 						},
 						failure: function(transport){ 
-							_this.renderMyBeList([]); 
+							weUI.hideLoadingToast();
+							_this.renderMyBeList([],p.newload); 
 						}
 					});
 				},
@@ -145,15 +148,27 @@
 					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
 					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
 					if(nextPageNo<=pageCount){
-						this.getMyTimeLine(nextPageNo);
+						this.getMyTimeLine({pageNo:nextPageNo, newload: false});
 					}
 					
 				},
 				 
-				renderMyTimeLineList: function(data){ 
+				renderMyTimeLineList: function(data,newload){ 
 					data= data?data:[];
-					var opt=$("#MyBeListImpl").render(data);
-					$("#DIV_MY_TIMELINE").html(opt); 
+					var opt="";
+					if(data.length>0){
+						opt=$("#MyBeListImpl").render(data);
+					}else{
+						if(newload){
+							opt="<div class=\"itms\">还没有发表任何动态~</div>";
+						}
+					}
+					if(newload){
+						$("#DIV_MY_TIMELINE").html(opt); 
+					}else{
+						$("#DIV_MY_TIMELINE").append(opt); 
+					}
+					
 				},
 				
 				getPropertyValue: function(propertyName){

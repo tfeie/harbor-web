@@ -22,11 +22,12 @@
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/weui.min.css">
+	href="//static.tfeie.com/css/weui.min.css"> 
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/style.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
-<script src="//static.tfeie.com/v2/js/tap.js"></script>
+
 </head>
 <body class="bg-eeeeee">
 	<nav class="be-nav po-f box-s">
@@ -53,7 +54,7 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
 	(function($) {
 		$.MyOnOGoPage = function(data) {
@@ -98,18 +99,18 @@
 					})
 				},
 				initData : function() {
-					this.getMyGoes(1);
+					this.getMyGoes({pageNo: 1,newload: true});
 				},
 				gotoNextPage: function(){
 					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
 					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
 					if(nextPageNo<=pageCount){
-						this.getMyGoes(nextPageNo);
+						this.getMyGoes({pageNo: nextPageNo,newload: false});
 					}
 					
 				},
 
-				getMyGoes : function(pageNo) {
+				getMyGoes : function(p) {
 					var _this = this;
 					var type=_this.getPropertyValue("type");
 					var url ="";
@@ -118,41 +119,49 @@
 					}else if(type=="myfavor"){
 						url = "../go/getMyFavorGoes";
 					}
+					weUI.showLoadingToast("加载中...");
 					ajaxController.ajax({
 						url : url,
 						type : "post",
 						data : {
 							goType: "oneonone",
-							pageNo : pageNo?pageNo:1,
+							pageNo : p.pageNo?p.pageNo:1,
 							pageSize : 10
 						},
 						success : function(transport) {
+							weUI.hideLoadingToast();
 							var data = transport.data;
 							var data =transport.data?transport.data:{}; 
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
-							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
+							if(pageNo<=pageCount){
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo","").attr("pageCount",pageCount).hide();
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",0).attr("pageCount",pageCount);
 							}
-							_this.renderMyGroups(data.result);
+							_this.renderMyGroups(data.result,p.newload);
 						},
 						failure : function(transport) {
-							_this.renderMyGroups([]);
+							weUI.hideLoadingToast();
+							_this.renderMyGroups([],p.newload);
 						}
 					});
 				},
 
-				renderMyGroups : function(data) {
+				renderMyGroups : function(data,newload) {
 					data = data ? data : [];
 					if(data.length>0){
 						opt = $("#MyGroupsImpl").render(data);
 					}else{
-						opt="<div class='itms box-s'><div class='js chaochu_2'>没有任何One On One活动哦~</div></div>";
+						if(newload){
+							opt="<div class='itms box-s'><div class='js chaochu_2'>没有任何One On One活动哦~</div></div>";
+						}
 					}
-					//$("#DIV_MY_GOES").html(opt);
-					$("#UL_GOTO_NEXTPAGE").before(opt); 
+					if(newload){
+						$("#DIV_MY_GOES").html(opt);
+					}else{
+						$("#DIV_MY_GOES").append(opt);
+					}
 				},
 
 				getPropertyValue : function(propertyName) {

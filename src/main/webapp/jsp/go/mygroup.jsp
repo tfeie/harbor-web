@@ -21,14 +21,16 @@
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
-
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/style.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/json2.js"></script>
-<script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
-<script src="//static.tfeie.com/v2/js/tap.js"></script>
+
 
 </head>
 <body class="bg-eeeeee">
@@ -42,10 +44,10 @@
 	</nav>
 
 	<section class="group-main" id="DIV_MY_GOES">
-		<div id="UL_GOTO_NEXTPAGE" style="display:none">
-				<p align="center">点击加载下一页</p>
-			</div>
+		
 	</section>
+	<div id="UL_GOTO_NEXTPAGE" style="display:none">
+	</div>
 
 </body>
 <script type="text/javascript"
@@ -58,7 +60,7 @@
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script src="//static.tfeie.com/js/jquery.harborbuilder.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
 	(function($) {
 		$.MyGroupGoPage = function(data) {
@@ -101,10 +103,10 @@
 					})
 				},
 				initData : function() {
-					this.getMyGoes();
+					this.getMyGoes({pageNo: 1,newload: true});
 				},
 
-				getMyGoes : function(pageNo) {
+				getMyGoes : function(p) {
 					var _this = this;
 					var type=_this.getPropertyValue("type");
 					var url ="";
@@ -113,49 +115,58 @@
 					}else if(type=="myfavor"){
 						url = "../go/getMyFavorGoes";
 					}
+					weUI.showLoadingToast("加载中...");
 					ajaxController.ajax({
 						url : url,
 						type : "post",
 						data : {
 							goType: "group",
-							pageNo : pageNo?pageNo:1,
+							pageNo : p.pageNo?p.pageNo:1,
 							pageSize : 10
 						},
 						success : function(transport) {
+							weUI.hideLoadingToast();
 							var data = transport.data;
 							var data =transport.data?transport.data:{}; 
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
-							if(pageNo<pageCount){
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
+							if(pageNo<=pageCount){
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",pageNo+1).attr("pageCount",pageCount);
 							}else{
-								$("#UL_GOTO_NEXTPAGE").show().attr("nextPageNo",pageNo+1).attr("pageCount",pageCount).hide();
+								$("#UL_GOTO_NEXTPAGE").attr("nextPageNo",0).attr("pageCount",pageCount);
 							}
-							_this.renderMyGroups(data.result);
+							_this.renderMyGroups(data.result,p.newload);
 						},
 						failure : function(transport) {
-							_this.renderMyGroups([]);
+							weUI.hideLoadingToast();
+							_this.renderMyGroups([],p.newload);
 						}
 					});
 				},
 
-				renderMyGroups : function(data) {
+				renderMyGroups : function(data,newload) {
 					data = data ? data : [];
 					var opt="";
 					if(data.length>0){
 						opt = $("#MyGroupsImpl").render(data);
 					}else{
-						opt="<div class='itms box-s'><div class='js chaochu_2'>您没有任何Group活动哦~</div></div>";
+						if(newload){
+							opt="<div class='itms box-s'><div class='js chaochu_2'>您没有任何Group活动哦~</div></div>";
+						}
+					}
+					if(newload){
+						$("#DIV_MY_GOES").html(opt);
+					}else{
+						$("#DIV_MY_GOES").append(opt);
 					}
 					
-					$("#UL_GOTO_NEXTPAGE").before(opt);
 				},
 				
 				gotoNextPage: function(){
 					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
 					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
 					if(nextPageNo<=pageCount){
-						this.getMyGoes(nextPageNo);
+						this.getMyGoes({pageNo: nextPageNo,newload: false});
 					}
 					
 				},
