@@ -396,7 +396,7 @@
 					width="80" height="80"></a>
 			</div>
 							
-							<span>{{:enName}}</span> <label class="lbl2">{{:abroadCountryName}}</label> <em>{{:userStatusName}}</em>
+							<span>{{:enName}}</span> <label class="lbl2">{{:abroadCountryName}} {{:abroadCountryRGB}}</label> <em>{{:userStatusName}}</em>
 						</div>
 						<div class="member" beId="{{:beId}}" name="DIV_BE_CONTENT">
 							<div class="div_title">
