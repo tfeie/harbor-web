@@ -25,8 +25,6 @@
 	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
-<script src="//static.tfeie.com/v2/js/tap.js"></script>
 <script type="text/javascript"
 	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <style>
