@@ -80,6 +80,7 @@
 					$("#DIV_MY_GOES").delegate("[name='GROUP_DETL']","click",function(){
 						var goId =$(this).attr("goId");
 						var goType =$(this).attr("goType");
+						var type =_this.getPropertyValue("type");
 						if(goType=="group"){
 							if(type=="mycreate"){
 								window.location.href="../go/confirmlist.html?goId="+goId;
