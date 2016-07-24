@@ -164,8 +164,9 @@ wx.config({
 					var _this = this; 
 					
 					$("#DIV_BE_DETAIL").delegate("#DIV_DO_SHARE","click",function(){
+						var topic =$(this).attr("topic");
 						wx.onMenuShareTimeline({
-						    title: _this.getPropertyValue("topic"),
+						    title: topic,
 						    link:  _this.getPropertyValue("url"), 
 						    //imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
@@ -178,7 +179,7 @@ wx.config({
 						    }
 						});	
 						wx.onMenuShareAppMessage({
-						    title: _this.getPropertyValue("topic"),
+						    title: topic,
 						    link:  _this.getPropertyValue("url"), 
 						    //imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
@@ -501,7 +502,6 @@ wx.config({
 	$(document).ready(function(){ 
 		var p = new $.BeDetailPage({
 			beId: "<c:out value="${beId}"/>",
-			topic: "<c:out value="${topic}"/>",
 			url: "<c:out value="${url}"/>"
 		});
 		p.init();
@@ -530,7 +530,7 @@ wx.config({
 			{{/for}} 
 			</div>
 			<div class="btn-bottom">
-				<div class="btn-fx box-s" id="DIV_DO_SHARE"></div>
+				<div class="btn-fx box-s" id="DIV_DO_SHARE" topic="{{:contentSummary}}"></div>
 				<div class="btn-z  box-s" id="DIV_DO_DIANZAN" beId = "{{:beId}}">
 					<font>{{:dianzanCount}}</font>
 				</div>

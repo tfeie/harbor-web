@@ -114,11 +114,8 @@ public class BeController {
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
 		request.setAttribute("url", GlobalSettings.getHarborDomain() + "/be/detail.html?beId=" + be.getUserId());
-		request.setAttribute("topic", be.getContentSummary());
 		request.setAttribute("userInfo", userInfo);
-
 		request.setAttribute("beId", beId);
-		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("be/detail");
 		return view;
 	}
