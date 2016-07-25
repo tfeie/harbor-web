@@ -531,7 +531,7 @@ public class UserController {
 			json.put("inviteCode", code);
 			json.put("sign", sign);
 			param = Java3DESUtil.encryptThreeDESECB(json.toJSONString());
-			param = java.net.URLEncoder.encode(param,"utf-8");
+			param = java.net.URLEncoder.encode(param, "utf-8");
 		} catch (Exception ex) {
 			throw new BusinessException("邀请码加密错误");
 		}
@@ -563,7 +563,7 @@ public class UserController {
 			JSONObject json = JSONObject.parseObject(jsonparam);
 			userId = json.getString("userId");
 			request.setAttribute("initcode", json.getString("code"));
-			param = java.net.URLEncoder.encode(param,"utf-8");
+			param = java.net.URLEncoder.encode(param, "utf-8");
 		} catch (Exception ex) {
 			throw new BusinessException("邀请码解密错误");
 		}
@@ -1033,33 +1033,13 @@ public class UserController {
 	 * @param fansUserId
 	 */
 	private void sendAddFansMQ(String userId, String fansUserId) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			DoUserFans body = new DoUserFans();
-			body.setFansUserId(fansUserId);
-			body.setUserId(userId);
-			body.setTime(DateUtil.getSysDate());
-			body.setHandleType(DoUserFans.HandleType.GUANZHU.name());
-			body.setMqId(UUIDUtil.genId32());
-			body.setMqType(MQType.MQ_HY_USER_FANS.getValue());
-			message.setMessageBody(JSONObject.toJSONString(body));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("User Fans build  message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
+		DoUserFans body = new DoUserFans();
+		body.setFansUserId(fansUserId);
+		body.setUserId(userId);
+		body.setTime(DateUtil.getSysDate());
+		body.setHandleType(DoUserFans.HandleType.GUANZHU.name());
+		UserInteractionMQSend.sendMQ(body);
+
 	}
 
 	/**

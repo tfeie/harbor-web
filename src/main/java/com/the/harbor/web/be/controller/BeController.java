@@ -20,11 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.aliyun.mns.client.CloudQueue;
-import com.aliyun.mns.client.MNSClient;
-import com.aliyun.mns.common.ClientException;
-import com.aliyun.mns.common.ServiceException;
-import com.aliyun.mns.model.Message;
 import com.the.harbor.api.be.IBeSV;
 import com.the.harbor.api.be.param.Be;
 import com.the.harbor.api.be.param.BeComment;
@@ -50,7 +45,6 @@ import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.PageInfo;
 import com.the.harbor.base.vo.Response;
-import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
@@ -572,33 +566,12 @@ public class BeController {
 	 * @param userId
 	 */
 	private void sendBeDoLikesMQ(String beId, String userId) {
-		MNSClient client = MNSFactory.getMNSClient();
-		try {
-			CloudQueue queue = client.getQueueRef(GlobalSettings.getUserInteractionQueueName());
-			Message message = new Message();
-			DoBeLikes body = new DoBeLikes();
-			body.setBeId(beId);
-			body.setUserId(userId);
-			body.setTime(DateUtil.getSysDate());
-			body.setHandleType(HandleType.ZAN.name());
-			body.setMqId(UUIDUtil.genId32());
-			body.setMqType(MQType.MQ_HY_BE_LIKES.getValue());
-			message.setMessageBody(JSONObject.toJSONString(body));
-			queue.putMessage(message);
-		} catch (ClientException ce) {
-			LOG.error("Something wrong with the network connection between client and MNS service."
-					+ "Please check your network and DNS availablity.", ce);
-		} catch (ServiceException se) {
-			if (se.getErrorCode().equals("QueueNotExist")) {
-				LOG.error("Queue is not exist.Please create before use", se);
-			} else if (se.getErrorCode().equals("TimeExpired")) {
-				LOG.error("The request is time expired. Please check your local machine timeclock", se);
-			}
-			LOG.error("BE dianzan add message put in Queue error", se);
-		} catch (Exception e) {
-			LOG.error("Unknown exception happened!", e);
-		}
-		client.close();
+		DoBeLikes body = new DoBeLikes();
+		body.setBeId(beId);
+		body.setUserId(userId);
+		body.setTime(DateUtil.getSysDate());
+		body.setHandleType(HandleType.ZAN.name());
+		UserDianzanMQSend.sendMQ(body);
 	}
 
 	/**
@@ -707,7 +680,7 @@ public class BeController {
 			} else {
 				long count = HyBeUtil.getBeRewardHBCount(giveHBReq.getBeId());
 				responseData = new ResponseData<Long>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"打赏成功", count+1);
+						"打赏成功", count + 1);
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);

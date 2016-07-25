@@ -23,8 +23,8 @@ import com.the.harbor.commons.util.DateUtil;
 import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.web.model.ResponseData;
-import com.the.harbor.web.system.utils.NotifyMQSend;
 import com.the.harbor.web.system.utils.WXUserUtil;
+import com.the.harbor.web.util.NotifyMQSend;
 
 @RestController
 @RequestMapping("/notify")
