@@ -12,6 +12,8 @@ import com.the.harbor.api.be.param.DoBeLikes;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
+import com.the.harbor.commons.indices.mq.MNSRecord;
+import com.the.harbor.commons.indices.mq.MNSRecordThread;
 import com.the.harbor.commons.util.UUIDUtil;
 
 public class UserDianzanMQSend {
@@ -20,6 +22,8 @@ public class UserDianzanMQSend {
 
 	public static void sendMQ(DoBeLikes body) {
 		MNSClient client = MNSFactory.getMNSClient();
+		String sendStatus = MNSRecord.Status.SEND_SUCCESS.name();
+		String sendError = null;
 		try {
 			body.setMqId(UUIDUtil.genId32());
 			body.setMqType(MQType.MQ_HY_BE_LIKES.getValue());
@@ -28,6 +32,8 @@ public class UserDianzanMQSend {
 			message.setMessageBody(JSONObject.toJSONString(body));
 			queue.putMessage(message);
 		} catch (ClientException ce) {
+			sendStatus = MNSRecord.Status.SEND_FAIL.name();
+			sendError = "ClientException:" + ce.getMessage();
 			LOG.error("Something wrong with the network connection between client and MNS service."
 					+ "Please check your network and DNS availablity.", ce);
 		} catch (ServiceException se) {
@@ -36,10 +42,24 @@ public class UserDianzanMQSend {
 			} else if (se.getErrorCode().equals("TimeExpired")) {
 				LOG.error("The request is time expired. Please check your local machine timeclock", se);
 			}
-			LOG.error("be dianzan message put in Queue error", se);
+			LOG.error("message put in Queue error", se);
+			sendStatus = MNSRecord.Status.SEND_FAIL.name();
+			sendError = "ServiceException:" + se.getMessage();
 		} catch (Exception e) {
 			LOG.error("Unknown exception happened!", e);
+			sendStatus = MNSRecord.Status.SEND_FAIL.name();
+			sendError = e.getMessage();
 		}
+		
+		
+		MNSRecord mns = new MNSRecord();
+		mns.setMqId(body.getMqId());
+		mns.setMqType(body.getMqType());
+		mns.setSendStatus(sendStatus);
+		mns.setSendError(sendError);
+		mns.setMqBody(body);
+		new Thread(new MNSRecordThread(mns)).start();
+		
 		client.close();
 	}
 
