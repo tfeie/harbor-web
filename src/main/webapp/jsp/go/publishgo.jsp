@@ -43,7 +43,7 @@
 		<section class="act_info">
 			<p>
 				<span class="on" name="goType" goType="group">Group邀请<input
-					type="text" placeholder="5-6" id="inviteMembers" />人
+					type="text" id="inviteMembers" />人
 				</span> <span name="goType" goType="oneonone">One on One</span>
 			</p>
 		</section>
@@ -52,7 +52,7 @@
 				<span><input class="datainp" id="expectedStartTime" type="text" placeholder="请选择"  readonly><!-- <input type="text" placeholder="2016-5-25 10:00 " id="expectedStartTime"
 					class="datepicker" /> --></span><label>
 							<select id="expectedDuration" class="chooes_2">
-								<option value="">请选择</option>
+								<option value="">时长</option>
 								<option value="约1个小时">约1小时</option>
 								<option value="约2小时">约2小时</option>
 								<option value="半天">半天</option>
@@ -75,7 +75,7 @@
 				<span name="orgMode" orgMode="offline" class="on">线下服务</span><span name="orgMode" orgMode="online">在线服务</span>
 			</p>
 			<p id="p_location">
-				<input type="text" placeholder="北京中关村附近" id="location"/>
+				<input type="text" placeholder="北京朝阳区星巴克(中关村店)" id="location"/>
 			</p>
 		</section>
 		<section class="fabu_zhuti disan">

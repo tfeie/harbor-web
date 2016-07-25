@@ -24,6 +24,7 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 
 </head>
 <body>
@@ -293,6 +294,9 @@
 	})(jQuery);
 
 	$(document).ready(function() {
+		var b = new $.HarborBuilder();
+		b.buildFooter();
+		
 		var p = new $.OnOGoDetailPage({
 			goId : "<c:out value="${go.goId}"/>"
 		});

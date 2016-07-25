@@ -43,7 +43,7 @@
 		</section>
 		<section class="tijiao on">
 			<p>
-				<c:if test="${confirm==true}">小白已经确认了时间地点，您不能再修改</c:if>
+				<c:if test="${confirm==true}">用户已经确认了时间地点，您不能再修改</c:if>
 				<c:if test="${confirm==false}">请您输入2个活动举办的时间地点</c:if>
 			</p>
 		</section>
@@ -120,6 +120,7 @@
 		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script> 
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 	
 <script type="text/javascript">
 (function($){
@@ -143,7 +144,14 @@
 				}); 
 				
 				$("#BTN_CONFIRM_MEET_END").on("click", function() {
-					_this.confirmMeetEnd();
+					weUI.confirm({
+						content : "您确认服务已经结束了吗?",
+						ok: function(){
+							_this.confirmMeetEnd();
+							weUI.closeConfirm();
+						}
+					});
+					
 				});
 				
 				
@@ -159,7 +167,7 @@
 					},
 					success: function(transport){
 						weUI.alert({
-							content : "活动已结束，等待小白评价~",
+							content : "活动已结束，等待用户评价~",
 							ok: function(){
 								window.location.href="../go/myono.html?type=mycreate";
 								weUI.closeAlert();
@@ -248,7 +256,7 @@
 						expectedLocation2: expectedLocation2
 					},
 					success: function(transport){
-						weUI.alert({content:"约见地点设置成功,等待小白确认",
+						weUI.alert({content:"约见地点设置成功,等待用户确认",
 							ok: function(){
 								window.location.href="../go/mycreateonodetail.html?goId="+_this.getPropertyValue("goId");
 								weUI.closeAlert();
@@ -284,6 +292,9 @@ $(document).ready(function(){
 		isTime:true,
 		minDate:jeDate.now(0)
 	});
+	
+	var b = new $.HarborBuilder();
+	b.buildFooter();
 
 	var p = new $.GoHainiuAppointmentPage({ 
 		goId:  "<c:out value="${goOrder.goId}"/>",

@@ -1366,6 +1366,7 @@ public class GoController {
 					d.put("industryName", u.getIndustryName());
 					d.put("title", u.getTitle());
 					d.put("atCityName", u.getAtCityName());
+					d.put("abroadCountryRGB", u.getAbroadCountryRGB());
 					array.add(d);
 				}
 			}
@@ -1435,6 +1436,7 @@ public class GoController {
 				d.put("industryName", u.getIndustryName());
 				d.put("title", u.getTitle());
 				d.put("atCityName", u.getAtCityName());
+				d.put("abroadCountryRGB", u.getAbroadCountryRGB());
 			}
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"处理成功", d);
