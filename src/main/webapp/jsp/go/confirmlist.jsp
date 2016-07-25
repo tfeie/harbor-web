@@ -319,7 +319,7 @@
 				</section>
 				<section class="ip_text oz">
 					<p>
-						<span>{{:enName}}</span><label class="lbl2" >{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
+						<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
 					</p>
 					<p> {{:employmentInfo}} </p>
 				</section>
