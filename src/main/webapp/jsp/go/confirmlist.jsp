@@ -267,6 +267,7 @@
 				renderWaitConfirm: function(data){
 					data= data?data:[];
 					var opt="";
+					console.log(data);
 					if(data.length>0){
 						opt=$("#WaitConfirmImpl").render(data);
 					}else{
