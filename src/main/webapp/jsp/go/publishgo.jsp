@@ -88,7 +88,8 @@
 
 		<section class="fabu_but">
 			<p>
-				<span class="in" id="SPAN_ADD_IMAGE"><a>添加图片</a></span><span class="on"  id="SPAN_ADD_TEXT"><a>添加文本</a></span>
+				<span class="in"  id="SPAN_ADD_TEXT"><a>添加文本</a></span>
+				<span class="on" id="SPAN_ADD_IMAGE"><a>添加图片</a></span>
 			</p>
 		</section>
 		<div class="clear"></div>
