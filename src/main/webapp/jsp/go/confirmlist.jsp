@@ -321,7 +321,7 @@
 					<p>
 						<span>{{:enName}}</span><label class="lbl2" >{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
 					</p>
-					<p></p>
+					<p> {{:employmentInfo}} </p>
 				</section>
 				<section class="but_queren">
 					<input type="button" value="拒绝" name="BTN_REJECT" userId="{{:userId}}"/><input type="button" value="通过" name="BTN_PASS"
