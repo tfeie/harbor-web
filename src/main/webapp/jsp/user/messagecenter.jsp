@@ -163,9 +163,9 @@
 				{{/if}}
 			</div>
 			<div class="r">
-				<div class="time">{{:timeInterval}}</div>
+				<div class="time"><a href="{{if haslink==true}}{{:link}}{{else}}javascript:void(0){{/if}}">{{:timeInterval}}</a></div>
 				<div class="c">
-					<a href="#">
+					<a href="{{if haslink==true}}{{:link}}{{else}}javascript:void(0){{/if}}">
 						{{if accepterType=='system'}}
 							<div class="name">{{:title}}</div>
 						{{else}}
