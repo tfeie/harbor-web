@@ -228,9 +228,12 @@ wx.config({
 					$("#DIV_BE_DETAIL").delegate("#BE_IMG","click",function(){
 						var imageURL = $(this).attr("imageUrl");
 						var imageURLs = _this.imageURLs?_this.imageURLs:[];
+						console.log(imageURL);
+						console.log(imageURLs);
 						if(imageURLs.length==0){
 							return;
 						}
+						console.log("preview");
 						wx.previewImage({
 						    current: imageURL, // 当前显示图片的http链接
 						    urls: imageURLs // 需要预览的图片http链接列表
