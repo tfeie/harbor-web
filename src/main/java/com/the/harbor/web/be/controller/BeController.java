@@ -107,7 +107,7 @@ public class BeController {
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
-		request.setAttribute("url", GlobalSettings.getHarborDomain() + "/be/detail.html?beId=" + be.getUserId());
+		request.setAttribute("url", GlobalSettings.getHarborDomain() + "/be/detail.html?beId=" + beId);
 		request.setAttribute("userInfo", userInfo);
 		request.setAttribute("beId", beId);
 		ModelAndView view = new ModelAndView("be/detail");

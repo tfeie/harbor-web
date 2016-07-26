@@ -934,7 +934,7 @@
 						success: function(transport){
 							weUI.alert({
 								content: "资料修改成功",
-								ok:function(){ 
+								ok:function(){
 									window.location.href="../user/userCenter.html";
 								}
 							})
