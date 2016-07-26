@@ -230,11 +230,9 @@ wx.config({
 						var imageURLs = _this.imageURLs?_this.imageURLs:[];
 						console.log(imageURL);
 						console.log(imageURLs);
-						alert(imageURLs.length+"ll");
 						if(imageURLs.length==0){
 							return;
 						}
-						console.log("preview");
 						wx.previewImage({
 						    current: imageURL, // 当前显示图片的http链接
 						    urls: imageURLs // 需要预览的图片http链接列表
@@ -501,28 +499,25 @@ wx.config({
 					data= data?data:{};
 					var imageURLs = new Array();
 					var num = 0;
-					if(data.length>0){
-						var beDetails = data.beDetails;
-						if(beDetails && beDetails.length > 0){
-							for (var i=0;i< beDetails.length;i++){
-								var type = beDetails[i].type;
-								if(type == "text") {
-									if(num == 1){
-										var detail = beDetails[i].detail;
-										if(detail.length > 10){
-											detail = detail.substr(0,10);
-										}
-										this.params['shareDesc'] = beDetails[i].detail;
-										break;
-									}else {
-										num += 1;
+					var beDetails = data.beDetails;
+					if(beDetails && beDetails.length > 0){
+						for (var i=0;i< beDetails.length;i++){
+							var type = beDetails[i].type;
+							if(type == "text") {
+								if(num == 1){
+									var detail = beDetails[i].detail;
+									if(detail.length > 10){
+										detail = detail.substr(0,10);
 									}
-									
-								}else if(type=="image"){
-									var imageUrl = beDetails[i].imageUrl;
-									alert(imageUrl);
-									imageURLs.push(imageUrl);
+									this.params['shareDesc'] = beDetails[i].detail;
+									break;
+								}else {
+									num += 1;
 								}
+								
+							}else if(type=="image"){
+								var imageUrl = beDetails[i].imageUrl;
+								imageURLs.push(imageUrl);
 							}
 						}
 					}
