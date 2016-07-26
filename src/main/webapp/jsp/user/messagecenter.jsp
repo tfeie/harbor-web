@@ -127,7 +127,7 @@
 					if(data.length>0){
 						opt=$("#MyNotifyListImpl").render(data);
 					}else{
-						opt="<div class=\"itms clearfix\" style=\"align:center\">没有任何消息哦~</div>";
+						opt="<div class=\"itms clearfix\">没有任何消息哦~</div>";
 					}
 					$("#DIV_MY_NOTIFY").html(opt); 
 				},
