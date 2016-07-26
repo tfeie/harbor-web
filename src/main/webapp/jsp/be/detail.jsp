@@ -510,7 +510,6 @@ wx.config({
 										detail = detail.substr(0,10);
 									}
 									this.params['shareDesc'] = beDetails[i].detail;
-									break;
 								}else {
 									num += 1;
 								}
