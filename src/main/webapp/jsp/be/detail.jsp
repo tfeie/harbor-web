@@ -250,6 +250,10 @@ wx.config({
 						},
 						success: function(transport){ 
 							var count = transport.data;
+							weUI.showXToast("打赏成功");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 							_this.getRewardUsers(count); 
 						},
 						failure: function(transport){ 
@@ -314,6 +318,10 @@ wx.config({
 						success: function(transport){
 							var data = transport.data;
 							var arr = [data];
+							weUI.showXToast("评论成功");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
 							var opt=$("#BeCommentsImpl").render(arr);
 							$("#DIV_BE_COMMENTS").append(opt); 
 							$("#COMMENT_CONTENT").val("");
@@ -349,6 +357,10 @@ wx.config({
 						},
 						success: function(transport){
 							var count = transport.data;
+							weUI.showXToast("已点赞");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
 							$("#DIV_DO_DIANZAN").html("<font>"+count+"</font>");
 						},
 						failure: function(transport){ 
@@ -376,6 +388,10 @@ wx.config({
 						},
 						success: function(transport){
 							var count = transport.data;
+							weUI.showXToast("已取消");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
 							$("#DIV_DO_DIANZAN").html("<font>"+count+"</font>");
 						},
 						failure: function(transport){ 
@@ -401,6 +417,10 @@ wx.config({
 							userId: userId
 						},
 						success: function(transport){
+							weUI.showXToast("关注成功");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
 							$(_t).html("已关注").off("click");
 						},
 						failure: function(transport){ 

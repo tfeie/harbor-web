@@ -149,6 +149,7 @@
 									isShowProgressTips : 1,
 									success : function(r) {
 										var mediaId = r.serverId;
+										weUI.showLoadingToast("图片转存中..")
 										ajaxController.ajax({
 											url: "../be/uploadBeImgToOSS",
 											type: "post",
@@ -157,18 +158,26 @@
 												userId: _this.getPropertyValue("userId")
 											},
 											success: function(transport){
+												weUI.hideLoadingToast();
 												var imgURL  = transport.data;
 												$(s).find("#IMG_BE").attr("src", imgURL+"@!be_thumbnail");
 												_this.modifyBeDetail(_id,"",imgURL);
 											},
 											failure: function(transport){
-												weUI.alert({content:"图片上传失败"});
+												weUI.hideLoadingToast();
+												weUI.showXToast("图片转存失败");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 500);
 											}
 											
 										});
 									},
 									fail : function(res) {
-										weUI.alert({content:"图片上传失败"});
+										weUI.showXToast("图片上传失败");
+										setTimeout(function () {
+											weUI.hideXToast();
+							            }, 500);
 									}
 								});
 							}
@@ -462,6 +471,7 @@
 						beDetails: _this.bedetails,
 						beTags: _this.selectedBeTags
 					} 
+					weUI.showLoadingToast("正在发布...")
 					ajaxController.ajax({
 						url: "../be/submitNewBe",
 						type: "post", 
@@ -469,15 +479,15 @@
 							beData: JSON.stringify(data)
 						},
 						success: function(transport){
-							weUI.alert({
-								content: "B&E发布成功",
-								ok: function(){
-									window.location.href="../be/index.html";
-									weUI.closeAlert();
-								}
-							})
+							weUI.hideLoadingToast();
+							weUI.showXToast("发布成功，跳转到首页");
+							setTimeout(function () {
+								weUI.hideXToast();
+								window.location.href="../be/index.html";
+				            }, 500);
 						},
 						failure: function(transport){
+							weUI.hideLoadingToast();
 							var busiCode = transport.busiCode;
 							var statusInfo = transport.statusInfo;
 							if(busiCode=="user_unregister"){
@@ -485,7 +495,10 @@
 									window.location.href="../user/toUserRegister.html";
 								}});
 							}else{
-								weUI.alert({content:statusInfo});
+								weUI.showXToast("系统繁忙，请稍候重试");
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 						}
 						
