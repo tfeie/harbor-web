@@ -241,7 +241,7 @@
 					ajaxController.ajax({
 						url: "../user/submitUserCertficate",
 						type: "post",
-						data: {
+						data: { 
 							userId:"<c:out value="${userInfo.userId}"/>",
 							overseasPhoto: $("#overseasPhoto").val(),
 							idcardPhoto: $("#idcardPhoto").val()
