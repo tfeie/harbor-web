@@ -166,16 +166,17 @@
 						goOrderId: _this.getPropertyValue("goOrderId")
 					},
 					success: function(transport){
-						weUI.alert({
-							content : "活动已结束，等待用户评价~",
-							ok: function(){
-								window.location.href="../go/myono.html?type=mycreate";
-								weUI.closeAlert();
-							}
-						});
+						weUI.showXToast("活动已结束，等待用户评价");
+						setTimeout(function () {
+							weUI.hideXToast();
+							window.location.href="../go/myono.html?type=mycreate";
+			            }, 500);
 					},
 					failure: function(transport){ 
-						weUI.alert({content: transport.statusInfo});
+						weUI.showXToast(transport.statusInfo);
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 					}
 				});
 			},
@@ -242,7 +243,10 @@
 				});
 				var res=valueValidator.fireRulesAndReturnFirstError();
 				if(res){
-					weUI.alert({content:res});
+					weUI.showXToast(res);
+					setTimeout(function () {
+						weUI.hideXToast();
+		            }, 500);
 					return;
 				}
 				ajaxController.ajax({
@@ -256,15 +260,18 @@
 						expectedLocation2: expectedLocation2
 					},
 					success: function(transport){
-						weUI.alert({content:"约见地点设置成功,等待用户确认",
-							ok: function(){
-								window.location.href="../go/mycreateonodetail.html?goId="+_this.getPropertyValue("goId");
-								weUI.closeAlert();
-							}
-						});
+						weUI.showXToast("约见地点设置成功,等待用户确认");
+						setTimeout(function () {
+							weUI.hideXToast();
+							window.location.href="../go/mycreateonodetail.html?goId="+_this.getPropertyValue("goId");
+			            }, 500);
+						
 					},
 					failure: function(transport){ 
-						weUI.alert({content: transport.statusInfo});
+						weUI.showXToast(transport.statusInfo);
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 					}
 				});
 			},

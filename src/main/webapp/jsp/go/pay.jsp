@@ -143,29 +143,31 @@ wx.config({
 						    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 						    paySign: d.paySign, // 支付签名
 						    success: function (res) {
-						    	weUI.alert({
-									content: "支付成功，请等待海牛确认.您可以浏览下其它活动",
-									ok: function(){
-										window.location.href="../go/goindex.html";
-									}
-								})
+						    	weUI.showXToast("支付成功，请等待海牛确认.您可以浏览下其它活动");
+								setTimeout(function () {
+									weUI.hideXToast();
+									window.location.href="../go/goindex.html";
+					            }, 500);
 						    },
 						    fail: function(res){
-						    	weUI.alert({
-									content: "活动支付失败"
-								})
+						    	weUI.showXToast("支付失败");
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 						    }, 
 						    cancel: function(res){
-						    	weUI.alert({
-									content: "活动支付取消"
-								})
+						    	weUI.showXToast("支付取消");
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 						    }
 						});
 					},
 					failure : function(transport) {
-						weUI.alert({
-							content: transport.statusInfo
-						})
+						weUI.showXToast(transport.statusInfo);
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 					}
 
 				});
