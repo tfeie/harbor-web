@@ -230,6 +230,7 @@ wx.config({
 						var imageURLs = _this.imageURLs?_this.imageURLs:[];
 						console.log(imageURL);
 						console.log(imageURLs);
+						alert(imageURLs.length+"ll");
 						if(imageURLs.length==0){
 							return;
 						}
@@ -495,7 +496,8 @@ wx.config({
 				},
 				
 				
-				renderBeDetail: function(data){ 
+				renderBeDetail: function(data){
+					var _this = this;
 					data= data?data:{};
 					var imageURLs = new Array();
 					var num = 0;
@@ -518,13 +520,14 @@ wx.config({
 									
 								}else if(type=="image"){
 									var imageUrl = beDetails[i].imageUrl;
+									alert(imageUrl);
 									imageURLs.push(imageUrl);
 								}
 							}
 						}
 					}
 					//存储图片地址
-					this.imageURLs = imageURLs;
+					_this.imageURLs = imageURLs;
 					var opt=$("#BeDetailImpl").render(data);
 					$("#DIV_BE_DETAIL").html(opt); 
 				},
