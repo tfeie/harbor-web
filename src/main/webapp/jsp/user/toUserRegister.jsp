@@ -49,8 +49,8 @@
 
 	<section class="zhuce">
 		<div class="div_six" id="DIV_SEX">
-			<span><i class="on" id="I_SEX_1"><input type="hidden"
-					value="1" /><img src="//static.tfeie.com/images/boy.png" /></i></span> <span><i
+			<span style="width:50%"><i class="on" id="I_SEX_1"><input type="hidden"
+					value="1" /><img src="//static.tfeie.com/images/boy.png" /></i></span> <span style="width:50%"><i
 				id="I_SEX_2"><input type="hidden" value="2" /><img
 					src="//static.tfeie.com/images/girl.png" /></i></span>
 		</div>
