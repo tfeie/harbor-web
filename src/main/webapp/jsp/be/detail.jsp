@@ -47,8 +47,8 @@
 
 .arrow {
 	position: absolute;
-	right: 10%;
-	top: 5%;
+	right: 1%;
+	top: 1%;
 }
 
 #share-text {
@@ -163,8 +163,10 @@ wx.config({
 					
 					$("#DIV_BE_DETAIL").delegate("#DIV_DO_SHARE","click",function(){
 						var topic =$(this).attr("topic");
+						var shareDesc =  _this.getPropertyValue("shareDesc");
 						wx.onMenuShareTimeline({
 						    title: topic,
+						    desc:shareDesc?shareDesc:"",
 						    link:  _this.getPropertyValue("url"), 
 						    //imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
@@ -178,6 +180,7 @@ wx.config({
 						});	
 						wx.onMenuShareAppMessage({
 						    title: topic,
+						    desc:shareDesc?shareDesc:"",
 						    link:  _this.getPropertyValue("url"), 
 						    //imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
@@ -435,6 +438,28 @@ wx.config({
 				
 				renderBeDetail: function(data){ 
 					data= data?data:{};
+					var num = 0;
+					if(data){
+						var beDetails = data.beDetails;
+						if(beDetails && beDetails.length > 0){
+							for (var i=0;i< beDetails.length;i++){
+								var type = beDetails[i].type;
+								if(type == "text") {
+									if(num == 1){
+										var detail = beDetails[i].detail;
+										if(detail.length > 10){
+											detail = detail.substr(0,10);
+										}
+										this.params['shareDesc'] = beDetails[i].detail;
+										break;
+									}else {
+										num += 1;
+									}
+									
+								}
+							}
+						}
+					}
 					var opt=$("#BeDetailImpl").render(data);
 					$("#DIV_BE_DETAIL").html(opt); 
 				},

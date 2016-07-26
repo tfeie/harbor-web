@@ -145,6 +145,7 @@
 					$("#BTN_SHARE").on("click",function(){
 						wx.onMenuShareTimeline({
 						    title: _this.getPropertyValue("enName")+"在海归海湾的名片",
+						    desc: "邀请码：" + _this.getPropertyValue("initcode"),
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
