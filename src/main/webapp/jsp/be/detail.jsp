@@ -171,11 +171,14 @@ wx.config({
 						    //imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
 						    	weUI.alert({content:"分享成功",ok: function(){
+						    		$("#shareit").hide(); 
+						    		$("#DIV_BE_DETAIL").show();
 						    		weUI.closeAlert();
 						    	}});
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
+						    	$("#DIV_BE_DETAIL").show();
 						    }
 						});	
 						wx.onMenuShareAppMessage({
@@ -186,19 +189,23 @@ wx.config({
 						    success: function () {  
 						    	weUI.alert({content:"分享成功",ok: function(){
 						    		$("#shareit").hide(); 
+						    		$("#DIV_BE_DETAIL").show();
 						    		weUI.closeAlert();
 						    	}});
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
+						    	$("#DIV_BE_DETAIL").show();
 						    }
 						});	
 						
 						$("#shareit").show();
+						$("#DIV_BE_DETAIL").hide();
 					});
 					
 					$("#shareit").on("click", function(){
-					    $("#shareit").hide(); 
+					    $("#shareit").hide();
+					    $("#DIV_BE_DETAIL").show();
 					 })
 					 
 					
