@@ -44,7 +44,7 @@
 			<span>会员到期时间</span><label><c:out value="${userMember.desc}"/></label>
 		</div>
 		<div class="item">
-			<span>购买月份</span><label id="LABEL_BUY_MONTHS"></label>
+			<span>购买时长</span><label id="LABEL_BUY_MONTHS"></label>
 		</div>
 		<div class="item">
 			<span>应付金额</span><label><em  id="EM_BUY_PRICE"></em>元</label>
@@ -111,7 +111,10 @@ wx.config({
 					var _this = this;
 					var jq=$("[name='RADIO_MONTH'].on");
 					if(!jq){
-						weUI.alert({content:"请选择购买月份"});
+						weUI.showXToast("请选择购买时长");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					var payMonth = jq.attr("months");
@@ -134,18 +137,31 @@ wx.config({
 							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 							    paySign: d.paySign, // 支付签名
 							    success: function (res) {
-							    	weUI.alert({content:"您成功购买"+payMonth+"个月会员,稍候查看"});
+							    	weUI.showXToast("您成功购买"+payMonth+"个月会员,稍后给您续期");
+									setTimeout(function () {
+										weUI.hideXToast();
+										window.localtion.href="../user/memberCenter.html";
+						            }, 500);
 							    },
 							    fail: function(res){
-							    	weUI.alert({content:"支付失败"});
+							    	weUI.showXToast("支付失败");
+									setTimeout(function () {
+										weUI.hideXToast();
+						            }, 500);
 							    }, 
 							    cancel: function(res){
-							    	weUI.alert({content:"您取消支付"});
+							    	weUI.showXToast("支付已取消");
+									setTimeout(function () {
+										weUI.hideXToast();
+						            }, 500);
 							    }
 							});
 						},
 						failure : function(transport) {
-							weUI.alert({content:transport.statusInfo});
+							weUI.showXToast("支付失败");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 
 					});
@@ -193,7 +209,10 @@ wx.config({
 						return d.count==months;
 					});
 					if(!pa || pa.length==0){
-						weUI.alert({content:"会员定价信息出错，请刷新页面重试"});
+						weUI.showXToast("会员定价信息出错，请刷新页面重试");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					return pa[0];

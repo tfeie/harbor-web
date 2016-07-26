@@ -111,19 +111,31 @@
 				submitUserSelectedSystemTags: function(){
 					var _this = this;
 					if(_this.interestSelectedTags.length==0){
-						_this.showError("兴趣标签至少选择1个");
+						weUI.showXToast("兴趣标签至少选择1个");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return;
 					}
 					if(_this.interestSelectedTags.length>5){
-						_this.showError("兴趣标签不能大于5个");
+						weUI.showXToast("兴趣标签不能大于5个");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return;
 					}
 					if(_this.skillSelectedTags.length==0){
-						_this.showError("技能标签至少选择1个");
+						weUI.showXToast("技能标签至少选择1个");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return;
 					}
 					if(_this.skillSelectedTags.length>5){
-						_this.showError("技能标签不能大于5个");
+						weUI.showXToast("技能标签不能大于5个");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return;
 					} 
 					var d =  {
@@ -138,12 +150,18 @@
 							submitString: JSON.stringify(d)
 							
 						},
-						success : function(transport) { 
-							window.location.href="../user/previewUserInfo.html";
-							//_this.showSuccess("兴趣技能提交成功");
+						success : function(transport) {
+							weUI.showXToast("提交成功，可以预览您的个人信息");
+							setTimeout(function () {
+								weUI.hideXToast();
+								window.location.href="../user/previewUserInfo.html";
+				            }, 500);
 						},
 						failure : function(transport) {
-							_this.showError("兴趣技能提交失败，请重试");
+							weUI.showXToast("设置失败，请稍后重试");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 
 					});
@@ -180,7 +198,10 @@
 						}else{
 							//如果没有选择，则选择
 							if(_this.interestSelectedTags.length>=5){
-								alert("兴趣标签最多只能选择5个");
+								weUI.showXToast("兴趣标签最多只能选择5个");
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 								return ;
 							}
 							_this.interestSelectedTags.push({
@@ -210,7 +231,10 @@
 						}else{
 							//如果没有选择，则选择
 							if(_this.skillSelectedTags.length>=5){
-								alert("技能标签最多只能选择5个");
+								weUI.showXToast("技能标签最多只能选择5个");
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 								return ;
 							}
 							_this.skillSelectedTags.push({

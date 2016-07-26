@@ -80,7 +80,10 @@
 				checkInviteCode: function(){
 					var inviteCode = $.trim($("#inviteCode").val());
 					if(inviteCode==""){
-						weUI.alert({content:"请输入邀请码"});
+						weUI.showXToast("请输入邀请码");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 					}
 					ajaxController.ajax({
 						url: "../user/checkUserInviteCode",
@@ -93,7 +96,10 @@
 							window.location.href="../user/toUserRegister.html?pcode=" + data;
 						},
 						failure: function(transport){  
-							weUI.alert({content:transport.statusInfo});
+							weUI.showXToast("邀请码校验失败，请稍后重试");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},

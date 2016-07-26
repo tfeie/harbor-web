@@ -155,19 +155,29 @@
 									userId:"<c:out value="${userInfo.userId}"/>"
 								},
 								success: function(transport){
+									weUI.showXToast("上传成功");
+									setTimeout(function () {
+										weUI.hideXToast();
+						            }, 500);
 									var imgURL  = transport.data;
 									$("#idcardPhoto").val(imgURL);
 									$("#img_idcard").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
 								},
 								failure: function(transport){
-									alert("上传失败");
+									weUI.showXToast("上传失败，请稍后重试");
+									setTimeout(function () {
+										weUI.hideXToast();
+						            }, 500);
 									$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.png");
 								}
 								
 							});
 						},
 						fail : function(res) {
-							alert("上传失败");
+							weUI.showXToast("上传失败，请稍后重试");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 							$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.png");
 						}
 					});
@@ -233,10 +243,11 @@
 					var _this=this;
 					var res=_this.valueValidator.fireRulesAndReturnFirstError();
 					if(res){
-						_this.showError(res);
+						weUI.showXToast(res);
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return;
-					}else{
-						_this.hideMessage();
 					}
 					ajaxController.ajax({
 						url: "../user/submitUserCertficate",
@@ -247,11 +258,17 @@
 							idcardPhoto: $("#idcardPhoto").val()
 						},
 						success: function(transport){
-							_this.showSuccess("认证材料提交成功，请等待审核");
-							window.location.href="../user/userCenter.html";
+							weUI.showXToast("认证材料提交成功，请等待审核");
+							setTimeout(function () {
+								weUI.hideXToast();
+								window.location.href="../user/userCenter.html";
+				            }, 500);
 						},
 						failure: function(transport){
-							_this.showError("系统繁忙，请稍候重试");
+							weUI.showXToast("系统繁忙，请稍候重试");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 						
 					});

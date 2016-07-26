@@ -220,10 +220,12 @@
 					$("#HREF_CONFIRM").bind("click",function(){
 						var res=_this.valueValidator.fireRulesAndReturnFirstError();
 						if(res){
-							_this.showError(res);
+							weUI.showXToast(res);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 							return;
 						}
-						_this.hideMessage();
 						_this.submit();
 						
 					});
@@ -273,10 +275,17 @@
 							pcode: pcode
 						},
 						success: function(transport){
-							window.location.href="../user/setUserSkills.html"
+							weUI.showXToast("注册成功，去设置您的兴趣技能吧");
+							setTimeout(function () {
+								weUI.hideXToast();
+								window.location.href="../user/setUserSkills.html"
+				            }, 500);
 						},
 						failure: function(transport){
-							weUI.alert({content:transport.statusInfo});
+							weUI.showXToast("系统繁忙，请稍候重试");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 						
 					});
@@ -331,11 +340,12 @@
 					var _this = this; 
 					var result = _this.valueValidator.fireFieldRule("mobilePhone");
 					if(result){
-						_this.showError(result);
+						weUI.showXToast(result);
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
-					}else{
-						_this.hideMessage();
-					} 
+					}
 					this.waitSeconds=60; 
 					this.unBindYZMEvent();
 				    $("#HREF_SEND_CODE").val("重发(" + this.waitSeconds + "秒)");
@@ -351,12 +361,18 @@
 							mobilePhone: mobilePhone
 						},
 						success: function(transport){
-							_this.showSuccess("验证码获取成功");
+							weUI.showXToast("验证码发送成功");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 							_this.unBindYZMEvent();
 							
 						},
 						failure: function(transport){
-							_this.showError(transport.statusInfo);
+							weUI.showXToast("系统繁忙，请稍候重试");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 						
 					});
@@ -373,18 +389,6 @@
 			        	this.waitSeconds--;
 			        	$("#HREF_SEND_CODE").val("重发(" + this.waitSeconds + "秒)");
 			        }
-				},
-				
-				showError: function(message){
-					$(".message-err").show().html("<p><span>X</span>"+message+"</p>");
-				},
-				
-				showSuccess: function(message){
-					$(".message-err").show().html("<p><span></span>"+message+"</p>");
-				},
-				
-				hideMessage: function(){
-					$(".message-err").html("").hide();
 				}
 			}
 		})
