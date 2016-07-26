@@ -113,25 +113,48 @@ wx.config({
 	jsApiList : [ 'checkJsApi', 'onMenuShareTimeline','onMenuShareAppMessage']
 });
 
-wx.onMenuShareTimeline({
-    title: "Beauty & Excellence",
-    desc:"海归海湾，海归创业正能量",
-    link:  "http://harbor.tfeie.com/be/index.html", 
-    success: function () {  
-    	
-    },
-    cancel: function () {  
-    }
-});	
-wx.onMenuShareAppMessage({
-	title: "Beauty & Excellence",
-    desc:"海归海湾，海归创业正能量",
-    link:  "http://harbor.tfeie.com/be/index.html",
-    success: function () { 
-    },
-    cancel: function () {  
-    }
-});	
+wx.ready(function () {
+
+    var shareData = {
+   title: '测试',
+   desc: '描述',
+   link: 'http://harbor.tfeie.com/be/index.html'
+ };
+
+  //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口  
+    wx.onMenuShareTimeline({  
+        title: '测试', // 分享标题  
+        link: 'http://harbor.tfeie.com/be/index.html', // 分享链接  
+        imgUrl: '', // 分享图标  
+        success: function () {   
+            // 用户确认分享后执行的回调函数  
+        },  
+        cancel: function () {   
+            // 用户取消分享后执行的回调函数  
+        }  
+    });  
+      
+    //获取“分享给朋友”按钮点击状态及自定义分享内容接口  
+    wx.onMenuShareAppMessage({  
+        title: '测试', // 分享标题  
+        desc: '描述', // 分享描述  
+        link: 'http://harbor.tfeie.com/be/index.html',  
+        imgUrl: '', // 分享图标  
+        type: 'link', // 分享类型,music、video或link，不填默认为link  
+        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空  
+        success: function () {   
+            // 用户确认分享后执行的回调函数  
+        },  
+        cancel: function () {   
+            // 用户取消分享后执行的回调函数  
+        }  
+    });  
+});
+
+wx.error(function (res) {  
+	  //alert(res.errMsg);  
+	});
+
 
 	(function($){
 		$.BeIndexPage = function(data){
