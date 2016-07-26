@@ -173,7 +173,7 @@
 						$("#BTN_SUBMIT").attr({"disabled":"disabled"});
 					},
 					failure: function(transport){
-						weUI.showXToast("系统繁忙，请稍后重试");
+						weUI.showXToast(transport.statusInfo);
 						setTimeout(function () {
 							weUI.hideXToast();
 			            }, 500);
