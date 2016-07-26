@@ -76,8 +76,7 @@
 			</p>
 			<p class="aihao" id="SELECTED_INTEREST_TAGS"></p>
 			<section class="jinrong">
-				<p><c:out value="${userInfo.industryName}"/></p>
-				<p><c:out value="${userInfo.atCity}"/></p>
+				<p><c:out value="${userInfo.employmentInfo}"/></p>
 				<p class="aihao" id="SELECTED_SKILL_TAGS"></p>
 			</section>
 			<p class="but">
@@ -86,9 +85,13 @@
 			</p>
 
 			<div class="clear"></div>
-			<p >请复制邀请码到剪切板，用以粘贴注册</p>
-			<p id = "inviteCode"> </p>
+			<c:if test="${initcode!=null}">
+			<p >请记住邀请码<font size="5"><c:out value="${initcode}"/></font>，在下一步输入注册</p>
 			<p>（<c:out value="${userInfo.enName}"/>还剩 3 个邀请名额）</p>
+			</c:if>
+			<c:if test="${initcode==null}">
+			<p >邀请码已经用完</p>
+			</c:if>
 			<p>海湾，我们的舞台...</p>
 		</section>
 	</section>
@@ -136,8 +139,6 @@
 				},
 				
 				initData: function(){
-					var code = "邀请码：" + this.getPropertyValue("initcode");
-					$("#inviteCode").html(code);
 					this.getAllTags(); 
 				},
 				
