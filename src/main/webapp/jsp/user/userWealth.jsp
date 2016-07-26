@@ -77,12 +77,6 @@
 						window.location.href="../user/buyhaibei.html";
 					});
 				},
-				
-				buyHaibei: function(){
-					
-				},
-
-				
 				getPropertyValue: function(propertyName){
 					if(!propertyName)return;
 					return this.params[propertyName];

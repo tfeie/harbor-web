@@ -315,7 +315,7 @@
 
 	$(document).ready(function() {
 		var b = new $.HarborBuilder();
-		b.buildFooter();
+		b.buildFooter({showBeGoQuick: "hide"});
 		
 		var p = new $.GoGroupConfirmPage({
 			goId : "<c:out value="${go.goId}"/>",

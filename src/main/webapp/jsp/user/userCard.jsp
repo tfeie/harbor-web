@@ -149,10 +149,13 @@
 						    desc: "邀请码：" + _this.getPropertyValue("initcode"),
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
-						    success: function () {  
-						    	weUI.alert({content:"分享成功",ok: function(){
-						    		$("#shareit").hide(); 
-						    	}});
+						    success: function () {
+						    	weUI.showXToast("分享成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									$("#shareit").hide(); 
+					            }, 500);
+								return ;
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
@@ -164,9 +167,11 @@
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
-						    	weUI.alert({content:"分享成功",ok: function(){
-						    		$("#shareit").hide(); 
-						    	}});
+						    	weUI.showXToast("分享成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									$("#shareit").hide(); 
+					            }, 500);
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 

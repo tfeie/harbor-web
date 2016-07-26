@@ -141,10 +141,16 @@
 						},
 						success: function(transport){
 							var data =transport.data;
-							weUI.alert({content: "好友申请已经发送，请等待TA同意"});
+							weUI.showXToast("好友申请已经发送，请等待TA同意");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						},
 						failure: function(transport){  
-							weUI.alert({content: transport.statusInfo});
+							weUI.showXToast( transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},
