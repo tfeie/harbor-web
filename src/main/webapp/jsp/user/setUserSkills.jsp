@@ -139,7 +139,8 @@
 							
 						},
 						success : function(transport) { 
-							_this.showSuccess("兴趣技能提交成功");
+							window.location.href="../user/previewUserInfo.html";
+							//_this.showSuccess("兴趣技能提交成功");
 						},
 						failure : function(transport) {
 							_this.showError("兴趣技能提交失败，请重试");

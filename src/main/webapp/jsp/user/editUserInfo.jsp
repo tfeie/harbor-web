@@ -933,7 +933,10 @@
 						},
 						success: function(transport){
 							weUI.alert({
-								content: "资料修改成功"
+								content: "资料修改成功",
+								ok:function(){
+									window.location.href="../be/index.html";
+								}
 							})
 						},
 						failure: function(transport){
