@@ -148,6 +148,7 @@
 						weUI.alert({content:"请选择活动约见时间地点"});
 						return ;
 					}
+					weUI.showLoadingToast("确认中...");
 					ajaxController.ajax({
 						url : "../go/confirmGoOrderMeetLocaltion",
 						type : "post",
@@ -157,19 +158,19 @@
 							confirmLocation: confirmLocation
 						},
 						success : function(transport) {
-							weUI.alert({
-								content : "您已经确认约见地点",
-								ok: function(){
-									window.location.href="../go/myjointgoes.html?goType=ono";
-									weUI.closeAlert();
-								}
-							});
-							
+							weUI.hideLoadingToast();
+							weUI.showXToast("确认成功,进入我参加的活动页");
+							setTimeout(function () {
+								weUI.hideXToast();
+								window.location.href="../go/myjointgoes.html?goType=ono";
+				            }, 500);
 						},
 						failure : function(transport) {
-							weUI.alert({
-								content : transport.statusInfo
-							});
+							weUI.hideLoadingToast();
+							weUI.showXToast("确认失败，稍候重试..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},

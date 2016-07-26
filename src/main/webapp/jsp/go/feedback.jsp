@@ -205,7 +205,10 @@
 							goType:_this.getPropertyValue("goType")
 						},
 						success: function(transport){
-							
+							weUI.showXToast("已打赏..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						},
 						failure: function(transport){
 							var busiCode = transport.busiCode;
@@ -223,7 +226,10 @@
 									window.location.href="../user/toApplyCertficate.html";
 								}});
 							}else{
-								weUI.alert({content:statusInfo});
+								weUI.showXToast("打赏失败，稍候重试..");
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 						}
 					});
@@ -240,11 +246,16 @@
 							goType:_this.getPropertyValue("goType")
 						},
 						success: function(transport){
-							
+							weUI.showXToast("处理成功..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						},
 						failure: function(transport){
-							weUI.alert({content:"点评失败,请重试..."});
-							return ;
+							weUI.showXToast("系统繁忙，请稍候再试..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},
@@ -319,10 +330,16 @@
 							$("#COMMENT_CONTENT").val("");
 							$("#parentUserId").val("");
 							$("#parentCommentId").val("");
+							weUI.showXToast("评论成功..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						},
 						failure: function(transport){ 
-							weUI.alert({content:"评论失败,请重试..."});
-							return ;
+							weUI.showXToast("评论失败,稍候重试..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},

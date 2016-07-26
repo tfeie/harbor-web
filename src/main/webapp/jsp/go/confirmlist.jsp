@@ -174,6 +174,10 @@
 						type: "post", 
 						data: data,
 						success: function(transport){
+							weUI.showXToast("已拒绝..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 							var dom=$("#WAIT_CONFIRM_"+userId);
 							dom.fadeOut("200",function(){dom.detach();});
 							var len = $("[name='WAIT_CONFIRM_DETL']").length;
@@ -183,7 +187,10 @@
 							}
 						},
 						failure: function(transport){ 
-							weUI.alert({content:transport.statusInfo});
+							weUI.showXToast("系统繁忙，稍候重试..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},
@@ -217,10 +224,18 @@
 									$("#BEEN_CONFIRM_LIST").append(opt); 
 								}
 								
+								weUI.showXToast("已同意..");
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
+								
 								
 							},
 							failure: function(transport){ 
-								weUI.alert({content:transport.statusInfo});
+								weUI.showXToast("系统繁忙，请稍候再试..");
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 						});
 					

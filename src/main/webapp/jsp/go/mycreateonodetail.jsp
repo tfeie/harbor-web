@@ -201,11 +201,17 @@
 									window.location.href="../user/toUserRegister.html";
 								}});
 							}else{
-								weUI.alert({content:"收藏成功"});
+								weUI.showXToast("已收藏");
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 						},
 						failure : function(transport) {
-							weUI.alert({content:transport.statusInfo });
+							weUI.showXToast("系统繁忙，请稍候重试..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 
 					});
@@ -224,7 +230,10 @@
 							window.location.href="../go/toOrder.html?goId="+goId;
 						},
 						failure : function(transport) {
-							weUI.alert({content:transport.statusInfo });
+							weUI.showXToast("系统繁忙，请稍候重试..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 
 					});

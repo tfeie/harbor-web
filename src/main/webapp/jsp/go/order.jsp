@@ -146,7 +146,10 @@
 				
 				var res=valueValidator.fireRulesAndReturnFirstError();
 				if(res){
-					weUI.alert({content:res});
+					weUI.showXToast(res);
+					setTimeout(function () {
+						weUI.hideXToast();
+		            }, 500);
 					return;
 				}
 				
@@ -161,20 +164,19 @@
 					data: data ,
 					success: function(transport){
 						var goOrderId = transport.data;
-						weUI.alert({
-							content: "活动预约成功",
-							ok: function(){
-								weUI.closeAlert();
-								window.location.href="../go/toPay.html?goOrderId="+goOrderId;
-							}
-						});
+						weUI.showXToast("活动预约成功，进入支付");
+						setTimeout(function () {
+							weUI.hideXToast();
+							window.location.href="../go/toPay.html?goOrderId="+goOrderId;
+			            }, 500);
 						//禁止提交
 						$("#BTN_SUBMIT").attr({"disabled":"disabled"});
 					},
 					failure: function(transport){
-						weUI.alert({
-							content: transport.statusInfo
-						})
+						weUI.showXToast("系统繁忙，请稍后重试");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 					}
 					
 				});

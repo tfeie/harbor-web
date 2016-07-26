@@ -174,6 +174,7 @@ wx.config({
 			
 			applyGroup: function(){
 				var _this = this; 
+				weUI.showLoadingToast("正在处理中...");
 				ajaxController.ajax({
 					url: "../go/applyGroup",
 					type: "post", 
@@ -183,6 +184,7 @@ wx.config({
 						goId: _this.getPropertyValue("goId")
 					},
 					success: function(transport){ 
+						weUI.hideLoadingToast();
 						var d = transport.data;
 						var orderId = d.orderId;
 						var needPay = d.needPay;
@@ -202,17 +204,16 @@ wx.config({
 									$("#SEL_SHOW_RESULT").show();
 							    },
 							    fail: function(res){
-							    	weUI.alert({
-										content: "活动支付失败",
-										ok: function(){
-											 weUI.closeAlert();
-										}
-									})
+							    	weUI.showXToast("支付失败，请稍候重试..");
+									setTimeout(function () {
+										weUI.hideXToast();
+						            }, 500);
 							    }, 
 							    cancel: function(res){
-							    	weUI.alert({
-										content: "活动支付取消"
-									})
+							    	weUI.showXToast("支付已经取消..");
+									setTimeout(function () {
+										weUI.hideXToast();
+						            }, 500);
 							    }
 							});
 						}else{
@@ -224,9 +225,11 @@ wx.config({
 						
 					},
 					failure: function(transport){
-						weUI.alert({
-							content: transport.statusInfo
-						})
+						weUI.hideLoadingToast();
+						weUI.showXToast("系统繁忙，请稍候重试..");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 					}
 					
 				});

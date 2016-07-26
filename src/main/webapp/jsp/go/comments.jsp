@@ -180,6 +180,7 @@
 				
 				giveHaibei: function(count){
 					var _this = this;
+					weUI.showLoadingToast("正在打赏...");
 					ajaxController.ajax({
 						url: "../go/giveHaibei",
 						type: "post", 
@@ -189,9 +190,14 @@
 							goType:_this.getPropertyValue("goType")
 						},
 						success: function(transport){
-							
+							weUI.hideLoadingToast();
+							weUI.showXToast("打赏成功");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						},
 						failure: function(transport){
+							weUI.hideLoadingToast();
 							var busiCode = transport.busiCode;
 							var statusInfo = transport.statusInfo;
 							if(busiCode=="user_unregister"){
@@ -207,7 +213,10 @@
 									window.location.href="../user/toApplyCertficate.html";
 								}});
 							}else{
-								weUI.alert({content:statusInfo});
+								weUI.showXToast("打赏失败，稍候重试...");
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 						}
 					});
@@ -215,6 +224,7 @@
 				
 				submitGoHelp: function(helpValue){
 					var _this = this;
+					weUI.showLoadingToast();
 					ajaxController.ajax({
 						url: "../go/submitGoHelp",
 						type: "post", 
@@ -224,11 +234,18 @@
 							goType:_this.getPropertyValue("goType")
 						},
 						success: function(transport){
-							
+							weUI.hideLoadingToast();
+							weUI.showXToast("处理成功");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						},
 						failure: function(transport){
-							weUI.alert({content:"点评失败,请重试..."});
-							return ;
+							weUI.hideLoadingToast();
+							weUI.showXToast("处理失败,稍候重试..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},
@@ -285,11 +302,17 @@
 						parentCommentId: parentCommentId,
 						parentUserId: parentUserId
 					}
+					weUI.showLoadingToast();
 					ajaxController.ajax({
 						url: "../go/sendGoComment",
 						type: "post", 
 						data: data,
 						success: function(transport){
+							weUI.hideLoadingToast();
+							weUI.showXToast("评论成功");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 							var data = transport.data;
 							var arr = [data];
 							var opt=$("#CommentsImpl").render(arr);
@@ -304,8 +327,11 @@
 							$("#parentCommentId").val("");
 						},
 						failure: function(transport){ 
-							weUI.alert({content:transport.statusInfo});
-							return ;
+							weUI.hideLoadingToast();
+							weUI.showXToast("评论失败..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},

@@ -159,6 +159,10 @@
 											},
 											success: function(transport){
 												weUI.hideLoadingToast();
+												weUI.showXToast("图片转存成功");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 500);
 												var imgURL  = transport.data;
 												$(s).find("#IMG_BE").attr("src", imgURL+"@!be_thumbnail");
 												_this.modifyBeDetail(_id,"",imgURL);
@@ -451,18 +455,27 @@
 						return (o.type=="text" && o.detail=="") || (o.type=="image" && o.imageUrl=="");
 					});
 					if(queryDetails.length>0){
-						weUI.alert({content:"您的B&E还有没有填写的内容或者上传的图片"});
+						weUI.showXToast("您的B&E还有没有填写的内容或者上传的图片");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					
 					if(_this.selectedBeTags.length>=5){ 
-						weUI.alert({content:"最多只能选择5个标签"});
-						return ;
+						weUI.showXToast("最多只能选择5个标签");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
+						return;
 					}
 					
 					if(_this.selectedBeTags.length==0){ 
-						weUI.alert({content:"至少选择1个标签"});
-						return ;
+						weUI.showXToast("至少选择1个标签");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
+						return;
 					}
 					
 					

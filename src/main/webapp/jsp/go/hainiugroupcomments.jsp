@@ -224,10 +224,16 @@
 							$("#COMMENT_CONTENT").val("");
 							$("#parentUserId").val("");
 							$("#parentCommentId").val("");
+							weUI.showXToast("评论成功..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						},
 						failure: function(transport){ 
-							weUI.alert({content:transport.statusInfo});
-							return ;
+							weUI.showXToast("系统繁忙，请稍候重试..");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},

@@ -126,18 +126,17 @@
 					data: data ,
 					success: function(transport){
 						var goOrderId = transport.data;
-						weUI.alert({
-							content: "处理成功",
-							ok: function(){
-								weUI.closeAlert();
-								window.location.href="../go/mycreateonodetail.html?goId="+_this.getPropertyValue("goId");
-							}
-						}); 
+						weUI.showXToast("已确认..");
+						setTimeout(function () {
+							weUI.hideXToast();
+							window.location.href="../go/mycreateonodetail.html?goId="+_this.getPropertyValue("goId");
+			            }, 500);
 					},
 					failure: function(transport){
-						weUI.alert({
-							content: transport.statusInfo
-						})
+						weUI.showXToast("系统繁忙，请稍候重试..");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 					}
 					
 				});

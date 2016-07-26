@@ -266,6 +266,7 @@ jeDate({
 									isShowProgressTips : 1,
 									success : function(r) {
 										var mediaId = r.serverId;
+										weUI.showLoadingToast("图片转存中..")
 										ajaxController.ajax({
 											url: "../go/uploadGoImgToOSS",
 											type: "post",
@@ -274,18 +275,30 @@ jeDate({
 												userId: _this.getPropertyValue("userId")
 											},
 											success: function(transport){
+												weUI.hideLoadingToast();
+												weUI.showXToast("图片转存成功");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 500);
 												var imgURL  = transport.data;
 												$(s).find("#IMG_GO").attr("src", imgURL+"@!go_thumbnail");
 												_this.modifyGoDetail(_id,"",imgURL);
 											},
 											failure: function(transport){
-												weUI.alert({content:"图片上传失败"});
+												weUI.hideLoadingToast();
+												weUI.showXToast("图片转存失败");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 500);
 											}
 											
 										});
 									},
 									fail : function(res) {
-										weUI.alert({content:"图片上传失败"});
+										weUI.showXToast("图片上传失败");
+										setTimeout(function () {
+											weUI.hideXToast();
+							            }, 500);
 									}
 								});
 							}
@@ -751,7 +764,10 @@ jeDate({
 					
 					var res=valueValidator.fireRulesAndReturnFirstError();
 					if(res){
-						weUI.alert({content:res});
+						weUI.showXToast(res);
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return;
 					}
 					//校验活动明细 
@@ -779,7 +795,7 @@ jeDate({
 						goDetails: _this.godetails,
 						goTags: _this.selectedGoTags
 					} 
-					//alert(JSON.stringify(data));
+					weUI.showLoadingToast("正在发布..")
 					ajaxController.ajax({
 						url: "../go/submitNewGo",
 						type: "post", 
@@ -787,22 +803,22 @@ jeDate({
 							goData: JSON.stringify(data)
 						},
 						success: function(transport){
-							weUI.alert({
-								content: "活动提交成功",
-								ok: function(){
-									if(goType=="group"){
-										window.location.href="../go/goindex.html?goType=" + "group";
-									}else{
-										window.location.href="../go/goindex.html?goType=" + "one";
-									}
-									weUI.closeAlert();
+							weUI.hideLoadingToast();
+							weUI.showXToast("发布成功，将跳转到首页");
+							setTimeout(function () {
+								weUI.hideXToast();
+								if(goType=="group"){
+									window.location.href="../go/goindex.html?goType=group";
+								}else{
+									window.location.href="../go/goindex.html?goType=ono";
 								}
-							})
+				            }, 500);
 						},
 						failure: function(transport){
-							weUI.alert({
-								content: "活动提交失败"+transport.statusInfo
-							})
+							weUI.showXToast("发布失败"+transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 						
 					});
