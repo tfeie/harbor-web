@@ -121,21 +121,31 @@ wx.config({
 							    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 							    paySign: d.paySign, // 支付签名
 							    success: function (res) {
-							    	weUI.alert({content:"您成功购买"+count+"个海贝，一会将充入您的账户~",ok: function(){
+							    	weUI.showXToast("您成功购买"+count+"个海贝，一会将充入您的账户~");
+									setTimeout(function () {
+										weUI.hideXToast();
 										window.location.href="../user/userWealth.html";
-										weUI.closeAlert();
-									}});
+						            }, 1000);
 							    },
 							    fail: function(res){
-							    	weUI.alert({content:"支付失败"});
+							    	weUI.showXToast("支付失败");
+									setTimeout(function () {
+										weUI.hideXToast();
+						            }, 500);
 							    }, 
 							    cancel: function(res){
-							    	weUI.alert({content:"您取消支付"});
+							    	weUI.showXToast("支付取消");
+									setTimeout(function () {
+										weUI.hideXToast();
+						            }, 500);
 							    }
 							});
 						},
 						failure : function(transport) {
-							weUI.alert({content:transport.statusInfo});
+							weUI.showXToast(transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},

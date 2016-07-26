@@ -203,18 +203,28 @@
 												userId: _this.getPropertyValue("userId")
 											},
 											success: function(transport){
+												weUI.showXToast("主页背景修改成功");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 500);
 												var imgURL  = transport.data;
 												$("#homePageBg").val(imgURL);
 												$("#IMG_HOMEPAGEBG").attr("src", imgURL);
 											},
 											failure: function(transport){
-												weUI.alert({content:"主页背景修改失败"});
+												weUI.showXToast("主页背景修改失败");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 500);
 											}
 											
 										});
 									},
 									fail : function(res) {
-										weUI.alert({content:"主页背景修改失败"});
+										weUI.showXToast("主页背景修改失败");
+										setTimeout(function () {
+											weUI.hideXToast();
+							            }, 500);
 									}
 								});
 							}
@@ -241,18 +251,28 @@
 												userId: _this.getPropertyValue("userId")
 											},
 											success: function(transport){
+												weUI.showXToast("头像修改成功");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 500);
 												var imgURL  = transport.data;
 												$("#wxHeadimg").val(imgURL);
 												$("#IMG_HEADICON").attr("src", imgURL);
 											},
 											failure: function(transport){
-												weUI.alert({content:"头像修改失败"});
+												weUI.showXToast("头像修改失败");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 500);
 											}
 											
 										});
 									},
 									fail : function(res) {
-										weUI.alert({content:"头像修改失败"});
+										weUI.showXToast("头像修改失败");
+										setTimeout(function () {
+											weUI.hideXToast();
+							            }, 500);
 									}
 								});
 							}
@@ -286,7 +306,10 @@
 					//自定义兴趣标签绑定事件
 					$("#UI_CAN_SELECT_INTEREST_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
 						if(_this.selectedInterestTags.length==5){
-							weUI.alert({content:"最多只能选择5个兴趣标签"});
+							weUI.showXToast("最多只能选择5个兴趣标签");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 							return ;
 						}
 						var content = "<section class=\"par_name\">";
@@ -332,10 +355,11 @@
 								
 								var res=valueValidator.fireRulesAndReturnFirstError();
 								if(res){
-									$("#_customized_interest_tag_error").html("<p><span>X</span>"+res+"</p>").show();
+									weUI.showXToast(res);
+									setTimeout(function () {
+										weUI.hideXToast();
+						            }, 500);
 									return;
-								} else{
-									$("#_customized_interest_tag_error").hide();
 								}
 								//添加到待选标签库
 								var newTag = {
@@ -359,7 +383,10 @@
 					//自定义技能标签绑定事件
 					$("#UI_CAN_SELECT_SKILL_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
 						if(_this.selectedSkillTags.length==5){
-							weUI.alert({content:"最多只能选择5个技能标签"});
+							weUI.showXToast("最多只能选择5个技能标签");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 							return ;
 						}
 						var content = "<section class=\"par_name\">";
@@ -466,7 +493,10 @@
 				addNewSelectInterestTag: function(tagName){
 					var _this = this;
 					if(_this.selectedInterestTags.length>=5){
-						weUI.alert({content:"最多只能选择5个兴趣标签"});
+						weUI.showXToast("最多只能选择5个兴趣标签");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					//从待选列表中标记已经被选
@@ -496,7 +526,10 @@
 					var _this = this;
 					var datas=_this.selectedInterestTags;
 					if(datas.length-1==0){ 
-						weUI.alert({content:"请至少保留1个兴趣标签"});
+						weUI.showXToast("请至少保留1个兴趣标签");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					var tags=$.grep(datas,function(o,i){
@@ -526,7 +559,10 @@
 				addNewSelectSkillTag: function(tagName){
 					var _this = this;
 					if(_this.selectedSkillTags.length>=5){ 
-						weUI.alert({content:"最多只能选择5个技能标签"});
+						weUI.showXToast("最多只能选择5个技能标签");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					//从待选列表中标记已经被选
@@ -556,7 +592,10 @@
 					var _this = this;
 					var datas=_this.selectedSkillTags;
 					if(datas.length-1==0){
-						weUI.alert({content:"请至少保留1个技能标签"});
+						weUI.showXToast("请至少保留1个技能标签");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					var tags=$.grep(datas,function(o,i){
@@ -901,7 +940,10 @@
 					
 					var res=valueValidator.fireRulesAndReturnFirstError();
 					if(res){
-						weUI.alert({content:res});
+						weUI.showXToast(res);
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return;
 					}
 					
@@ -932,17 +974,17 @@
 							userData: JSON.stringify(data)
 						},
 						success: function(transport){
-							weUI.alert({
-								content: "资料修改成功",
-								ok:function(){
-									window.location.href="../user/userCenter.html";
-								}
-							})
+							weUI.showXToast("修改成功，回到用户中心");
+							setTimeout(function () {
+								weUI.hideXToast();
+								window.location.href="../user/userCenter.html";
+				            }, 500);
 						},
 						failure: function(transport){
-							weUI.alert({
-								content: "资料修改失败"
-							})
+							weUI.showXToast("修改失败，请稍后重试");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 						
 					});
