@@ -167,7 +167,7 @@
 						},
 						failure : function(transport) {
 							weUI.hideLoadingToast();
-							weUI.showXToast("确认失败，稍候重试..");
+							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
 				            }, 500);

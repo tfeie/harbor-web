@@ -213,7 +213,7 @@
 									window.location.href="../user/toApplyCertficate.html";
 								}});
 							}else{
-								weUI.showXToast("打赏失败，稍候重试...");
+								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
 					            }, 500);
@@ -242,7 +242,7 @@
 						},
 						failure: function(transport){
 							weUI.hideLoadingToast();
-							weUI.showXToast("处理失败,稍候重试..");
+							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
 				            }, 500);
@@ -328,7 +328,7 @@
 						},
 						failure: function(transport){ 
 							weUI.hideLoadingToast();
-							weUI.showXToast("评论失败..");
+							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
 				            }, 500);

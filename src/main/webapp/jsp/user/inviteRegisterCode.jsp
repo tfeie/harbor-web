@@ -96,7 +96,7 @@
 							window.location.href="../user/toUserRegister.html?pcode=" + data;
 						},
 						failure: function(transport){  
-							weUI.showXToast("邀请码校验失败，请稍后重试");
+							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
 				            }, 500);

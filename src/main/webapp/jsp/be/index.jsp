@@ -199,7 +199,10 @@
 									window.location.href="../user/toApplyCertficate.html";
 								}});
 							}else{
-								weUI.alert({content:statusInfo});
+								weUI.showXToast(statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 1000);
 							}
 						}
 					});
@@ -229,7 +232,10 @@
 									window.location.href="../user/toUserRegister.html";
 								}});
 							}else{
-								weUI.alert({content:statusInfo});
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 							
 						}

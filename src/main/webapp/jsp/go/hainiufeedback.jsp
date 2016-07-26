@@ -245,7 +245,7 @@
 				            }, 500);
 						},
 						failure: function(transport){ 
-							weUI.showXToast("系统繁忙，请稍候重试..");
+							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
 				            }, 500);

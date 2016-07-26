@@ -508,7 +508,7 @@
 									window.location.href="../user/toUserRegister.html";
 								}});
 							}else{
-								weUI.showXToast("系统繁忙，请稍候重试");
+								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
 					            }, 500);

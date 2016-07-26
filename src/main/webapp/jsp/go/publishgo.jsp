@@ -815,7 +815,7 @@ jeDate({
 				            }, 500);
 						},
 						failure: function(transport){
-							weUI.showXToast("发布失败"+transport.statusInfo);
+							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
 				            }, 500);

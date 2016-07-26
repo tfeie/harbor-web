@@ -279,7 +279,10 @@ wx.config({
 									window.location.href="../user/toApplyCertficate.html";
 								}});
 							}else{
-								weUI.alert({content:statusInfo});
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 						}
 					});
@@ -347,7 +350,10 @@ wx.config({
 									window.location.href="../user/toApplyCertficate.html";
 								}});
 							}else{
-								weUI.alert({content:statusInfo});
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 							
 						}
@@ -378,7 +384,10 @@ wx.config({
 									window.location.href="../user/toUserRegister.html";
 								}});
 							}else{
-								weUI.alert({content:statusInfo});
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 							
 						}
@@ -409,7 +418,10 @@ wx.config({
 									window.location.href="../user/toUserRegister.html";
 								}});
 							}else{
-								weUI.alert({content:statusInfo});
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 						}
 					});
@@ -438,7 +450,10 @@ wx.config({
 									window.location.href="../user/toUserRegister.html";
 								}});
 							}else{
-								weUI.alert({content:statusInfo});
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 500);
 							}
 						}
 					});

@@ -122,7 +122,10 @@
 						_this.applyFriend();
 					});
 					$("#BTN_IM").on("click",function(){
-						weUI.alert({content: "发送消息测试"});
+						weUI.showXToast("发送消息");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 					})
 				},
 				

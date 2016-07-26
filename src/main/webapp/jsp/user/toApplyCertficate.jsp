@@ -265,7 +265,7 @@
 				            }, 500);
 						},
 						failure: function(transport){
-							weUI.showXToast("系统繁忙，请稍候重试");
+							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
 				            }, 500);
@@ -273,18 +273,6 @@
 						
 					});
 					
-				},
-				
-				showError: function(message){
-					$(".message-err").show().html("<p><span>X</span>"+message+"</p>");
-				},
-				
-				showSuccess: function(message){
-					$(".message-err").show().html("<p><span></span>"+message+"</p>");
-				},
-				
-				hideMessage: function(){
-					$(".message-err").html("").hide();
 				}
 			}
 		})

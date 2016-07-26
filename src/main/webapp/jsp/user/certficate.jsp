@@ -123,22 +123,18 @@
 						remark: remark
 					},
 					success: function(transport){
-						weUI.alert({
-							content: "审核成功",
-							ok: function(){
-								window.location.href="../user/userList.html";
-								weUI.closeAlert();
-							}
-						})
+						weUI.showXToast("审核通过");
+						setTimeout(function () {
+							window.location.href="../user/userList.html";
+							weUI.hideXToast();
+			            }, 500);
 					},
 					failure: function(transport){
-						weUI.alert({
-							content: "系统繁忙，请稍候重试",
-							ok: function(){
-								window.location.href="../user/userList.html";
-								weUI.closeAlert();
-							}
-						})
+						weUI.showXToast(transport.statusInfo);
+						setTimeout(function () {
+							window.location.href="../user/userList.html";
+							weUI.hideXToast();
+			            }, 500);
 					}
 					
 				});

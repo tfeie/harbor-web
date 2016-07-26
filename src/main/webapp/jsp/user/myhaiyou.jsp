@@ -210,7 +210,10 @@
 							_this.getMyFriends();
 						},
 						failure: function(transport){ 
-							weUI.alert({content:transport.statusInfo})
+							weUI.showXToast(transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},
@@ -233,7 +236,10 @@
 							}
 						},
 						failure: function(transport){ 
-							weUI.alert({content:transport.statusInfo})
+							weUI.showXToast(transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 				},

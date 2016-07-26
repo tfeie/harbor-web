@@ -981,7 +981,7 @@
 				            }, 500);
 						},
 						failure: function(transport){
-							weUI.showXToast("修改失败，请稍后重试");
+							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
 				            }, 500);
@@ -989,19 +989,6 @@
 						
 					});
 					
-				},
-
-				
-				showError: function(message){
-					$(".message-err").show().html("<p><span>X</span>"+message+"</p>");
-				},
-				
-				showSuccess: function(message){
-					$(".message-err").show().html("<p><span></span>"+message+"</p>");
-				},
-				
-				hideMessage: function(){
-					$(".message-err").html("").hide();
 				}
 			}
 		})
