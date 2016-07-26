@@ -143,7 +143,7 @@ wx.config({
 	jsApiList : [ 'checkJsApi', 'onMenuShareTimeline','onMenuShareAppMessage']
 });
 
-	(function($){
+	(function($){ 
 		$.BeDetailPage = function(data){
 			this.settings = $.extend(true,{},$.BeDetailPage.defaults);
 			this.params= data?data:{}

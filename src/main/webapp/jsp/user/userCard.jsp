@@ -86,6 +86,7 @@
 			</p>
 
 			<div class="clear"></div>
+			<p >请复制邀请码到剪切板，用以粘贴注册</p>
 			<p id = "inviteCode"> </p>
 			<p>（<c:out value="${userInfo.enName}"/>还剩 3 个邀请名额）</p>
 			<p>海湾，我们的舞台...</p>
