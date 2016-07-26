@@ -562,7 +562,7 @@ public class UserController {
 			String jsonparam = Java3DESUtil.decryptThreeDESECB(param);
 			JSONObject json = JSONObject.parseObject(jsonparam);
 			userId = json.getString("userId");
-			request.setAttribute("initcode", json.getString("code"));
+			request.setAttribute("initcode", json.getString("inviteCode"));
 			param = java.net.URLEncoder.encode(param, "utf-8");
 		} catch (Exception ex) {
 			throw new BusinessException("邀请码解密错误");
