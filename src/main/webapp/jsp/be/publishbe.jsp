@@ -208,7 +208,10 @@
 					//自定义标签绑定事件
 					$("#UI_CAN_SELECT_BE_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
 						if(_this.selectedBeTags.length==5){
-							weUI.alert({content:"最多只能选择5个标签"});
+							weUI.showXToast("最多只能选择5个标签");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 							return ;
 						}
 						var content = "<div class=\"wb-m\">";
@@ -348,7 +351,10 @@
 				addNewBeTag: function(tagName){
 					var _this = this;
 					if(_this.selectedBeTags.length>=5){ 
-						weUI.alert({content:"最多只能选择5个标签"});
+						weUI.showXToast("最多只能添加5个标签");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					//从待选列表中标记已经被选
@@ -379,7 +385,10 @@
 					var _this = this;
 					var datas=_this.selectedBeTags;
 					if(datas.length-1==0){
-						weUI.alert({content:"请至少保留1个标签"});
+						weUI.showXToast("至少保留1个标签");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					var tags=$.grep(datas,function(o,i){
@@ -425,7 +434,10 @@
 				deleteBeDetail: function(_id){
 					var _this = this;
 					if(_this.bedetails.length==1){
-						weUI.alert({content:"请至少得填写一项B&E..."});
+						weUI.showXToast("请至少得填写一项B&E");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return;
 					}
 					var queryDetails = $.grep(_this.bedetails,function(o,i){

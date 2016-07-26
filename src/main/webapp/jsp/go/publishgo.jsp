@@ -325,7 +325,10 @@ jeDate({
 					//自定义标签绑定事件
 					$("#UI_CAN_SELECT_GO_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
 						if(_this.selectedGoTags.length==5){
-							weUI.alert({content:"最多只能选择5个标签"});
+							weUI.showXToast("最多只能选择5个标签");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 							return ;
 						} 
 						var content = "<section class=\"par_name\">";
@@ -470,7 +473,10 @@ jeDate({
 				addNewGoTag: function(tagName){
 					var _this = this;
 					if(_this.selectedGoTags.length>=5){ 
-						weUI.alert({content:"最多只能选择5个标签"});
+						weUI.showXToast("最多只能选择5个标签");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					//从待选列表中标记已经被选
@@ -501,7 +507,10 @@ jeDate({
 					var _this = this;
 					var datas=_this.selectedGoTags;
 					if(datas.length-1==0){
-						weUI.alert({content:"请至少保留1个标签"});
+						weUI.showXToast("至少保留1个标签");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					var tags=$.grep(datas,function(o,i){
@@ -547,7 +556,10 @@ jeDate({
 				deleteGoDetail: function(_id){
 					var _this = this;
 					if(_this.godetails.length==1){
-						weUI.alert({content:"请至少保留一项活动详情"});
+						weUI.showXToast("至少上传一张图或写一段文字");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 1000);
 						return;
 					}
 					var queryDetails = $.grep(_this.godetails,function(o,i){
@@ -775,7 +787,10 @@ jeDate({
 						return (o.type=="text" && o.detail=="") || (o.type=="image" && o.imageUrl=="");
 					});
 					if(queryDetails.length>0){
-						weUI.alert({content:"您还有没有填写完成的活动内容或者要上传的活动图片"});
+						weUI.showXToast("图片或文字没有填写");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 500);
 						return ;
 					}
 					
