@@ -140,7 +140,7 @@ wx.config({
 	timestamp : <c:out value="${timestamp}"/>,
 	nonceStr : '<c:out value="${nonceStr}"/>',
 	signature : '<c:out value="${signature}"/>',
-	jsApiList : [ 'checkJsApi', 'onMenuShareTimeline','onMenuShareAppMessage']
+	jsApiList : [ 'checkJsApi', 'previewImage','onMenuShareTimeline','onMenuShareAppMessage']
 });
 
 	(function($){ 
@@ -223,6 +223,20 @@ wx.config({
 					$("#DIV_BE_DETAIL").delegate("#DIV_DO_DIANZAN","click",function(){
 						_this.doDianzan();
 					});
+					
+					//BE图片预览
+					$("#DIV_BE_DETAIL").delegate("#BE_IMG","click",function(){
+						var imageURL = $(this).attr("imageUrl");
+						var imageURLs = _this.imageURLs?_this.imageURLs:[];
+						if(imageURLs.length==0){
+							return;
+						}
+						wx.previewImage({
+						    current: imageURL, // 当前显示图片的http链接
+						    urls: imageURLs // 需要预览的图片http链接列表
+						});
+					});
+					
 					
 					//打赏按钮 
 					$("#DIV_REWARD_COUNT").on("click",function(){
@@ -480,6 +494,7 @@ wx.config({
 				
 				renderBeDetail: function(data){ 
 					data= data?data:{};
+					var imageURLs = new Array();
 					var num = 0;
 					if(data){
 						var beDetails = data.beDetails;
@@ -498,10 +513,15 @@ wx.config({
 										num += 1;
 									}
 									
+								}else if(type=="image"){
+									var imageUrl = detail.imageUrl;
+									imageURLs.push(imageUrl);
 								}
 							}
 						}
 					}
+					//存储图片地址
+					this.imageURLs = imageURLs;
 					var opt=$("#BeDetailImpl").render(data);
 					$("#DIV_BE_DETAIL").html(opt); 
 				},
@@ -583,7 +603,7 @@ wx.config({
 					<p> {{:detail}} </p>
 				{{/if}}
 				{{if type=="image"}}
-					<img src="{{:imgThumbnailUrl}}" width="100%">
+					<img src="{{:imgThumbnailUrl}}" width="100%" imageUrl="{{:imageUrl}}" name="BE_IMG">
 				{{/if}}
 				{{if #index==0}}
 					<div class="bq clearfix">
