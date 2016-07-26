@@ -44,7 +44,7 @@
 		<section class="tijiao on">
 			<p>
 				<c:if test="${confirm==true}">用户已经确认了时间地点，您不能再修改</c:if>
-				<c:if test="${confirm==false}">请您输入2个活动举办的时间地点</c:if>
+				<c:if test="${confirm==false}">请您输入两个约定的时间和地点</c:if>
 			</p>
 		</section>
 
@@ -104,7 +104,7 @@
 			
 			<c:if test="${confirm==false}">
 			<section class="yuejian-but">
-				<button id="BTN_CONFITM_MEET_LOCAL">设置约见地点</button>
+				<button id="BTN_CONFITM_MEET_LOCAL">提交时间地点</button>
 			</section>
 			</c:if>
 		</section>
@@ -260,7 +260,7 @@
 						expectedLocation2: expectedLocation2
 					},
 					success: function(transport){
-						weUI.showXToast("约见地点设置成功,等待用户确认");
+						weUI.showXToast("约见地点设置成功,等待新秀确认");
 						setTimeout(function () {
 							weUI.hideXToast();
 							window.location.href="../go/mycreateonodetail.html?goId="+_this.getPropertyValue("goId");
