@@ -496,7 +496,7 @@ wx.config({
 					data= data?data:{};
 					var imageURLs = new Array();
 					var num = 0;
-					if(data){
+					if(data.length>0){
 						var beDetails = data.beDetails;
 						if(beDetails && beDetails.length > 0){
 							for (var i=0;i< beDetails.length;i++){
@@ -514,7 +514,7 @@ wx.config({
 									}
 									
 								}else if(type=="image"){
-									var imageUrl = detail.imageUrl;
+									var imageUrl = beDetails[i].imageUrl;
 									imageURLs.push(imageUrl);
 								}
 							}
