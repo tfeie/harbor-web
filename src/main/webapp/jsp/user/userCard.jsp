@@ -86,7 +86,7 @@
 
 			<div class="clear"></div>
 			<c:if test="${initcode!=null}">
-			<p >请记住邀请码<font size="5"><c:out value="${initcode}"/></font>，在下一步输入注册</p>
+			<p >请记住邀请码 <font size="5"><c:out value="${initcode}"/></font>，在下一步输入注册</p>
 			<p>（<c:out value="${userInfo.enName}"/>还剩 3 个邀请名额）</p>
 			</c:if>
 			<c:if test="${initcode==null}">

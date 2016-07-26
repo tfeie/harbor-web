@@ -223,7 +223,7 @@
 							weUI.showXToast(res);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 							return;
 						}
 						_this.submit();
@@ -275,17 +275,17 @@
 							pcode: pcode
 						},
 						success: function(transport){
-							weUI.showXToast("注册成功，去设置您的兴趣技能吧");
+							weUI.showXToast("注册成功");
 							setTimeout(function () {
 								weUI.hideXToast();
 								window.location.href="../user/setUserSkills.html"
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 						
 					});
@@ -343,7 +343,7 @@
 						weUI.showXToast(result);
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					this.waitSeconds=60; 
@@ -364,7 +364,7 @@
 							weUI.showXToast("验证码发送成功");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 							_this.unBindYZMEvent();
 							
 						},
@@ -372,7 +372,7 @@
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 						
 					});

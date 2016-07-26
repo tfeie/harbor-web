@@ -170,11 +170,12 @@ wx.config({
 						    link:  _this.getPropertyValue("url"), 
 						    //imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
-						    	weUI.alert({content:"分享成功",ok: function(){
-						    		$("#shareit").hide(); 
+						    	weUI.showXToast("分享成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									$("#shareit").hide(); 
 						    		$("#DIV_BE_DETAIL").show();
-						    		weUI.closeAlert();
-						    	}});
+					            }, 500);
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
@@ -187,11 +188,12 @@ wx.config({
 						    link:  _this.getPropertyValue("url"), 
 						    //imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
-						    	weUI.alert({content:"分享成功",ok: function(){
-						    		$("#shareit").hide(); 
+						    	weUI.showXToast("分享成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									$("#shareit").hide(); 
 						    		$("#DIV_BE_DETAIL").show();
-						    		weUI.closeAlert();
-						    	}});
+					            }, 500);
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
