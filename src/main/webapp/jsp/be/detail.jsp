@@ -225,7 +225,7 @@ wx.config({
 					});
 					
 					//BE图片预览
-					$("#DIV_BE_DETAIL").delegate("#BE_IMG","click",function(){
+					$("#DIV_BE_DETAIL").delegate("[name='BE_IMG']","click",function(){
 						var imageURL = $(this).attr("imageUrl");
 						var imageURLs = _this.imageURLs?_this.imageURLs:[];
 						console.log(imageURL);
