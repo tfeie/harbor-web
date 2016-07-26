@@ -935,7 +935,7 @@
 							weUI.alert({
 								content: "资料修改成功",
 								ok:function(){
-									window.location.href="../be/index.html";
+									window.location.href="../user/userCenter.html";
 								}
 							})
 						},

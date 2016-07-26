@@ -248,7 +248,7 @@
 						},
 						success: function(transport){
 							_this.showSuccess("认证材料提交成功，请等待审核");
-							window.location.href="../be/index.html";
+							window.location.href="../user/userCenter.html";
 						},
 						failure: function(transport){
 							_this.showError("系统繁忙，请稍候重试");
