@@ -86,6 +86,7 @@
 			</p>
 
 			<div class="clear"></div>
+			<p id = "inviteCode"> </p>
 			<p>（<c:out value="${userInfo.enName}"/>还剩 3 个邀请名额）</p>
 			<p>海湾，我们的舞台...</p>
 		</section>
@@ -133,7 +134,9 @@
 					this.bindEvents();
 				},
 				
-				initData: function(){ 
+				initData: function(){
+					var code = "邀请码：" + this.getPropertyValue("initcode");
+					$("#inviteCode").html(code);
 					this.getAllTags(); 
 				},
 				
