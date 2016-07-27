@@ -138,9 +138,10 @@
 					this.bindEvents();
 					
 					wx.ready(function () {
+						var code = "${initcode}"?"${initcode}":"邀请码已用完";
 						 var shareData = {
-								   title: '${userInfo.enName}邀你打天下' ,
-								   desc: "海归海湾，海归创业第一站",
+								   title: '${userInfo.enName}在海归海湾创业' ,
+								   desc: "海归海湾，海归创业第一站，限量邀请码：" + code,
 								   imgUrl:'${userInfo.wxHeadimg}',
 								   link: '${url}'
 							};
@@ -158,8 +159,8 @@
 					var _this=this;
 					$("#BTN_SHARE").on("click",function(){
 						wx.onMenuShareTimeline({
-						    title: _this.getPropertyValue("enName")+"邀你打天下",
-						    desc: "邀请码：" + _this.getPropertyValue("initcode"),
+						    title: _this.getPropertyValue("enName")+"在海归海湾创业",
+						    desc: "海归海湾，海归创业第一站，限量邀请码：" + _this.getPropertyValue("initcode"),
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {
@@ -175,8 +176,8 @@
 						    }
 						});	
 						wx.onMenuShareAppMessage({
-						    title: _this.getPropertyValue("enName")+"在海归海湾的名片",
-						    desc: "邀请码：" + _this.getPropertyValue("initcode"),
+						    title: _this.getPropertyValue("enName")+"在海归海湾创业",
+						    desc: "海归海湾，海归创业第一站，限量邀请码：" + _this.getPropertyValue("initcode"),
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  

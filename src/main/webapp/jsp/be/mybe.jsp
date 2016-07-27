@@ -145,7 +145,7 @@
 						opt = $("#MyBeListImpl").render(data);
 					}else{
 						if(newload){
-							opt="<div class='itms box-s'><div class='js chaochu_2'>没有任何动态哦~</div></div>";
+							opt="<div class='itms box-s'><div class='js chaochu_2' style='text-align:center;'>没有任何动态哦~</div></div>";
 						}
 					}
 					if(newload){

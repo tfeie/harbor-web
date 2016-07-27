@@ -161,7 +161,7 @@
 						opt = $("#MyGroupsImpl").render(data);
 					}else{
 						if(newload){
-							opt="<div class='itms box-s'><div class='js chaochu_2'>您没有任何Group活动哦~</div></div>";
+							opt="<div class='itms box-s'><div class='js chaochu_2' style='text-align:center;'>您没有任何Group活动哦~</div></div>";
 						}
 					}
 					if(newload){

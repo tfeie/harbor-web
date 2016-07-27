@@ -40,7 +40,7 @@
 			</div>
 		</section>
 		<section class="group_oneon" >
-			<section class="lat_group on" id="DIV_GOES">
+			<section class="lat_group on" style="text-align:center;" id="DIV_GOES">
 			</section>
 		</section>
 		<div id="UL_GOTO_NEXTPAGE" style="display:none">
