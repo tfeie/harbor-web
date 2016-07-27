@@ -222,6 +222,7 @@ jeDate({
 						_this.godetails.push({
 							_id: new Date().getTime(),
 							type: "image",
+							candel: true,
 							imageUrl:""
 						});
 						//渲染详情页面
@@ -233,6 +234,7 @@ jeDate({
 						_this.godetails.push({
 							_id: new Date().getTime(),
 							type: "text",
+							candel: true,
 							detail:""
 						});
 						//渲染详情页面
@@ -405,6 +407,7 @@ jeDate({
 					this.godetails=[{
 						_id: new Date().getTime(),
 						type: "text",
+						candel: false,
 						detail:""
 					}];
 					this.getAllTags(); 
@@ -910,9 +913,12 @@ jeDate({
 三.说明
 四.注意">{{:detail}}</textarea>
 				</p>
-				<section class="yingchang" name="SECTION_DEL_GO_DETAIL" _id="{{:_id}}">
-					<img src="//static.tfeie.com/images/img50.png" />
-				</section>
+				{{if candel==true}}
+					<section class="yingchang" name="SECTION_DEL_GO_DETAIL" _id="{{:_id}}">
+						<img src="//static.tfeie.com/images/img50.png" />
+					</section>
+				{{/if}}
+				
 			</section>
 		{{/if}}
 		{{if type=="image"}}
