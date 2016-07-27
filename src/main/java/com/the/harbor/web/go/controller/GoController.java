@@ -522,6 +522,14 @@ public class GoController {
 		if (go == null) {
 			throw new BusinessException("您查看的活动信息不存在");
 		}
+		UserViewInfo userInfo = WXUserUtil.getUserViewInfoUnCheckWXAuth(request);
+		/* 发送浏览记录 */
+		DoGoView body = new DoGoView();
+		body.setGoId(goId);
+		body.setUserId(userInfo == null ? null : userInfo.getUserId());
+		body.setTime(DateUtil.getSysDate());
+		UserViewMQSend.sendMQ(body);
+
 		request.setAttribute("go", go);
 		ModelAndView view = new ModelAndView("go/onodetail");
 		return view;

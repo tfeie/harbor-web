@@ -12,6 +12,7 @@ import com.the.harbor.commons.components.redis.CacheFactory;
 import com.the.harbor.commons.redisdata.def.RedisDataKey;
 import com.the.harbor.commons.redisdata.util.HyUserUtil;
 import com.the.harbor.commons.util.StringUtil;
+import com.the.harbor.web.constants.WXConstants;
 import com.the.harbor.web.util.DubboServiceUtil;
 import com.the.harbor.web.weixin.param.WeixinOauth2Token;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
@@ -45,6 +46,16 @@ public final class WXUserUtil {
 		if (StringUtil.isBlank(wtoken.getOpenId())) {
 			throw new BusinessException("认证失败,请关闭浏览器后重新进入");
 		}
+		UserViewInfo userInfo = getUserViewInfoByOpenId(wtoken.getOpenId());
+		return userInfo;
+	}
+	
+	public static UserViewInfo getUserViewInfoUnCheckWXAuth(HttpServletRequest request) {
+		Object o = request.getSession().getAttribute(WXConstants.SESSION_WX_WEB_AUTH);
+		if(o==null){
+			return null;
+		}
+		WeixinOauth2Token wtoken = (WeixinOauth2Token) o;
 		UserViewInfo userInfo = getUserViewInfoByOpenId(wtoken.getOpenId());
 		return userInfo;
 	}
