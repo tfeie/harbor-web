@@ -37,7 +37,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				"/go/goindex.html", "/go/invite.html", "/go/toFeedback.html", "/go/toHainiuFeedback.html",
 				"/go/confirmlist.html", "/go/toHainiuAppointment.html", "/go/toAppointment.html",
 				"/go/myjointgoes.html", "/go/toHainiuConfirm.html", "/be/publishbe.html", "/be/mybe.html",
-				"/be/mytimeline.html", "/be/index.html" };
+				"/be/mytimeline.html", "/be/index.html","/user/toUserInviteCode.html" };
 		String uri = request.getRequestURI();
 		boolean doFilter = false;
 		for (String s : shouldFilter) {
