@@ -227,13 +227,13 @@
 							weUI.showXToast("评论成功..");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){ 
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 					});
 				},

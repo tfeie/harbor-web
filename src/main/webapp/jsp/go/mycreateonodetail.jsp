@@ -204,14 +204,14 @@
 								weUI.showXToast("已收藏");
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 						},
 						failure : function(transport) {
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 
 					});
@@ -230,10 +230,10 @@
 							window.location.href="../go/toOrder.html?goId="+goId;
 						},
 						failure : function(transport) {
-							weUI.showXToast("系统繁忙，请稍候重试..");
+							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 
 					});

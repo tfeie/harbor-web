@@ -194,7 +194,7 @@
 							weUI.showXToast("打赏成功");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){
 							weUI.hideLoadingToast();
@@ -216,7 +216,7 @@
 								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 						}
 					});
@@ -238,14 +238,14 @@
 							weUI.showXToast("处理成功");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){
 							weUI.hideLoadingToast();
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 					});
 				},
@@ -312,7 +312,7 @@
 							weUI.showXToast("评论成功");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 							var data = transport.data;
 							var arr = [data];
 							var opt=$("#CommentsImpl").render(arr);
@@ -331,7 +331,7 @@
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 					});
 				},

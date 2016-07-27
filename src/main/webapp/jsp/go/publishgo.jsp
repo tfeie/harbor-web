@@ -279,7 +279,7 @@ jeDate({
 												weUI.showXToast("图片转存成功");
 												setTimeout(function () {
 													weUI.hideXToast();
-									            }, 500);
+									            }, 1000);
 												var imgURL  = transport.data;
 												$(s).find("#IMG_GO").attr("src", imgURL+"@!go_thumbnail");
 												_this.modifyGoDetail(_id,"",imgURL);
@@ -289,7 +289,7 @@ jeDate({
 												weUI.showXToast("图片转存失败");
 												setTimeout(function () {
 													weUI.hideXToast();
-									            }, 500);
+									            }, 1000);
 											}
 											
 										});
@@ -298,7 +298,7 @@ jeDate({
 										weUI.showXToast("图片上传失败");
 										setTimeout(function () {
 											weUI.hideXToast();
-							            }, 500);
+							            }, 1000);
 									}
 								});
 							}
@@ -325,10 +325,10 @@ jeDate({
 					//自定义标签绑定事件
 					$("#UI_CAN_SELECT_GO_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
 						if(_this.selectedGoTags.length==5){
-							weUI.showXToast("最多只能选择5个标签");
+							weUI.showXToast("标签已选满");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 							return ;
 						} 
 						var content = "<section class=\"par_name\">";
@@ -473,10 +473,10 @@ jeDate({
 				addNewGoTag: function(tagName){
 					var _this = this;
 					if(_this.selectedGoTags.length>=5){ 
-						weUI.showXToast("最多只能选择5个标签");
+						weUI.showXToast("标签已选满");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					//从待选列表中标记已经被选
@@ -507,10 +507,10 @@ jeDate({
 					var _this = this;
 					var datas=_this.selectedGoTags;
 					if(datas.length-1==0){
-						weUI.showXToast("至少保留1个标签");
+						weUI.showXToast("至少保留1个");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					var tags=$.grep(datas,function(o,i){
@@ -556,7 +556,7 @@ jeDate({
 				deleteGoDetail: function(_id){
 					var _this = this;
 					if(_this.godetails.length==1){
-						weUI.showXToast("至少上传一张图或写一段文字");
+						weUI.showXToast("至少保留一项");
 						setTimeout(function () {
 							weUI.hideXToast();
 			            }, 1000);
@@ -779,7 +779,7 @@ jeDate({
 						weUI.showXToast(res);
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return;
 					}
 					//校验活动明细 
@@ -790,7 +790,7 @@ jeDate({
 						weUI.showXToast("图片或文字没有填写");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					
@@ -819,7 +819,7 @@ jeDate({
 						},
 						success: function(transport){
 							weUI.hideLoadingToast();
-							weUI.showXToast("发布成功，将跳转到首页");
+							weUI.showXToast("发布成功");
 							setTimeout(function () {
 								weUI.hideXToast();
 								if(goType=="group"){
@@ -827,13 +827,13 @@ jeDate({
 								}else{
 									window.location.href="../go/goindex.html?goType=ono";
 								}
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 						
 					});
