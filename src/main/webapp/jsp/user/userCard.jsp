@@ -136,6 +136,17 @@
 				init: function(){
 					this.initData(); 
 					this.bindEvents();
+					
+					wx.ready(function () {
+						 var shareData = {
+								   title: '${userInfo.enName}邀你打天下' ,
+								   desc: "海归海湾，海归创业第一站",
+								   link: '${url}'
+							};
+						 
+						wx.onMenuShareTimeline(shareData);	
+						wx.onMenuShareAppMessage(shareData);	
+					});
 				},
 				
 				initData: function(){
@@ -146,7 +157,7 @@
 					var _this=this;
 					$("#BTN_SHARE").on("click",function(){
 						wx.onMenuShareTimeline({
-						    title: _this.getPropertyValue("enName")+"在海归海湾的名片",
+						    title: _this.getPropertyValue("enName")+"邀你打天下",
 						    desc: "邀请码：" + _this.getPropertyValue("initcode"),
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: _this.getPropertyValue("shareImg"), 
