@@ -70,7 +70,7 @@
 					<c:forEach var="detail" items="${go.goDetails }">
 						<c:if test="${detail.type=='text'}">
 							<p>
-								<c:out value="${detail.detail}" />
+								<c:out value="${detail.detail}" escapeXml="false"/>
 							</p>
 						</c:if>
 						<c:if test="${detail.type=='image'}">
