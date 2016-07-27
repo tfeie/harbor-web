@@ -40,7 +40,7 @@
 			</div>
 		</section>
 		<section class="group_oneon" >
-			<section class="lat_group on" style="text-align:center;" id="DIV_GOES">
+			<section class="lat_group on"  id="DIV_GOES">
 			</section>
 		</section>
 		<div id="UL_GOTO_NEXTPAGE" style="display:none">
@@ -231,7 +231,7 @@
 						 opt = $("#GroupsImpl").render(data);
 					}else{
 						if(newload){
-							opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
+							opt="<section class=\"wuwai_jiansheng\" style=\"text-align:center;\">还没有相关活动信息哦~</section>";
 						}
 					}
 					if(newload){
@@ -249,7 +249,7 @@
 						 opt = $("#OneOnOnImpl").render(data);
 					}else{
 						if(newload){
-							opt="<section class=\"wuwai_jiansheng\">还没有相关活动信息哦~</section>";
+							opt="<section class=\"wuwai_jiansheng\" style=\"text-align:center;\">还没有相关活动信息哦~</section>";
 						}
 					}
 					if(newload){
