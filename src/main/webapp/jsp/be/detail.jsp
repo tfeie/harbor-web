@@ -555,6 +555,7 @@ wx.config({
 					_this.imageURLs = imageURLs;
 					var opt=$("#BeDetailImpl").render(data);
 					$("#DIV_BE_DETAIL").html(opt); 
+					$("#DIV_REWARD_COUNT").html(data.giveHaibeiCount);
 				},
 				
 				getRewardUsers: function(count){
@@ -568,7 +569,6 @@ wx.config({
 						success: function(transport){
 							var data =transport.data; 
 							_this.renderBeRewardUsers(data); 
-							$("#DIV_REWARD_COUNT").html(count);
 						},
 						failure: function(transport){ 
 							_this.renderBeRewardUsers([]); 
