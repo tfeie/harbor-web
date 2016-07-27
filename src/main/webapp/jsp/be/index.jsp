@@ -177,8 +177,7 @@
 						},
 						success: function(transport){ 
 							var count = transport.data;
-							var n =$("#a_givehb_"+beId).text();
-							$("#a_givehb_"+beId).text(count+parseInt(n));
+							$("#a_givehb_"+beId).text(count);
 							weUI.showXToast("打赏成功");
 							setTimeout(function () {
 								weUI.hideXToast();
