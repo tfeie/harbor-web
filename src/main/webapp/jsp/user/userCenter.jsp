@@ -66,8 +66,8 @@
 
 		<section class="ip2_pengyou">
 			<ul>
-				<li><a href="#"><span>0</span><label>益友</label></a></li>
-				<li><a href="#"><span>0</span><label>助人</label></a></li>
+				<li><a href="#"><span>0</span><label>升级中</label></a></li>
+				<li><a href="#"><span>0</span><label>升级中</label></a></li>
 				<li><a href="../user/myguanzhu.html"><span><c:out
 								value="${guanzhuCount}" /></span><label>关注</label></a></li>
 				<li><a href="../user/myfans.html"><span><c:out
@@ -109,10 +109,10 @@
 
 		<section class="ip2_my">
 			<section class="ip2_wid">
-				<p class="ip2_7">
+				<p class="ip2_7" style="display:none">
 					<a href="../user/memberCenter.html">会员中心</a>
 				</p>
-				<p class="ip2_7" style="display:none">
+				<p class="ip2_7">
 					<a href="javascript:void(0)">新功能ing</a>
 				</p>
 				<p class="ip2_8" style="display:none">

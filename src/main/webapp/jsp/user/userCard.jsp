@@ -71,7 +71,7 @@
 				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></label><i><c:out value="${userInfo.userStatusName}"/></i>
 			</p>
 			<p class="pengyou">
-				<a href="#">益友 10</a><a href="#" class="on">助人 10</a><a href="#">公益贝
+				<a href="#">升级中</a><a href="#" class="on">升级中</a><a href="#">公益贝
 					100</a>
 			</p>
 			<p class="aihao" id="SELECTED_INTEREST_TAGS"></p>

@@ -3,6 +3,7 @@ package com.the.harbor.web.system.controller;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,10 +15,12 @@ import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.dict.ParamCode;
 import com.the.harbor.base.enumeration.dict.TypeCode;
 import com.the.harbor.commons.indices.hyuniversity.UniversityHandler;
+import com.the.harbor.commons.redisdata.def.HyAreaVo;
 import com.the.harbor.commons.redisdata.def.HyCountryVo;
 import com.the.harbor.commons.redisdata.def.HyDictsVo;
 import com.the.harbor.commons.redisdata.def.HyIndustryVo;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
+import com.the.harbor.commons.redisdata.util.HyAreaUtil;
 import com.the.harbor.commons.redisdata.util.HyCountryUtil;
 import com.the.harbor.commons.redisdata.util.HyDictUtil;
 import com.the.harbor.commons.redisdata.util.HyIndustryUtil;
@@ -179,4 +182,33 @@ public class BaseDataController {
 		return responseData;
 	}
 
+	@RequestMapping("/getAllProvincies")
+	public ResponseData<List<HyAreaVo>> getAllProvincies() {
+		ResponseData<List<HyAreaVo>> responseData = null;
+		try {
+			List<HyAreaVo> ls = HyAreaUtil.getProvincies();
+			responseData = new ResponseData<List<HyAreaVo>>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "获取省份列表成功", ls);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = new ResponseData<List<HyAreaVo>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getCities")
+	public ResponseData<List<HyAreaVo>> getCities(@NotBlank(message = "省份编码为空") String proviceCode) {
+		ResponseData<List<HyAreaVo>> responseData = null;
+		try {
+			List<HyAreaVo> ls = HyAreaUtil.getCities(proviceCode);
+			responseData = new ResponseData<List<HyAreaVo>>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "获取地市列表成功", ls);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = new ResponseData<List<HyAreaVo>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
 }

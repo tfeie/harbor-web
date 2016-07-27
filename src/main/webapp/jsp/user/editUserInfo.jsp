@@ -113,6 +113,18 @@
 				<input type="text" id="title" value="<c:out value="${userInfo.title}"/>" placeholder="您的职位头衔,如:CTO">
 			</p>
 		</section>
+		<section class="sel_con">
+			<p class="boss">
+				<select id="atProvince">
+				</select>
+			</p>
+		</section>
+		<section class="sel_con">
+			<p class="boss">
+				<select id="atCity">
+				</select>
+			</p>
+		</section>
 		<section class="check_item">
 			<section class="xinqi" id="SELECTED_SKILL_TAGS">
 				
@@ -178,6 +190,8 @@
 					this.getAllDicts();
 					this.getAllTags();
 					this.renderSex();
+					this.getAllHyProvincies();
+					this.getAllHyCities(this.getPropertyValue("atProvince"));
 				},
 				
 				bindEvents: function(){ 
@@ -277,6 +291,12 @@
 								});
 							}
 						});
+					});
+					
+					//选择省份
+					$("#atProvince").on("change",function(){
+						var provinceCode =$(this).val();
+						_this.getAllHyCities(provinceCode);
 					});
 					
 					//提交事件绑定
@@ -788,6 +808,68 @@
 					});
 				},
 				
+				getAllHyProvincies: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../sys/getAllProvincies",
+						type: "post", 
+						success: function(transport){
+							var data =transport.data;
+							_this.fillAtProvinceSelelct(data);
+						},
+						failure: function(transport){
+							_this.fillAtProvinceSelelct([]);
+						}
+						
+					});
+				},
+				
+				fillAtProvinceSelelct: function(options){
+					var d  = {
+						defaultValue: this.getPropertyValue("atProvince"),
+						showAll: true,
+						allValue: "",
+						allDesc: "请选择省份",
+						options: options?options:[]
+					};
+					var opt=$("#AreaSelectOptionImpl").render(d);
+					$("#atProvince").append(opt);
+				},
+				
+				
+				getAllHyCities: function(atProvince){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../sys/getCities",
+						type: "post", 
+						data: {
+							proviceCode: atProvince
+						},
+						success: function(transport){
+							var data =transport.data;
+							_this.fillAtCitySelelct(data);
+						},
+						failure: function(transport){
+							_this.fillAtCitySelelct([]);
+						}
+						
+					});
+				},
+				
+				fillAtCitySelelct: function(options){
+					var d  = {
+						defaultValue: this.getPropertyValue("atCity"),
+						showAll: true,
+						allValue: "",
+						allDesc: "请选择地市",
+						options: options?options:[]
+					};
+					var opt=$("#AreaSelectOptionImpl").render(d);
+					$("#atCity").html(opt);
+				},
+				
+				
+				
 				fillIndustriesSelelct: function(options){
 					var d  = {
 						defaultValue: this.getPropertyValue("industry"),
@@ -816,6 +898,8 @@
 					var mobilePhone = $.trim($("#mobilePhone").val());
 					var company= $.trim($("#company").val());
 					var title= $.trim($("#title").val());
+					var atProvince= $.trim($("#atProvince").val());
+					var atCity= $.trim($("#atCity").val());
 					
 					var valueValidator = new $.ValueValidator();
 					valueValidator.addRule({
@@ -963,6 +1047,8 @@
 						company: company,
 						industry: industry,
 						title: title,  
+						atCity: atCity,
+						atProvince: atProvince,
 						interestSelectedTags: _this.selectedInterestTags,
 						skillSelectedTags: _this.selectedSkillTags
 					}
@@ -1006,7 +1092,9 @@
 			abroadCountry: "<c:out value="${userInfo.abroadCountry}"/>",
 			industry: "<c:out value="${userInfo.industry}"/>",
 			maritalStatus: "<c:out value="${userInfo.maritalStatus}"/>",
-			constellation: "<c:out value="${userInfo.constellation}"/>"
+			constellation: "<c:out value="${userInfo.constellation}"/>",
+			atProvince: "<c:out value="${userInfo.atProvince}"/>",
+			atCity: "<c:out value="${userInfo.atCity}"/>"
 		});
 		p.init();
 	});
@@ -1027,6 +1115,15 @@
 	{{/if}}
     {{for options ~defaultValue=defaultValue}}
         <option value="{{:industryCode}}"  {{if ~defaultValue==industryCode}} selected {{/if}}>{{:industryName}}</option>
+    {{/for}}
+	</script>
+	
+	<script id="AreaSelectOptionImpl" type="text/x-jsrender"> 
+	{{if showAll==true}}
+    <option value="{{:allValue}}">{{:allDesc}}</option>
+	{{/if}}
+    {{for options ~defaultValue=defaultValue}}
+        <option value="{{:areaCode}}"  {{if ~defaultValue==areaCode}} selected {{/if}}>{{:areaName}}</option>
     {{/for}}
 	</script>
 	

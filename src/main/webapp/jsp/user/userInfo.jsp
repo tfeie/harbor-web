@@ -72,7 +72,6 @@
 		</section>
 
 		<section class="ip_zhiwei">
-			<p><c:out value="${userInfo.mobilePhone}"/></p>
 			<p><c:out value="${userInfo.industryName}"/></p>
 			<p><c:out value="${userInfo.company}"/></p>
 			<p><c:out value="${userInfo.title}"/></p>
