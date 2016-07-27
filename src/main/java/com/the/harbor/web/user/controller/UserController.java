@@ -143,7 +143,7 @@ public class UserController {
 		String pcode = request.getParameter("pcode");
 		if (invite) {
 			if (StringUtil.isBlank(pcode)) {
-				throw new BusinessException("目前只开通邀约注册，速速找好友邀请吧~");
+				throw new BusinessException("目前只开通邀约注册，速速找好友邀请吧~",true,"../user/toUserInviteCode.html");
 			}
 			String jsonparam = Java3DESUtil.decryptThreeDESECB(pcode);
 			JSONObject json = JSONObject.parseObject(jsonparam);
