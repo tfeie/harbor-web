@@ -1326,6 +1326,11 @@ public class UserController {
 
 	@RequestMapping("/toUserInviteCode.html")
 	public ModelAndView toUserInviteCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		if(userInfo != null){
+			ModelAndView view = new ModelAndView("redirect:../be/index.html");
+			return view;
+		}
 		ModelAndView view = new ModelAndView("user/inviteRegisterCode");
 		return view;
 	}
