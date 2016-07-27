@@ -294,11 +294,12 @@ wx.config({
 						},
 						success: function(transport){ 
 							var count = transport.data;
+							$("#DIV_REWARD_COUNT").html(count);
 							weUI.showXToast("打赏成功");
 							setTimeout(function () {
 								weUI.hideXToast();
 				            }, 1000);
-							_this.getRewardUsers(count); 
+							_this.getRewardUsers(); 
 						},
 						failure: function(transport){ 
 							var busiCode = transport.busiCode;
@@ -558,7 +559,7 @@ wx.config({
 					$("#DIV_REWARD_COUNT").html(data.giveHaibeiCount);
 				},
 				
-				getRewardUsers: function(count){
+				getRewardUsers: function(){
 					var _this = this;
 					ajaxController.ajax({
 						url: "../be/getRewardUsers",
