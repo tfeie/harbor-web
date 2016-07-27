@@ -92,7 +92,7 @@
 								dom.detach();
 								var len = $("[name='DIV_NOTIFY']").length;
 								if(len==0){
-									var opt="<div class=\"itms clearfix\">没有任何消息哦~</div>";
+									var opt="<div class=\"itms clearfix\" style=\"text-align:center;\">没有任何消息哦~</div>";
 									$("#DIV_MY_NOTIFY").append(opt); 
 								}
 							});
