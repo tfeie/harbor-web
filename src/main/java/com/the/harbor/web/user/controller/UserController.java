@@ -521,15 +521,18 @@ public class UserController {
 		String code = "";
 		String sign = "";
 		String param = "";
+		int ncount = 0;
 		if (!CollectionUtil.isEmpty(userInviteList)) {
 			code = userInviteList.get(0).getInviteCode();
 			sign = SignUtil.getUserInviteSign(userInfo.getUserId(), code);
+			ncount = userInviteList.size() - 1;
 		}
 		try {
 			JSONObject json = new JSONObject();
 			json.put("userId", userInfo.getUserId());
 			json.put("inviteCode", code);
 			json.put("sign", sign);
+			json.put("ncount", ncount);
 			param = Java3DESUtil.encryptThreeDESECB(json.toJSONString());
 			param = java.net.URLEncoder.encode(param, "utf-8");
 		} catch (Exception ex) {
@@ -545,6 +548,7 @@ public class UserController {
 		request.setAttribute("userInfo", userInfo);
 		request.setAttribute("inviteCode", param);
 		request.setAttribute("initcode", code);
+		request.setAttribute("ncount", ncount);
 
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
@@ -563,6 +567,7 @@ public class UserController {
 			JSONObject json = JSONObject.parseObject(jsonparam);
 			userId = json.getString("userId");
 			request.setAttribute("initcode", json.getString("inviteCode"));
+			request.setAttribute("ncount", json.getString("ncount"));
 			param = java.net.URLEncoder.encode(param, "utf-8");
 		} catch (Exception ex) {
 			throw new BusinessException("邀请码解密错误");
