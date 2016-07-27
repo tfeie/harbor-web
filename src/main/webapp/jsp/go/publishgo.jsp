@@ -562,6 +562,16 @@ jeDate({
 			            }, 1000);
 						return;
 					}
+					// 第一个文本不能删
+					var firstgo = _this.godetails[0];
+					if(firstgo._id == _id){
+						weUI.showXToast("第一个文本框不允许删除");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 1000);
+						return;
+					}
+					
 					var queryDetails = $.grep(_this.godetails,function(o,i){
 						return o._id==_id;
 					});
