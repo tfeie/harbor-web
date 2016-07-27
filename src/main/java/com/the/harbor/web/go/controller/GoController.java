@@ -26,6 +26,7 @@ import com.the.harbor.api.go.param.CreateGoPaymentOrderResp;
 import com.the.harbor.api.go.param.DoGoComment;
 import com.the.harbor.api.go.param.DoGoFavorite;
 import com.the.harbor.api.go.param.DoGoJoinConfirm;
+import com.the.harbor.api.go.param.DoGoView;
 import com.the.harbor.api.go.param.GiveHBReq;
 import com.the.harbor.api.go.param.Go;
 import com.the.harbor.api.go.param.GoComment;
@@ -87,6 +88,7 @@ import com.the.harbor.web.util.DubboServiceUtil;
 import com.the.harbor.web.util.UserCommentMQSend;
 import com.the.harbor.web.util.UserFavorMQSend;
 import com.the.harbor.web.util.UserGroupJoinConfirmMQSend;
+import com.the.harbor.web.util.UserViewMQSend;
 
 @RestController
 @RequestMapping("/go")
@@ -259,6 +261,11 @@ public class GoController {
 			throw new BusinessException("请先选择活动后才可以预约", true, "../go/oneononeindex.html");
 		}
 		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		DoGoView body = new DoGoView();
+		body.setGoId(goId);
+		body.setUserId(userInfo.getUserId());
+		body.setTime(DateUtil.getSysDate());
+		UserViewMQSend.sendMQ(body);
 		// 查询活动信息
 		Go go = DubboServiceUtil.queryGo(goId);
 		if (go == null) {
@@ -614,12 +621,19 @@ public class GoController {
 		}
 		boolean joint = HyGoUtil.checkUserHadJointGroup(goId, userInfo.getUserId());
 		boolean applied = HyGoUtil.checkUserHadAppliedGroup(goId, userInfo.getUserId());
-		if(joint){
+		if (joint) {
 			GoJoin goJoin = DubboServiceUtil.QueryUserJoinGo(userInfo.getUserId(), goId);
-			if(goJoin!=null){
-				request.setAttribute("orderId",goJoin.getOrderId());
+			if (goJoin != null) {
+				request.setAttribute("orderId", goJoin.getOrderId());
 			}
 		}
+		/* 发送浏览记录 */
+		DoGoView body = new DoGoView();
+		body.setGoId(goId);
+		body.setUserId(userInfo.getUserId());
+		body.setTime(DateUtil.getSysDate());
+		UserViewMQSend.sendMQ(body);
+
 		request.setAttribute("applied", applied);
 		request.setAttribute("joint", joint);
 		request.setAttribute("go", go);
@@ -635,12 +649,6 @@ public class GoController {
 		request.setAttribute("signature", signature);
 
 		ModelAndView view = new ModelAndView("go/invite");
-		return view;
-	}
-
-	@RequestMapping("/invite2.html")
-	public ModelAndView invite2(HttpServletRequest request) {
-		ModelAndView view = new ModelAndView("go/invite2");
 		return view;
 	}
 
