@@ -141,7 +141,7 @@
 						var _id =$(this).attr("_id"); 
 						wx.chooseImage({
 							count : 1,
-							sizeType: ['original'],
+							sizeType: ['compressed'],
 							success : function(res) {
 								var localId = res.localIds[0]; 
 								wx.uploadImage({
@@ -214,9 +214,11 @@
 				            }, 500);
 							return ;
 						}
-						var content = "<div class=\"wb-m\">";
-						content +="<input class=\"In-text\" type=\"text\" id=\"CUSTOMIZE_BE_TAGS\" placeholder=\"请输入一个标签:4个字符以内\">";
-						content +="</div>";
+						var content = "<section class=\"par_name\">";
+						content +="<p class=\"boss\">";
+						content +="<input type=\"text\" id=\"CUSTOMIZE_BE_TAGS\" placeholder=\"请输入一个标签:4个字符以内\">";
+						content +="</p>";
+						content +="</section>";
 						content +="<div style=\"padding-left:1em;line-height:1em;color:#ff6142;\" id=\"_customized_be_tag_error\"></div>";
 						weUI.confirm({
 							title: "请自定义一个标签",

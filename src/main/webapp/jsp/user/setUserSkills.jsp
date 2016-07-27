@@ -17,6 +17,8 @@
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/owl.carousel.min.css">
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
@@ -63,6 +65,8 @@
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script type="text/javascript">
 	(function($) {
 		$.UserSkillsPage = function() {
@@ -118,7 +122,7 @@
 						return;
 					}
 					if(_this.interestSelectedTags.length>5){
-						weUI.showXToast("兴趣标签不能大于5个");
+						weUI.showXToast("兴趣标签已选满");
 						setTimeout(function () {
 							weUI.hideXToast();
 			            }, 500);
@@ -132,7 +136,7 @@
 						return;
 					}
 					if(_this.skillSelectedTags.length>5){
-						weUI.showXToast("技能标签不能大于5个");
+						weUI.showXToast("技能标签已选满");
 						setTimeout(function () {
 							weUI.hideXToast();
 			            }, 500);
@@ -151,7 +155,7 @@
 							
 						},
 						success : function(transport) {
-							weUI.showXToast("提交成功，可以预览您的个人信息");
+							weUI.showXToast("提交成功");
 							setTimeout(function () {
 								weUI.hideXToast();
 								window.location.href="../user/previewUserInfo.html";
@@ -198,7 +202,7 @@
 						}else{
 							//如果没有选择，则选择
 							if(_this.interestSelectedTags.length>=5){
-								weUI.showXToast("兴趣标签最多只能选择5个");
+								weUI.showXToast("兴趣标签已选满");
 								setTimeout(function () {
 									weUI.hideXToast();
 					            }, 500);
@@ -231,7 +235,7 @@
 						}else{
 							//如果没有选择，则选择
 							if(_this.skillSelectedTags.length>=5){
-								weUI.showXToast("技能标签最多只能选择5个");
+								weUI.showXToast("技能标签已选满");
 								setTimeout(function () {
 									weUI.hideXToast();
 					            }, 500);

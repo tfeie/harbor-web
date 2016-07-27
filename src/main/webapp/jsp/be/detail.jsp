@@ -140,7 +140,7 @@ wx.config({
 	timestamp : <c:out value="${timestamp}"/>,
 	nonceStr : '<c:out value="${nonceStr}"/>',
 	signature : '<c:out value="${signature}"/>',
-	jsApiList : [ 'checkJsApi', 'onMenuShareTimeline','onMenuShareAppMessage']
+	jsApiList : [ 'checkJsApi', 'previewImage','onMenuShareTimeline','onMenuShareAppMessage']
 });
 
 	(function($){ 
@@ -170,11 +170,12 @@ wx.config({
 						    link:  _this.getPropertyValue("url"), 
 						    //imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
-						    	weUI.alert({content:"分享成功",ok: function(){
-						    		$("#shareit").hide(); 
+						    	weUI.showXToast("分享成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									$("#shareit").hide(); 
 						    		$("#DIV_BE_DETAIL").show();
-						    		weUI.closeAlert();
-						    	}});
+					            }, 500);
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
@@ -187,11 +188,12 @@ wx.config({
 						    link:  _this.getPropertyValue("url"), 
 						    //imgUrl: _this.getPropertyValue("shareImg"), 
 						    success: function () {  
-						    	weUI.alert({content:"分享成功",ok: function(){
-						    		$("#shareit").hide(); 
+						    	weUI.showXToast("分享成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									$("#shareit").hide(); 
 						    		$("#DIV_BE_DETAIL").show();
-						    		weUI.closeAlert();
-						    	}});
+					            }, 500);
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
@@ -223,6 +225,22 @@ wx.config({
 					$("#DIV_BE_DETAIL").delegate("#DIV_DO_DIANZAN","click",function(){
 						_this.doDianzan();
 					});
+					
+					//BE图片预览
+					$("#DIV_BE_DETAIL").delegate("[name='BE_IMG']","click",function(){
+						var imageURL = $(this).attr("imageUrl");
+						var imageURLs = _this.imageURLs?_this.imageURLs:[];
+						console.log(imageURL);
+						console.log(imageURLs);
+						if(imageURLs.length==0){
+							return;
+						}
+						wx.previewImage({
+						    current: imageURL, // 当前显示图片的http链接
+						    urls: imageURLs // 需要预览的图片http链接列表
+						});
+					});
+					
 					
 					//打赏按钮 
 					$("#DIV_REWARD_COUNT").on("click",function(){
@@ -478,30 +496,34 @@ wx.config({
 				},
 				
 				
-				renderBeDetail: function(data){ 
+				renderBeDetail: function(data){
+					var _this = this;
 					data= data?data:{};
+					var imageURLs = new Array();
 					var num = 0;
-					if(data){
-						var beDetails = data.beDetails;
-						if(beDetails && beDetails.length > 0){
-							for (var i=0;i< beDetails.length;i++){
-								var type = beDetails[i].type;
-								if(type == "text") {
-									if(num == 1){
-										var detail = beDetails[i].detail;
-										if(detail.length > 10){
-											detail = detail.substr(0,10);
-										}
-										this.params['shareDesc'] = beDetails[i].detail;
-										break;
-									}else {
-										num += 1;
+					var beDetails = data.beDetails;
+					if(beDetails && beDetails.length > 0){
+						for (var i=0;i< beDetails.length;i++){
+							var type = beDetails[i].type;
+							if(type == "text") {
+								if(num == 1){
+									var detail = beDetails[i].detail;
+									if(detail.length > 10){
+										detail = detail.substr(0,10);
 									}
-									
+									this.params['shareDesc'] = beDetails[i].detail;
+								}else {
+									num += 1;
 								}
+								
+							}else if(type=="image"){
+								var imageUrl = beDetails[i].imageUrl;
+								imageURLs.push(imageUrl);
 							}
 						}
 					}
+					//存储图片地址
+					_this.imageURLs = imageURLs;
 					var opt=$("#BeDetailImpl").render(data);
 					$("#DIV_BE_DETAIL").html(opt); 
 				},
@@ -583,7 +605,7 @@ wx.config({
 					<p> {{:detail}} </p>
 				{{/if}}
 				{{if type=="image"}}
-					<img src="{{:imgThumbnailUrl}}" width="100%">
+					<img src="{{:imgThumbnailUrl}}" width="100%" imageUrl="{{:imageUrl}}" name="BE_IMG">
 				{{/if}}
 				{{if #index==0}}
 					<div class="bq clearfix">

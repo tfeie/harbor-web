@@ -206,7 +206,7 @@
 												weUI.showXToast("主页背景修改成功");
 												setTimeout(function () {
 													weUI.hideXToast();
-									            }, 500);
+									            }, 1000);
 												var imgURL  = transport.data;
 												$("#homePageBg").val(imgURL);
 												$("#IMG_HOMEPAGEBG").attr("src", imgURL);
@@ -215,7 +215,7 @@
 												weUI.showXToast("主页背景修改失败");
 												setTimeout(function () {
 													weUI.hideXToast();
-									            }, 500);
+									            }, 1000);
 											}
 											
 										});
@@ -224,7 +224,7 @@
 										weUI.showXToast("主页背景修改失败");
 										setTimeout(function () {
 											weUI.hideXToast();
-							            }, 500);
+							            }, 1000);
 									}
 								});
 							}
@@ -254,7 +254,7 @@
 												weUI.showXToast("头像修改成功");
 												setTimeout(function () {
 													weUI.hideXToast();
-									            }, 500);
+									            }, 1000);
 												var imgURL  = transport.data;
 												$("#wxHeadimg").val(imgURL);
 												$("#IMG_HEADICON").attr("src", imgURL);
@@ -263,7 +263,7 @@
 												weUI.showXToast("头像修改失败");
 												setTimeout(function () {
 													weUI.hideXToast();
-									            }, 500);
+									            }, 1000);
 											}
 											
 										});
@@ -272,7 +272,7 @@
 										weUI.showXToast("头像修改失败");
 										setTimeout(function () {
 											weUI.hideXToast();
-							            }, 500);
+							            }, 1000);
 									}
 								});
 							}
@@ -309,7 +309,7 @@
 							weUI.showXToast("最多只能选择5个兴趣标签");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 							return ;
 						}
 						var content = "<section class=\"par_name\">";
@@ -358,7 +358,7 @@
 									weUI.showXToast(res);
 									setTimeout(function () {
 										weUI.hideXToast();
-						            }, 500);
+						            }, 1000);
 									return;
 								}
 								//添加到待选标签库
@@ -386,7 +386,7 @@
 							weUI.showXToast("最多只能选择5个技能标签");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 							return ;
 						}
 						var content = "<section class=\"par_name\">";
@@ -493,10 +493,10 @@
 				addNewSelectInterestTag: function(tagName){
 					var _this = this;
 					if(_this.selectedInterestTags.length>=5){
-						weUI.showXToast("最多只能选择5个兴趣标签");
+						weUI.showXToast("兴趣标签已选满");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					//从待选列表中标记已经被选
@@ -526,10 +526,10 @@
 					var _this = this;
 					var datas=_this.selectedInterestTags;
 					if(datas.length-1==0){ 
-						weUI.showXToast("请至少保留1个兴趣标签");
+						weUI.showXToast("请至少保留1个哦");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					var tags=$.grep(datas,function(o,i){
@@ -559,10 +559,10 @@
 				addNewSelectSkillTag: function(tagName){
 					var _this = this;
 					if(_this.selectedSkillTags.length>=5){ 
-						weUI.showXToast("最多只能选择5个技能标签");
+						weUI.showXToast("技能标签已选满");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					//从待选列表中标记已经被选
@@ -592,10 +592,10 @@
 					var _this = this;
 					var datas=_this.selectedSkillTags;
 					if(datas.length-1==0){
-						weUI.showXToast("请至少保留1个技能标签");
+						weUI.showXToast("至少保留1个哦");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					var tags=$.grep(datas,function(o,i){
@@ -943,7 +943,7 @@
 						weUI.showXToast(res);
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return;
 					}
 					
@@ -974,17 +974,17 @@
 							userData: JSON.stringify(data)
 						},
 						success: function(transport){
-							weUI.showXToast("修改成功，回到用户中心");
+							weUI.showXToast("修改成功");
 							setTimeout(function () {
 								weUI.hideXToast();
 								window.location.href="../user/userCenter.html";
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 						
 					});
