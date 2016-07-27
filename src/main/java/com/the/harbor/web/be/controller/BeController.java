@@ -73,15 +73,6 @@ public class BeController {
 
 	@RequestMapping("/index.html")
 	public ModelAndView index(HttpServletRequest request) {
-		long timestamp = DateUtil.getCurrentTimeMillis();
-		String nonceStr = WXHelpUtil.createNoncestr();
-		String jsapiTicket = WXHelpUtil.getJSAPITicket();
-		String url = WXRequestUtil.getFullURL(request);
-		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
-		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
-		request.setAttribute("timestamp", timestamp);
-		request.setAttribute("nonceStr", nonceStr);
-		request.setAttribute("signature", signature);
 		ModelAndView view = new ModelAndView("be/index");
 		return view;
 	}

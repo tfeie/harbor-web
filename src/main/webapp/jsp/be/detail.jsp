@@ -120,6 +120,8 @@
 	     <img class="arrow" src="//static.tfeie.com/images/share.jpg">
 	  </a>
 	</div>
+	<input id="shareDesc" type="hidden" value=""/>
+	
 </body>
 
 <script type="text/javascript"
@@ -155,7 +157,24 @@ wx.config({
 			prototype: {
 				init: function(){
 					this.bindEvents(); 
-					this.initData();  
+					this.initData();
+					
+					setTimeout(function () {
+						var topic = $("#DIV_DO_SHARE").attr("topic");
+						var shareDesc = $("#shareDesc").val();
+						
+						wx.ready(function () {
+							 var shareData = {
+									   title: topic,
+									   desc: shareDesc,
+									   link: '${url}'
+								};
+							 
+							wx.onMenuShareTimeline(shareData);	
+							wx.onMenuShareAppMessage(shareData);	
+						});
+		            }, 500);
+					
 				},
 				
 				bindEvents: function(){
@@ -163,7 +182,7 @@ wx.config({
 					
 					$("#DIV_BE_DETAIL").delegate("#DIV_DO_SHARE","click",function(){
 						var topic =$(this).attr("topic");
-						var shareDesc =  _this.getPropertyValue("shareDesc");
+						var shareDesc =  $("#shareDesc").val();
 						wx.onMenuShareTimeline({
 						    title: topic,
 						    desc:shareDesc?shareDesc:"",
@@ -508,10 +527,17 @@ wx.config({
 							if(type == "text") {
 								if(num == 1){
 									var detail = beDetails[i].detail;
-									if(detail.length > 10){
+									var a = detail.substr(0,2);
+									if(a == "<a") {
+										var index = detail.indexOf(">");
+										var ss = detail.substr(index+1);
+										var index1 = ss.indexOf("<");
+										detail = ss.substr(0,index1);
+									}else if (detail.length > 10){
 										detail = detail.substr(0,10);
 									}
-									this.params['shareDesc'] = beDetails[i].detail;
+									$("#shareDesc").attr("value",detail);
+									num += 1;
 								}else {
 									num += 1;
 								}
