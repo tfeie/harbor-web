@@ -162,7 +162,7 @@
 												weUI.showXToast("图片转存成功");
 												setTimeout(function () {
 													weUI.hideXToast();
-									            }, 500);
+									            }, 1000);
 												var imgURL  = transport.data;
 												$(s).find("#IMG_BE").attr("src", imgURL+"@!be_thumbnail");
 												_this.modifyBeDetail(_id,"",imgURL);
@@ -172,7 +172,7 @@
 												weUI.showXToast("图片转存失败");
 												setTimeout(function () {
 													weUI.hideXToast();
-									            }, 500);
+									            }, 1000);
 											}
 											
 										});
@@ -181,7 +181,7 @@
 										weUI.showXToast("图片上传失败");
 										setTimeout(function () {
 											weUI.hideXToast();
-							            }, 500);
+							            }, 1000);
 									}
 								});
 							}
@@ -208,10 +208,10 @@
 					//自定义标签绑定事件
 					$("#UI_CAN_SELECT_BE_TAGS").delegate("[name='IMG_CUSTOMIZE_TAG_ADD']","click",function(){
 						if(_this.selectedBeTags.length==5){
-							weUI.showXToast("最多只能选择5个标签");
+							weUI.showXToast("标签已选满");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 							return ;
 						}
 						var content = "<section class=\"par_name\">";
@@ -353,10 +353,10 @@
 				addNewBeTag: function(tagName){
 					var _this = this;
 					if(_this.selectedBeTags.length>=5){ 
-						weUI.showXToast("最多只能添加5个标签");
+						weUI.showXToast("标签已选满");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					//从待选列表中标记已经被选
@@ -387,10 +387,10 @@
 					var _this = this;
 					var datas=_this.selectedBeTags;
 					if(datas.length-1==0){
-						weUI.showXToast("至少保留1个标签");
+						weUI.showXToast("请保留1个标签");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					var tags=$.grep(datas,function(o,i){
@@ -436,10 +436,10 @@
 				deleteBeDetail: function(_id){
 					var _this = this;
 					if(_this.bedetails.length==1){
-						weUI.showXToast("请至少得填写一项B&E");
+						weUI.showXToast("没有填写内容");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return;
 					}
 					var queryDetails = $.grep(_this.bedetails,function(o,i){
@@ -469,18 +469,18 @@
 						return (o.type=="text" && o.detail=="") || (o.type=="image" && o.imageUrl=="");
 					});
 					if(queryDetails.length>0){
-						weUI.showXToast("您的B&E还有没有填写的内容或者上传的图片");
+						weUI.showXToast("没有发布内容");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return ;
 					}
 					
 					if(_this.selectedBeTags.length>=5){ 
-						weUI.showXToast("最多只能选择5个标签");
+						weUI.showXToast("标签个数已超限");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return;
 					}
 					
@@ -488,7 +488,7 @@
 						weUI.showXToast("至少选择1个标签");
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 						return;
 					}
 					
@@ -507,11 +507,11 @@
 						},
 						success: function(transport){
 							weUI.hideLoadingToast();
-							weUI.showXToast("发布成功，跳转到首页");
+							weUI.showXToast("发布成功");
 							setTimeout(function () {
 								weUI.hideXToast();
 								window.location.href="../be/index.html";
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){
 							weUI.hideLoadingToast();
@@ -525,7 +525,7 @@
 								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 						}
 						

@@ -236,7 +236,7 @@
 								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 							
 						}
