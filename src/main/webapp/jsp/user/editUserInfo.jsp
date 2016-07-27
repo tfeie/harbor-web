@@ -977,7 +977,7 @@
 							weUI.showXToast("修改成功");
 							setTimeout(function () {
 								weUI.hideXToast();
-								window.location.href="../user/userCenter.html";
+								window.location.href="../user/previewUserInfo.html";
 				            }, 1000);
 						},
 						failure: function(transport){
