@@ -204,16 +204,16 @@ wx.config({
 									$("#SEL_SHOW_RESULT").show();
 							    },
 							    fail: function(res){
-							    	weUI.showXToast("支付失败，请稍候重试..");
+							    	weUI.showXToast("支付失败，请重试");
 									setTimeout(function () {
 										weUI.hideXToast();
-						            }, 500);
+						            }, 1000);
 							    }, 
 							    cancel: function(res){
 							    	weUI.showXToast("支付已经取消..");
 									setTimeout(function () {
 										weUI.hideXToast();
-						            }, 500);
+						            }, 1000);
 							    }
 							});
 						}else{
@@ -229,7 +229,7 @@ wx.config({
 						weUI.showXToast(transport.statusInfo);
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 					}
 					
 				});

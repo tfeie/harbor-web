@@ -159,18 +159,18 @@
 						},
 						success : function(transport) {
 							weUI.hideLoadingToast();
-							weUI.showXToast("确认成功,进入我参加的活动页");
+							weUI.showXToast("确认成功");
 							setTimeout(function () {
 								weUI.hideXToast();
 								window.location.href="../go/myjointgoes.html?goType=ono";
-				            }, 500);
+				            }, 1000);
 						},
 						failure : function(transport) {
 							weUI.hideLoadingToast();
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 					});
 				},

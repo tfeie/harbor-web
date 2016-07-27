@@ -173,7 +173,7 @@ wx.config({
 							wx.onMenuShareTimeline(shareData);	
 							wx.onMenuShareAppMessage(shareData);	
 						});
-		            }, 500);
+		            }, 1000);
 					
 				},
 				
@@ -194,7 +194,7 @@ wx.config({
 									weUI.hideXToast();
 									$("#shareit").hide(); 
 						    		$("#DIV_BE_DETAIL").show();
-					            }, 500);
+					            }, 1000);
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
@@ -212,7 +212,7 @@ wx.config({
 									weUI.hideXToast();
 									$("#shareit").hide(); 
 						    		$("#DIV_BE_DETAIL").show();
-					            }, 500);
+					            }, 1000);
 						    },
 						    cancel: function () {  
 						    	$("#shareit").hide(); 
@@ -297,7 +297,7 @@ wx.config({
 							weUI.showXToast("打赏成功");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 							_this.getRewardUsers(count); 
 						},
 						failure: function(transport){ 
@@ -319,7 +319,7 @@ wx.config({
 								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 						}
 					});
@@ -343,13 +343,16 @@ wx.config({
 						},
 						ruleMessages: {
 							required: "请填写评论",
-							cnlength:"评论不能超过100个汉字"
+							cnlength:"评论内容只能少于100字"
 						}
 					});
 					var res=valueValidator.fireRulesAndReturnFirstError();
 					if(res){
-						weUI.alert({content:res});
-						return;
+						weUI.showXToast(res);
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 1000);
+						return ;
 					}
 					
 					var data = {
@@ -390,7 +393,7 @@ wx.config({
 								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 							
 						}
@@ -424,7 +427,7 @@ wx.config({
 								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 							
 						}
@@ -458,7 +461,7 @@ wx.config({
 								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 						}
 					});
@@ -490,7 +493,7 @@ wx.config({
 								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 						}
 					});

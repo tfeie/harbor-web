@@ -170,13 +170,13 @@
 						setTimeout(function () {
 							weUI.hideXToast();
 							window.location.href="../go/myono.html?type=mycreate";
-			            }, 500);
+			            }, 1000);
 					},
 					failure: function(transport){ 
 						weUI.showXToast(transport.statusInfo);
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 					}
 				});
 			},
@@ -246,7 +246,7 @@
 					weUI.showXToast(res);
 					setTimeout(function () {
 						weUI.hideXToast();
-		            }, 500);
+		            }, 1000);
 					return;
 				}
 				ajaxController.ajax({
@@ -260,18 +260,18 @@
 						expectedLocation2: expectedLocation2
 					},
 					success: function(transport){
-						weUI.showXToast("约见地点设置成功,等待新秀确认");
+						weUI.showXToast("设置成功,等待新秀确认");
 						setTimeout(function () {
 							weUI.hideXToast();
 							window.location.href="../go/mycreateonodetail.html?goId="+_this.getPropertyValue("goId");
-			            }, 500);
+			            }, 1000);
 						
 					},
 					failure: function(transport){ 
 						weUI.showXToast(transport.statusInfo);
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 					}
 				});
 			},

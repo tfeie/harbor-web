@@ -183,14 +183,14 @@
 								weUI.showXToast("已收藏");
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 						},
 						failure : function(transport) {
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 
 					});
@@ -212,7 +212,7 @@
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 
 					});

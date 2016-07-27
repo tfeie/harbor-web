@@ -149,7 +149,7 @@
 					weUI.showXToast(res);
 					setTimeout(function () {
 						weUI.hideXToast();
-		            }, 500);
+		            }, 1000);
 					return;
 				}
 				
@@ -168,7 +168,7 @@
 						setTimeout(function () {
 							weUI.hideXToast();
 							window.location.href="../go/toPay.html?goOrderId="+goOrderId;
-			            }, 500);
+			            }, 1000);
 						//禁止提交
 						$("#BTN_SUBMIT").attr({"disabled":"disabled"});
 					},
@@ -176,7 +176,7 @@
 						weUI.showXToast(transport.statusInfo);
 						setTimeout(function () {
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 					}
 					
 				});

@@ -205,10 +205,10 @@
 							goType:_this.getPropertyValue("goType")
 						},
 						success: function(transport){
-							weUI.showXToast("已打赏..");
+							weUI.showXToast("已打赏");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){
 							var busiCode = transport.busiCode;
@@ -229,7 +229,7 @@
 								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 						}
 					});
@@ -249,13 +249,13 @@
 							weUI.showXToast("处理成功..");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 					});
 				},
@@ -333,13 +333,13 @@
 							weUI.showXToast("评论成功..");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){ 
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 					});
 				},

@@ -174,10 +174,10 @@
 						type: "post", 
 						data: data,
 						success: function(transport){
-							weUI.showXToast("已拒绝..");
+							weUI.showXToast("已拒绝");
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 							var dom=$("#WAIT_CONFIRM_"+userId);
 							dom.fadeOut("200",function(){dom.detach();});
 							var len = $("[name='WAIT_CONFIRM_DETL']").length;
@@ -190,7 +190,7 @@
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 					});
 				},
@@ -224,10 +224,10 @@
 									$("#BEEN_CONFIRM_LIST").append(opt); 
 								}
 								
-								weUI.showXToast("已同意..");
+								weUI.showXToast("已同意");
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 								
 								
 							},
@@ -235,7 +235,7 @@
 								weUI.showXToast(transport.statusInfo);
 								setTimeout(function () {
 									weUI.hideXToast();
-					            }, 500);
+					            }, 1000);
 							}
 						});
 					
