@@ -141,6 +141,7 @@
 						 var shareData = {
 								   title: '${userInfo.enName}邀你打天下' ,
 								   desc: "海归海湾，海归创业第一站",
+								   imgUrl:'${userInfo.wxHeadimg}',
 								   link: '${url}'
 							};
 						 
