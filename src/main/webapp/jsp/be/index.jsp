@@ -336,7 +336,7 @@
 						opt = $("#BeListImpl").render(data);
 					}else{
 						if(newload){
-							opt="<li>没有任何内容哦~~</li>";
+							opt="<li style='text-align:center;'>没有任何内容哦~~</li>";
 						}
 					}
 					if(newload){
