@@ -167,7 +167,8 @@ wx.config({
 							 var shareData = {
 									   title: topic,
 									   desc: shareDesc,
-									   link: '${url}'
+									   link: '${url}',
+									   imgUrl: '${userInfo.wxHeadimg}'
 								};
 							 
 							wx.onMenuShareTimeline(shareData);	
@@ -187,7 +188,7 @@ wx.config({
 						    title: topic,
 						    desc:shareDesc?shareDesc:"",
 						    link:  _this.getPropertyValue("url"), 
-						    //imgUrl: _this.getPropertyValue("shareImg"), 
+						    imgUrl: '${userInfo.wxHeadimg}',
 						    success: function () {  
 						    	weUI.showXToast("分享成功");
 								setTimeout(function () {
@@ -205,7 +206,7 @@ wx.config({
 						    title: topic,
 						    desc:shareDesc?shareDesc:"",
 						    link:  _this.getPropertyValue("url"), 
-						    //imgUrl: _this.getPropertyValue("shareImg"), 
+						    imgUrl: '${userInfo.wxHeadimg}',
 						    success: function () {  
 						    	weUI.showXToast("分享成功");
 								setTimeout(function () {
