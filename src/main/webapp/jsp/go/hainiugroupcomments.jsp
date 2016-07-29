@@ -38,7 +38,7 @@
 				<p>
 					<span><c:out value="${goJoin.enName}" /></span><label class="lbl2" style="background:<c:out value="${goJoin.abroadCountryRGB}" />"><c:out
 							value="${goJoin.abroadCountryName}" /></label>
-					<font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${goJoin.userStatusName}" /></font>
+					<font <c:if test="${goJoin.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${goJoin.userStatusName}" /></font>
 				</p>
 				<p>
 						<c:out value="${goJoin.employmentInfo}" escapeXml="false" />
