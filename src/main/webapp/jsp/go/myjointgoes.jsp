@@ -164,7 +164,9 @@
 				
 				queryGroupGoes: function(p){
 					var _this = this;
-					weUI.showLoadingToast("加载中...");
+					if(!p.newload){
+						weUI.showLoadingToast("加载中...");
+					}
 					ajaxController.ajax({
 						url: "../go/queryMyJointGoes",
 						type: "post",  
@@ -175,7 +177,9 @@
 							pageSize : 10
 						},
 						success: function(transport){
-							weUI.hideLoadingToast();
+							if(!p.newload){
+								weUI.hideLoadingToast();
+							}
 							var data =transport.data?transport.data:{}; 
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
@@ -187,7 +191,9 @@
 							_this.renderGroups(data.result,p.newload); 
 						},
 						failure: function(transport){ 
-							weUI.hideLoadingToast();
+							if(!p.newload){
+								weUI.hideLoadingToast();
+							}
 							_this.renderGroups([],p.newload); 
 						}
 					});
@@ -206,7 +212,9 @@
 							pageSize : 10
 						},
 						success: function(transport){
-							weUI.hideLoadingToast();
+							if(!p.newload){
+								weUI.hideLoadingToast();
+							}
 							var data =transport.data;  
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
@@ -218,7 +226,9 @@
 							_this.renderOneOnOne(data.result,p.newload); 
 						},
 						failure: function(transport){ 
-							weUI.hideLoadingToast();
+							if(!p.newload){
+								weUI.hideLoadingToast();
+							}
 							_this.renderOneOnOne([],p.newload); 
 						}
 					});

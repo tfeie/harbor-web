@@ -125,7 +125,9 @@
 					}else if(type=="myfavor"){
 						url = "../go/getMyFavorGoes";
 					}
-					weUI.showLoadingToast("加载中...");
+					if(!p.newload){
+						weUI.showLoadingToast("加载中...");
+					}
 					ajaxController.ajax({
 						url : url,
 						type : "post",
@@ -135,7 +137,9 @@
 							pageSize : 10
 						},
 						success : function(transport) {
-							weUI.hideLoadingToast();
+							if(!p.newload){
+								weUI.hideLoadingToast();
+							}
 							var data = transport.data;
 							var data =transport.data?transport.data:{}; 
 							var pageNo = data.pageNo;
@@ -148,7 +152,9 @@
 							_this.renderMyGroups(data.result,p.newload);
 						},
 						failure : function(transport) {
-							weUI.hideLoadingToast();
+							if(!p.newload){
+								weUI.hideLoadingToast();
+							}
 							_this.renderMyGroups([],p.newload);
 						}
 					});

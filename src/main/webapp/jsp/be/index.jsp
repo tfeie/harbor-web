@@ -300,7 +300,10 @@
 				
 				queryBes: function(p){
 					var _this = this;
-					weUI.showLoadingToast("加载中...");
+					if(!p.newload){
+						//滚屏翻页增加提示
+						weUI.showLoadingToast("加载中...");
+					}
 					ajaxController.ajax({
 						url: "../be/queryBes",
 						type: "post",  
@@ -311,7 +314,9 @@
 							pageSize : 10
 						},
 						success: function(transport){
-							weUI.hideLoadingToast();
+							if(!p.newload){
+								weUI.hideLoadingToast();
+							}
 							var data =transport.data?transport.data:{}; 
 							var pageNo = data.pageNo;
 							var pageCount = data.pageCount;
@@ -323,7 +328,9 @@
 							}
 						},
 						failure: function(transport){ 
-							weUI.hideLoadingToast();
+							if(!p.newload){
+								weUI.hideLoadingToast();
+							}
 							_this.renderBes([],p.newload); 
 						}
 					});
