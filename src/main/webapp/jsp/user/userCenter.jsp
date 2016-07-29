@@ -42,7 +42,7 @@
 			<p>
 				<span><c:out value="${userInfo.enName}" /></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out
 						value="${userInfo.abroadCountryName}" /></label>
-				<font color="#FFB90F"><c:out value="${userInfo.userStatusName}" /></font>
+				<font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}" /></font>
 			</p>
 		</section>
 		<section class="ip_shengf ip2">
