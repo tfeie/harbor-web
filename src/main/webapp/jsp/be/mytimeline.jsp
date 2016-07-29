@@ -43,7 +43,7 @@
 			</div>
 			<div class="r">
 				<div class="name">
-					<c:out value="${userInfo.enName}"/><span class="bg-lv" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></span><font><c:out value="${userInfo.userStatusName}"/></font>
+					<c:out value="${userInfo.enName}"/><span class="bg-lv" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></span><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}"/></font>
 				</div>
 				<div class="xx"><c:out value="${userInfo.industryName}"/>/<c:out value="${userInfo.title}"/>/<c:out value="${userInfo.atCityName}"/></div>
 			</div>

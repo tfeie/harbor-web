@@ -38,7 +38,7 @@
 				<p>
 					<span><c:out value="${go.enName}" /></span><label class="lbl2" style="background:<c:out value="${go.abroadCountryRGB}" />"><c:out
 							value="${go.abroadCountryName}" /></label>
-					<c:out value="${go.userStatusName}" />
+					<font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${go.userStatusName}" /></font>
 				</p>
 				<p>
 					<c:out value="${go.employmentInfo}" escapeXml="false" />

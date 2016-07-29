@@ -418,7 +418,7 @@
 					width="80" height="80"></a>
 			</div>
 							
-							<span>{{:enName}}</span> <label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}} {{:abroadCountryRGB}}</label> <em>{{:userStatusName}}</em>
+							<span>{{:enName}}</span> <label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}} {{:abroadCountryRGB}}</label> <em><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}>{{:userStatusName}}</font></em>
 						</div>
 						<div class="member" beId="{{:beId}}" name="DIV_BE_CONTENT">
 							<div class="div_title">

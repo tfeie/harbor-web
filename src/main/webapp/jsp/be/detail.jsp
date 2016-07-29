@@ -72,7 +72,7 @@
 					<div class="name-xx">
 						<div class="xx chaochu_1"><c:out value="${userInfo.enName}"/></div>
 						<div class="yrz">
-							<span class="bg-lan" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></span><font><c:out value="${userInfo.userStatusName}"/></font>
+							<span class="bg-lan" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></span><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}"/></font>
 						</div>
 					</div>
 					<div class="jj"><c:out value="${userInfo.employmentInfo}"/></div>
@@ -671,7 +671,7 @@ wx.config({
 						<div class="name">
 							<div class="xx">{{:enName}}</div>
 							<div class="yrz">
-								<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+								<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}>{{:userStatusName}}</font>
 							</div>
 							<div class="time">{{:createTimeInteval}}</div>
 						</div>
