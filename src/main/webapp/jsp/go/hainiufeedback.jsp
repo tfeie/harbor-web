@@ -53,7 +53,7 @@
 			</section>
 			<section class="ip_text">
 				<p>
-					<span><c:out value="${userInfo.enName}" escapeXml="false" /></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}" escapeXml="false" /></label><i><c:out value="${userInfo.userStatusName}" escapeXml="false" /></i>
+					<span><c:out value="${userInfo.enName}" escapeXml="false" /></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}" escapeXml="false" /></label><i><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}" escapeXml="false" /></font></i>
 				</p>
 				<p>
 						<c:out value="${userInfo.employmentInfo}" escapeXml="false" />
