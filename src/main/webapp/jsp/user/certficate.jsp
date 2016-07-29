@@ -33,19 +33,18 @@
 </head>
 <script type="text/javascript">
 (function() {
-	$.manager = function(data) {
-		this.settings = $.extend(true,{},$.manager.defaults);
+	$.AuthPage = function(data) {
+		this.settings = $.extend(true,{},$.AuthPage.defaults);
 		this.params= data?data:{};
 	};
 	
-	$.extend($.manager,{
+	$.extend($.AuthPage,{
 		defaults:{
 			
 		},
 		prototype:{
 			init:function(){
 				this.bindEvents();
-				this.initData();
 			},
 			
 			bindEvents:function(){
@@ -57,38 +56,22 @@
 				$("[name='authResult']").on("click",function(){
 					$("[name='authResult']").removeClass("on");
 					$(this).addClass("on");
-					
-					var status = $(this).attr("subsStatus");
-					if(status=="11"){
+					var authStatus = $(this).attr("authStatus");
+					if(authStatus=="13"){
 						$("#AUTH_REMARK").show();
 					}else{
 						$("#AUTH_REMARK").hide();
 					}
 				});
 			},
-			initData: function(){
-				this.intiImg();
-			},
 			
-			intiImg:function(){
-				var cardimg = '${userInfo.idcardPhoto}';
-				var html = "<img src=\"//static.tfeie.com/images/img4.jpg\" id=\"img_idcard\"/>";
-				if(cardimg != ""){
-					html="<img src=\"${userInfo.idcardPhoto}\" id=\"img_idcard\"/>";
-				}
-				$("#IMGIDCardPicker").html(html);
-				
-				var ovimg = '${userInfo.overseasPhoto}';
-				var html = "<img src=\"//static.tfeie.com/images/img5.png\" id=\"img_oversea\"/>";
-				if(ovimg != ""){
-					html="<img src=\"${userInfo.overseasPhoto}\" id=\"img_oversea\"/>";
-				}
-				$("#IMGOverSeaPicker").html(html);
-				
+			getPropertyValue: function(propertyName){
+				if(!propertyName)return;
+				return this.params[propertyName];
 			},
 			
 			submit: function(){
-				var status = $.trim($("[name='authResult'].on").attr("subsStatus"));
+				var authStatus = $.trim($("[name='authResult'].on").attr("authStatus"));
 				var remark = $.trim($("#myRemark").val());
 				var valueValidator = new $.ValueValidator();
 				if(status == "13"){
@@ -96,18 +79,16 @@
 						labelName: "原因",
 						fieldName: "remark",
 						getValue: function(){
-							var remark = $("#myRemark").val();
+							var remark = $("#authRemark").val();
 							return remark;
 						},
 						fieldRules: {
 							required: true
 						},
 						ruleMessages: {
-							required: "请填写审核不通过原因"
+							required: "请填写原因"
 						}
 					});
-				} else {
-					remark = "";
 				}
 				var res=valueValidator.fireRulesAndReturnFirstError();
 				if(res){
@@ -115,26 +96,26 @@
 					return;
 				}
 				ajaxController.ajax({
-					url: "../user/submitUserAuth",
+					url: "../user/submitUserAuthInfo",
 					type: "post",
 					data: {
-						userId:"<c:out value="${userInfo.userId}"/>",
-						status: status,
+						userId, this.getPropertyValue("userId"),
+						status: authStatus,
 						remark: remark
 					},
 					success: function(transport){
-						weUI.showXToast("审核通过");
+						weUI.showXToast("审核完成");
 						setTimeout(function () {
 							window.location.href="../user/userList.html";
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 					},
 					failure: function(transport){
 						weUI.showXToast(transport.statusInfo);
 						setTimeout(function () {
 							window.location.href="../user/userList.html";
 							weUI.hideXToast();
-			            }, 500);
+			            }, 1000);
 					}
 					
 				});
@@ -144,53 +125,54 @@
 })(jQuery);
 
  $(document).ready(function(){
-	var p = new $.manager({});
+	var p = new $.AuthPage({
+		userId: "<c:out value="${userInfo.userId}" />"
+	});
 	p.init();
 });
 </script>
 <body>
 	<section class="ip_info">
 		<section class="info_img">
-			<span><a href="#"><img src="${userInfo.wxHeadimg}" width="50" height="60"></a></span>
+			<span><a href="../user/userInfo.html?userId=<c:out value="${userInfo.userId}" />"><img src="<c:out value="${userInfo.wxHeadimg}" />"></a></span>
 		</section>
 		<section class="ip_text">
 			<p>
-				<span>${userInfo.enName}</span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />">${userInfo.abroadCountryName}</label><i>${userInfo.userStatusName}</i>
+				<span><c:out value="${userInfo.enName}" /></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}" /></label><i><c:out value="${userInfo.userStatusName}" /></i>
 			</p>
-			<p>${userInfo.employmentInfo}</p>
+			<p><c:out value="${userInfo.employmentInfo}" /></p>
 		</section>
 	</section>
 						
 	<section class="sec_item sec_item_img">
 		<div class="div_title">
 			<h3>
-				<span>上传身份证（正）</span>
+				<span>身份证（正）</span>
 			</h3>
 		</div>
 		<div class="img" id="IMGIDCardPicker">
+			<img src="<c:out value="${userInfo.idcardPhoto}" />" >
 		</div>
 	</section>
 	<section class="sec_item sec_item_img">
 		<div class="div_title">
 			<h3>
-				<span>上传海外学历认证/签证/学生证</span>
+				<span>海外学历认证/签证/学生证</span>
 			</h3>
 		</div>
 		<div class="img" id="IMGOverSeaPicker">
-		
+			<img src="<c:out value="${userInfo.overseasPhoto}" />" >
 		</div>
 	</section>
 	<section class="me_qingke">
-			<p name="authResult" class="on" subsStatus="12">通过</p>
-			<p name="authResult" subsStatus="13">不通过</p>
+		<p name="authResult" class="on" authStatus="12">通过</p>
+		<p name="authResult" authStatus="13">不通过</p>
 	</section>
 	<section class="my_gushi" id="AUTH_REMARK" style="display:none">
-            <p><textarea id="myRemark" placeholder="请填写审核不通原因…"></textarea></p>
+        <p><textarea id="authRemark" placeholder="请填写审核不通原因…"></textarea></p>
     </section>
-	<div class="message-err" id="DIV_TIPS"></div>
 	<section class="but_baoc">
 		<p>
-			<input type="hidden" id="isapply" value="1"/>
 			<input type="button" value="提交认证" id="BTN_SUBMIT"/>
 		</p>
 	</section>

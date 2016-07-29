@@ -43,6 +43,10 @@
 			<li>海外学历认证文件或留学签证扫描件或<br />学生证扫描件
 			</li>
 			<li>认证通过之后，将点亮头像旁边的“已认证”字样，并可享受更多权限哦。</li>
+			
+			<c:if test="${userInfo.authSts=='13'}">
+				<li><font color='red'><c:out value="${userInfo.certRemark }"/></font></li>
+			</c:if>
 		</ul>
 	</section>
 	<section class="sec_item sec_item_img">
@@ -96,100 +100,10 @@
 		jsApiList : [ 'checkJsApi', 'chooseImage', 'previewImage',
 				'uploadImage', 'downloadImage' ]
 	});
-	wx.ready(function() {
-		$("#IMGOverSeaPicker").bind("click", function() {
-			wx.chooseImage({
-				count : 1,
-				sizeType: ['original'],
-				success : function(res) {
-					var localId = res.localIds[0]; 
-					wx.uploadImage({
-						localId : localId,
-						isShowProgressTips : 1,
-						success : function(r) {
-							var mediaId = r.serverId;
-							ajaxController.ajax({
-								url: "../user/uploadUserAuthFileToOSS",
-								type: "post",
-								data: {
-									mediaId: mediaId,
-									userId:"<c:out value="${userInfo.userId}"/>"
-								},
-								success: function(transport){
-									var imgURL  = transport.data;
-									$("#overseasPhoto").val(imgURL);
-									$("#img_oversea").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
-								},
-								failure: function(transport){
-									alert("上传失败");
-									$("#img_oversea").attr("src", "//static.tfeie.com/images/img5.png");
-								}
-								
-							});
-						},
-						fail : function(res) {
-							alert("上传失败");
-							$("#img_oversea").attr("src", "//static.tfeie.com/images/img5.png");
-						}
-					});
-				}
-			});
-		});
-		
-		$("#IMGIDCardPicker").bind("click", function() {
-			wx.chooseImage({
-				count : 1,
-				sizeType: ['original'],
-				success : function(res) {
-					var localId = res.localIds[0]; 
-					wx.uploadImage({
-						localId : localId,
-						isShowProgressTips : 1,
-						success : function(r) {
-							var mediaId = r.serverId;
-							ajaxController.ajax({
-								url: "../user/uploadUserAuthFileToOSS",
-								type: "post",
-								data: {
-									mediaId: mediaId,
-									userId:"<c:out value="${userInfo.userId}"/>"
-								},
-								success: function(transport){
-									weUI.showXToast("上传成功");
-									setTimeout(function () {
-										weUI.hideXToast();
-						            }, 500);
-									var imgURL  = transport.data;
-									$("#idcardPhoto").val(imgURL);
-									$("#img_idcard").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
-								},
-								failure: function(transport){
-									weUI.showXToast("上传失败，请稍后重试");
-									setTimeout(function () {
-										weUI.hideXToast();
-						            }, 500);
-									$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.png");
-								}
-								
-							});
-						},
-						fail : function(res) {
-							weUI.showXToast("上传失败，请稍后重试");
-							setTimeout(function () {
-								weUI.hideXToast();
-				            }, 500);
-							$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.png");
-						}
-					});
-				}
-			});
-		});
-	});
-	
-	
 	(function($){
-		$.UserCertificatePage = function(){
+		$.UserCertificatePage = function(data){
 			this.settings = $.extend(true,{},$.UserCertificatePage.defaults);
+			this.params= data?data:{}
 		}
 		$.extend($.UserCertificatePage,{
 			defaults: { 
@@ -235,10 +149,114 @@
 				
 				bindEvents: function(){
 					var _this = this; 
-					$("#BTN_SUBMIT").bind("click",function(){
+					$("#BTN_SUBMIT").on("click",function(){
 						_this.submit();
 					});
+					
+					$("#IMGOverSeaPicker").on("click", function() {
+						wx.chooseImage({
+							count : 1,
+							sizeType: ['original'],
+							success : function(res) {
+								var localId = res.localIds[0]; 
+								wx.uploadImage({
+									localId : localId,
+									isShowProgressTips : 1,
+									success : function(r) {
+										var mediaId = r.serverId;
+										ajaxController.ajax({
+											url: "../user/uploadUserAuthFileToOSS",
+											type: "post",
+											data: {
+												mediaId: mediaId,
+												userId: _this.getPropertyValue("userId")
+											},
+											success: function(transport){
+												weUI.showXToast("上传成功");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 1000);
+												var imgURL  = transport.data;
+												$("#overseasPhoto").val(imgURL);
+												$("#img_oversea").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
+											},
+											failure: function(transport){
+												$("#img_oversea").attr("src", "//static.tfeie.com/images/img5.png");
+												weUI.showXToast("上传失败请重试");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 1000);
+											}
+											
+										});
+									},
+									fail : function(res) {
+										$("#img_oversea").attr("src", "//static.tfeie.com/images/img5.png");
+										weUI.showXToast("上传失败请重试");
+										setTimeout(function () {
+											weUI.hideXToast();
+							            }, 1000);
+									}
+								});
+							}
+						});
+					});
+					
+					$("#IMGIDCardPicker").on("click", function() {
+						wx.chooseImage({
+							count : 1,
+							sizeType: ['original'],
+							success : function(res) {
+								var localId = res.localIds[0]; 
+								wx.uploadImage({
+									localId : localId,
+									isShowProgressTips : 1,
+									success : function(r) {
+										var mediaId = r.serverId;
+										ajaxController.ajax({
+											url: "../user/uploadUserAuthFileToOSS",
+											type: "post",
+											data: {
+												mediaId: mediaId,
+												userId: _this.getPropertyValue("userId")
+											},
+											success: function(transport){
+												weUI.showXToast("上传成功");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 1000);
+												var imgURL  = transport.data;
+												$("#idcardPhoto").val(imgURL);
+												$("#img_idcard").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
+											},
+											failure: function(transport){
+												weUI.showXToast("上传失败请重试");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 1000);
+												$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.png");
+											}
+											
+										});
+									},
+									fail : function(res) {
+										weUI.showXToast("上传失败请重试");
+										setTimeout(function () {
+											weUI.hideXToast();
+							            }, 1000);
+										$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.png");
+									}
+								});
+							}
+						});
+					});
 				}, 
+				
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
+				},
+			
 				submit: function(){
 					var _this=this;
 					var res=_this.valueValidator.fireRulesAndReturnFirstError();
@@ -253,22 +271,22 @@
 						url: "../user/submitUserCertficate",
 						type: "post",
 						data: {
-							userId:"<c:out value="${userInfo.userId}"/>",
+							userId: _this.getPropertyValue("userId"),
 							overseasPhoto: $("#overseasPhoto").val(),
 							idcardPhoto: $("#idcardPhoto").val()
 						},
 						success: function(transport){
-							weUI.showXToast("认证材料提交成功，请等待审核");
+							weUI.showXToast("已提交等待审核");
 							setTimeout(function () {
 								weUI.hideXToast();
 								window.location.href="../user/userCenter.html";
-				            }, 500);
+				            }, 1000);
 						},
 						failure: function(transport){
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
-				            }, 500);
+				            }, 1000);
 						}
 						
 					});
@@ -282,7 +300,9 @@
 	$(document).ready(function(){
 		var b = new $.HarborBuilder();
 		b.buildFooter({showBeGoQuick: "hide"});
-		var p = new $.UserCertificatePage();
+		var p = new $.UserCertificatePage({
+			userId: "<c:out value="${userInfo.userId}" />"
+		});
 		p.init();
 	});
 </script>

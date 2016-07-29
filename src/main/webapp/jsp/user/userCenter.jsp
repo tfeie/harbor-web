@@ -121,6 +121,12 @@
 				<p class="ip2_8">
 					<a href="javascript:void(0)">新功能ing</a>
 				</p>
+				
+				<c:if test="${hasAuthRight==true }">
+				<p class="ip2_8">
+					<a href="../user/unauthusers.html">用户审核</a>
+				</p>
+				</c:if>
 			</section>
 		</section>
 

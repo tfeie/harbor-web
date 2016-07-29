@@ -22,11 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.aliyun.mns.client.CloudQueue;
-import com.aliyun.mns.client.MNSClient;
-import com.aliyun.mns.common.ClientException;
-import com.aliyun.mns.common.ServiceException;
-import com.aliyun.mns.model.Message;
 import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.CreateUserBuyHBOrderReq;
 import com.the.harbor.api.user.param.CreateUserBuyHBOrderResp;
@@ -54,11 +49,9 @@ import com.the.harbor.api.user.param.UserWealthQueryResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
 import com.the.harbor.base.enumeration.hyuser.UserInviteStatus;
-import com.the.harbor.base.enumeration.hyuser.UserStatus;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.Response;
-import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
 import com.the.harbor.commons.components.aliyuncs.sms.param.SMSSendRequest;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
@@ -143,7 +136,7 @@ public class UserController {
 		String pcode = request.getParameter("pcode");
 		if (invite) {
 			if (StringUtil.isBlank(pcode)) {
-				throw new BusinessException("目前只开通邀约注册，速速找好友邀请吧~",true,"../user/toUserInviteCode.html");
+				throw new BusinessException("目前只开通邀约注册，速速找好友邀请吧~", true, "../user/toUserInviteCode.html");
 			}
 			String jsonparam = Java3DESUtil.decryptThreeDESECB(pcode);
 			JSONObject json = JSONObject.parseObject(jsonparam);
@@ -476,9 +469,11 @@ public class UserController {
 	@RequestMapping("/userCenter.html")
 	public ModelAndView userCenter(HttpServletRequest request) {
 		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		boolean hasRight = HyCfgUtil.checkUserHasAuthCertRight(userInfo.getUserId());
 		request.setAttribute("userInfo", userInfo);
 		request.setAttribute("fansCount", HyUserUtil.getUserFans(userInfo.getUserId()).size());
 		request.setAttribute("guanzhuCount", HyUserUtil.getUserGuanzhuUsers(userInfo.getUserId()).size());
+		request.setAttribute("hasAuthRight", hasRight);
 		ModelAndView view = new ModelAndView("user/userCenter");
 		return view;
 	}
@@ -1247,29 +1242,30 @@ public class UserController {
 		return responseData;
 	}
 
-	@RequestMapping("/userList.html")
-	public ModelAndView users(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String status = request.getParameter("status");
-		if (StringUtil.isBlank(status)) {
-			status = UserStatus.UNAUTHORIZED.getValue();
+	@RequestMapping("/unauthusers.html")
+	public ModelAndView unauthusers(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		boolean hasRight = HyCfgUtil.checkUserHasAuthCertRight(userInfo.getUserId());
+		if (!hasRight) {
+			throw new BusinessException("您没有审核权限哦");
 		}
-		request.setAttribute("status", status);
-		ModelAndView view = new ModelAndView("user/userList");
+		ModelAndView view = new ModelAndView("user/unauthusers");
 		return view;
 	}
 
-	@RequestMapping("/queryUsers")
-	public @ResponseBody ResponseData<List<UserViewInfo>> queryUsers(HttpServletRequest request,
+	@RequestMapping("/queryUnAuthUsers")
+	public @ResponseBody ResponseData<List<UserViewInfo>> queryUnAuthUsers(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		ResponseData<List<UserViewInfo>> responseData = null;
 		try {
-			String status = request.getParameter("status");
-			if (StringUtil.isBlank(status)) {
-				throw new BusinessException(ExceptCodeConstants.PARAM_IS_NULL, "用户状态为空");
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			boolean hasRight = HyCfgUtil.checkUserHasAuthCertRight(userInfo.getUserId());
+			if (!hasRight) {
+				throw new BusinessException("您无权查看未认证用户列表");
 			}
 			List<UserViewInfo> userViewInfos = DubboConsumerFactory.getService(IUserSV.class).queryUnAuthUsers();
 			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS,
-					ExceptCodeConstants.SUCCESS, "获取标签成功", userViewInfos);
+					ExceptCodeConstants.SUCCESS, "查询成功", userViewInfos);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_FAILURE,
@@ -1280,6 +1276,11 @@ public class UserController {
 
 	@RequestMapping("/toCertficate.html")
 	public ModelAndView toCertficate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		UserViewInfo loginUser = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		boolean hasRight = HyCfgUtil.checkUserHasAuthCertRight(loginUser.getUserId());
+		if (!hasRight) {
+			throw new BusinessException("您无权查看未认证用户资料信息");
+		}
 		String userId = request.getParameter("userId");
 		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByUserId(userId);
 		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
@@ -1288,7 +1289,7 @@ public class UserController {
 		}
 		UserViewInfo userInfo = resp.getUserInfo();
 		if (userInfo == null) {
-			throw new BusinessException("USER-100001", "您访问的用户不存在");
+			throw new BusinessException("待审核用户不存在");
 		}
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/certficate");
@@ -1296,27 +1297,28 @@ public class UserController {
 	}
 
 	/**
-	 * 提交认证
+	 * 提交审核认证
 	 * 
 	 * @param req
 	 * @return
 	 */
-	@RequestMapping("/submitUserAuth")
+	@RequestMapping("/submitUserAuthInfo")
 	@ResponseBody
-	public ResponseData<String> submitUserCertficate(@NotNull(message = "参数为空") UserAuthReq req) {
+	public ResponseData<String> submitUserAuthInfo(@NotNull(message = "参数为空") UserAuthReq req, HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
-			if (req == null) {
-				throw new BusinessException("认证材料信息不正确");
+			UserViewInfo loginUser = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			boolean hasRight = HyCfgUtil.checkUserHasAuthCertRight(loginUser.getUserId());
+			if (!hasRight) {
+				throw new BusinessException("您无权认证此用户");
 			}
 			Response rep = DubboConsumerFactory.getService(IUserSV.class).submitUserAuthInfo(req);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
-			} else {
-				responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-						"审核成功", "");
 			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"审核成功", "");
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
@@ -1327,7 +1329,7 @@ public class UserController {
 	@RequestMapping("/toUserInviteCode.html")
 	public ModelAndView toUserInviteCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
-		if(userInfo != null){
+		if (userInfo != null) {
 			ModelAndView view = new ModelAndView("redirect:../be/index.html");
 			return view;
 		}

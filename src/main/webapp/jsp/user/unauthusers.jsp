@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>认证</title>
+<title>未认证用户列表</title>
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
@@ -63,22 +63,19 @@
 				
 				bindEvents:function(){
 					$(".wdgz-main").delegate("[name='DIV_USERID']","click",function(){
-						var userId = $(this).attr("id");
-						location.href="<%=_base%>/user/toCertficate.html?userId=" + userId;
+						var userId = $(this).attr("userId");
+						location.href="../user/toCertficate.html?userId=" + userId;
 					});
 				},
 				initData: function(){
-					this.selectUser("10");
+					this.queryUnAuthUsers();
 				},
 				
-				selectUser:function(status){
+				queryUnAuthUsers(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "<%=_base%>/user/queryUsers",
+						url: "../user/queryUnAuthUsers",
 						type: "post",
-						data: {
-							status:status
-						},
 						success: function(transport){
 							var data =transport.data; 
 							_this.renderUserInfo(data); 
@@ -95,7 +92,7 @@
 					if(data.length>0){
 						opt=$("#userListImpl").render(data);
 					}else{
-						opt="<div class=\"itms clearfix\">没有任何消息哦~</div>";
+						opt="<div class=\"itms clearfix\">没有待审核认证的用户哦~</div>";
 					}
 					$("#DIV_USER").html(opt);
 				}
@@ -110,16 +107,16 @@
 </script>
 
 <script id="userListImpl" type="text/x-jsrender"> 
-<div class="itms clearfix" name="DIV_USERID" id={{:userId}}>
+<div class="itms clearfix" name="DIV_USERID" userId={{:userId}}>
 			<div class="img">
-				<a href="#"><img src={{:wxHeadimg}} width="50" height="50"></a>
+				<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}"></a>
 			</div>
 			<div class="r">
-				<div class="time">2016-07-23</div>
+				<div class="time">{{:submitCertDate}}</div>
 				<div class="c">
 					<a href="#">
 						<div class="name">{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font></div>
-						<div class="xx"><a href="#">{{:signature}}</a> </div>
+						<div class="xx"><a href="javascript:void(0)">{{:signature}}</a> </div>
 					</a>
 				</div>
 			</div>
