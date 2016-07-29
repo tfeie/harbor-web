@@ -41,7 +41,7 @@
 
 		<section class="ip_name ip2">
 			<p>
-				<span><c:out value="${go.enName}"/></span><label class="lbl2" style="background:<c:out value="${go.abroadCountryRGB}" />"><c:out value="${go.abroadCountryName}"/></label><c:out value="${go.userStatusName}"/>
+				<span><c:out value="${go.enName}"/></span><label class="lbl2" style="background:<c:out value="${go.abroadCountryRGB}" />"><c:out value="${go.abroadCountryName}"/></label><font <c:if test="${go.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${go.userStatusName}"/></font>
 			</p>
 		</section>
 		<section class="ip_shengf ip3">
@@ -266,7 +266,8 @@
 							</div>
 							<div class="text">
 								<h2>
-									{{:enName}}<label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i><span class="frt">{{:createTimeInteval}}
+									{{:enName}}<label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}   
+>{{:userStatusName}}</font></i><span class="frt">{{:createTimeInteval}}
 									</span>
 								</h2>
 								<p>{{:content}}</p>

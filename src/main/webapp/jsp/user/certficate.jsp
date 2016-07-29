@@ -138,7 +138,7 @@
 		</section>
 		<section class="ip_text">
 			<p>
-				<span><c:out value="${userInfo.enName}" /></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}" /></label><i><c:out value="${userInfo.userStatusName}" /></i>
+				<span><c:out value="${userInfo.enName}" /></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}" /></label><i><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}" /></font></i>
 			</p>
 			<p><c:out value="${userInfo.employmentInfo}" /></p>
 		</section>

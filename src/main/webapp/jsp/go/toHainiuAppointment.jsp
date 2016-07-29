@@ -64,8 +64,8 @@
 			<section class="text-info">
 				<p>
 					<i><c:out value="${userInfo.enName}" escapeXml="false" /></i><span style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out
-							value="${userInfo.abroadCountryName}" escapeXml="false" /></span><label><c:out
-							value="${userInfo.userStatusName}" escapeXml="false" /></label>
+							value="${userInfo.abroadCountryName}" escapeXml="false" /></span><label><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out
+							value="${userInfo.userStatusName}" escapeXml="false" /></font></label>
 				</p>
 				<p class="on">
 					<c:out value="${userInfo.employmentInfo}" escapeXml="false" />

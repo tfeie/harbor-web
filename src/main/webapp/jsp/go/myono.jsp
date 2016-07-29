@@ -207,7 +207,8 @@
 					</div>
 					<div class="name-xx">
 						<div class="xx">
-							{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+							{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}   
+>{{:userStatusName}}</font></font>
 						</div>
 						<div class="jj">{{:employmentInfo}}</div>
 					</div>

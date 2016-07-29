@@ -329,7 +329,8 @@
 							</section>
 							<section class="ip_text">
 								<p>
-									<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i>
+									<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}   
+>{{:userStatusName}}</font></i>
 								</p>
 								<p>{{:employmentInfo}}</p>
 							</section>
@@ -379,7 +380,8 @@
 							</section>
 							<section class="ip_text">
 								<p>
-									<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i>{{:userStatusName}}</i><em
+									<span>{{:enName}}</span><label class="lbl2" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</label><i><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}   
+>{{:userStatusName}}</font></i><em
 										class="online"><a href="#">{{:orgModeName}}</a></em>
 								</p>
 								<p>

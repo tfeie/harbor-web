@@ -115,7 +115,8 @@
 				<div class="time">{{:submitCertDate}}</div>
 				<div class="c">
 					<a href="#">
-						<div class="name">{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font></div>
+						<div class="name">{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}   
+>{{:userStatusName}}</font></div>
 						<div class="xx"><a href="javascript:void(0)">{{:signature}}</a> </div>
 					</a>
 				</div>

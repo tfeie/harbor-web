@@ -172,7 +172,8 @@
 						{{if accepterType=='system'}}
 							<div class="name">{{:title}}</div>
 						{{else}}
-							<div class="name">{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font></div>
+							<div class="name">{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}   
+>{{:userStatusName}}</font></div>
 						{{/if}}
 						
 						<div class="xx"><a href="{{if haslink==true}}{{:link}}{{else}}javascript:void(0){{/if}}">{{:content}}</a> </div>

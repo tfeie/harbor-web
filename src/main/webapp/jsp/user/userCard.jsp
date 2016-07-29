@@ -68,7 +68,7 @@
 		</section>
 		<section class="per_info">
 			<p class="name">
-				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></label><i><c:out value="${userInfo.userStatusName}"/></i>
+				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></label><i><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}"/></font></i>
 			</p>
 			<p class="pengyou">
 				<a href="#">升级中</a><a href="#" class="on">升级中</a><a href="#">公益贝

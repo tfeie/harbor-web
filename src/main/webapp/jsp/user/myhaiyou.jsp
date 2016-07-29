@@ -352,7 +352,8 @@
 							<div class="name-xx">
 								<div class="xx">{{:enName}}</div>
 								<div class="yrz">
-									<span class="bg-lan" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+									<span class="bg-lan" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}   
+>{{:userStatusName}}</font>
 								</div>
 							</div>
 							<div class="jj">{{:employmentInfo}}</div>
@@ -375,7 +376,8 @@
 								<div class="name-xx">
 									<div class="xx">{{:enName}}</div>
 									<div class="yrz">
-										<span class="bg-lan" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font>{{:userStatusName}}</font>
+										<span class="bg-lan" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}   
+>{{:userStatusName}}</font>
 									</div>
 								</div>
 								<div class="jj">{{:employmentInfo}}</div>
