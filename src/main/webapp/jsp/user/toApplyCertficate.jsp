@@ -157,7 +157,7 @@
 					$("#IMGOverSeaPicker").on("click", function() {
 						wx.chooseImage({
 							count : 1,
-							sizeType: ['original'],
+							sizeType: ['compressed'],
 							success : function(res) {
 								var localId = res.localIds[0]; 
 								wx.uploadImage({
@@ -206,7 +206,7 @@
 					$("#IMGIDCardPicker").on("click", function() {
 						wx.chooseImage({
 							count : 1,
-							sizeType: ['original'],
+							sizeType: ['compressed'],
 							success : function(res) {
 								var localId = res.localIds[0]; 
 								wx.uploadImage({
