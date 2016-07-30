@@ -36,6 +36,9 @@
 		<div class="div_title">
 			<h3>
 				<span>申请认证请提交以下材料</span>
+				<c:if test="${userInfo.authSts=='13'}">
+				<p><font color='red'>您提交的材料审核不通过，原因:<c:out value="${userInfo.certRemark }"/>。请重新按照要求提交</font></p>
+				</c:if>
 			</h3>
 		</div>
 		<ul>
@@ -44,9 +47,7 @@
 			</li>
 			<li>认证通过之后，将点亮头像旁边的“已认证”字样，并可享受更多权限哦。</li>
 			
-			<c:if test="${userInfo.authSts=='13'}">
-				<li><font color='red'><c:out value="${userInfo.certRemark }"/></font></li>
-			</c:if>
+			
 		</ul>
 	</section>
 	<section class="sec_item sec_item_img">

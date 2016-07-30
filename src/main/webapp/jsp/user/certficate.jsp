@@ -72,9 +72,9 @@
 			
 			submit: function(){
 				var authStatus = $.trim($("[name='authResult'].on").attr("authStatus"));
-				var remark = $.trim($("#myRemark").val());
+				var remark = $.trim($("#authRemark").val());
 				var valueValidator = new $.ValueValidator();
-				if(status == "13"){
+				if(authStatus == "13"){
 					valueValidator.addRule({
 						labelName: "原因",
 						fieldName: "remark",
@@ -92,28 +92,31 @@
 				}
 				var res=valueValidator.fireRulesAndReturnFirstError();
 				if(res){
-					weUI.alert({content:res});
+					weUI.showXToast(res);
+					setTimeout(function () {
+						weUI.hideXToast();
+		            }, 1000);
 					return;
 				}
 				ajaxController.ajax({
 					url: "../user/submitUserAuthInfo",
 					type: "post",
 					data: {
-						userId, this.getPropertyValue("userId"),
+						userId: this.getPropertyValue("userId"),
 						status: authStatus,
 						remark: remark
 					},
 					success: function(transport){
 						weUI.showXToast("审核完成");
 						setTimeout(function () {
-							window.location.href="../user/userList.html";
+							window.location.href="../user/unauthusers.html";
 							weUI.hideXToast();
 			            }, 1000);
 					},
 					failure: function(transport){
 						weUI.showXToast(transport.statusInfo);
 						setTimeout(function () {
-							window.location.href="../user/userList.html";
+							window.location.href="../user/unauthusers.html";
 							weUI.hideXToast();
 			            }, 1000);
 					}
@@ -151,7 +154,7 @@
 			</h3>
 		</div>
 		<div class="img" id="IMGIDCardPicker">
-			<img src="<c:out value="${userInfo.idcardPhoto}" />" >
+			<img src="<c:out value="${userInfo.idcardPhoto}" />" width="193.8px" height="120px">
 		</div>
 	</section>
 	<section class="sec_item sec_item_img">
@@ -161,7 +164,7 @@
 			</h3>
 		</div>
 		<div class="img" id="IMGOverSeaPicker">
-			<img src="<c:out value="${userInfo.overseasPhoto}" />" >
+			<img src="<c:out value="${userInfo.overseasPhoto}"/>" width="193.8px" height="120px">
 		</div>
 	</section>
 	<section class="me_qingke">

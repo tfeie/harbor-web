@@ -23,12 +23,13 @@
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css"> 
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/css/style.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
-<script src="//static.tfeie.com/v2/js/tap.js"></script>
+
 </head>
-<body>
+<body style="background:#ffffff">
 	<section class="wdgz-main" id="DIV_USER">
 
 	</section>
@@ -36,13 +37,12 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script> 
 <script type="text/javascript"
-	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
-<script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
+<script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
 
 	(function() {
@@ -101,6 +101,9 @@
 	})(jQuery);
 	
 	 $(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter({showBeGoQuick:"hidden"});
+		
 		var p = new $.PreAuthPage({});
 		p.init();
 	});
@@ -109,7 +112,7 @@
 <script id="userListImpl" type="text/x-jsrender"> 
 <div class="itms clearfix" name="DIV_USERID" userId={{:userId}}>
 			<div class="img">
-				<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}"></a>
+				<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}" width="50" height="50"></a>
 			</div>
 			<div class="r">
 				<div class="time">{{:submitCertDate}}</div>
