@@ -115,7 +115,7 @@
 				<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}" width="50" height="50"></a>
 			</div>
 			<div class="r">
-				<div class="time">{{:submitCertDate}}</div>
+				<div class="time"></div>
 				<div class="c">
 					<a href="#">
 						<div class="name">{{:enName}}<span class="bg-lv" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}   
