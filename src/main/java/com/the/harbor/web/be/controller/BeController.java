@@ -509,6 +509,7 @@ public class BeController {
 		b.setCreateDate(doBeComment.getSysdate());
 		b.setCreateTimeInteval(DateUtil.getInterval(doBeComment.getSysdate()));
 		// 发布人信息
+		b.setUserStatus(userInfo.getUserStatus());
 		b.setUserStatusName(userInfo.getUserStatusName());
 		b.setWxHeadimg(userInfo.getWxHeadimg());
 		b.setEnName(userInfo.getEnName());
@@ -518,6 +519,7 @@ public class BeController {
 		if (!StringUtil.isBlank(doBeComment.getParentUserId())) {
 			UserViewInfo puser = WXUserUtil.getUserViewInfoByUserId(doBeComment.getParentUserId());
 			if (puser != null) {
+				b.setPuserStatusName(userInfo.getUserStatus());
 				b.setPabroadCountryName(puser.getAbroadCountryName());
 				b.setPenName(puser.getEnName());
 				b.setPuserStatusName(puser.getUserStatusName());
@@ -533,6 +535,7 @@ public class BeController {
 		if (!StringUtil.isBlank(b.getUserId())) {
 			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(b.getUserId());
 			if (userInfo != null) {
+				b.setUserStatus(userInfo.getUserStatus());
 				b.setUserStatusName(userInfo.getUserStatusName());
 				b.setWxHeadimg(userInfo.getWxHeadimg());
 				b.setEnName(userInfo.getEnName());

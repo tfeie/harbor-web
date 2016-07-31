@@ -1131,6 +1131,7 @@ public class GoController {
 		if (!StringUtil.isBlank(b.getPublishUserId())) {
 			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(b.getPublishUserId());
 			if (userInfo != null) {
+				b.setUserStatus(userInfo.getUserStatus());
 				b.setUserStatusName(userInfo.getUserStatusName());
 				b.setWxHeadimg(userInfo.getWxHeadimg());
 				b.setEnName(userInfo.getEnName());
@@ -1144,6 +1145,7 @@ public class GoController {
 		if (!StringUtil.isBlank(b.getParentUserId())) {
 			UserViewInfo puser = WXUserUtil.getUserViewInfoByUserId(b.getParentUserId());
 			if (puser != null) {
+				b.setPuserStatus(puser.getUserStatus());
 				b.setPabroadCountryName(puser.getAbroadCountryName());
 				b.setPenName(puser.getEnName());
 				b.setPuserStatusName(puser.getUserStatusName());
@@ -1193,7 +1195,7 @@ public class GoController {
 		b.setCreateTimeInteval(DateUtil.getInterval(doGoComment.getSysdate()));
 		b.setIsreply(!StringUtil.isBlank(doGoComment.getParentCommentId()));
 		// 发布人信息
-		b.setUserStatusName(userInfo.getUserStatusName());
+		b.setUserStatus(userInfo.getUserStatus());
 		b.setWxHeadimg(userInfo.getWxHeadimg());
 		b.setEnName(userInfo.getEnName());
 		b.setUserStatusName(userInfo.getUserStatusName());
@@ -1202,6 +1204,7 @@ public class GoController {
 		if (!StringUtil.isBlank(doGoComment.getParentUserId())) {
 			UserViewInfo puser = WXUserUtil.getUserViewInfoByUserId(doGoComment.getParentUserId());
 			if (puser != null) {
+				b.setPuserStatus(puser.getUserStatus());
 				b.setPabroadCountryName(puser.getAbroadCountryName());
 				b.setPenName(puser.getEnName());
 				b.setPuserStatusName(puser.getUserStatusName());
