@@ -1304,7 +1304,8 @@ public class UserController {
 	 */
 	@RequestMapping("/submitUserAuthInfo")
 	@ResponseBody
-	public ResponseData<String> submitUserAuthInfo(@NotNull(message = "参数为空") UserAuthReq req, HttpServletRequest request) {
+	public ResponseData<String> submitUserAuthInfo(@NotNull(message = "参数为空") UserAuthReq req,
+			HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
 			UserViewInfo loginUser = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
@@ -1330,8 +1331,7 @@ public class UserController {
 	public ModelAndView toUserInviteCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
 		if (userInfo != null) {
-			ModelAndView view = new ModelAndView("redirect:../be/index.html");
-			return view;
+			response.sendRedirect("../be/index.html");
 		}
 		ModelAndView view = new ModelAndView("user/inviteRegisterCode");
 		return view;
