@@ -22,6 +22,12 @@
 	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript">
+	var isLogin="<c:out value="${islogin}"/>";
+	if(isLogin=="true"){
+		window.location.href="../be/index.html";
+	}
+</script>
 </head>
 <section class="mycenter">
 
