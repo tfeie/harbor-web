@@ -201,7 +201,9 @@
 				
 				queryOnOGoes: function(p){
 					var _this = this;
-					weUI.showLoadingToast("加载中...");
+					if(!p.newload){
+						weUI.showLoadingToast("加载中...");
+					}
 					ajaxController.ajax({
 						url: "../go/queryMyJointGoes",
 						type: "post",  
