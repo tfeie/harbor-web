@@ -582,7 +582,7 @@ public class GoController {
 		}
 		request.setAttribute("go", go);
 		request.setAttribute("goOrderId", goOrderId);
-		request.setAttribute("backURL", WXRequestUtil.getFullURL(request));
+		request.setAttribute("backURL", request.getParameter("backURL"));
 		ModelAndView view = new ModelAndView("go/comments");
 		return view;
 	}
