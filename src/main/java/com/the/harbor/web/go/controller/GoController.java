@@ -627,13 +627,13 @@ public class GoController {
 		if (go == null) {
 			throw new BusinessException("您查看的活动信息不存在");
 		}
+		LOG.debug("用户id:" + userInfo.getUserId());
 		boolean joint = HyGoUtil.checkUserHadJointGroup(goId, userInfo.getUserId());
 		boolean applied = HyGoUtil.checkUserHadAppliedGroup(goId, userInfo.getUserId());
-		if (joint) {
-			GoJoin goJoin = DubboServiceUtil.QueryUserJoinGo(userInfo.getUserId(), goId);
-			if (goJoin != null) {
-				request.setAttribute("orderId", goJoin.getOrderId());
-			}
+		GoJoin goJoin = DubboServiceUtil.QueryUserJoinGo(userInfo.getUserId(), goId);
+		if (goJoin != null) {
+			request.setAttribute("orderId", goJoin.getOrderId());
+			request.setAttribute("goJoin", goJoin);
 		}
 		/* 发送浏览记录 */
 		DoGoView body = new DoGoView();

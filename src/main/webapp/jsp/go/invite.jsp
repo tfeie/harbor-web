@@ -106,14 +106,30 @@
 						<c:out value="${go.payModeName}" />
 					</c:if>
 					</span>
-					<c:if test="${joint==false}">
-					<button id="BTN_BAOMING">
-						<img src="//static.tfeie.com/images/img58.png">我要报名
-					</button>
+					
+					<c:if test="${goJoin==null}">
+						<button id="BTN_BAOMING">
+							<img src="//static.tfeie.com/images/img58.png">我要报名
+						</button>
 					</c:if>
 					<label id="APPLY_SUCCESS" style="display:none">报名成功</label>
-					<c:if test="${joint==true}">
-					<label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />">已参加,进入点评</a></label>
+					<c:if test="${goJoin!=null}">
+						 <c:if test="${goJoin.orderStatus=='10'}">
+						 	<label id="APPLY_SUCCESS">已报名</label>
+						 </c:if>
+						 <c:if test="${goJoin.orderStatus=='11'}">
+						 	<label id="APPLY_SUCCESS">等待审核</label>
+						 </c:if>
+						 <c:if test="${goJoin.orderStatus=='20'}">
+						 	<label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />">已参加,进入点评</a></label>
+						 </c:if>
+						  <c:if test="${goJoin.orderStatus=='21'}">
+						    <label id="APPLY_SUCCESS">拒绝</label>
+						 </c:if>
+						  <c:if test="${goJoin.orderStatus=='40'}">
+						    <label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />">已参加,进入点评</a></label>
+						 </c:if>
+					
 					</c:if>
 				</p>
 			</section>
