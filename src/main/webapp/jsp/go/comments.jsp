@@ -325,6 +325,10 @@
 							$("#COMMENT_CONTENT").val("");
 							$("#parentUserId").val("");
 							$("#parentCommentId").val("");
+							var backURL = _this.getPropertyValue("backURL");
+							if(backURL!=""){
+								window.location.href=backURL;
+							}
 						},
 						failure: function(transport){ 
 							weUI.hideLoadingToast();
@@ -359,6 +363,7 @@
 
 	$(document).ready(function() {
 		var p = new $.GoGroupCommentPage({
+			backURL:  "<c:out value="${backURL}" escapeXml="false"/>",
 			goId : "<c:out value="${go.goId}"/>",
 			goType : "<c:out value="${go.goType}"/>",
 			goOrderId : "<c:out value="${goOrderId}"/>"

@@ -1,5 +1,6 @@
 package com.the.harbor.web.go.controller;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -565,7 +566,7 @@ public class GoController {
 	 * @return
 	 */
 	@RequestMapping("/comments.html")
-	public ModelAndView comments(HttpServletRequest request) {
+	public ModelAndView comments(HttpServletRequest request) throws Exception {
 		WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		String goOrderId = request.getParameter("goOrderId");
 		if (StringUtil.isBlank(goOrderId)) {
@@ -581,6 +582,7 @@ public class GoController {
 		}
 		request.setAttribute("go", go);
 		request.setAttribute("goOrderId", goOrderId);
+		request.setAttribute("backURL", WXRequestUtil.getFullURL(request));
 		ModelAndView view = new ModelAndView("go/comments");
 		return view;
 	}
