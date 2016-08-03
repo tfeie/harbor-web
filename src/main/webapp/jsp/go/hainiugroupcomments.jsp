@@ -227,6 +227,10 @@
 							weUI.showXToast("评论成功..");
 							setTimeout(function () {
 								weUI.hideXToast();
+								var backURL = _this.getPropertyValue("backURL");
+								if(backURL!=""){
+									window.location.href=backURL;
+								}
 				            }, 1000);
 						},
 						failure: function(transport){ 
@@ -261,6 +265,7 @@
 
 	$(document).ready(function() {
 		var p = new $.GoGroupCommentPage({
+			backURL:  "<c:out value="${backURL}" escapeXml="false"/>",
 			goId : "<c:out value="${go.goId}"/>",
 			goOrderId : "<c:out value="${goOrderId}"/>"
 

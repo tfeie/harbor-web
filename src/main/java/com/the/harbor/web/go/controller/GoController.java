@@ -614,6 +614,7 @@ public class GoController {
 		request.setAttribute("go", go);
 		request.setAttribute("goJoin", goJoin);
 		request.setAttribute("goOrderId", goOrderId);
+		request.setAttribute("backURL", request.getParameter("backURL"));
 		ModelAndView view = new ModelAndView("go/hainiugroupcomments");
 		return view;
 	}
