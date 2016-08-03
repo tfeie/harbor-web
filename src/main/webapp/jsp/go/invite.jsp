@@ -121,13 +121,23 @@
 						 	<label id="APPLY_SUCCESS">等待审核</label>
 						 </c:if>
 						 <c:if test="${goJoin.orderStatus=='20'}">
-						 	<label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />">已参加,进入点评</a></label>
+						 	<c:if test="${goJoin.diffHours>=3}">
+						 		<label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />">已参加,进入点评</a></label>
+						 	</c:if>
+						 	<c:if test="${goJoin.diffHours<3}">
+						 		<label id="APPLY_SUCCESS"><a href="javascript:void(0)">已报名</a></label>
+						 	</c:if>
 						 </c:if>
 						  <c:if test="${goJoin.orderStatus=='21'}">
 						    <label id="APPLY_SUCCESS">拒绝</label>
 						 </c:if>
 						  <c:if test="${goJoin.orderStatus=='40'}">
-						    <label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />">已参加,进入点评</a></label>
+						    <c:if test="${goJoin.diffHours>=3}">
+						 		<label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />">已参加,进入点评</a></label>
+						 	</c:if>
+						 	<c:if test="${goJoin.diffHours<3}">
+						 		<label id="APPLY_SUCCESS"><a href="javascript:void(0)">已报名</a></label>
+						 	</c:if>
 						 </c:if>
 					
 					</c:if>
