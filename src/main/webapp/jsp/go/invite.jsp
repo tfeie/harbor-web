@@ -122,7 +122,7 @@
 						 </c:if>
 						 <c:if test="${goJoin.orderStatus=='20'}">
 						 	<c:if test="${goJoin.diffHours>=3}">
-						 		<label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />">已参加,进入点评</a></label>
+						 		<label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />&backURL=../go/myjointgoes.html?goType=group">已参加,进入点评</a></label>
 						 	</c:if>
 						 	<c:if test="${goJoin.diffHours<3}">
 						 		<label id="APPLY_SUCCESS"><a href="javascript:void(0)">已报名</a></label>
@@ -133,7 +133,7 @@
 						 </c:if>
 						  <c:if test="${goJoin.orderStatus=='40'}">
 						    <c:if test="${goJoin.diffHours>=3}">
-						 		<label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />">已参加,进入点评</a></label>
+						 		<label id="APPLY_SUCCESS"><a href="../go/comments.html?goOrderId=<c:out value="${orderId}" />&backURL=../go/myjointgoes.html?goType=group">已参加,进入点评</a></label>
 						 	</c:if>
 						 	<c:if test="${goJoin.diffHours<3}">
 						 		<label id="APPLY_SUCCESS"><a href="javascript:void(0)">已报名</a></label>
