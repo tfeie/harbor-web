@@ -235,7 +235,7 @@
 												setTimeout(function () {
 													weUI.hideXToast();
 									            }, 1000);
-												$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.png");
+												$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.jpg");
 											}
 											
 										});
@@ -245,7 +245,7 @@
 										setTimeout(function () {
 											weUI.hideXToast();
 							            }, 1000);
-										$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.png");
+										$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.jpg");
 									}
 								});
 							}
