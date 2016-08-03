@@ -1344,10 +1344,8 @@ public class GoController {
 			List<GoJoin> ls = new ArrayList<GoJoin>();
 			if (!CollectionUtil.isEmpty(list)) {
 				for (GoJoin goOrder : list) {
-					if (com.the.harbor.base.enumeration.hygojoin.OrderStatus.APPLIED.getValue()
+					if (com.the.harbor.base.enumeration.hygojoin.OrderStatus.AGREE.getValue()
 							.equals(goOrder.getOrderStatus())
-							|| com.the.harbor.base.enumeration.hygojoin.OrderStatus.AGREE.getValue()
-									.equals(goOrder.getOrderStatus())
 							|| com.the.harbor.base.enumeration.hygojoin.OrderStatus.FINISH.getValue()
 									.equals(goOrder.getOrderStatus())) {
 						ls.add(goOrder);
