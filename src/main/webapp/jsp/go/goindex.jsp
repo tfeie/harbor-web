@@ -116,15 +116,32 @@
 						}
 					});
 					
-					$(".group_oneon").delegate(".wuwai_jiansheng","click",function(){
-						var goId =$(this).attr("goId");
-						var goType =$(this).attr("goType");
+					$(".group_oneon").delegate(".title_jiansheng","click",function(){
+						var goId = $(this).parent().attr("goId");
+						var goType = $(this).parent().attr("goType");
 						if(goType=="group"){
 							window.location.href="../go/invite.html?goId="+goId;
 						}else{
 							window.location.href="../go/onodetail.html?goId="+goId;
 						}
 						
+					});
+					
+					$(".group_oneon").delegate(".info_fuwu","click",function(){
+						var goId =$(this).parent().attr("goId");
+						var goType =$(this).parent().attr("goType");
+						if(goType=="group"){
+							window.location.href="../go/invite.html?goId="+goId;
+						}else{
+							window.location.href="../go/onodetail.html?goId="+goId;
+						}
+					});
+					
+					// 收藏
+					$(".group_oneon").delegate("[name='GO_FAVORITE']","click",function(){
+						var goId =$(this).parents(".wuwai_jiansheng").attr("goId");
+						var goType =$(this).parents(".wuwai_jiansheng").attr("goType");
+						_this.doGoFavorite($(this),goId,goType);
 					});
 					
 					$("#UL_GOTO_NEXTPAGE").on("click",function(){
@@ -161,6 +178,35 @@
 						this.queryOnOGoes({tagId: "", searchKey: "", pageNo: 1, newload: true});
 					}
 				}, 
+				
+				doGoFavorite:function(_this,goId,goType){
+					var v = _this.attr("value");
+					weUI.showLoadingToast("正在处理中...");
+					ajaxController.ajax({
+						url: "../go/doGoFavorite",
+						type: "post", 
+						data:{
+							goId: goId
+						},
+						success: function(transport){
+							var count = parseInt(v) + 1;
+							$("#GO_FAVORITE").html("收藏" + count);
+							weUI.hideLoadingToast();
+							weUI.showXToast("收藏成功");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
+						},
+						failure: function(transport){
+							weUI.hideLoadingToast();
+							weUI.showXToast(transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
+						}
+						
+					});
+				},
 				
 				getIndexPageSilders: function(){
 					var _this = this;
@@ -457,7 +503,7 @@
 					</section>
 					<section class="num_per">
 						<p>
-							<a href="#">浏览 {{:viewCount}}</a><a href="#">参加 {{:joinCount}}</a><a href="#">收藏 {{:favorCount}}</a>
+							<a href="#">浏览 {{:viewCount}}</a><a href="#">参加 {{:joinCount}}</a><a href="#" name="GO_FAVORITE" value='{{:favorCount}}'>收藏 {{:favorCount}}</a>
 						</p>
 					</section>
 				</section>
@@ -494,7 +540,7 @@
 						</section>
 					</section>
 					<section class="oneon_span">
-						<a href="#">浏览 {{:viewCount}}</a><a href="#">收藏 {{:favorCount}}</a>
+						<a href="#">浏览 {{:viewCount}}</a><a href="#" name='GO_FAVORITE' value='{{:favorCount}}'>收藏 {{:favorCount}}</a>
 						<div class="clear"></div>
 					</section>
 				</section>
