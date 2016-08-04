@@ -85,7 +85,7 @@
 			</section>
 			<section class="num_liulan">
 				<p>
-					<a href="#">浏览 <c:out value="${go.viewCount}" /></a><a href="#">参加 <c:out value="${go.joinCount}" /></a><a href="#">收藏 <c:out value="${go.favorCount}" /></a>
+					<a href="#">浏览 <c:out value="${go.viewCount}" /></a><a href="#">参加 <c:out value="${go.joinCount}" /></a><a href="#" id="GO_FAVORITE">收藏 <c:out value="${go.favorCount}" /></a>
 				</p>
 			</section>
 		</section>
@@ -190,12 +190,44 @@ wx.config({
 					window.location.href="../go/myjointgoes.html?goType=group";
 				});
 				
-				
+				$("#GO_FAVORITE").on("click",function(){
+					_this.doGoFavorite();
+				});
 			},
 			
 			getPropertyValue: function(propertyName){
 				if(!propertyName)return;
 				return this.params[propertyName];
+			},
+			
+			doGoFavorite:function(){
+				var _this = this;
+				weUI.showLoadingToast("正在处理中...");
+				ajaxController.ajax({
+					url: "../go/doGoFavorite",
+					type: "post", 
+					data:{
+						goId: _this.getPropertyValue("goId")
+					},
+					success: function(transport){
+						var favorCount = ${go.favorCount};
+						favorCount += 1;
+						$("#GO_FAVORITE").html("收藏" + favorCount);
+						weUI.hideLoadingToast();
+						weUI.showXToast("收藏成功");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 1000);
+					},
+					failure: function(transport){
+						weUI.hideLoadingToast();
+						weUI.showXToast(transport.statusInfo);
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 1000);
+					}
+					
+				});
 			},
 			
 			applyGroup: function(){

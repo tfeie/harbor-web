@@ -1256,7 +1256,7 @@ public class UserController {
 	@RequestMapping("/queryUnAuthUsers")
 	public @ResponseBody ResponseData<List<UserViewInfo>> queryUnAuthUsers(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		LOG.debug("进入查询未认证用户表");
+		LOG.info("进入查询未认证用户表");
 		ResponseData<List<UserViewInfo>> responseData = null;
 		try {
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);

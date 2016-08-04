@@ -648,7 +648,7 @@ public class GoController {
 		request.setAttribute("applied", applied);
 		request.setAttribute("joint", joint);
 		request.setAttribute("go", go);
-
+		
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -1650,4 +1650,38 @@ public class GoController {
 		}
 		return responseData;
 	}
+	
+	@RequestMapping("/doGoFavorite")
+	@ResponseBody
+	public ResponseData<JSONObject> doGoFavorite(HttpServletRequest request) {
+		ResponseData<JSONObject> responseData = null;
+		try {
+			String goId = request.getParameter("goId");
+			if (StringUtil.isBlank(goId)) {
+				throw new BusinessException("活动标识不存在");
+			}
+			Go go = DubboServiceUtil.queryGo(goId);
+			if (go == null) {
+				throw new BusinessException("活动信息不存在");
+			}
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			GroupApplyReq groupApplyReq = new GroupApplyReq();
+
+			groupApplyReq.setUserId(userInfo.getUserId());
+			groupApplyReq.setGoId(goId);
+			Response resp = DubboConsumerFactory.getService(IGoSV.class).doGoFavorite(groupApplyReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
+				throw new BusinessException(resp.getResponseHeader().getResultCode(),
+						resp.getResponseHeader().getResultMessage());
+			}
+			
+			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"提交成功", null);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
 }
