@@ -29,8 +29,7 @@
 	<script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
 <script type="text/javascript"
-		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>	
-	
+		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
 </head>
 
 <body>
