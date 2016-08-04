@@ -1280,7 +1280,7 @@ public class UserController {
 		boolean hasRight = HyCfgUtil.checkUserHasAuthCertRight(loginUser.getUserId());
 		if (!hasRight) {
 			throw new BusinessException("您无权查看未认证用户资料信息");
-		}
+		} 
 		String userId = request.getParameter("userId");
 		UserViewResp resp = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByUserId(userId);
 		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
