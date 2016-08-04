@@ -1261,7 +1261,7 @@ public class UserController {
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			boolean hasRight = HyCfgUtil.checkUserHasAuthCertRight(userInfo.getUserId());
 			if (!hasRight) {
-				throw new BusinessException("您无权查看未认证用户列表");
+				//throw new BusinessException("您无权查看未认证用户列表");
 			}
 			List<UserViewInfo> userViewInfos = DubboConsumerFactory.getService(IUserSV.class).queryUnAuthUsers();
 			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS,
@@ -1291,6 +1291,15 @@ public class UserController {
 		if (userInfo == null) {
 			throw new BusinessException("待审核用户不存在");
 		}
+		long timestamp = DateUtil.getCurrentTimeMillis();
+		String nonceStr = WXHelpUtil.createNoncestr();
+		String jsapiTicket = WXHelpUtil.getJSAPITicket();
+		String url = WXRequestUtil.getFullURL(request);
+		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/certficate");
 		return view;
