@@ -1261,7 +1261,7 @@ public class UserController {
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 			boolean hasRight = HyCfgUtil.checkUserHasAuthCertRight(userInfo.getUserId());
 			if (!hasRight) {
-				//throw new BusinessException("您无权查看未认证用户列表");
+				throw new BusinessException("您无权查看未认证用户列表");
 			}
 			List<UserViewInfo> userViewInfos = DubboConsumerFactory.getService(IUserSV.class).queryUnAuthUsers();
 			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS,
