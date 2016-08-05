@@ -161,6 +161,9 @@ wx.config({
 					
 					setTimeout(function () {
 						var topic = $("#DIV_DO_SHARE").attr("topic");
+						if (topic.length > 10){
+							topic = topic.substr(0,10) + "... ...";
+						}
 						var shareDesc = $("#shareDesc").val();
 						
 						wx.ready(function () {
@@ -183,6 +186,9 @@ wx.config({
 					
 					$("#DIV_BE_DETAIL").delegate("#DIV_DO_SHARE","click",function(){
 						var topic =$(this).attr("topic");
+						if (topic.length > 10){
+							topic = topic.substr(0,10) + "... ...";
+						}
 						var shareDesc =  $("#shareDesc").val();
 						wx.onMenuShareTimeline({
 						    title: topic,
