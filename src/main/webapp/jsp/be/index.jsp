@@ -109,11 +109,9 @@ wx.config({
 	timestamp : '<c:out value="${timestamp}"/>',
 	nonceStr : '<c:out value="${nonceStr}"/>',
 	signature : '<c:out value="${signature}"/>',
-	jsApiList : [ 'checkJsApi', 'previewImage','onMenuShareTimeline','onMenuShareAppMessage']
+	jsApiList : [ 'checkJsApi','onMenuShareTimeline','onMenuShareAppMessage']
 });
 
-/* 
-wx.error(function(res){ alert(res.err_msg); }); */
 
 	(function($){
 		$.BeIndexPage = function(data){
@@ -129,23 +127,17 @@ wx.error(function(res){ alert(res.err_msg); }); */
 					this.bindEvents(); 
 					this.initData();
 					
-					setTimeout(function () {
-						var topic = "Beauty & Excellence";
-						var shareDesc = "海归海湾，海归创业正能量";
-						
-						wx.ready(function () {
-							 var shareData = {
-									   title: topic,
-									   desc: shareDesc,
-									   link: '${url}',
-									   imgUrl: '${userInfo.wxHeadimg}'
-								};
-							 
-							wx.onMenuShareTimeline(shareData);	
-							wx.onMenuShareAppMessage(shareData);	
-						});
-		            }, 1000);
-					
+					/* wx.ready(function () {
+						 var shareData = {
+								   title: "Beauty & Excellence",
+								   desc: "海归海湾，海归创业正能量",
+								   link: '${url}',
+								   imgUrl: '${userInfo.wxHeadimg}'
+							};
+						 
+						wx.onMenuShareTimeline(shareData);	
+						wx.onMenuShareAppMessage(shareData);	
+					}); */
 				},
 				
 				bindEvents: function(){
