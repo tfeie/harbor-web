@@ -119,6 +119,8 @@
 
 </body>
 <script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> 
+<script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
@@ -129,6 +131,16 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script type="text/javascript">
+//微信API配置
+wx.config({
+	debug : false,
+	appId : '<c:out value="${appId}"/>',
+	timestamp : '<c:out value="${timestamp}"/>',
+	nonceStr : '<c:out value="${nonceStr}"/>',
+	signature : '<c:out value="${signature}"/>',
+	jsApiList : [ 'checkJsApi', 'previewImage','onMenuShareTimeline','onMenuShareAppMessage']
+});
+
 	(function($) {
 		$.OnOGoDetailPage = function(data) {
 			this.settings = $.extend(true, {}, $.OnOGoDetailPage.defaults);
@@ -141,6 +153,18 @@
 				init : function() {
 					this.bindEvents();
 					this.getGoComments();
+					
+					wx.ready(function () {
+						 var shareData = {
+								   title: "${go.topic}",
+								   desc: "海归海湾，海创前辈导师投资人直约",
+								   link: '${url}',
+								   imgUrl: '${userInfo.wxHeadimg}'
+							};
+						 
+						wx.onMenuShareTimeline(shareData);	
+						wx.onMenuShareAppMessage(shareData);	
+					});
 				},
 
 				bindEvents : function() {

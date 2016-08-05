@@ -532,6 +532,17 @@ public class GoController {
 		UserViewMQSend.sendMQ(body);
 
 		request.setAttribute("go", go);
+		long timestamp = DateUtil.getCurrentTimeMillis();
+		String nonceStr = WXHelpUtil.createNoncestr();
+		String jsapiTicket = WXHelpUtil.getJSAPITicket();
+		String url = WXRequestUtil.getFullURL(request);
+		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
+		request.setAttribute("url", GlobalSettings.getHarborDomain() + "/go/onodetail.html?goId=" + goId);
+		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("go/onodetail");
 		return view;
 	}
@@ -672,7 +683,8 @@ public class GoController {
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
 		request.setAttribute("signature", signature);
-
+		request.setAttribute("url", GlobalSettings.getHarborDomain() + "/go/invite.html?goId=" + goId);
+		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("go/invite");
 		return view;
 	}

@@ -159,10 +159,10 @@
 wx.config({
 	debug : false,
 	appId : '<c:out value="${appId}"/>',
-	timestamp : <c:out value="${timestamp}"/>,
+	timestamp : '<c:out value="${timestamp}"/>',
 	nonceStr : '<c:out value="${nonceStr}"/>',
 	signature : '<c:out value="${signature}"/>',
-	jsApiList : [ 'checkJsApi', 'chooseWXPay' ]
+	jsApiList : [ 'checkJsApi', 'chooseWXPay','onMenuShareTimeline','onMenuShareAppMessage' ]
 });
 
 (function($){
@@ -177,6 +177,18 @@ wx.config({
 		prototype: {
 			init: function(){
 				this.bindEvents(); 
+				
+				wx.ready(function () {
+					 var shareData = {
+							   title: "${go.topic}",
+							   desc: "海归海湾，海归创业的舞台",
+							   link: '${url}',
+							   imgUrl: '${userInfo.wxHeadimg}'
+						};
+					 
+					wx.onMenuShareTimeline(shareData);	
+					wx.onMenuShareAppMessage(shareData);	
+				});
 			},
 			
 			bindEvents: function(){

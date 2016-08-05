@@ -91,6 +91,8 @@
 	 
 </body>
 <script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
@@ -99,18 +101,19 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
-<script type="text/javascript"
-	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
 //微信API配置
 wx.config({
 	debug : false,
 	appId : '<c:out value="${appId}"/>',
-	timestamp : <c:out value="${timestamp}"/>,
+	timestamp : '<c:out value="${timestamp}"/>',
 	nonceStr : '<c:out value="${nonceStr}"/>',
 	signature : '<c:out value="${signature}"/>',
-	jsApiList : [ 'checkJsApi', 'onMenuShareTimeline','onMenuShareAppMessage']
+	jsApiList : [ 'checkJsApi', 'previewImage','onMenuShareTimeline','onMenuShareAppMessage']
 });
+/* 
+wx.error(function(res){ alert(res.err_msg); }); */
+
 	(function($){
 		$.BeIndexPage = function(data){
 			this.settings = $.extend(true,{},$.BeIndexPage.defaults);
@@ -125,17 +128,23 @@ wx.config({
 					this.bindEvents(); 
 					this.initData();
 					
-					wx.ready(function () {
-						 var shareData = {
-								   title: 'Beauty & Excellence' ,
-								   desc: "海归海湾，海归创业正能量",
-								   imgUrl:'${userInfo.wxHeadimg}',
-								   link: '${url}'
-							};
-						 
-						wx.onMenuShareTimeline(shareData);	
-						wx.onMenuShareAppMessage(shareData);	
-					});
+					setTimeout(function () {
+						var topic = "Beauty & Excellence";
+						var shareDesc = "海归海湾，海归创业正能量";
+						
+						wx.ready(function () {
+							 var shareData = {
+									   title: topic,
+									   desc: shareDesc,
+									   link: '${url}',
+									   imgUrl: '${userInfo.wxHeadimg}'
+								};
+							 
+							wx.onMenuShareTimeline(shareData);	
+							wx.onMenuShareAppMessage(shareData);	
+						});
+		            }, 1000);
+					
 				},
 				
 				bindEvents: function(){
