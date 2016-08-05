@@ -99,8 +99,18 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
-
+//微信API配置
+wx.config({
+	debug : false,
+	appId : '<c:out value="${appId}"/>',
+	timestamp : <c:out value="${timestamp}"/>,
+	nonceStr : '<c:out value="${nonceStr}"/>',
+	signature : '<c:out value="${signature}"/>',
+	jsApiList : [ 'checkJsApi', 'onMenuShareTimeline','onMenuShareAppMessage']
+});
 	(function($){
 		$.BeIndexPage = function(data){
 			this.settings = $.extend(true,{},$.BeIndexPage.defaults);
@@ -113,7 +123,19 @@
 			prototype: {
 				init: function(){
 					this.bindEvents(); 
-					this.initData();  
+					this.initData();
+					
+					wx.ready(function () {
+						 var shareData = {
+								   title: 'Beauty & Excellence' ,
+								   desc: "海归海湾，海归创业正能量",
+								   imgUrl:'${userInfo.wxHeadimg}',
+								   link: '${url}'
+							};
+						 
+						wx.onMenuShareTimeline(shareData);	
+						wx.onMenuShareAppMessage(shareData);	
+					});
 				},
 				
 				bindEvents: function(){
