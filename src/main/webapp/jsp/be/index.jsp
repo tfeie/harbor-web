@@ -111,7 +111,6 @@ wx.config({
 	signature : '<c:out value="${signature}"/>',
 	jsApiList : [ 'checkJsApi', 'onMenuShareTimeline','onMenuShareAppMessage']
 });
-
 	(function($){
 		$.BeIndexPage = function(data){
 			this.settings = $.extend(true,{},$.BeIndexPage.defaults);

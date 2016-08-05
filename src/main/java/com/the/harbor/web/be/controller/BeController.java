@@ -85,6 +85,7 @@ public class BeController {
 		request.setAttribute("signature", signature);
 		request.setAttribute("url", GlobalSettings.getHarborDomain() + "/be/index.html");
 		request.setAttribute("userInfo", userInfo);
+		
 		ModelAndView view = new ModelAndView("be/index");
 		return view;
 	}
