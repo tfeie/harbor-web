@@ -166,7 +166,7 @@ wx.config({
 						wx.ready(function () {
 							 var shareData = {
 									   title: topic,
-									   desc: shareDesc,
+									   desc: "海归海湾，海归创业正能量",
 									   link: '${url}',
 									   imgUrl: '${userInfo.wxHeadimg}'
 								};
@@ -186,7 +186,7 @@ wx.config({
 						var shareDesc =  $("#shareDesc").val();
 						wx.onMenuShareTimeline({
 						    title: topic,
-						    desc:shareDesc?shareDesc:"",
+						    desc:"海归海湾，海归创业正能量",
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: '${userInfo.wxHeadimg}',
 						    success: function () {  
@@ -204,7 +204,7 @@ wx.config({
 						});	
 						wx.onMenuShareAppMessage({
 						    title: topic,
-						    desc:shareDesc?shareDesc:"",
+						    desc:"海归海湾，海归创业正能量",
 						    link:  _this.getPropertyValue("url"), 
 						    imgUrl: '${userInfo.wxHeadimg}',
 						    success: function () {  
