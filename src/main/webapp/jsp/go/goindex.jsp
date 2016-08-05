@@ -190,7 +190,7 @@
 						},
 						success: function(transport){
 							var count = parseInt(v) + 1;
-							$("#GO_FAVORITE").html("收藏" + count);
+							_this.html("收藏" + count);
 							weUI.hideLoadingToast();
 							weUI.showXToast("收藏成功");
 							setTimeout(function () {
