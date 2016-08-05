@@ -543,6 +543,20 @@ public class GoController {
 			goType = "group";
 		}
 		request.setAttribute("goType", goType);
+		
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		long timestamp = DateUtil.getCurrentTimeMillis();
+		String nonceStr = WXHelpUtil.createNoncestr();
+		String jsapiTicket = WXHelpUtil.getJSAPITicket();
+		String url = WXRequestUtil.getFullURL(request);
+		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
+		request.setAttribute("timestamp", timestamp);
+		request.setAttribute("nonceStr", nonceStr);
+		request.setAttribute("signature", signature);
+		request.setAttribute("url", GlobalSettings.getHarborDomain() + "/go/goindex.html");
+		request.setAttribute("userInfo", userInfo);
+		
 		ModelAndView view = new ModelAndView("go/goindex");
 		return view;
 	}

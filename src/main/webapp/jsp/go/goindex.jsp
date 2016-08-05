@@ -55,7 +55,9 @@
 		<div id="UL_GOTO_NEXTPAGE" style="display:none"></div>
 		
 	</section>
-</body> 
+</body>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script> 
 <script type="text/javascript"
@@ -66,6 +68,16 @@
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
+//微信API配置
+wx.config({
+	debug : false,
+	appId : '<c:out value="${appId}"/>',
+	timestamp : '<c:out value="${timestamp}"/>',
+	nonceStr : '<c:out value="${nonceStr}"/>',
+	signature : '<c:out value="${signature}"/>',
+	jsApiList : [ 'checkJsApi', 'previewImage','onMenuShareTimeline','onMenuShareAppMessage']
+});
+
 	(function($){
 		$.GoIndexPage = function(data){
 			this.settings = $.extend(true,{},$.GoIndexPage.defaults);
@@ -78,7 +90,18 @@
 			prototype: {
 				init: function(){
 					this.bindEvents(); 
-					this.initData();  
+					this.initData(); 
+					wx.ready(function () {
+						 var shareData = {
+								   title: "Group & One on One",
+								   desc: "海归海湾，海归创业第一站",
+								   link: '${url}',
+								   imgUrl: '${userInfo.wxHeadimg}'
+							};
+						 
+						wx.onMenuShareTimeline(shareData);	
+						wx.onMenuShareAppMessage(shareData);	
+					});
 				},
 				
 				bindEvents: function(){
