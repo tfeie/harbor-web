@@ -90,8 +90,9 @@
 					var _this = this; 
 					
 					//添加图片按钮事件
-					$("#SPAN_ADD_IMAGE").on("click",function(){
-						 
+					$("#DIV_MY_TIMELINE").delegate("[name='DEL_BE']","click",function(){
+						 var beId =$(this).attr("beId");
+						 _this.deleteBe(beId);
 					}); 
 					
 					$("#UL_GOTO_NEXTPAGE").on("click",function(){
@@ -114,6 +115,27 @@
 				initData: function(){
 					this.getMyTimeLine({pageNo: 1, newload: true});
 				}, 
+				
+				deleteBe: function(beId){
+					ajaxController.ajax({
+						url: "../be/deleteBe",
+						type: "post", 
+						data: { 
+							beId: beId
+						},
+						success: function(transport){
+							var dom=$("#DIV_BE_"+beId);
+							dom.fadeOut("200",function(){
+								dom.detach();
+								var len = $("[name='DIV_BES']").length;
+								if(len==0){
+									var opt="<div class=\"itms\">还没有发表任何动态~</div>";
+									$("#DIV_MY_TIMELINE").append(opt); 
+								}
+							});
+						}
+					});
+				},
 				
 				getMyTimeLine: function(p){
 					var _this = this;
@@ -200,7 +222,7 @@
 
 
 <script id="MyBeListImpl" type="text/x-jsrender"> 
-	<div class="itms">
+	<div class="itms" id="DIV_BE_{{:beId}}" name='DIV_BES'>
         	<div class="l">{{if showMMdd==true}}{{:mmdd}} {{/if}}</div>
             <a href="../be/detail.html?beId={{:beId}}" class="r">
             	<div class="c">
@@ -215,7 +237,7 @@
 						{{/if}}
 				</div>
                 <div class="r-jj">
-                	<p class="chaochu_3">{{if hastext==true}} {{:contentSummary}} {{/if}}</p>	
+                	<p class="chaochu_3">{{if hastext==true}} {{:contentSummary}} {{/if}} <a href="javascript:void" name="DEL_BE" beId="{{:beId}}">删除</a></p>	
                 </div>
 
                 </div>

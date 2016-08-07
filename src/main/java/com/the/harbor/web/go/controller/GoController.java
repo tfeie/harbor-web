@@ -1,6 +1,5 @@
 package com.the.harbor.web.go.controller;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +23,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderReq;
 import com.the.harbor.api.go.param.CreateGoPaymentOrderResp;
+import com.the.harbor.api.go.param.DeleteGoReq;
 import com.the.harbor.api.go.param.DoGoComment;
 import com.the.harbor.api.go.param.DoGoFavorite;
 import com.the.harbor.api.go.param.DoGoJoinConfirm;
@@ -554,7 +554,7 @@ public class GoController {
 			goType = "group";
 		}
 		request.setAttribute("goType", goType);
-		
+
 		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
@@ -567,7 +567,7 @@ public class GoController {
 		request.setAttribute("signature", signature);
 		request.setAttribute("url", GlobalSettings.getHarborDomain() + "/go/goindex.html");
 		request.setAttribute("userInfo", userInfo);
-		
+
 		ModelAndView view = new ModelAndView("go/goindex");
 		return view;
 	}
@@ -673,7 +673,7 @@ public class GoController {
 		request.setAttribute("applied", applied);
 		request.setAttribute("joint", joint);
 		request.setAttribute("go", go);
-		
+
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
@@ -1676,7 +1676,7 @@ public class GoController {
 		}
 		return responseData;
 	}
-	
+
 	@RequestMapping("/doGoFavorite")
 	@ResponseBody
 	public ResponseData<JSONObject> doGoFavorite(HttpServletRequest request) {
@@ -1700,12 +1700,33 @@ public class GoController {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
 						resp.getResponseHeader().getResultMessage());
 			}
-			
+
 			responseData = new ResponseData<JSONObject>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"提交成功", null);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, JSONObject.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/deleteGo")
+	@ResponseBody
+	public ResponseData<String> deleteGo(@NotNull(message = "参数为空") DeleteGoReq deleteGoReq,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			Response rep = DubboConsumerFactory.getService(IGoSV.class).deleteGo(deleteGoReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"删除成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}

@@ -27,6 +27,7 @@ import com.the.harbor.api.be.param.BeCreateReq;
 import com.the.harbor.api.be.param.BeCreateResp;
 import com.the.harbor.api.be.param.BeQueryReq;
 import com.the.harbor.api.be.param.BeQueryResp;
+import com.the.harbor.api.be.param.DeleteBeReq;
 import com.the.harbor.api.be.param.DoBeComment;
 import com.the.harbor.api.be.param.DoBeLikes;
 import com.the.harbor.api.be.param.DoBeLikes.HandleType;
@@ -702,6 +703,27 @@ public class BeController {
 	public ModelAndView testscroll(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("be/testscroll");
 		return view;
+	}
+
+	@RequestMapping("/deleteBe")
+	@ResponseBody
+	public ResponseData<String> deleteBe(@NotNull(message = "参数为空") DeleteBeReq deleteBeReq,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			Response rep = DubboConsumerFactory.getService(IBeSV.class).deleteBe(deleteBeReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"删除成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
 	}
 
 }
