@@ -77,9 +77,9 @@
 				},
 				initEvents: function(){
 					var _this = this;
-					$("#DIV_MY_GOES").delegate("[name='GROUP_DETL']","click",function(){
-						var goId =$(this).attr("goId");
-						var goType =$(this).attr("goType");
+					$("#DIV_MY_GOES").delegate("[name^='TD_']","click",function(){
+						var goId = $(this).parent("[name='GROUP_DETL']").attr("goId");
+						var goType = $(this).parent("[name='GROUP_DETL']").attr("goType");
 						var type =_this.getPropertyValue("type");
 						if(goType=="group"){
 							if(type=="mycreate"){
@@ -94,6 +94,17 @@
 							}else{
 								window.location.href="../go/onodetail.html?goId="+goId;
 							}
+						}
+					});
+					
+					// 我发起的，点击编辑
+					$("#DIV_MY_GOES").delegate("[id='SHOU_OR_EDIT']","click",function(){
+						var type =_this.getPropertyValue("type");
+						if(type=="mycreate"){
+							weUI.showXToast("功能马上来");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
 						}
 					});
 					
@@ -212,11 +223,11 @@
 
 <script id="MyGroupsImpl" type="text/x-jsrender"> 
 		<div class="itms box-s" name="GROUP_DETL" goId="{{:goId}}" goType="{{:goType}}">
-			<div class="tie">
+			<div class="tie" name="TD_TOPIC">
 				<p>{{:topic}}</p>
 				<div class="tim">{{:createTimeStr}}</div>
 			</div>
-			<div class="name clearfix">
+			<div class="name clearfix" name="TD_NAME">
 				<div class="img">
 					<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}" width="40" height="40"></a>
 				</div>
@@ -229,24 +240,31 @@
 					<div class="jj">{{:employmentInfo}}</div>
 				</div>
 			</div>
-			<div class="time">
+			<div class="time" name="TD_TIME">
 				{{:expectedStartTime}}<span class="bg-f5922f">{{:orgModeName}}</span>
 			</div>
-			<div class="yq">
+			<div class="yq" name="TD_YQ">
 				Group邀请{{:inviteMembers}}人<span class="fc-f5922f">{{if payMode=="10"}}{{:fixPriceYuan}}元{{else payMode=="20"}}{{:payModeName}}{{:fixPriceYuan}}元 {{else payMode=="30"}} {{:payModeName}} {{/if}}</span>
 			</div>
-			<div class="dz">{{:location}}</div>
-			<div class="js chaochu_2">{{:contentSummary}}</div>
+			<div class="dz" name="TD_LOCAL">{{:location}}</div>
+			<div class="js chaochu_2" name="TD_CONTENT">{{:contentSummary}}</div>
 			<div class="bottom">
-				<div class="list">
+				<div class="list" id='liulan'>
 					浏览<font>{{:viewCount}}</font>
 				</div>
-				<div class="list">
+				<div class="list" id='canjia'>
 					参加<font>{{:joinCount}}</font>
 				</div>
-				<div class="list list-sc">
+				<c:if test="${type=='mycreate'}">
+				<div class="list list-sc" id='SHOU_OR_EDIT'>
+					编辑<font></font>
+				</div>
+				</c:if>
+				<c:if test="${type=='myfavor'}">
+				<div class="list list-sc" id='SHOU_OR_EDIT'>
 					收藏<font>{{:favorCount}}</font>
 				</div>
+				</c:if>
 			</div>
 		</div> 
 </script>

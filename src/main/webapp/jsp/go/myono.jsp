@@ -71,9 +71,9 @@
 				},
 				initEvents: function(){
 					var _this = this;
-					$("#DIV_MY_GOES").delegate("[name='GROUP_DETL']","click",function(){
-						var goId =$(this).attr("goId");
-						var goType =$(this).attr("goType");
+					$("#DIV_MY_GOES").delegate("[name^='TD_']","click",function(){
+						var goId = $(this).parent("[name='GROUP_DETL']").attr("goId");
+						var goType = $(this).parent("[name='GROUP_DETL']").attr("goType");
 						var type =_this.getPropertyValue("type");
 						if(goType=="group"){
 							window.location.href="../go/invite.html?goId="+goId;
@@ -86,6 +86,18 @@
 							
 						}
 					});
+					
+					// 我发起的，点击编辑
+					$("#DIV_MY_GOES").delegate("[id='SHOU_OR_EDIT']","click",function(){
+						var type =_this.getPropertyValue("type");
+						if(type=="mycreate"){
+							weUI.showXToast("功能马上来");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
+						}
+					});
+					
 					
 					$(window).scroll(function() {
 						var scrollTop = $(document).scrollTop();//获取垂直滚动的距离
@@ -194,10 +206,10 @@
 
 <script id="MyGroupsImpl" type="text/x-jsrender"> 	
 		<div class="itms box-s" name="GROUP_DETL" goId="{{:goId}}" goType="{{:goType}}">
-			<div class="tie">
+			<div class="tie" name="TD_TOPIC">
 				<p>{{:topic}}</p>
 			</div>
-			<div class="fw">
+			<div class="fw" name="TD_NAME">
 				<div class="right">
 					<span class="bg-f5922f">{{:orgModeName}}</span> <font class="fc-f5922f">{{:payModeName}}</font>
 				</div>
@@ -214,16 +226,24 @@
 					</div>
 				</div>
 			</div>
-			<div class="c pad-10 chaochu_3">
+			<div class="c pad-10 chaochu_3" name="TD_CONTENT">
 				{{:contentSummary}}
 			</div>
 			<div class="bottom">
 				<div class="list">
 					浏览<font>{{:viewCount}}</font>
 				</div>
-				<div class="list list-sc">
+				<c:if test="${type=='mycreate'}">
+				<div class="list list-sc" id='SHOU_OR_EDIT'>
+					编辑<font></font>
+				</div>
+				</c:if>
+				<c:if test="${type=='myfavor'}">
+				<div class="list list-sc" id='SHOU_OR_EDIT'>
 					收藏<font>{{:favorCount}}</font>
 				</div>
+				</c:if>
+				
 			</div>
 		</div> 	
 </script>
