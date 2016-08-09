@@ -199,6 +199,8 @@
 							//如果已经选择，则取消
 							_this.deleteTagSelected(_this.interestSelectedTags,tagId);
 							$(this).css("background","#ffe0d6");
+							$(this).css("color","#ba3c14");
+							
 						}else{
 							//如果没有选择，则选择
 							if(_this.interestSelectedTags.length>=5){
@@ -215,6 +217,8 @@
 								tagType: tagType
 							});
 							$(this).css("background","#f96b3e");
+							$(this).css("color","#ffffff");
+
 						}
 						$("#SPAN_TOTAL_INTEREST_TAG_SELECTED").html("("+_this.interestSelectedTags.length+"/5)");
 					});
@@ -232,6 +236,8 @@
 							//如果已经选择，则取消
 							_this.deleteTagSelected(_this.skillSelectedTags,tagId);
 							$(this).css("background","#ffecb2");
+							$(this).css("color","#c17811");
+							
 						}else{
 							//如果没有选择，则选择
 							if(_this.skillSelectedTags.length>=5){
@@ -248,6 +254,7 @@
 								tagType: tagType
 							});
 							$(this).css("background","#f96b3e");
+							$(this).css("color","#ffffff");
 						}
 						$("#SPAN_TOTAL_SKILL_TAG_SELECTED").html("("+_this.skillSelectedTags.length+"/5)");
 					});
@@ -281,13 +288,13 @@
 
 <script id="InterestTagsImpl" type="text/x-jsrender">
 <section class="tab_location{{: #index+1}}">
-	<button name="BTN_INTEREST_TAG" tagId="{{:tagId}}" tagType="{{:tagType}}" tagCat="{{:tagCat}}" {{if selected==true}} style="background:#f96b3e" {{/if}}>{{:tagName}}</button>
+	<button name="BTN_INTEREST_TAG" tagId="{{:tagId}}" tagType="{{:tagType}}" tagCat="{{:tagCat}}" {{if selected==true}} style="background:#f96b3e;color:#ffffff" {{/if}}>{{:tagName}}</button>
 </section> 
 </script>
 
 <script id="SkillTagsImpl" type="text/x-jsrender">
 <section class="tab_location{{: #index+1}}">
-	<button name="BTN_SKILL_TAG" tagId="{{:tagId}}" tagType="{{:tagType}}" tagCat="{{:tagCat}}" {{if selected==true}} style="background:#f96b3e" {{/if}}>{{:tagName}}</button>
+	<button name="BTN_SKILL_TAG" tagId="{{:tagId}}" tagType="{{:tagType}}" tagCat="{{:tagCat}}" {{if selected==true}} style="background:#f96b3e;color:#ffffff" {{/if}}>{{:tagName}}</button>
 </section> 
 </script>
 </html>

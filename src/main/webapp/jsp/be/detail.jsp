@@ -89,7 +89,7 @@
 			<div class="list" id="DIV_REWARD_USERS">
 				
 			</div>
-			<div class="c">
+			<div class="c" id="btss">
 				<div class="f-left">认为值得赏</div>
 				<div class="num btn-like" id="DIV_REWARD_COUNT">0</div>
 			</div>
@@ -236,6 +236,21 @@ wx.config({
 					    $("#DIV_BE_DETAIL").show();
 					 })
 					 
+					 $("#DIV_REWARD_USERS").on("click",function(){
+						 $("#COMMENT_CONTENT").val("");
+						 $("#parentUserId").val("");
+						 $("#parentCommentId").val("");
+						 $("#COMMENT_CONTENT").attr("placeholder","朕以为...").focus;
+
+					 })
+					 
+					 $("#btss").on("click",function(){
+						 $("#COMMENT_CONTENT").val("");
+						 $("#parentUserId").val("");
+						 $("#parentCommentId").val("");
+						 $("#COMMENT_CONTENT").attr("placeholder","朕以为...").focus;
+
+					 })
 					
 					//添加图片按钮事件
 					$("#BTN_SEND").on("click",function(){
@@ -398,7 +413,7 @@ wx.config({
 									window.location.href="../user/toApplyCertficate.html";
 								}});
 							}else{
-								weUI.showXToast(transport.statusInfo);
+								weUI.showXToast("网络不佳");
 								setTimeout(function () {
 									weUI.hideXToast();
 					            }, 1000);
