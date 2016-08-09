@@ -526,7 +526,7 @@ wx.config({
 					</section>
 					<section class="num_per">
 						<p>
-							<a href="#">浏览 {{:viewCount}}</a><a href="#">参加 {{:joinCount}}</a><a href="#" name="GO_FAVORITE" value='{{:favorCount}}'>收藏 {{:favorCount}}</a>
+							<a href="javascript:void(0)">浏览 {{:viewCount}}</a><a href="javascript:void(0)">参加 {{:joinCount}}</a><a href="javascript:void(0)" name="GO_FAVORITE" value='{{:favorCount}}'>收藏 {{:favorCount}}</a>
 						</p>
 					</section>
 				</section>
@@ -563,7 +563,7 @@ wx.config({
 						</section>
 					</section>
 					<section class="oneon_span">
-						<a href="#">浏览 {{:viewCount}}</a><a href="#" name='GO_FAVORITE' value='{{:favorCount}}'>收藏 {{:favorCount}}</a>
+						<a href="javascript:void(0)">浏览 {{:viewCount}}</a><a href="javascript:void(0)" name='GO_FAVORITE' value='{{:favorCount}}'>收藏 {{:favorCount}}</a>
 						<div class="clear"></div>
 					</section>
 				</section>
