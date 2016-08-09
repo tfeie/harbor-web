@@ -167,7 +167,8 @@
 							if(!p.newload){
 								weUI.hideLoadingToast();
 							}
-							_this.renderMyBeList([],p.newload); 
+							console.log(transport);
+							_this.renderMyTimeLineList([],p.newload); 
 						}
 					});
 				},
@@ -237,7 +238,7 @@
 						{{/if}}
 				</div>
                 <div class="r-jj">
-                	<p class="chaochu_3">{{if hastext==true}} {{:contentSummary}} {{/if}} <a href="javascript:void" name="DEL_BE" beId="{{:beId}}">删除</a></p>	
+                	<p class="chaochu_3">{{if hastext==true}} {{:contentSummary}} {{/if}}</p>	
                 </div>
 
                 </div>
