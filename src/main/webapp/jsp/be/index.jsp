@@ -127,7 +127,7 @@ wx.config({
 					this.bindEvents(); 
 					this.initData();
 					
-					/* wx.ready(function () {
+					 /* wx.ready(function () {
 						 var shareData = {
 								   title: "Beauty & Excellence",
 								   desc: "海归海湾，海归创业正能量",
@@ -212,7 +212,7 @@ wx.config({
 							var statusInfo = transport.statusInfo;
 							if(busiCode=="user_unregister"){
 								weUI.confirm({content:"您还没有注册,是否先注册后再打赏~",ok: function(){
-									window.location.href="../user/toUserRegister.html";
+									window.location.href="../user/toUserInviteCode.html";
 								}});
 							}else if(busiCode=="haibei_not_enough"){
 								weUI.confirm({content:"您的海贝余额不足啦，是否先进行充值后再打赏~",ok: function(){
@@ -253,7 +253,7 @@ wx.config({
 							var statusInfo = transport.statusInfo;
 							if(busiCode=="user_unregister"){
 								weUI.confirm({content:"您还没有注册,是否先注册后再点赞~",ok: function(){
-									window.location.href="../user/toUserRegister.html";
+									window.location.href="../user/toUserInviteCode.html";
 								}});
 							}else{
 								weUI.showXToast(transport.statusInfo);
