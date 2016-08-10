@@ -42,8 +42,8 @@
 			</h3>
 		</div>
 		<ul>
-			<li>身份证照片</li>
-			<li>海外学历认证文件或留学签证扫描件或<br />学生证扫描件
+			<li>海外学历认证、学生证、毕业证或工作证</li>
+			<li>学生签证、或海外居住证明
 			</li>
 			<li>认证通过之后，将点亮头像旁边的“已认证”字样，并可享受更多权限哦。</li>
 			
@@ -53,7 +53,7 @@
 	<section class="sec_item sec_item_img">
 		<div class="div_title">
 			<h3>
-				<span>上传身份证（正）</span>
+				<span>上传海外学历认证、学生证、毕业证或工作证</span>
 			</h3>
 		</div>
 		<div class="img" id="IMGIDCardPicker">
@@ -63,7 +63,7 @@
 	<section class="sec_item sec_item_img">
 		<div class="div_title">
 			<h3>
-				<span>上传海外学历认证/签证/学生证</span>
+				<span>上传学生签证、或海外居住证明</span>
 			</h3>
 		</div>
 		<div class="img" id="IMGOverSeaPicker">
