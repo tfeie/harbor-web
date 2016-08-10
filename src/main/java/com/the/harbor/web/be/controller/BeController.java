@@ -74,7 +74,7 @@ public class BeController {
 
 	@RequestMapping("/index.html")
 	public ModelAndView index(HttpServletRequest request) {
-		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
