@@ -27,6 +27,10 @@
 	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script> 
+<script type="text/javascript"
+	src="//static.tfeie.com/v2/js/swiper.min.js"></script> 	
+<script type="text/javascript"
+	src="//static.tfeie.com/v2/js/tap.js"></script> 
 <script type="text/javascript" src="//static.tfeie.com/js/json2.js"></script>
 
 
@@ -66,21 +70,7 @@
 							</div>
 						</div>
 					</div> 
-					<div class="itms clearfix">
-						<div class="img">
-							<img src="//static.tfeie.com/v2/images/tx.png" width="40"
-								height="40">
-						</div>
-						<div class="name">
-							<div class="name-xx">
-								<div class="xx">MaysMays</div>
-								<div class="yrz">
-									<span class="bg-lan">香港</span><font>已认证</font>
-								</div>
-							</div>
-							<div class="jj">金融/合伙人/北京</div>
-						</div>
-					</div> 
+					
 
 				</div>
 			</div>
@@ -381,7 +371,7 @@
 									</div>
 								</div>
 								<div class="jj">{{:employmentInfo}}</div>
-								<div class="hyy">Hi，Nice to meet you.</div>
+								<div class="hyy"></div>
 							</div>
 						</div>
 					</div>

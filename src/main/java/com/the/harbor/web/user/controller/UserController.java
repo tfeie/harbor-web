@@ -961,6 +961,7 @@ public class UserController {
 					d.put("industryName", u.getIndustryName());
 					d.put("title", u.getTitle());
 					d.put("atCityName", u.getAtCityName());
+					d.put("abroadCountryRGB", u.getAbroadCountryRGB());
 
 					char firstChar = Pinyin.getPinyin(u.getEnName()).toUpperCase().charAt(0);
 					String fc = String.valueOf(firstChar);
@@ -1014,6 +1015,7 @@ public class UserController {
 					d.put("industryName", u.getIndustryName());
 					d.put("title", u.getTitle());
 					d.put("atCityName", u.getAtCityName());
+					d.put("abroadCountryRGB", u.getAbroadCountryRGB());
 					arr.add(d);
 				}
 			}
