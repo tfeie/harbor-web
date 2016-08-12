@@ -95,11 +95,11 @@
 				<p class="ip2_4">
 					<a href="../be/mytimeline.html">我的时间线</a>
 				</p>
-				<p class="ip2_5">
-					<a href="../user/getUserCard.html">我的名片</a>
+				<p class="ip2_5" id="USER_CARD_ID">
+					<a href="javascript:void(0)">我的名片</a>
 				</p>
 				<p class="ip2_5">
-					<a href="javascript:void(0)">新功能ing</a>
+					<a href="../user/previewUserInfo.html">个人信息</a>
 				</p>
 				<p class="ip2_6">
 					<a href="../user/userWealth.html">财富</a>
@@ -137,7 +137,40 @@
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
+(function($){
+	$.UserCenterPage = function(){
+		this.settings = $.extend(true,{},$.UserCenterPage.defaults);
+	}
+	
+	$.extend($.UserCenterPage,{
+		defaults: { 
+		},
+		prototype: {
+			init: function(){
+				this.bindEvents();
+			},
+			
+			bindEvents: function(){
+				var _this = this;
+				$("#USER_CARD_ID").bind("click",function(){
+					var isCert = '${isCert}';
+					if(isCert == "0"){
+						weUI.confirm({content:"您还没有认证,是否先认证~",ok: function(){
+							window.location.href="../user/toApplyCertficate.html";
+						}});
+					} else {
+						window.location.href="../user/getUserCard.html";
+					}
+					
+				});
+			}
+		}
+	})
+})(jQuery);
 	$(document).ready(function() {
+		var p = new $.UserCenterPage();
+		p.init();
+		
 		var b = new $.HarborBuilder();
 		b.buildFooter({
 			showBeGoQuick : "hide"

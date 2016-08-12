@@ -49,6 +49,7 @@ import com.the.harbor.api.user.param.UserWealthQueryResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
 import com.the.harbor.base.enumeration.hyuser.UserInviteStatus;
+import com.the.harbor.base.enumeration.hyuser.UserStatus;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.Response;
@@ -474,6 +475,14 @@ public class UserController {
 		request.setAttribute("fansCount", HyUserUtil.getUserFans(userInfo.getUserId()).size());
 		request.setAttribute("guanzhuCount", HyUserUtil.getUserGuanzhuUsers(userInfo.getUserId()).size());
 		request.setAttribute("hasAuthRight", hasRight);
+		
+		// 是否认证标志
+		request.setAttribute("isCert","0");
+		if(userInfo != null){
+			if(UserStatus.AUTHORIZED_SUCCESS.getValue().equals(userInfo.getUserStatus())){
+				request.setAttribute("isCert","1");
+			}
+		}
 		ModelAndView view = new ModelAndView("user/userCenter");
 		return view;
 	}

@@ -57,7 +57,7 @@
 			</h3>
 		</div>
 		<div class="img" id="IMGIDCardPicker">
-			<img src="//static.tfeie.com/images/img4.jpg" id="img_idcard"/>
+			<img src="//static.tfeie.com/images/img5.png" id="img_idcard"/>
 		</div>
 	</section>
 	<section class="sec_item sec_item_img">
@@ -235,7 +235,7 @@
 												setTimeout(function () {
 													weUI.hideXToast();
 									            }, 1000);
-												$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.jpg");
+												$("#img_idcard").attr("src", "//static.tfeie.com/images/img5.png");
 											}
 											
 										});
@@ -245,7 +245,7 @@
 										setTimeout(function () {
 											weUI.hideXToast();
 							            }, 1000);
-										$("#img_idcard").attr("src", "//static.tfeie.com/images/img4.jpg");
+										$("#img_idcard").attr("src", "//static.tfeie.com/images/img5.png");
 									}
 								});
 							}
