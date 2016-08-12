@@ -25,6 +25,9 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script> 
 <script type="text/javascript" src="<%=_base%>/js/jedate/jedate.js"></script>
+<script src="//static.tfeie.com/js/jquery-te/jquery-te-1.4.0.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/js/jquery-te/jquery-te-1.4.0.css"> 
 
 </head>
 <body class="body">
@@ -115,7 +118,7 @@
 		</section>
 		<section class="my_gushi" name="SELECTION_MYSTORY" style="display:none">
 			<p>
-				<textarea placeholder="请说说关于这个主题你的故事…" id="myStory"></textarea>
+				<textarea id="myStory"></textarea>
 			</p>
 		</section>
 
@@ -587,12 +590,37 @@ jeDate({
 				},
 				
 				renderGoDetails: function(){
+					var _this = this;
 					var godetails =this.godetails?this.godetails:[];
 					var d = { 
 						godetails: godetails
 					}
 					var opt=$("#GoDetailsImpl").render(d);
 					$("#SECTION_GO_DETAILS").html(opt);
+					
+					$.each(godetails,function(idx,o){
+						if(o.type=="text"){
+							$("#GO_DETAIL_TEXTAREA_"+o._id).jqte({
+								title: false,
+								sup: false,
+								strike: false,
+								sub: false,
+								source: true,
+								i: false,
+								u: false,
+								rule: false,
+								remove: false,
+								outdent: false,
+								format: false,
+								blur: function(){
+									var val=$("#GO_DETAIL_TEXTAREA_"+o._id).val();
+									_this.modifyGoDetail(o._id,val,"");
+								}
+							});
+							$("#GO_DETAIL_TEXTAREA_"+o._id).jqteVal(o.detail);
+						}
+						
+					})
 				},
 				
 				submit: function(){
@@ -907,11 +935,7 @@ jeDate({
 		{{if type=="text"}}
 			<section class="zhuti_hanhua items">
 				<p>
-					<textarea name="GO_DETAIL_TEXTAREA"  _id="{{:_id}}" placeholder="请说说这个主题能掏些什么干货…
-一.主题
-二.内容
-三.说明
-四.注意">{{:detail}}</textarea>
+					<textarea name="GO_DETAIL_TEXTAREA"  id="GO_DETAIL_TEXTAREA_{{:_id}}" _id="{{:_id}}">{{:detail}}</textarea>
 				</p>
 				{{if candel==true}}
 					<section class="yingchang" name="SECTION_DEL_GO_DETAIL" _id="{{:_id}}">
