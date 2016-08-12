@@ -29,6 +29,9 @@
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 <script src="//static.tfeie.com/v2/js/swiper.min.js"></script>
 
+<script src="//static.tfeie.com/js/jquery-te/jquery-te-1.4.0.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="//static.tfeie.com/js/jquery-te/jquery-te-1.4.0.css"> 
 </head>
 
 <body>
@@ -134,6 +137,7 @@
 						var val = $(this).val();
 						_this.modifyBeDetail(_id,val,"");
 					}); 
+					
 					
 					//图片上传服务
 					$("#DIV_BE_DETAILS").delegate("[name='LBL_BE_UPLOAD_IMG']","click",function(){
@@ -454,12 +458,38 @@
 				},
 				
 				renderBeDetails: function(){
+					var _this= this;
 					var bedetails =this.bedetails?this.bedetails:[];
 					var d = { 
 						bedetails: bedetails
 					}
 					var opt=$("#BeDetailsImpl").render(d);
 					$("#DIV_BE_DETAILS").html(opt);
+					
+					$.each(bedetails,function(idx,o){
+						if(o.type=="text"){
+							$("#BE_DETAIL_TEXTAREA_"+o._id).jqte({
+								title: false,
+								sup: false,
+								strike: false,
+								sub: false,
+								source: true,
+								i: false,
+								u: false,
+								rule: false,
+								remove: false,
+								outdent: false,
+								format: false,
+								blur: function(){
+									var val=$("#BE_DETAIL_TEXTAREA_"+o._id).val();
+									_this.modifyBeDetail(o._id,val,"");
+								}
+							});
+							$("#BE_DETAIL_TEXTAREA_"+o._id).jqteVal(o.detail);
+						}
+						
+					})
+					
 				},
 				
 				submit: function(){
@@ -573,7 +603,7 @@
 	{{for bedetails}} 
 	{{if type=="text"}}
 	<div class="wb-m">
-		<textarea class="In-text" name="BE_DETAIL_TEXTAREA"  _id="{{:_id}}" placeholder="请填写您的B&E...">{{:detail}}</textarea>
+		<textarea class="In-text" name="BE_DETAIL_TEXTAREA" id="BE_DETAIL_TEXTAREA_{{:_id}}"  _id="{{:_id}}" placeholder="请填写您的B&E...">{{:detail}}</textarea>
 		{{if candel==true}}
 		<i class="icon-gb-wb" name="LI_DEL_BE_DETAIL" _id="{{:_id}}"></i>
 		{{/if}}
