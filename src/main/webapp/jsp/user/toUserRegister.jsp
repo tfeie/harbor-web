@@ -57,7 +57,7 @@
 		<div class="div_input">
 			<div class="item">
 				<span><input type="text" id="enName"
-					placeholder="请输入英文名ie.Martin" /></span>
+					placeholder="请输入姓名(中文或英文)" /></span>
 			</div>
 			<section class="sel_con zhuche">
 				<p class="boss">
@@ -73,7 +73,7 @@
 			</section>
 			<div class="item">
 				<span><input type="text" id="mobilePhone"
-					placeholder="请输入手机号码/Email(国外)" /></span>
+					placeholder="请输入手机号码" /></span>
 			</div>
 			<div class="item">
 				<span><input type="text" id="randomCode" placeholder="请输入验证码" /></span><input
