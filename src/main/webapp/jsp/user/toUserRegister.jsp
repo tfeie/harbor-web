@@ -73,7 +73,7 @@
 			</section>
 			<div class="item">
 				<span><input type="text" id="mobilePhone"
-					placeholder="请输入手机号码" /></span>
+					placeholder="请输入手机号码" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"/></span>
 			</div>
 			<div class="item">
 				<span><input type="text" id="randomCode" placeholder="请输入验证码" /></span><input
