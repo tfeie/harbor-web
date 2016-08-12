@@ -63,10 +63,10 @@
 		</section>
 		<section class="me_qingke">
 			<p name="payMode" payMode="10">
-				固定费用<input type="text" id="price" placeholder="">元/人
+				固定费用<input type="text" id="price" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">元/人
 			</p>
 			<p name="payMode" payMode="20">
-				A A 预付<input type="text" id="price" placeholder="">元/人<span>多退少补</span>
+				A A 预付<input type="text" id="price" placeholder="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">元/人<span>多退少补</span>
 			</p>
 			<p name="payMode" payMode="30">我请客</p>
 		</section>
@@ -75,7 +75,7 @@
 				<span name="orgMode" orgMode="offline" class="on">线下服务</span><span name="orgMode" orgMode="online">在线服务</span>
 			</p>
 			<p id="p_location">
-				<input type="text" placeholder="北京朝阳区星巴克(中关村店)" id="location"/>
+				<input type="text" placeholder="例如：北京朝阳区星巴克(中关村店)" id="location"/>
 			</p>
 		</section>
 		<section class="fabu_zhuti disan">

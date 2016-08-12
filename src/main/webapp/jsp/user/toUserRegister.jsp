@@ -41,7 +41,7 @@
 			<img src="//static.tfeie.com/images/img3.png" />
 		</div>
 		<div class="text">
-			<h2>海湾，我们的舞台</h2>
+			<h2>在海湾，一起创业吧</h2>
 		</div>
 	</section>
 
@@ -151,13 +151,13 @@
 						},
 						fieldRules: {
 							required: true,
-							regexp: /^[A-Za-z][A-Za-z\s]*[A-Za-z]$/,
+							/* regexp: /^[A-Za-z][A-Za-z\s]*[A-Za-z]$/, */
 							cnlength: 10
 						},
 						ruleMessages: {
 							required: "请输入英文名",
-							regexp:"英文名只能是字母",
-							cnlength:"英文名长度不能超过10个字符"
+							/* regexp:"英文名只能是字母", */
+							cnlength:"姓名长度不能超过10个字"
 						}
 					}).addRule({
 						labelName: "留学国家",

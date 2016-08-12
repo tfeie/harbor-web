@@ -75,7 +75,7 @@
 		<section class="sec_btn2">
 			<span><a href="javascript:void(0)" id="BTN_CONFIRM">确认</a></span>
 			<span><a href="javascript:void(0)" id="BTN_REJECT">拒绝</a></span>
-			<span><a href="javascript:void(0)" id="BTN_SEND_MQ">给小白发消息</a></span>
+			<span><a href="javascript:void(0)" id="BTN_SEND_MQ">给TA发消息</a></span>
 		</section>
 	</section>
 </body>
