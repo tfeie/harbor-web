@@ -1032,6 +1032,29 @@ public class GoController {
 			HttpServletRequest request) {
 		ResponseData<PageInfo<Go>> responseData = null;
 		try {
+			queryGoReq.setQueryhide(false);
+			QueryGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryGoes(queryGoReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"查询成功", rep.getPagInfo());
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+	
+	@RequestMapping("/queryGoesForAdmin")
+	@ResponseBody
+	public ResponseData<PageInfo<Go>> queryGoesForAdmin(@NotNull(message = "参数为空") QueryGoReq queryGoReq,
+			HttpServletRequest request) {
+		ResponseData<PageInfo<Go>> responseData = null;
+		try {
+			queryGoReq.setQueryhide(true);
 			QueryGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryGoes(queryGoReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),

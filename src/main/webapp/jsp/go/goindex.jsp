@@ -484,7 +484,7 @@ wx.config({
 <script id="GroupsImpl" type="text/x-jsrender"> 
 				<section class="wuwai_jiansheng" goId="{{:goId}}" goType="{{:goType}}">
 					<section class="title_jiansheng">
-						<p>{{:topic}}</p>
+						<p>{{:topic}} {{if topFlag=="1"}}<font color='red'>[已置顶]</font>{{/if}}</p>
 						<section class="pos_yuan">
 							<span></span><span class="on"></span>
 							<div class="clear"></div>
@@ -535,7 +535,7 @@ wx.config({
 <script id="OneOnOnImpl" type="text/x-jsrender"> 
 				<section class="wuwai_jiansheng" goId="{{:goId}}" goType="{{:goType}}">
 					<section class="title_jiansheng">
-						<p>{{:topic}}</p>
+						<p>{{:topic}} {{if topFlag=="1"}}<font color='red'>[已置顶]</font>{{/if}}</p>
 						<section class="pos_yuan">
 							<span></span><span class="on"></span>
 							<div class="clear"></div>

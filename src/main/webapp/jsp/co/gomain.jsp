@@ -36,7 +36,7 @@
 	<section class="mainer">
 		<section class="choose_go">
 			<div class="bor_wid">
-			<p><span goType="group" <c:if test="${goType=='group' }">class="on"</c:if>>Group</span><span  <c:if test="${goType=='ono' }">class="on"</c:if> goType="ono">One on One</span></p>
+			<p><span goType="group" <c:if test="${goType=='group' }">class="on"</c:if>>Group</span><span  <c:if test="${goType=='oneonone' }">class="on"</c:if> goType="ono">One on One</span></p>
 			</div>
 		</section>
 		<section class="title">
@@ -171,6 +171,110 @@ wx.config({
 						var tagId=$("#DIV_GO_TAGS").find("[name='GO_TAG'].on").attr("tagId");
 						tagId=tagId?tagId:"";
 						_this.gotoNextPage(tagId);
+					});
+					
+					//置顶
+					$(document).delegate("[name='HREF_TOP']","click",function(){
+						var goId=$(this).attr("goId");
+						var goType =$(this).parents(".wuwai_jiansheng").attr("goType");
+						ajaxController.ajax({
+							url: "../co/topGo",
+							type: "post", 
+							data:{
+								goId: goId
+							},
+							success: function(transport){
+								weUI.showXToast("置顶成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									window.location.href="../co/gomain.html?goType="+goType;
+					            }, 1000);
+							},
+							failure: function(transport){
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 1000);
+							}
+						});
+					});
+					
+					//取消置顶
+					$(document).delegate("[name='HREF_CANCEL_TOP']","click",function(){
+						var goId=$(this).attr("goId");
+						var goType =$(this).parents(".wuwai_jiansheng").attr("goType");
+						ajaxController.ajax({
+							url: "../co/cancelTopGo",
+							type: "post", 
+							data:{
+								goId: goId
+							},
+							success: function(transport){
+								weUI.showXToast("取消成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									window.location.href="../co/gomain.html?goType="+goType;
+					            }, 1000);
+							},
+							failure: function(transport){
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 1000);
+							}
+						});
+					});
+					
+					//隐藏
+					$(document).delegate("[name='HREF_HIDE']","click",function(){
+						var goId=$(this).attr("goId");
+						var goType =$(this).parents(".wuwai_jiansheng").attr("goType");
+						ajaxController.ajax({
+							url: "../co/hideGo",
+							type: "post", 
+							data:{
+								goId: goId
+							},
+							success: function(transport){
+								weUI.showXToast("已隐藏");
+								setTimeout(function () {
+									weUI.hideXToast();
+									window.location.href="../co/gomain.html?goType="+goType;
+					            }, 1000);
+							},
+							failure: function(transport){
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 1000);
+							}
+						});
+					});
+					
+					//取消隐藏
+					$(document).delegate("[name='HREF_CANCEL_HIDE']","click",function(){
+						var goId=$(this).attr("goId");
+						var goType =$(this).parents(".wuwai_jiansheng").attr("goType");
+						ajaxController.ajax({
+							url: "../co/cancelHideGo",
+							type: "post", 
+							data:{
+								goId: goId
+							},
+							success: function(transport){
+								weUI.showXToast("取消成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									window.location.href="../co/gomain.html?goType="+goType;
+					            }, 1000);
+							},
+							failure: function(transport){
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 1000);
+							}
+						});
 					});
 					
 					$(window).scroll(function() {
@@ -315,7 +419,7 @@ wx.config({
 						weUI.showLoadingToast("加载中...");
 					}
 					ajaxController.ajax({
-						url: "../go/queryGoes",
+						url: "../go/queryGoesForAdmin",
 						type: "post",  
 						data : {
 							goType: "group",
@@ -350,7 +454,7 @@ wx.config({
 						weUI.showLoadingToast("加载中...");
 					}
 					ajaxController.ajax({
-						url: "../go/queryGoes",
+						url: "../go/queryGoesForAdmin",
 						type: "post",  
 						data : {
 							goType: "oneonone",
@@ -486,7 +590,7 @@ wx.config({
 <script id="GroupsImpl" type="text/x-jsrender"> 
 				<section class="wuwai_jiansheng" goId="{{:goId}}" goType="{{:goType}}">
 					<section class="title_jiansheng">
-						<p>{{:topic}}</p>
+						<p>{{:topic}}  {{if hideFlag=="1"}}<font color='red'>[已隐藏]</font>{{/if}} {{if topFlag=="1"}}<font color='red'>[已置顶]</font>{{/if}}</p>
 						<section class="pos_yuan">
 							<span></span><span class="on"></span>
 							<div class="clear"></div>
@@ -532,7 +636,18 @@ wx.config({
 						</p>
 					</section>
 					<section class="oneon_span">
-						<a href="javascript:void(0)">隐藏</a><a href="javascript:void(0)">置顶</a>
+						{{if hideFlag!="1"}} 
+						<a href="javascript:void(0)" name="HREF_HIDE" goId="{{:goId}}">隐藏</a>
+						{{/if}}
+						{{if hideFlag=="1"}} 
+						<a href="javascript:void(0)" name="HREF_CANCEL_HIDE" goId="{{:goId}}">取消隐藏</a>
+						{{/if}}
+						{{if topFlag!="1"}} 
+						<a href="javascript:void(0)" name="HREF_TOP" goId="{{:goId}}">置顶</a>
+						{{/if}}
+						{{if topFlag=="1"}} 
+						<a href="javascript:void(0)" name="HREF_CANCEL_TOP" goId="{{:goId}}">取消置顶</a>
+						{{/if}}
 						<div class="clear"></div>
 					</section>
 				</section>
@@ -541,7 +656,7 @@ wx.config({
 <script id="OneOnOnImpl" type="text/x-jsrender"> 
 				<section class="wuwai_jiansheng" goId="{{:goId}}" goType="{{:goType}}">
 					<section class="title_jiansheng">
-						<p>{{:topic}}</p>
+						<p>{{:topic}}   {{if hideFlag=="1"}}<font color='red'>[已隐藏]</font>{{/if}} {{if topFlag=="1"}}<font color='red'>[已置顶]</font>{{/if}}</p>
 						<section class="pos_yuan">
 							<span></span><span class="on"></span>
 							<div class="clear"></div>
@@ -574,7 +689,18 @@ wx.config({
 					</section>
 
 					<section class="oneon_span">
-						<a href="javascript:void(0)">隐藏</a><a href="javascript:void(0)">置顶</a>
+						{{if hideFlag!="1"}} 
+						<a href="javascript:void(0)" name="HREF_HIDE" goId="{{:goId}}">隐藏</a>
+						{{/if}}
+						{{if hideFlag=="1"}} 
+						<a href="javascript:void(0)" name="HREF_CANCEL_HIDE" goId="{{:goId}}">取消隐藏</a>
+						{{/if}}
+						{{if topFlag!="1"}} 
+						<a href="javascript:void(0)" name="HREF_TOP" goId="{{:goId}}">置顶</a>
+						{{/if}}
+						{{if topFlag=="1"}} 
+						<a href="javascript:void(0)" name="HREF_CANCEL_TOP" goId="{{:goId}}">取消置顶</a>
+						{{/if}}
 						<div class="clear"></div>
 					</section>
 				</section>

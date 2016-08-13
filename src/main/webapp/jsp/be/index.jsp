@@ -446,6 +446,7 @@ wx.config({
 						</div>
 						<div class="member" beId="{{:beId}}" name="DIV_BE_CONTENT">
 							<div class="div_title">
+								{{if topFlag=="1"}}<font color='red'>[已置顶]</font>{{/if}}
 								{{if hastext==true}}
 								<h3>
 									<a href="../be/detail.html?beId={{:beId}}">{{:contentSummary}}</a>

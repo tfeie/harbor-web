@@ -169,6 +169,106 @@ wx.config({
 						_this.gotoNextPage(tagId);
 					});
 					
+					//置顶
+					$(document).delegate("[name='HREF_TOP']","click",function(){
+						var beId=$(this).attr("beId");
+						ajaxController.ajax({
+							url: "../co/topBe",
+							type: "post", 
+							data:{
+								beId: beId
+							},
+							success: function(transport){
+								weUI.showXToast("置顶成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									window.location.href="../co/bemain.html";
+					            }, 1000);
+							},
+							failure: function(transport){
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 1000);
+							}
+						});
+					});
+					
+					//取消置顶
+					$(document).delegate("[name='HREF_CANCEL_TOP']","click",function(){
+						var beId=$(this).attr("beId");
+						ajaxController.ajax({
+							url: "../co/cancelTopBe",
+							type: "post", 
+							data:{
+								beId: beId
+							},
+							success: function(transport){
+								weUI.showXToast("取消成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									window.location.href="../co/bemain.html";
+					            }, 1000);
+							},
+							failure: function(transport){
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 1000);
+							}
+						});
+					});
+					
+					//隐藏
+					$(document).delegate("[name='HREF_HIDE']","click",function(){
+						var beId=$(this).attr("beId");
+						ajaxController.ajax({
+							url: "../co/hideBe",
+							type: "post", 
+							data:{
+								beId: beId
+							},
+							success: function(transport){
+								weUI.showXToast("已隐藏");
+								setTimeout(function () {
+									weUI.hideXToast();
+									window.location.href="../co/bemain.html";
+					            }, 1000);
+							},
+							failure: function(transport){
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 1000);
+							}
+						});
+					});
+					
+					//取消隐藏
+					$(document).delegate("[name='HREF_CANCEL_HIDE']","click",function(){
+						var beId=$(this).attr("beId");
+						ajaxController.ajax({
+							url: "../co/cancelHideBe",
+							type: "post", 
+							data:{
+								beId: beId
+							},
+							success: function(transport){
+								weUI.showXToast("取消成功");
+								setTimeout(function () {
+									weUI.hideXToast();
+									window.location.href="../co/bemain.html";
+					            }, 1000);
+							},
+							failure: function(transport){
+								weUI.showXToast(transport.statusInfo);
+								setTimeout(function () {
+									weUI.hideXToast();
+					            }, 1000);
+							}
+						});
+					});
+					
 					
 					$(window).scroll(function() {
 						var scrollTop = $(document).scrollTop();//获取垂直滚动的距离
@@ -329,7 +429,7 @@ wx.config({
 						weUI.showLoadingToast("加载中...");
 					}
 					ajaxController.ajax({
-						url: "../be/queryBes",
+						url: "../be/queryBesForAdmin",
 						type: "post",  
 						data : {
 							polyTagId: p.tagId?p.tagId:"",
@@ -448,6 +548,8 @@ wx.config({
 						</div>
 						<div class="member" beId="{{:beId}}" name="DIV_BE_CONTENT">
 							<div class="div_title">
+								{{if hideFlag=="1"}}<font color='red'>[已隐藏]</font>{{/if}}
+								{{if topFlag=="1"}}<font color='red'>[已置顶]</font>{{/if}}
 								{{if hastext==true}}
 								<h3>
 									<a href="../be/detail.html?beId={{:beId}}">{{:contentSummary}}</a>
@@ -472,7 +574,21 @@ wx.config({
 							<span class="span_time">{{:createTimeInterval}}</span> <span class="span_pl"><a class="list btn-pl" href="../be/detail.html?beId={{:beId}}">{{:commentCount}}</a></span>
 							<span class="span_bk" name="SPN_DASHANG" beId="{{:beId}}"><a id="a_givehb_{{:beId}}">{{:giveHaibeiCount}}</a></span> <span class="span_z" name="SPN_DIANZAN" beId="{{:beId}}"><a id="a_dianzan_{{:beId}}">{{:dianzanCount}}</a></span>
 						</div>
-
+						<section class="oneon_span">
+						{{if hideFlag!="1"}} 
+						<a href="javascript:void(0)" name="HREF_HIDE" beId="{{:beId}}">隐藏</a>
+						{{/if}}
+						{{if hideFlag=="1"}} 
+						<a href="javascript:void(0)" name="HREF_CANCEL_HIDE" beId="{{:beId}}">取消隐藏</a>
+						{{/if}}
+						{{if topFlag!="1"}} 
+						<a href="javascript:void(0)" name="HREF_TOP" beId="{{:beId}}">置顶</a>
+						{{/if}}
+						{{if topFlag=="1"}} 
+						<a href="javascript:void(0)" name="HREF_CANCEL_TOP" beId="{{:beId}}">取消置顶</a>
+						{{/if}}
+						<div class="clear"></div>
+					</section>
 					</section>
 			</li>
 

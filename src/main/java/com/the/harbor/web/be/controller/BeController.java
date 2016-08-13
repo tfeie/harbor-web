@@ -626,6 +626,29 @@ public class BeController {
 			HttpServletRequest request) {
 		ResponseData<PageInfo<Be>> responseData = null;
 		try {
+			beQueryReq.setQueryhide(false);
+			BeQueryResp rep = DubboConsumerFactory.getService(IBeSV.class).queryBes(beQueryReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"查询成功", rep.getPagInfo());
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<PageInfo<Be>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+	
+	@RequestMapping("/queryBesForAdmin")
+	@ResponseBody
+	public ResponseData<PageInfo<Be>> queryBesForAdmin(@NotNull(message = "参数为空") BeQueryReq beQueryReq,
+			HttpServletRequest request) {
+		ResponseData<PageInfo<Be>> responseData = null;
+		try {
+			beQueryReq.setQueryhide(true);
 			BeQueryResp rep = DubboConsumerFactory.getService(IBeSV.class).queryBes(beQueryReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),

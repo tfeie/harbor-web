@@ -173,7 +173,7 @@ public class ContentOperateController {
 			if (!superUser) {
 				throw new BusinessException("您无权取消隐藏");
 			}
-			hideBeReq.setHide(false);
+			hideBeReq.setHide(true);
 			Response resp = DubboConsumerFactory.getService(IBeSV.class).hideBe(hideBeReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
@@ -274,7 +274,7 @@ public class ContentOperateController {
 			if (!superUser) {
 				throw new BusinessException("您无权取消隐藏");
 			}
-			hideGoReq.setHide(false);
+			hideGoReq.setHide(true);
 			Response resp = DubboConsumerFactory.getService(IGoSV.class).hideGo(hideGoReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 				throw new BusinessException(resp.getResponseHeader().getResultCode(),
