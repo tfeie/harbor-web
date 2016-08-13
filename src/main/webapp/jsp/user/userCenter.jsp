@@ -67,8 +67,8 @@
 
 		<section class="ip2_pengyou">
 			<ul>
-				<li><a href="#"><span>0</span><label>升级中</label></a></li>
-				<li><a href="#"><span>0</span><label>升级中</label></a></li>
+				<li><a href="#"><span>0</span><label>益友</label></a></li>
+				<li><a href="#"><span>0</span><label>助人</label></a></li>
 				<li><a href="../user/myguanzhu.html"><span><c:out
 								value="${guanzhuCount}" /></span><label>关注</label></a></li>
 				<li><a href="../user/myfans.html"><span><c:out

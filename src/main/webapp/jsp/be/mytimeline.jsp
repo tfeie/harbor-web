@@ -89,10 +89,10 @@
 				bindEvents: function(){
 					var _this = this; 
 					
-					//添加图片按钮事件
 					$("#DIV_MY_TIMELINE").delegate("[name='DEL_BE']","click",function(){
 						 var beId =$(this).attr("beId");
-						 _this.deleteBe(beId);
+						 var showMMdd =$(this).attr("showMMdd");
+						 _this.deleteBe(beId,showMMdd);
 					}); 
 					
 					$("#UL_GOTO_NEXTPAGE").on("click",function(){
@@ -116,7 +116,7 @@
 					this.getMyTimeLine({pageNo: 1, newload: true});
 				}, 
 				
-				deleteBe: function(beId){
+				deleteBe: function(beId,showMMdd){
 					ajaxController.ajax({
 						url: "../be/deleteBe",
 						type: "post", 
@@ -125,12 +125,19 @@
 						},
 						success: function(transport){
 							var dom=$("#DIV_BE_"+beId);
+							//获取下一个BE记录
+							var next =dom.next("[name='DIV_BES']");
 							dom.fadeOut("200",function(){
 								dom.detach();
 								var len = $("[name='DIV_BES']").length;
 								if(len==0){
 									var opt="<div class=\"itms\">还没有发表任何动态~</div>";
 									$("#DIV_MY_TIMELINE").append(opt); 
+								}else{
+									if(next.length){
+										var nextDateDiv = next.find("#DIV_MMDD");
+										nextDateDiv.html(nextDateDiv.attr("date"));
+									}
 								}
 							});
 						}
@@ -224,7 +231,7 @@
 
 <script id="MyBeListImpl" type="text/x-jsrender"> 
 	<div class="itms" id="DIV_BE_{{:beId}}" name='DIV_BES'>
-        	<div class="l">{{if showMMdd==true}}{{:mmdd}} {{/if}}</div>
+        	<div class="l" id="DIV_MMDD" date="{{:mmdd}}">{{if showMMdd==true}}{{:mmdd}} {{/if}}</div>
             <a href="../be/detail.html?beId={{:beId}}" class="r">
             	<div class="c">
             	<div class="i">
@@ -243,6 +250,7 @@
 
                 </div>
             </a>
+			<div class="clearfix icon-sc" name="DEL_BE" beId="{{:beId}}" showMMdd={{:showMMdd}}>删除</div>
         </div> 
 </script>
 </html>

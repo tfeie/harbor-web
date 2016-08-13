@@ -87,7 +87,13 @@
 			            	_this.gotoNextPage();
 			            }
 
-					})
+					});
+					
+					$(document).delegate(".icon-sc","click",function(){
+						 var beId =$(this).attr("beId");
+						 _this.deleteBe(beId);
+					}); 
+					
 					
 				},
 				
@@ -156,6 +162,29 @@
 					
 				},
 				
+				deleteBe: function(beId){
+					ajaxController.ajax({
+						url: "../be/deleteBe",
+						type: "post", 
+						data: { 
+							beId: beId
+						},
+						success: function(transport){
+							var dom=$("#DIV_BE_"+beId);
+							//获取下一个BE记录
+							var next =dom.next("[name='DIV_BES']");
+							dom.fadeOut("200",function(){
+								dom.detach();
+								var len = $("[name='DIV_BES']").length;
+								if(len==0){
+									var opt="<div class='itms box-s'><div class='js chaochu_2' style='text-align:center;'>没有任何动态哦~</div></div>";
+									$("#SELECTTION_MY_BE_LIST").append(opt); 
+								}
+							});
+						}
+					});
+				},
+				
 				getPropertyValue: function(propertyName){
 					if(!propertyName)return;
 					return this.params[propertyName];
@@ -178,7 +207,10 @@
 
 
 <script id="MyBeListImpl" type="text/x-jsrender"> 
-	<div  class="itms box-s">
+	<div  class="itms box-s" id="DIV_BE_{{:beId}}" name='DIV_BES'>
+			<c:if test="${type=='mycreate'}">
+			<i class="icon-sc" name="BE_DEL" beId="{{:beId}}"></i>
+			</c:if>
         	<div class="top">
                 <div class="img">
                    <a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}" width="40" height="40"></a>
