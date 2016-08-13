@@ -475,7 +475,7 @@ public class UserController {
 		request.setAttribute("fansCount", HyUserUtil.getUserFans(userInfo.getUserId()).size());
 		request.setAttribute("guanzhuCount", HyUserUtil.getUserGuanzhuUsers(userInfo.getUserId()).size());
 		request.setAttribute("hasAuthRight", hasRight);
-		
+		request.setAttribute("superUser", HyCfgUtil.checkSuperUser(userInfo.getUserId()));
 		// 是否认证标志
 		request.setAttribute("isCert","0");
 		if(userInfo != null){

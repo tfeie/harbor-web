@@ -113,19 +113,20 @@
 				<p class="ip2_7" style="display:none">
 					<a href="../user/memberCenter.html">会员中心</a>
 				</p>
-				<p class="ip2_7">
-					<a href="javascript:void(0)">新功能ing</a>
-				</p>
 				<p class="ip2_8" style="display:none">
 					<a href="#">设置</a>
 				</p>
-				<p class="ip2_8">
-					<a href="javascript:void(0)">新功能ing</a>
-				</p>
-				
 				<c:if test="${hasAuthRight==true }">
-				<p class="ip2_8">
+				<p class="ip2_7">
 					<a href="../user/unauthusers.html">用户审核</a>
+				</p>
+				</c:if>
+				<c:if test="${superUser==true }">
+				<p class="ip2_7">
+					<a href="../co/bemain.html">B&E管理</a>
+				</p>
+				<p class="ip2_7">
+					<a href="../co/gomain.html">G&O管理</a>
 				</p>
 				</c:if>
 			</section>
