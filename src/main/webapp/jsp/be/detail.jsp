@@ -61,7 +61,7 @@
 	<section class="be_main">
 		<div class="tx_top box-s">
 			<div class="btn-right">
-				<span class="btn-gz" id="SPAN_ADD_FANS" userId="<c:out value="${userInfo.userId}"/>">+关注</span> <span class="btn-pl"></span>
+				<span class="btn-gz" id="SPAN_ADD_FANS" userId="<c:out value="${userInfo.userId}"/>">+关注</span> <span class="btn-pl" id="SPAN_IM" userId="<c:out value="${userInfo.userId}"/>"></span>
 			</div>
 			<div class="c">
 				<div class="img">
@@ -262,6 +262,14 @@ wx.config({
 						var userId = $(this).attr("userId");
 						 _this.addGuanzhu(userId,this);
 					});  
+					
+					//打开IM聊天
+					$("#SPAN_IM").on("click",function(){
+						var userId = $(this).attr("userId");
+						window.location.href="../user/im.html?touchId="+userId;
+					}); 
+					
+					
 					//点赞事件代理
 					$("#DIV_BE_DETAIL").delegate("#DIV_DO_DIANZAN","click",function(){
 						_this.doDianzan();

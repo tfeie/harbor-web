@@ -86,6 +86,36 @@ import com.the.harbor.web.weixin.param.WeixinUserInfo;
 public class UserController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+	
+	@RequestMapping("/im.html")
+	public ModelAndView im(HttpServletRequest request) {
+		String touchId = request.getParameter("touchId");
+		if(StringUtil.isBlank(touchId)){
+			throw new BusinessException("请选择您要聊天的海友");
+		}
+		UserViewInfo userInfo=WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		if(userInfo.getUserId().equals(touchId)){
+			throw new BusinessException("您不能和自己聊天");
+		}
+		request.setAttribute("uid", userInfo.getUserId());
+		request.setAttribute("credential", userInfo.getWxOpenid());
+		request.setAttribute("appkey", "23434419");
+		request.setAttribute("touid", touchId);
+		ModelAndView view = new ModelAndView("user/im");
+		return view;
+	}
+	
+	@RequestMapping("/im2.html")
+	public ModelAndView im2(HttpServletRequest request) {
+		UserViewInfo userInfo=WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		request.setAttribute("uid", "hy00000192");
+		request.setAttribute("credential", "oztCUs2X5d-j0Ykczx0eUXJmlzcA");
+		request.setAttribute("appkey", "23434419");
+		request.setAttribute("touid", userInfo.getUserId());
+		ModelAndView view = new ModelAndView("user/im");
+		return view;
+	}
+
 
 	@RequestMapping("/pages.html")
 	public ModelAndView pages(HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -121,10 +121,9 @@
 						_this.applyFriend();
 					});
 					$("#BTN_IM").on("click",function(){
-						weUI.showXToast("发送消息");
-						setTimeout(function () {
-							weUI.hideXToast();
-			            }, 500);
+						//打开IM聊天
+						var userId = _this.getPropertyValue("userId");
+						window.location.href="../user/im.html?touchId="+userId;
 					})
 				},
 				
