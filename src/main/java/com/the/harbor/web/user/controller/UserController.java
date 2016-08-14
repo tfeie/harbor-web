@@ -564,6 +564,10 @@ public class UserController {
 		} catch (Exception ex) {
 			throw new BusinessException("邀请码加密错误");
 		}
+		
+		UserWealthQueryResp userWealth = DubboServiceUtil.getUserWealth(userInfo.getUserId());
+		request.setAttribute("yiyou", userWealth.getYiyou());
+		request.setAttribute("zhuren", userWealth.getZhuren());
 
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
@@ -613,6 +617,10 @@ public class UserController {
 		if (userInfo == null) {
 			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
 		}
+		
+		UserWealthQueryResp userWealth = DubboServiceUtil.getUserWealth(userInfo.getUserId());
+		request.setAttribute("yiyou", userWealth.getYiyou());
+		request.setAttribute("zhuren", userWealth.getZhuren());
 
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();

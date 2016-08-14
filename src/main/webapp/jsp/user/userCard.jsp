@@ -71,8 +71,8 @@
 				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></label><i><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}"/></font></i>
 			</p>
 			<p class="pengyou">
-				<a href="#">升级中</a><a href="#" class="on">升级中</a><a href="#">公益贝
-					100</a>
+				<a href="#">益友 <c:out value="${yiyou}"/></a><a href="#" class="on">助人 <c:out value="${zhuren}"/></a><a href="#">公益贝
+					0</a>
 			</p>
 			<p class="aihao" id="SELECTED_INTEREST_TAGS"></p>
 			<section class="jinrong">
