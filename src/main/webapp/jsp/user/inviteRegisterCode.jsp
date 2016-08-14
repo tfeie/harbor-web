@@ -13,7 +13,9 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>输入邀请码</title>
+<title>
+	<c:if test="${islogin=='true'}">登录中</c:if><c:if test="${islogin!='true'}">输入邀请码</c:if>
+</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"

@@ -489,12 +489,15 @@ public class UserController {
 	@RequestMapping("/userCenter.html")
 	public ModelAndView userCenter(HttpServletRequest request) {
 		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		UserWealthQueryResp userWealth = DubboServiceUtil.getUserWealth(userInfo.getUserId());
 		boolean hasRight = HyCfgUtil.checkUserHasAuthCertRight(userInfo.getUserId());
 		request.setAttribute("userInfo", userInfo);
 		request.setAttribute("fansCount", HyUserUtil.getUserFans(userInfo.getUserId()).size());
 		request.setAttribute("guanzhuCount", HyUserUtil.getUserGuanzhuUsers(userInfo.getUserId()).size());
 		request.setAttribute("hasAuthRight", hasRight);
 		request.setAttribute("superUser", HyCfgUtil.checkSuperUser(userInfo.getUserId()));
+		request.setAttribute("yiyou", userWealth.getYiyou());
+		request.setAttribute("zhuren", userWealth.getZhuren());
 		// 是否认证标志
 		request.setAttribute("isCert", "0");
 		if (userInfo != null) {

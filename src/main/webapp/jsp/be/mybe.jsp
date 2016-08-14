@@ -91,7 +91,14 @@
 					
 					$(document).delegate(".icon-sc","click",function(){
 						 var beId =$(this).attr("beId");
-						 _this.deleteBe(beId);
+						 weUI.confirm({
+							content: "确定要删除吗?",
+							ok: function(){
+								 _this.deleteBe(beId);
+								weUI.closeConfirm();
+							}
+						})
+						
 					}); 
 					
 					
