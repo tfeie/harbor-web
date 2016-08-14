@@ -1,0 +1,33 @@
+/*----------footer----------*/
+
+.po-f	{ position:fixed;}
+.po-a	{ position:absolute;}
+.footer	 { width:100%; height:50px; background:#ffffff; left:0; bottom:0; border-top:1px solid #dddddd;  font-size:12px; }
+.footer	a	{ display:block; float:left; height:50px; width:20%; line-height:25px; text-align:center; color:#ff6142;}
+.footer	a	i	{ position:relative;}
+.footer	a	i	font	{ position:absolute; width:15px; height:15px; background:#ff3414; top:2px; right:2px; line-height:15px; color:#fff; border-radius:15px; font-size:12px; font-style:normal; -webkit-transform:scale(0.8,0.8); transform:scale(0.8,0.8); }
+.footer	a	.icon-f1	{ width:30px; height:25px; display:block; margin:0 auto; position:relative; background:url(//static.tfeie.com/images/f1.png) center bottom no-repeat; background-size:16px 16px;}
+.footer	a:hover	.icon-f1,.footer	a.hover	.icon-f1	{ background-image:url(//static.tfeie.com/images/f1-1.png)}
+.footer	a	.icon-f2	{ width:30px; height:25px; display:block; margin:0 auto; position:relative; background:url(//static.tfeie.com/images/f2.png) center bottom no-repeat; background-size:16px 16px;}
+.footer	a:hover	.icon-f2,.footer	a.hover	.icon-f2	{ background-image:url(//static.tfeie.com/images/f2-1.png)}
+.footer	a	.icon-f3	{ width:30px; height:25px; display:block; margin:0 auto; position:relative; background:url(//static.tfeie.com/images/f3.png) center bottom no-repeat; background-size:16px 16px;}
+.footer	a:hover	.icon-f3,.footer	a.hover	.icon-f3	{ background-image:url(//static.tfeie.com/images/f3-1.png)}
+.footer	a	.icon-f4	{ width:30px; height:25px; display:block; margin:0 auto; position:relative; background:url(//static.tfeie.com/images/f4.png) center bottom no-repeat; background-size:16px 16px;}
+.footer	a:hover	.icon-f4,.footer	a.hover	.icon-f4	{ background-image:url(//static.tfeie.com/images/f4-1.png)}
+.footer	a	.icon-f5	{ width:30px; height:25px; display:block; margin:0 auto; position:relative; background:url(//static.tfeie.com/images/f5.png) center bottom no-repeat; background-size:16px 16px;}
+.footer	a:hover	.icon-f5,.footer	a.hover	.icon-f5	{ background-image:url(//static.tfeie.com/images/f5-1.png)}
+
+
+
+.sec_menu{ position: fixed; bottom:5em; right:0.5em; z-index: 11;  }
+.sec_menu *{transition: all 0.5s;}
+.sec_menu img{ width: 4em; }
+.sec_menu span{display: block;; width: 4em; position: absolute; top:0; right:0;}
+.sec_menu .wrap{ width: 4em; height: 4em; }
+.sec_menu span{opacity: 0; z-index: 99; top:0; left:0;}
+.sec_menu span.span1{ opacity: 1; z-index: 100; }
+.sec_menu.on span.span3{opacity: 1; top:-4.5em; left:-.5em;}
+.sec_menu.on span.span2{opacity: 1; left:-4.5em; top:-.5em;}
+.sec_menu.on span.span1{ transform: rotate(45deg); }
+.mask{display: none; position: fixed;top:0; left:0; width: 100%; height: 100%; background: #000; opacity: 0.6; z-index: 10; }
+.mask1{ position: fixed;top:0; left:0; width: 100%; height: 100%; background: #000; opacity: 0.5;/* z-index: -1; */}

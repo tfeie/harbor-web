@@ -641,7 +641,7 @@ public class BeController {
 		}
 		return responseData;
 	}
-	
+
 	@RequestMapping("/queryBesForAdmin")
 	@ResponseBody
 	public ResponseData<PageInfo<Be>> queryBesForAdmin(@NotNull(message = "参数为空") BeQueryReq beQueryReq,
@@ -734,7 +734,8 @@ public class BeController {
 			HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
-			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			deleteBeReq.setUserId(userInfo.getUserId());
 			Response rep = DubboConsumerFactory.getService(IBeSV.class).deleteBe(deleteBeReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),

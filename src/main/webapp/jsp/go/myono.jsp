@@ -23,8 +23,8 @@
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css"> 
-<link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/style.css">
+<link href="//static.tfeie.com/v2/css/footer.css" rel="stylesheet"
+	type="text/css" />
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
 
@@ -98,6 +98,18 @@
 						}
 					});
 					
+					//删除GO
+					$(document).delegate(".icon-sc","click",function(){
+						var goId =$(this).attr("goId");
+						weUI.confirm({
+							content: "确定要删除吗?",
+							ok: function(){
+								_this.deleteGo(goId);
+								weUI.closeConfirm();
+							}
+						})
+					}); 
+					
 					
 					$(window).scroll(function() {
 						var scrollTop = $(document).scrollTop();//获取垂直滚动的距离
@@ -110,9 +122,11 @@
 
 					})
 				},
+				
 				initData : function() {
 					this.getMyGoes({pageNo: 1,newload: true});
 				},
+				
 				gotoNextPage: function(){
 					var nextPageNo = $("#UL_GOTO_NEXTPAGE").attr("nextPageNo");
 					var pageCount=$("#UL_GOTO_NEXTPAGE").attr("pageCount");
@@ -120,6 +134,34 @@
 						this.getMyGoes({pageNo: nextPageNo,newload: false});
 					}
 					
+				},
+				
+				deleteGo: function(goId){
+					var _this =this;
+					ajaxController.ajax({
+						url: "../go/deleteGo",
+						type: "post", 
+						data: { 
+							goId: goId
+						},
+						success: function(transport){
+							var dom=$("#DIV_GO_"+goId);
+							dom.fadeOut("200",function(){
+								dom.detach();
+								var len = $("[name='GROUP_DETL']").length;
+								if(len==0){
+									var opt="<div class='itms box-s'><div class='js chaochu_2' style='text-align:center;'>没有任何One On One活动哦~</div></div>";
+									$("#DIV_MY_GOES").append(opt); 
+								}
+							});
+						},
+						failure: function(transport){
+							weUI.showXToast(transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
+						}
+					});
 				},
 
 				getMyGoes : function(p) {
@@ -205,7 +247,10 @@
 
 
 <script id="MyGroupsImpl" type="text/x-jsrender"> 	
-		<div class="itms box-s" name="GROUP_DETL" goId="{{:goId}}" goType="{{:goType}}">
+		<div class="itms box-s" name="GROUP_DETL" id="DIV_GO_{{:goId}}" goId="{{:goId}}" goType="{{:goType}}">
+			<c:if test="${type=='mycreate'}">
+			<i class="icon-sc" name="GO_DEL" goId="{{:goId}}"></i>
+			</c:if>
 			<div class="tie" name="TD_TOPIC">
 				<p>{{:topic}}</p>
 			</div>

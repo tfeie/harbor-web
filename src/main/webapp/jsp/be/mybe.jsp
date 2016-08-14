@@ -20,14 +20,14 @@
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
+<link href="//static.tfeie.com/v2/css/footer.css" rel="stylesheet"
+	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
-<link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/style.css">
+
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-
 
 </head>
 
@@ -163,6 +163,7 @@
 				},
 				
 				deleteBe: function(beId){
+					var _this = this;
 					ajaxController.ajax({
 						url: "../be/deleteBe",
 						type: "post", 
@@ -171,8 +172,6 @@
 						},
 						success: function(transport){
 							var dom=$("#DIV_BE_"+beId);
-							//获取下一个BE记录
-							var next =dom.next("[name='DIV_BES']");
 							dom.fadeOut("200",function(){
 								dom.detach();
 								var len = $("[name='DIV_BES']").length;
@@ -181,6 +180,12 @@
 									$("#SELECTTION_MY_BE_LIST").append(opt); 
 								}
 							});
+						},
+						failure: function(transport){
+							weUI.showXToast(transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
 						}
 					});
 				},
@@ -230,8 +235,6 @@
                     </div>
 					{{if hasimg==true}}
                     <img src="{{:imageURL}}" width="100%">
-					{{else}}
-					<div  width="100%"></div>
 					{{/if}}
                 </div>
             </div>

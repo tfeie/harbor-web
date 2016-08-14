@@ -1047,7 +1047,7 @@ public class GoController {
 		}
 		return responseData;
 	}
-	
+
 	@RequestMapping("/queryGoesForAdmin")
 	@ResponseBody
 	public ResponseData<PageInfo<Go>> queryGoesForAdmin(@NotNull(message = "参数为空") QueryGoReq queryGoReq,
@@ -1739,7 +1739,8 @@ public class GoController {
 			HttpServletRequest request) {
 		ResponseData<String> responseData = null;
 		try {
-			WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			deleteGoReq.setUserId(userInfo.getUserId());
 			Response rep = DubboConsumerFactory.getService(IGoSV.class).deleteGo(deleteGoReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
