@@ -53,6 +53,7 @@ import com.the.harbor.base.enumeration.hyuser.UserStatus;
 import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.Response;
+import com.the.harbor.commons.components.aliyuncs.im.IMSettings;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
 import com.the.harbor.commons.components.aliyuncs.sms.param.SMSSendRequest;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
@@ -86,36 +87,24 @@ import com.the.harbor.web.weixin.param.WeixinUserInfo;
 public class UserController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
-	
+
 	@RequestMapping("/im.html")
 	public ModelAndView im(HttpServletRequest request) {
 		String touchId = request.getParameter("touchId");
-		if(StringUtil.isBlank(touchId)){
+		if (StringUtil.isBlank(touchId)) {
 			throw new BusinessException("请选择您要聊天的海友");
 		}
-		UserViewInfo userInfo=WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-		if(userInfo.getUserId().equals(touchId)){
+		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+		if (userInfo.getUserId().equals(touchId)) {
 			throw new BusinessException("您不能和自己聊天");
 		}
 		request.setAttribute("uid", userInfo.getUserId());
 		request.setAttribute("credential", userInfo.getWxOpenid());
-		request.setAttribute("appkey", "23434419");
+		request.setAttribute("appkey", IMSettings.getAppKey());
 		request.setAttribute("touid", touchId);
 		ModelAndView view = new ModelAndView("user/im");
 		return view;
 	}
-	
-	@RequestMapping("/im2.html")
-	public ModelAndView im2(HttpServletRequest request) {
-		UserViewInfo userInfo=WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-		request.setAttribute("uid", "hy00000192");
-		request.setAttribute("credential", "oztCUs2X5d-j0Ykczx0eUXJmlzcA");
-		request.setAttribute("appkey", "23434419");
-		request.setAttribute("touid", userInfo.getUserId());
-		ModelAndView view = new ModelAndView("user/im");
-		return view;
-	}
-
 
 	@RequestMapping("/pages.html")
 	public ModelAndView pages(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -507,10 +496,10 @@ public class UserController {
 		request.setAttribute("hasAuthRight", hasRight);
 		request.setAttribute("superUser", HyCfgUtil.checkSuperUser(userInfo.getUserId()));
 		// 是否认证标志
-		request.setAttribute("isCert","0");
-		if(userInfo != null){
-			if(UserStatus.AUTHORIZED_SUCCESS.getValue().equals(userInfo.getUserStatus())){
-				request.setAttribute("isCert","1");
+		request.setAttribute("isCert", "0");
+		if (userInfo != null) {
+			if (UserStatus.AUTHORIZED_SUCCESS.getValue().equals(userInfo.getUserStatus())) {
+				request.setAttribute("isCert", "1");
 			}
 		}
 		ModelAndView view = new ModelAndView("user/userCenter");
@@ -1381,7 +1370,7 @@ public class UserController {
 	@RequestMapping("/toUserInviteCode.html")
 	public ModelAndView toUserInviteCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByWXAuth(request);
-		request.setAttribute("islogin", userInfo!=null);
+		request.setAttribute("islogin", userInfo != null);
 		ModelAndView view = new ModelAndView("user/inviteRegisterCode");
 		return view;
 	}
