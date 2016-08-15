@@ -744,10 +744,11 @@ wx.config({
 				<div class="c">
 					<div class="name-xx">
 						<div class="icon-pl" name="DIV_COMMENT_CONTENT" commentId="{{:commentId}}" userId="{{:userId}}" enName="{{:enName}}"></div>
+						{{if candelete==true}}
 						<div class="icon-qx">
                            <font class="yc" name="BE_COMMENT_DEL" commentId="{{:commentId}}" beId="{{:beId}}">删除</font>
                         </div>
-
+						{{/if}}
 						<div class="name">
 							<div class="xx">{{:enName}}</div>
 							<div class="yrz">
