@@ -75,7 +75,7 @@
 				
 				<div class="div_bottom">
 					<span><a href="#" class="money"><c:out value="${go.fixPriceYuan}"/>元</a></span> <span><a
-						href="#"><c:out value="${go.expectedDuration}"/></a></span> <span><a href="#">见过 126</a></span> <span><a
+						href="#"><c:out value="${go.expectedDuration}"/></a></span> <span><a href="#">见过 <c:out value="${go.joinCount}"/></a></span> <span><a
 						href="#">分享</a></span>
 					<div class="clear"></div>
 				</div>
@@ -110,7 +110,7 @@
 	</section>
 	<footer class="foot_fixed">
 		<section class="sec_01">
-			<a href="javascript:void(0)" id="BTN_GO_FAVOR"><span>感兴趣</span></a>
+			<a href="javascript:void(0)" id="BTN_GO_FAVOR"><span>想见</span></a>
 		</section>
 		<section class="sec_02">
 			<a href="javascript:void(0)" id="BTN_GO_APPLY"><span>立即预约</span></a>

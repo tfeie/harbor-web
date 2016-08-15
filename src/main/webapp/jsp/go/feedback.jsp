@@ -65,7 +65,7 @@
 		<section class="good_friend">
 			<section class="friend_num">
 				<p>
-					<span><img src="//static.tfeie.com/images/img35.png" /></span><label>3</label>
+					<span><img src="//static.tfeie.com/images/img35.png" /></span><label><c:out value="${go.helpCount}" /></label>
 				</p>
 				<p>
 					<span>助人统计</span>

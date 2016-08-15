@@ -452,6 +452,11 @@ public class GoController {
 		if (publishUserInfo == null) {
 			throw new BusinessException("活动发起方信息不存在");
 		}
+		Go go = DubboServiceUtil.queryGo(goOrder.getGoId());
+		if (go == null) {
+			throw new BusinessException("活动信息不存在");
+		}
+		request.setAttribute("go", go);
 		request.setAttribute("userInfo", publishUserInfo);
 		request.setAttribute("goOrder", goOrder);
 		ModelAndView view = new ModelAndView("go/feedback");
@@ -487,6 +492,11 @@ public class GoController {
 		if (orderUserInfo == null) {
 			throw new BusinessException("活动预约者信息不存在");
 		}
+		Go go = DubboServiceUtil.queryGo(goOrder.getGoId());
+		if (go == null) {
+			throw new BusinessException("活动信息不存在");
+		}
+		request.setAttribute("go", go);
 		request.setAttribute("userInfo", orderUserInfo);
 		request.setAttribute("goOrder", goOrder);
 		ModelAndView view = new ModelAndView("go/hainiufeedback");
