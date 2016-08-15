@@ -1087,9 +1087,12 @@ public class GoController {
 
 	@RequestMapping("/getGoComments")
 	@ResponseBody
-	public ResponseData<List<GoComment>> getGoComments(@NotBlank(message = "GO标识为空") String goId) {
+	public ResponseData<List<GoComment>> getGoComments(@NotBlank(message = "GO标识为空") String goId,
+			HttpServletRequest request) {
 		ResponseData<List<GoComment>> responseData = null;
 		try {
+			// 获取登录用户信息，如果没有登录获取结果为空，不影响评论加载
+			UserViewInfo loginUserInfo = WXUserUtil.getUserViewInfoUnCheckWXAuth(request);
 			/* 1.获取BE的所有评论集合 */
 			Set<String> set = HyGoUtil.getGoCommentIds(goId, 0, -1);
 			/* 2.获取所有评论数据 */
@@ -1099,6 +1102,10 @@ public class GoController {
 				if (!StringUtil.isBlank(commentData)) {
 					GoComment b = JSONObject.parseObject(commentData, GoComment.class);
 					this.fillGoCommentInfo(b);
+					// 是否只有自己发表的，才可以删除
+					if (loginUserInfo != null && loginUserInfo.getUserId().equals(b.getPublishUserId())) {
+						b.setCandelete(true);
+					}
 					list.add(b);
 				}
 			}
@@ -1231,6 +1238,7 @@ public class GoController {
 			UserCommentMQSend.sendMQ(doGoComment);
 			/* 4.组织评论内容返回 */
 			GoComment b = this.convertGoComment(doGoComment, userInfo);
+			b.setCandelete(true);
 			responseData = new ResponseData<GoComment>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"操作成功", b);
 		} catch (Exception e) {
@@ -1268,9 +1276,12 @@ public class GoController {
 
 	@RequestMapping("/getGoOrderComments")
 	@ResponseBody
-	public ResponseData<List<GoComment>> getGoOrderComments(@NotBlank(message = "GO预约标识为空") String orderId) {
+	public ResponseData<List<GoComment>> getGoOrderComments(@NotBlank(message = "GO预约标识为空") String orderId,
+			HttpServletRequest request) {
 		ResponseData<List<GoComment>> responseData = null;
 		try {
+			// 获取登录用户信息，如果没有登录获取结果为空，不影响评论加载
+			UserViewInfo loginUserInfo = WXUserUtil.getUserViewInfoUnCheckWXAuth(request);
 			/* 1.获取GO的所有评论集合 */
 			Set<String> set = HyGoUtil.getGoOrderCommentIds(orderId, 0, -1);
 			/* 2.获取所有评论数据 */
@@ -1280,6 +1291,10 @@ public class GoController {
 				if (!StringUtil.isBlank(commentData)) {
 					GoComment b = JSONObject.parseObject(commentData, GoComment.class);
 					this.fillGoCommentInfo(b);
+					// 是否只有自己发表的，才可以删除
+					if (loginUserInfo != null && loginUserInfo.getUserId().equals(b.getPublishUserId())) {
+						b.setCandelete(true);
+					}
 					list.add(b);
 				}
 			}

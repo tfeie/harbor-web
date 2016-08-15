@@ -304,6 +304,13 @@ wx.config({
 						$("#parentUserId").val(userId);
 						$("#COMMENT_CONTENT").attr("placeholder","回复 "+enName+":").focus
 					}); 
+					
+					//删除评论
+					$(document).delegate("[name='BE_COMMENT_DEL']","click",function(){
+						var commentId = $(this).attr("commentId");
+						var beId = $(this).attr("beId");
+						_this.deleteBeComment(beId,commentId);
+					});
 				},
 				
 				initData: function(){
@@ -311,6 +318,35 @@ wx.config({
 					this.getRewardUsers();
 					this.getBeComments();
 				}, 
+				
+				deleteBeComment: function(beId,commentId){
+					var _this=this;
+					ajaxController.ajax({
+						url: "../be/deleteBeComment",
+						type: "post", 
+						data: {
+							beId: beId,
+							commentId: commentId
+						},
+						success: function(transport){ 
+							var dom=$("#DIV_BE_COMMENTS_"+commentId);
+							dom.fadeOut("200",function(){
+								dom.detach();
+								var len = $("[name='DIV_BE_COMMENTS']").length;
+								if(len==0){
+									var opt="<div class='itms clearfix'><div class='js chaochu_2' style='text-align:center;'>没有任何评论哦~</div></div>";
+									$("#DIV_BE_COMMENTS").append(opt); 
+								}
+							});
+						},
+						failure: function(transport){ 
+							weUI.showXToast(transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
+						}
+					});
+				},
 				
 				rewardBe: function(count){
 					var _this=this;
@@ -404,7 +440,13 @@ wx.config({
 								weUI.hideXToast();
 				            }, 1000);
 							var opt=$("#BeCommentsImpl").render(arr);
-							$("#DIV_BE_COMMENTS").append(opt); 
+							var len = $("[name='DIV_BE_COMMENTS']").length;
+							if(len==0){
+								$("#DIV_BE_COMMENTS").html(opt); 
+							}else{
+								$("#DIV_BE_COMMENTS").append(opt); 
+							}
+							
 							$("#COMMENT_CONTENT").val("");
 							$("#parentUserId").val("");
 							$("#parentCommentId").val("");
@@ -633,7 +675,12 @@ wx.config({
 				
 				renderBeComments: function(data){
 					data= data?data:[];
-					var opt=$("#BeCommentsImpl").render(data);
+					var opt="";
+					if(data.length>0){
+						opt=$("#BeCommentsImpl").render(data);
+					}else{
+						opt="<div class='itms clearfix'><div class='js chaochu_2' style='text-align:center;'>没有任何评论哦~</div></div>";
+					}
 					$("#DIV_BE_COMMENTS").html(opt); 
 				},
 				
@@ -689,7 +736,7 @@ wx.config({
 </script>
 
 <script id="BeCommentsImpl" type="text/x-jsrender"> 
-			<div class="itms clearfix" commentId="{{:commentId}}">
+			<div class="itms clearfix" commentId="{{:commentId}}" name="DIV_BE_COMMENTS" id="DIV_BE_COMMENTS_{{:commentId}}">
 				<div class="img">
 					<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}" width="40"
 						height="40"></a>
@@ -697,6 +744,10 @@ wx.config({
 				<div class="c">
 					<div class="name-xx">
 						<div class="icon-pl" name="DIV_COMMENT_CONTENT" commentId="{{:commentId}}" userId="{{:userId}}" enName="{{:enName}}"></div>
+						<div class="icon-qx">
+                           <font class="yc" name="BE_COMMENT_DEL" commentId="{{:commentId}}" beId="{{:beId}}">删除</font>
+                        </div>
+
 						<div class="name">
 							<div class="xx">{{:enName}}</div>
 							<div class="yrz">

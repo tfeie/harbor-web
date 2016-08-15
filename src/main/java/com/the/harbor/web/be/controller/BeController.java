@@ -461,6 +461,7 @@ public class BeController {
 			UserCommentMQSend.sendMQ(doBeComment);
 			/* 4.组织评论内容返回 */
 			BeComment b = this.convertBeComment(doBeComment, userInfo);
+			b.setCandelete(true);
 			responseData = new ResponseData<BeComment>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
 					"操作成功", b);
 		} catch (Exception e) {
@@ -491,9 +492,12 @@ public class BeController {
 
 	@RequestMapping("/getBeComments")
 	@ResponseBody
-	public ResponseData<List<BeComment>> getBeComments(@NotBlank(message = "BE标识为空") String beId) {
+	public ResponseData<List<BeComment>> getBeComments(@NotBlank(message = "BE标识为空") String beId,
+			HttpServletRequest request) {
 		ResponseData<List<BeComment>> responseData = null;
 		try {
+			// 获取登录用户信息，如果没有登录获取结果为空，不影响评论加载
+			UserViewInfo loginUserInfo = WXUserUtil.getUserViewInfoUnCheckWXAuth(request);
 			/* 1.获取BE的所有评论集合 */
 			Set<String> set = HyBeUtil.getBeCommentIds(beId, 0, -1);
 			/* 2.获取所有评论数据 */
@@ -502,8 +506,14 @@ public class BeController {
 				String commentData = HyBeUtil.getBeComment(commentId);
 				if (!StringUtil.isBlank(commentData)) {
 					BeComment b = JSONObject.parseObject(commentData, BeComment.class);
-					this.fillBeCommentInfo(b);
-					list.add(b);
+					if (com.the.harbor.base.enumeration.hybecomments.Status.NORMAL.getValue().equals(b.getStatus())) {
+						this.fillBeCommentInfo(b);
+						//是否只有自己发表的，才可以删除
+						if(loginUserInfo!=null && loginUserInfo.getUserId().equals(b.getUserId())){
+							b.setCandelete(true);
+						}
+						list.add(b);
+					}
 				}
 			}
 			responseData = new ResponseData<List<BeComment>>(ResponseData.AJAX_STATUS_SUCCESS,
