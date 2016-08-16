@@ -86,7 +86,18 @@
 					<span>海牛的故事</span>
 				</div>
 				<article>
-					<p><c:out value="${go.myStory}"/></p>
+					<c:forEach var="detail" items="${go.goStories }">
+						<c:if test="${detail.type=='text'}">
+							<p>
+								<c:out value="${detail.detail}" escapeXml="false"/>
+							</p>
+						</c:if>
+						<c:if test="${detail.type=='image'}">
+							<p>
+								<img src="<c:out value="${detail.imgThumbnailUrl}"/>" width="100%">
+							</p>
+						</c:if>
+					</c:forEach>
 				</article>
 			</section>
 			<section class="item">
