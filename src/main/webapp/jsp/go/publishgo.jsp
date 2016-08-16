@@ -116,9 +116,13 @@
 		<section class="fabu_zhuti diwu" name="SELECTION_MYSTORY" style="display:none">
 			<p>我的故事</p>
 		</section>
-		<section class="my_gushi" name="SELECTION_MYSTORY" style="display:none">
+		<section class="my_gushi" name="SELECTION_MYSTORY"  id="SECTION_GO_STORIES" style="display:none">
+			
+		</section>
+		<section class="fabu_but" name="SELECTION_MYSTORY" style="display:none">
 			<p>
-				<textarea id="myStory"></textarea>
+				<span class="in"  id="STORY_ADD_TEXT"><a>添加文本</a></span>
+				<span class="on" id="STORY_ADD_IMAGE"><a>添加图片</a></span>
 			</p>
 		</section>
 
@@ -403,11 +407,100 @@ jeDate({
 						}); 
 					});
 					
+					//我的故事-添加图片按钮事件
+					$("#STORY_ADD_IMAGE").on("click",function(){
+						_this.gostories.push({
+							_id: new Date().getTime(),
+							type: "image",
+							candel: true,
+							imageUrl:""
+						});
+						//渲染我的故事表单
+						_this.renderGoStories();
+					});
+					
+					//我的故事-添加文字按钮事件
+					$("#STORY_ADD_TEXT").on("click",function(){
+						_this.gostories.push({
+							_id: new Date().getTime(),
+							type: "text",
+							candel: true,
+							detail:""
+						});
+						//渲染我的故事图文表单
+						_this.renderGoStories();
+					});
+					
+					//我的故事--图文删除事件代理
+					$("#SECTION_GO_STORIES").delegate("[name='SECTION_DEL_GO_STORY_DETAIL']","click",function(){
+						var _id =$(this).attr("_id");
+						_this.deleteGoStory(_id);
+					});
+					
+					//我的故事--图片上传服务
+					$("#SECTION_GO_STORIES").delegate("[name='P_GO_STORY_UPLOAD_IMG']","click",function(){
+						var _id =$(this).attr("_id");
+						var s = this;
+						wx.chooseImage({
+							count : 1,
+							sizeType: ['compressed'],
+							success : function(res) {
+								var localId = res.localIds[0]; 
+								wx.uploadImage({
+									localId : localId,
+									isShowProgressTips : 1,
+									success : function(r) {
+										var mediaId = r.serverId;
+										weUI.showLoadingToast("图片转存中..")
+										ajaxController.ajax({
+											url: "../go/uploadGoImgToOSS",
+											type: "post",
+											data: {
+												mediaId: mediaId,
+												userId: _this.getPropertyValue("userId")
+											},
+											success: function(transport){
+												weUI.hideLoadingToast();
+												weUI.showXToast("图片转存成功");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 1000);
+												var imgURL  = transport.data;
+												$(s).find("#IMG_GO_STORY").attr("src", imgURL+"@!go_thumbnail");
+												_this.modifyGoStory(_id,"",imgURL);
+											},
+											failure: function(transport){
+												weUI.hideLoadingToast();
+												weUI.showXToast("图片转存失败");
+												setTimeout(function () {
+													weUI.hideXToast();
+									            }, 1000);
+											}
+											
+										});
+									},
+									fail : function(res) {
+										weUI.showXToast("图片上传失败");
+										setTimeout(function () {
+											weUI.hideXToast();
+							            }, 1000);
+									}
+								});
+							}
+						});
+					}); 
+					
 				},
 				
 				initData: function(){ 
 					this.selectedGoTags=[];
 					this.godetails=[{
+						_id: new Date().getTime(),
+						type: "text",
+						candel: false,
+						detail:""
+					}];
+					this.gostories=[{
 						_id: new Date().getTime(),
 						type: "text",
 						candel: false,
@@ -419,6 +512,7 @@ jeDate({
 				initRenders: function(){
 					this.renderSelectedGoTags();
 					this.renderGoDetails();
+					this.renderGoStories();
 				},
 				
 				getAllTags: function(){
@@ -623,6 +717,88 @@ jeDate({
 					})
 				},
 				
+				
+				deleteGoStory: function(_id){
+					var _this = this;
+					if(_this.gostories.length==1){
+						weUI.showXToast("至少保留一项");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 1000);
+						return;
+					}
+					// 第一个文本不能删
+					var firstgo = _this.gostories[0];
+					if(firstgo._id == _id){
+						weUI.showXToast("不允许删除");
+						setTimeout(function () {
+							weUI.hideXToast();
+			            }, 1000);
+						return;
+					}
+					
+					var gostories = $.grep(_this.gostories,function(o,i){
+						return o._id==_id;
+					});
+					if(gostories.length==0){
+						return;
+					}
+					var d = gostories[0];
+					_this.gostories.splice($.inArray(d,_this.gostories),1);
+					_this.renderGoStories();
+				},
+				
+				renderGoStories: function(){
+					var _this = this;
+					var gostories =this.gostories?this.gostories:[];
+					var d = { 
+						gostories: gostories
+					}
+					var opt=$("#GoStoriesImpl").render(d);
+					$("#SECTION_GO_STORIES").html(opt);
+					
+					$.each(gostories,function(idx,o){
+						if(o.type=="text"){
+							$("#GO_STORY_TEXTAREA_"+o._id).jqte({
+								title: false,
+								sup: false,
+								strike: false,
+								sub: false,
+								source: true,
+								i: false,
+								u: false,
+								rule: false,
+								remove: false,
+								outdent: false,
+								format: false,
+								blur: function(){
+									var val=$("#GO_STORY_TEXTAREA_"+o._id).val();
+									_this.modifyGoStory(o._id,val,"");
+								}
+							});
+							$("#GO_STORY_TEXTAREA_"+o._id).jqteVal(o.detail);
+						}
+						
+					})
+				},
+				
+				modifyGoStory: function(_id,val,url){
+					var _this = this;
+					var gostories = $.grep(_this.gostories,function(o,i){
+						return o._id==_id;
+					});
+					if(gostories.length==0){
+						return;
+					}
+					var d = gostories[0];
+					if(d.type=="text"){
+						d.detail = val;
+					}else {
+						d.imageUrl = url;
+						d.imgThumbnailUrl=url+"@!go_thumbnail";
+					}
+				},
+				
 				submit: function(){
 					var _this = this;
 					var topic = $.trim($("#topic").val());
@@ -799,17 +975,15 @@ jeDate({
 					if(goType=="oneonone"){
 						valueValidator.addRule({
 							labelName: "我的故事",
-							fieldName: "myStory",
+							fieldName: "gostories",
 							getValue: function(){
-								return myStory;
+								return _this.gostories;
 							},
 							fieldRules: {
-								required: true, 
-								cnlength: 300
+								minlength: 1
 							},
 							ruleMessages: {
-								required: "请填写我的故事",
-								cnlength:"我的故事最多输入150个汉字"
+								minlength: "请填写我的故事"
 							}
 						});
 					}
@@ -847,10 +1021,11 @@ jeDate({
 						price: (payMode=="30")?"":price,
 						orgMode: orgMode,
 						location: (orgMode=="online")?"":location,
-						myStory: (goType=="oneonone")?myStory:"",
+						goStories: (goType=="oneonone")?_this.gostories:[],
 						goDetails: _this.godetails,
 						goTags: _this.selectedGoTags
 					} 
+					
 					weUI.showLoadingToast("正在发布..")
 					ajaxController.ajax({
 						url: "../go/submitNewGo",
@@ -871,6 +1046,7 @@ jeDate({
 				            }, 1000);
 						},
 						failure: function(transport){
+							weUI.hideLoadingToast();
 							weUI.showXToast(transport.statusInfo);
 							setTimeout(function () {
 								weUI.hideXToast();
@@ -956,5 +1132,33 @@ jeDate({
 			</section>
 		{{/if}}
 	{{/for}}
-</script>				
+</script>	
+
+<script id="GoStoriesImpl" type="text/x-jsrender">
+	{{for gostories}} 
+		{{if type=="text"}}
+			<section class="zhuti_hanhua items">
+				<p>
+					<textarea name="GO_STORY_TEXTAREA"  id="GO_STORY_TEXTAREA_{{:_id}}" _id="{{:_id}}">{{:detail}}</textarea>
+				</p>
+				{{if candel==true}}
+					<section class="yingchang" name="SECTION_DEL_GO_STORY_DETAIL" _id="{{:_id}}">
+						<img src="//static.tfeie.com/images/img50.png" />
+					</section>
+				{{/if}}
+				
+			</section>
+		{{/if}}
+		{{if type=="image"}}
+			<section class="jia_img items">
+				<p name="P_GO_STORY_UPLOAD_IMG" _id="{{:_id}}">
+					<img id="IMG_GO_STORY" src="{{if imageUrl=="" || imageUrl==false}}//static.tfeie.com/images/img51-1.png{{else}}{{:imgThumbnailUrl}}{{/if}}">
+				</p>
+				<section class="yingchang on" name="SECTION_DEL_GO_STORY_DETAIL" _id="{{:_id}}">
+					<img src="//static.tfeie.com/images/img50.png" />
+				</section>
+			</section>
+		{{/if}}
+	{{/for}}
+</script>			
 </html>
