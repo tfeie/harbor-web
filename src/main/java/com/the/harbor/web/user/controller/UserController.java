@@ -98,10 +98,14 @@ public class UserController {
 		if (userInfo.getUserId().equals(touchId)) {
 			throw new BusinessException("您不能和自己聊天");
 		}
+		UserViewInfo toUserInfo = WXUserUtil.getUserViewInfoByUserId(touchId);
 		request.setAttribute("uid", userInfo.getUserId());
 		request.setAttribute("credential", userInfo.getWxOpenid());
 		request.setAttribute("appkey", IMSettings.getAppKey());
 		request.setAttribute("touid", touchId);
+		request.setAttribute("toUserIcon", toUserInfo.getWxHeadimg());
+		request.setAttribute("fromUserIcon", userInfo.getWxHeadimg());
+		request.setAttribute("title", "与"+ toUserInfo.getEnName() +"聊天中");
 		ModelAndView view = new ModelAndView("user/im");
 		return view;
 	}

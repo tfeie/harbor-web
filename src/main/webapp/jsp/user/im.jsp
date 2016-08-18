@@ -27,7 +27,10 @@
         	 uid: '<c:out value="${uid}"/>',
              appkey: <c:out value="${appkey}"/>,
              credential: '<c:out value="${credential}"/>',
-             touid: '<c:out value="${touid}"/>'
+             touid: '<c:out value="${touid}"/>',
+             title:  '<c:out value="${title}"/>',
+             toAvatar:  '<c:out value="${toUserIcon}"/>',
+             avatar:  '<c:out value="${fromUserIcon}"/>'
         });
     }
 </script>
