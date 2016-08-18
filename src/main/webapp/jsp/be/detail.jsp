@@ -724,7 +724,7 @@ wx.config({
 			{{/for}} 
 			</div>
 			<div class="btn-bottom">
-				<div class="btn-fx box-s" id="DIV_DO_SHARE" topic="{{:contentSummary}}"></div>
+				<div class="btn-fx box-s" id="DIV_DO_SHARE" topic="分享"></div>
 				<div class="btn-z  box-s" id="DIV_DO_DIANZAN" beId = "{{:beId}}">
 					<font>{{:dianzanCount}}</font>
 				</div>
