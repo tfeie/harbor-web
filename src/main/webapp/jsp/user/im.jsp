@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>IM</title>
+<title>消息</title>
 <!--[if lt IE 9]>
 <script src="https://g.alicdn.com/aliww/ww/json/json.js" charset="utf-8"></script>
 <![endif]-->
