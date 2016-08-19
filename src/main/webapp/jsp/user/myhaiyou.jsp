@@ -45,15 +45,15 @@
 
 		<div class="top-tap box-s">
 			<div class="hd" id="hd">
-				<div class="itms">新海友&推荐</div>
-				<div class="itms on">我的海友</div>
+				<div class="itms on">新海友</div>
+				<div class="itms">我的海友</div>
 			</div>
 		</div>
 
 
 		<div id="bd">
 			<!--新海友-->
-			<div class="bd" style="display:none">
+			<div class="bd">
 				<div class="new-main box-s mar-top-10 pad-0-10" id="DIV_HAIYOU_APPLY">
 					<div class="top-tie">
 						<span>新海友请求</span>
@@ -77,7 +77,7 @@
 			<!--新海友-->
 			
 			<!--我的海友-->
-			<div class="bd">
+			<div class="bd" style="display:none">
 				<div class="myhy" style="display:none">
 					<div class="btn-search"></div>
 					<div class="search-main">
