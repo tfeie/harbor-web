@@ -255,7 +255,7 @@ jeDate({
 					});
 					
 					//活动明细文本框失去焦点事件代理
-					$("#SECTION_GO_DETAILS").delegate("[name='GO_DETAIL_TEXTAREA']","blur",function(){
+					$("#SECTION_GO_DETAILS").delegate("#GO_DETAIL_TEXTAREA_TOPIC","blur",function(){
 						var _id =$(this).attr("_id");
 						var val = $(this).val();
 						_this.modifyGoDetail(_id,val,"");
@@ -1111,7 +1111,13 @@ jeDate({
 		{{if type=="text"}}
 			<section class="zhuti_hanhua items">
 				<p>
+					{{if candel==false}}
+					<textarea name="GO_DETAIL_TEXTAREA"  id="GO_DETAIL_TEXTAREA_TOPIC" _id="{{:_id}}">{{:detail}}</textarea>
+					{{/if}}
+					{{if candel==true}}
 					<textarea name="GO_DETAIL_TEXTAREA"  id="GO_DETAIL_TEXTAREA_{{:_id}}" _id="{{:_id}}">{{:detail}}</textarea>
+					{{/if}}
+					
 				</p>
 				{{if candel==true}}
 					<section class="yingchang" name="SECTION_DEL_GO_DETAIL" _id="{{:_id}}">
