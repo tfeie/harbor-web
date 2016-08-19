@@ -89,6 +89,14 @@
 				</p>
 			</section>
 		</section>
+		<!--底栏的来自海归海湾-->
+		<div align="center">
+			来自 <strong> <a
+				href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzAxMjg3NDQ0Ng==&scene=115#wechat_redirect">
+					<font color="orange">海归海湾</font>
+			</a>
+			</strong> <br> 海归创业第一站
+		</div>
 		<section class="yanbaoming">
 			<section class="sec_btn2 fabu" style="display:none" id="SEL_SHOW_RESULT">
 				<input type="button" value="报名成功，等待审核" id="BTN_GOTO_MYJOIN">
@@ -144,7 +152,9 @@
 				</p>
 			</section>
 		</section> 
+
 	</section>
+
 </body>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>

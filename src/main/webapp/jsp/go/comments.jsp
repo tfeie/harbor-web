@@ -86,7 +86,7 @@
 		</section>
 		<section class="pinglun_textarea">
 			<p>
-				<textarea placeholder="评，组织者或活动..." id="COMMENT_CONTENT"></textarea>
+				<textarea placeholder="请输入评论内容" id="COMMENT_CONTENT"></textarea>
 				<input type="hidden" id="parentCommentId"/>
 				<input type="hidden" id="parentUserId"/>
 			</p>
