@@ -132,7 +132,7 @@
 					});
 					
 					//活动明细文本框失去焦点事件代理
-					$("#DIV_BE_DETAILS").delegate("[name='BE_DETAIL_TEXTAREA']","blur",function(){
+					$("#DIV_BE_DETAILS").delegate("#BE_DETAIL_TEXTAREA_TITLE","blur",function(){
 						var _id =$(this).attr("_id");
 						var val = $(this).val();
 						_this.modifyBeDetail(_id,val,"");
@@ -603,8 +603,11 @@
 	{{for bedetails}} 
 	{{if type=="text"}}
 	<div class="wb-m">
-		<textarea class="In-text" name="BE_DETAIL_TEXTAREA" id="BE_DETAIL_TEXTAREA_{{:_id}}"  _id="{{:_id}}" placeholder="请填写您的B&E...">{{:detail}}</textarea>
+		{{if candel==false}}
+		<textarea class="In-text" name="BE_DETAIL_TEXTAREA" id="BE_DETAIL_TEXTAREA_TITLE"  _id="{{:_id}}" placeholder="请填写您的B&E...">{{:detail}}</textarea>
+		{{/if}}
 		{{if candel==true}}
+		<textarea class="In-text" name="BE_DETAIL_TEXTAREA" id="BE_DETAIL_TEXTAREA_{{:_id}}"  _id="{{:_id}}">{{:detail}}</textarea>
 		<i class="icon-gb-wb" name="LI_DEL_BE_DETAIL" _id="{{:_id}}"></i>
 		{{/if}}
 	</div>
