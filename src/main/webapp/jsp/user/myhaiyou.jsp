@@ -63,14 +63,14 @@
 				<div class="tj-main box-s mar-top-10 pad-0-10">
 					<div class="top-tie">
 						<span>推荐的海友</span>
-						<div class="btn-search"></div>
-						<div class="search-main">
+						<div class="btn-search" style="display:none"></div>
+						<div class="search-main" style="display:none">
 							<div class="m">
 								<input type="text" placeholder="国家/行业/学校/职业" class="In-text">
 							</div>
 						</div>
 					</div> 
-					
+					<div id="DIV_TUIJIANFRIENDS"></div>
 
 				</div>
 			</div>
@@ -79,8 +79,8 @@
 			<!--我的海友-->
 			<div class="bd" style="display:none">
 				<div class="myhy" style="display:none">
-					<div class="btn-search"></div>
-					<div class="search-main">
+					<div class="btn-search" style="display:none"></div>
+					<div class="search-main" style="display:none">
 						<div class="m">
 							<input type="text" placeholder="国家/行业/学校/职业" class="In-text">
 						</div>
@@ -164,6 +164,7 @@
 					this.getIndexPageSilders();
 					this.getMyFriends();
 					this.getMyFriendsApplies();
+					this.getTuijianFriends();
 				}, 
 				
 				getIndexPageSilders: function(){
@@ -288,6 +289,33 @@
 					$("#DIV_MYFRIENDS").html(opt); 
 					
 				},
+				
+				getTuijianFriends: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/getTuijianUsers",
+						type: "post",  
+						success: function(transport){
+							var data =transport.data;  
+							_this.renderTuijianFriends(data); 
+						},
+						failure: function(transport){ 
+							_this.renderTuijianFriends([]); 
+						}
+					});
+				},
+				
+				renderTuijianFriends: function(data){
+					var opt= "";
+					if(data.length>0){
+						opt=$("#TuijianFriendsImpl").render(data);
+					}else{
+						opt="<div class=\"itms clearfix\">没有可推荐的海友~~</div>"
+					}
+					
+					$("#DIV_TUIJIANFRIENDS").html(opt); 
+					
+				},
 				 
 				renderBannerSider: function(data){ 
 					data= data?data:[];
@@ -353,6 +381,24 @@
 				</div>
 </script>
 
+<script id="TuijianFriendsImpl" type="text/x-jsrender">
+<div class="itms clearfix">
+       <div class="img">
+							<a href="../user/userInfo.html?userId={{:userId}}"><img src="{{:wxHeadimg}}" width="40" height="40"></a>
+						</div>
+        <div class="name">
+            <div class="name-xx">
+                <div class="xx">{{:enName}}</div>
+                <div class="yrz">
+									<span class="bg-lan" style="background:{{:abroadCountryRGB}}">{{:abroadCountryName}}</span><font {{if userStatus=='20'}}color="#FFB90F"{{/if}}   
+>{{:userStatusName}}</font>
+								</div>
+            </div>
+           <div class="jj">{{:employmentInfo}}</div>
+        </div>
+</div>
+
+</script>
 <script id="HaiyouApplyImpl" type="text/x-jsrender"> 	
 <div class="itms clearfix">
 						<div class="btn-right">

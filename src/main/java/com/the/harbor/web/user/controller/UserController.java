@@ -43,6 +43,8 @@ import com.the.harbor.api.user.param.UserSystemTagSubmitReq;
 import com.the.harbor.api.user.param.UserTag;
 import com.the.harbor.api.user.param.UserTagQueryReq;
 import com.the.harbor.api.user.param.UserTagQueryResp;
+import com.the.harbor.api.user.param.UserTuijianQueryReq;
+import com.the.harbor.api.user.param.UserTuijianQueryResp;
 import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.api.user.param.UserViewResp;
 import com.the.harbor.api.user.param.UserWealthQueryResp;
@@ -105,7 +107,7 @@ public class UserController {
 		request.setAttribute("touid", touchId);
 		request.setAttribute("toUserIcon", toUserInfo.getWxHeadimg());
 		request.setAttribute("fromUserIcon", userInfo.getWxHeadimg());
-		request.setAttribute("title", "与"+ toUserInfo.getEnName() +"聊天中");
+		request.setAttribute("title", "与" + toUserInfo.getEnName() + "聊天中");
 		ModelAndView view = new ModelAndView("user/im");
 		return view;
 	}
@@ -568,7 +570,7 @@ public class UserController {
 		} catch (Exception ex) {
 			throw new BusinessException("邀请码加密错误");
 		}
-		
+
 		UserWealthQueryResp userWealth = DubboServiceUtil.getUserWealth(userInfo.getUserId());
 		request.setAttribute("yiyou", userWealth.getYiyou());
 		request.setAttribute("zhuren", userWealth.getZhuren());
@@ -621,7 +623,7 @@ public class UserController {
 		if (userInfo == null) {
 			throw new BusinessException("USER-100001", "您访问的用户名片不存在");
 		}
-		
+
 		UserWealthQueryResp userWealth = DubboServiceUtil.getUserWealth(userInfo.getUserId());
 		request.setAttribute("yiyou", userWealth.getYiyou());
 		request.setAttribute("zhuren", userWealth.getZhuren());
@@ -1421,6 +1423,30 @@ public class UserController {
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/getTuijianUsers")
+	@ResponseBody
+	public ResponseData<List<UserViewInfo>> getTuijianUsers(HttpServletRequest request) {
+		ResponseData<List<UserViewInfo>> responseData = null;
+		try {
+			UserViewInfo loginUser = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			UserTuijianQueryReq userTuijianQueryReq = new UserTuijianQueryReq();
+			userTuijianQueryReq.setUserId(loginUser.getUserId());
+			UserTuijianQueryResp rep = DubboConsumerFactory.getService(IUserSV.class)
+					.queryTuijianUsers(userTuijianQueryReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "查询成功", rep.getUserInfos());
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
 		}
 		return responseData;
 	}

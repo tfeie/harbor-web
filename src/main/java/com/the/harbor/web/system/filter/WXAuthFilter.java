@@ -37,7 +37,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				"/go/myono.html", "/go/comments.html", "/go/goindex.html", "/go/invite.html", "/go/toFeedback.html",
 				"/go/toHainiuFeedback.html", "/go/confirmlist.html", "/go/toHainiuAppointment.html",
 				"/go/toAppointment.html", "/go/myjointgoes.html", "/go/toHainiuConfirm.html", "/be/publishbe.html",
-				"/be/mybe.html", "/be/mytimeline.html", "/be/index.html", "/user/toUserInviteCode.html","/co/" };
+				"/be/mybe.html", "/be/mytimeline.html", "/be/index.html", "/user/toUserInviteCode.html", "/co/" };
 		String uri = request.getRequestURI();
 		boolean doFilter = false;
 		for (String s : shouldFilter) {
@@ -99,8 +99,8 @@ public class WXAuthFilter extends OncePerRequestFilter {
 
 	public static void initSession(HttpServletRequest request) {
 		WeixinOauth2Token wtoken = new WeixinOauth2Token();
-		// wtoken.setOpenId("oztCUs2X5d-j0Ykczx0eUXJmlzcA");
-		wtoken.setOpenId("oztCUs5NNKaYBj_xM29Nw7azOmBo");
+		wtoken.setOpenId("oztCUs2X5d-j0Ykczx0eUXJmlzcA");
+		// wtoken.setOpenId("oztCUs5NNKaYBj_xM29Nw7azOmBo");
 		request.getSession().setAttribute(WXConstants.SESSION_WX_WEB_AUTH, wtoken);
 	}
 
