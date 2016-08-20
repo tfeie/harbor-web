@@ -33,6 +33,10 @@
              avatar:  '<c:out value="${fromUserIcon}"/>'
         });
     }
+    
+    window.onbeforeunload = function(event) {
+    	WKIT.destroy();
+    }
 </script>
 </head>
 <body style="background:#ffffff">
