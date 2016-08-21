@@ -592,7 +592,7 @@
 	<span class="list" name="SPAN_ADD_TAG" tagName="{{:tagName}}">{{:tagName}}</span>
 	{{/if}}
 	{{/for}}
-	<span class="tj"><img src="//static.tfeie.com/v2/images/icon-img.png" width="65" height="30" name="IMG_CUSTOMIZE_TAG_ADD"></span>
+	<span class="tj" name="IMG_CUSTOMIZE_TAG_ADD"></span>
 </script>
 
 <script id="SelectedTagImpl" type="text/x-jsrender"> 
