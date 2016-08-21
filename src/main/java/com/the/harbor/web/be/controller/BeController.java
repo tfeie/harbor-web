@@ -49,6 +49,7 @@ import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
+import com.the.harbor.commons.redisdata.def.DoNotify;
 import com.the.harbor.commons.redisdata.def.HyDictsVo;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyBeUtil;
@@ -63,6 +64,7 @@ import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.go.controller.GoController;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
+import com.the.harbor.web.util.NotifyMQSend;
 import com.the.harbor.web.util.UserCommentMQSend;
 import com.the.harbor.web.util.UserDianzanMQSend;
 
@@ -93,6 +95,7 @@ public class BeController {
 	@RequestMapping("/detail.html")
 	public ModelAndView detail(HttpServletRequest request) {
 		String beId = request.getParameter("beId");
+		String notifyId = request.getParameter("notifyId");
 		if (StringUtil.isBlank(beId)) {
 			throw new BusinessException("B&E标识不存在");
 		}
@@ -110,6 +113,13 @@ public class BeController {
 		UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId(be.getUserId());
 		if (userInfo == null) {
 			throw new BusinessException("B&E发表的用户不存在");
+		}
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
 		}
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
@@ -508,8 +518,8 @@ public class BeController {
 					BeComment b = JSONObject.parseObject(commentData, BeComment.class);
 					if (com.the.harbor.base.enumeration.hybecomments.Status.NORMAL.getValue().equals(b.getStatus())) {
 						this.fillBeCommentInfo(b);
-						//是否只有自己发表的，才可以删除
-						if(loginUserInfo!=null && loginUserInfo.getUserId().equals(b.getUserId())){
+						// 是否只有自己发表的，才可以删除
+						if (loginUserInfo != null && loginUserInfo.getUserId().equals(b.getUserId())) {
 							b.setCandelete(true);
 						}
 						list.add(b);

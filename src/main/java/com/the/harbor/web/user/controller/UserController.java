@@ -63,6 +63,7 @@ import com.the.harbor.commons.components.redis.CacheFactory;
 import com.the.harbor.commons.components.redis.interfaces.ICacheClient;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
+import com.the.harbor.commons.redisdata.def.DoNotify;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyCfgUtil;
 import com.the.harbor.commons.redisdata.util.HyNotifyUtil;
@@ -81,6 +82,7 @@ import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.util.DubboServiceUtil;
+import com.the.harbor.web.util.NotifyMQSend;
 import com.the.harbor.web.util.UserInteractionMQSend;
 import com.the.harbor.web.weixin.param.WeixinUserInfo;
 
@@ -99,6 +101,14 @@ public class UserController {
 		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		if (userInfo.getUserId().equals(touchId)) {
 			throw new BusinessException("您不能和自己聊天");
+		}
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
 		}
 		UserViewInfo toUserInfo = WXUserUtil.getUserViewInfoByUserId(touchId);
 		request.setAttribute("uid", userInfo.getUserId());
@@ -285,6 +295,14 @@ public class UserController {
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
 		String url = WXRequestUtil.getFullURL(request);
 		String signature = WXHelpUtil.createJSSDKSignatureSHA(nonceStr, jsapiTicket, timestamp, url);
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
+		}
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
 		request.setAttribute("nonceStr", nonceStr);
@@ -1213,7 +1231,7 @@ public class UserController {
 		int notifyCount = 0;
 		try {
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-			notifyCount = HyNotifyUtil.getUnReadNotifyCount(userInfo.getUserId());
+			notifyCount = HyNotifyUtil.getUnreadNotifies(userInfo.getUserId()).size();
 		} catch (Exception ex) {
 
 		}

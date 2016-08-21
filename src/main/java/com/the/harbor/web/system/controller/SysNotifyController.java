@@ -1,8 +1,6 @@
 package com.the.harbor.web.system.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,22 +30,24 @@ public class SysNotifyController {
 
 	private static final Logger LOG = Logger.getLogger(SysNotifyController.class);
 
-	@RequestMapping("/getUserMessage")
+	/**
+	 * 获取未读消息
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getUnreadNotifies")
 	@ResponseBody
-	public ResponseData<List<HyNotifyVo>> getUserMessage(HttpServletRequest request) {
-
+	public ResponseData<List<HyNotifyVo>> getUnreadNotifies(HttpServletRequest request) {
 		ResponseData<List<HyNotifyVo>> responseData = null;
 		try {
 			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-			Set<String> notifyIds = HyNotifyUtil.getUserNotifyIds(userInfo.getUserId(), 0, -1);
-			List<HyNotifyVo> notifies = new ArrayList<HyNotifyVo>();
-			for (String notifyId : notifyIds) {
-				HyNotifyVo nofity = HyNotifyUtil.getNotify(notifyId);
+			List<HyNotifyVo> notifies = HyNotifyUtil.getUnreadNotifies(userInfo.getUserId());
+			for (HyNotifyVo nofity : notifies) {
 				this.fillNotifyVo(nofity);
-				notifies.add(nofity);
 			}
 			responseData = new ResponseData<List<HyNotifyVo>>(ResponseData.AJAX_STATUS_SUCCESS,
-					ExceptCodeConstants.SUCCESS, "获取成功成功", notifies);
+					ExceptCodeConstants.SUCCESS, "获取成功", notifies);
 		} catch (Exception e) {
 			LOG.error(e);
 			responseData = new ResponseData<List<HyNotifyVo>>(ResponseData.AJAX_STATUS_FAILURE,
@@ -56,7 +56,33 @@ public class SysNotifyController {
 		return responseData;
 	}
 
-	@RequestMapping("/deleteUserMessage")
+	/**
+	 * 获取已读消息
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getReadNotifies")
+	@ResponseBody
+	public ResponseData<List<HyNotifyVo>> getReadNotifies(HttpServletRequest request) {
+		ResponseData<List<HyNotifyVo>> responseData = null;
+		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			List<HyNotifyVo> notifies = HyNotifyUtil.getreadNotifies(userInfo.getUserId());
+			for (HyNotifyVo nofity : notifies) {
+				this.fillNotifyVo(nofity);
+			}
+			responseData = new ResponseData<List<HyNotifyVo>>(ResponseData.AJAX_STATUS_SUCCESS,
+					ExceptCodeConstants.SUCCESS, "获取成功", notifies);
+		} catch (Exception e) {
+			LOG.error(e);
+			responseData = new ResponseData<List<HyNotifyVo>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/deleteUserNotify")
 	@ResponseBody
 	public ResponseData<String> deleteUserMessage(@NotBlank(message = "参数为空") String notifyId,
 			HttpServletRequest request) {
@@ -70,7 +96,8 @@ public class SysNotifyController {
 			body.setAccepterType(AccepterType.USER.getValue());
 			body.setAccepterId(userInfo.getUserId());
 			NotifyMQSend.sendNotifyMQ(body);
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS, "消息删除成功", "");
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"消息删除成功", "");
 		} catch (Exception e) {
 			LOG.error(e);
 			responseData = ExceptionUtil.convert(e, String.class);

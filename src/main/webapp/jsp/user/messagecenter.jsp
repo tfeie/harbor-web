@@ -81,7 +81,7 @@
 				delNotify: function(notifyId){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../notify/deleteUserMessage",
+						url: "../notify/deleteUserNotify",
 						type: "post",
 						data: {
 							notifyId:notifyId
@@ -109,7 +109,7 @@
 				getMessages: function(){
 					var _this = this;
 					ajaxController.ajax({
-						url: "../notify/getUserMessage",
+						url: "../notify/getUnreadNotifies",
 						type: "post",  
 						success: function(transport){
 							var data =transport.data; 

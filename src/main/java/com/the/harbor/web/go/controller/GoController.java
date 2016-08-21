@@ -71,6 +71,7 @@ import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.components.weixin.WXHelpUtil;
 import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
+import com.the.harbor.commons.redisdata.def.DoNotify;
 import com.the.harbor.commons.redisdata.def.HyDictsVo;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyDictUtil;
@@ -86,6 +87,7 @@ import com.the.harbor.commons.web.model.ResponseData;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.util.DubboServiceUtil;
+import com.the.harbor.web.util.NotifyMQSend;
 import com.the.harbor.web.util.UserCommentMQSend;
 import com.the.harbor.web.util.UserFavorMQSend;
 import com.the.harbor.web.util.UserGroupJoinConfirmMQSend;
@@ -246,6 +248,14 @@ public class GoController {
 			on1 = goOrder.getExpectedLocation1().equals(goOrder.getConfirmLocation());
 			on2 = goOrder.getExpectedLocation2().equals(goOrder.getConfirmLocation());
 		}
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
+		}
 		request.setAttribute("on1", on1);
 		request.setAttribute("on2", on2);
 		request.setAttribute("confirm", confirm);
@@ -351,7 +361,14 @@ public class GoController {
 			on1 = goOrder.getExpectedLocation1().equals(goOrder.getConfirmLocation());
 			on2 = goOrder.getExpectedLocation2().equals(goOrder.getConfirmLocation());
 		}
-
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
+		}
 		request.setAttribute("confirm", confirm);
 		request.setAttribute("on1", on1);
 		request.setAttribute("on2", on2);
@@ -456,6 +473,14 @@ public class GoController {
 		if (go == null) {
 			throw new BusinessException("活动信息不存在");
 		}
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
+		}
 		request.setAttribute("go", go);
 		request.setAttribute("userInfo", publishUserInfo);
 		request.setAttribute("goOrder", goOrder);
@@ -496,6 +521,14 @@ public class GoController {
 		if (go == null) {
 			throw new BusinessException("活动信息不存在");
 		}
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
+		}
 		request.setAttribute("go", go);
 		request.setAttribute("userInfo", orderUserInfo);
 		request.setAttribute("goOrder", goOrder);
@@ -506,6 +539,7 @@ public class GoController {
 	@RequestMapping("/confirmlist.html")
 	public ModelAndView confirmlist(HttpServletRequest request) {
 		String goId = request.getParameter("goId");
+
 		if (StringUtil.isBlank(goId)) {
 			throw new BusinessException("活动记录不存在");
 		}
@@ -517,6 +551,14 @@ public class GoController {
 		}
 		if (!userInfo.getUserId().equals(go.getUserId())) {
 			throw new BusinessException("您不是活动的发起者，无法确认");
+		}
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
 		}
 		request.setAttribute("go", go);
 		ModelAndView view = new ModelAndView("go/confirmlist");
@@ -564,7 +606,14 @@ public class GoController {
 			goType = "group";
 		}
 		request.setAttribute("goType", goType);
-
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
+		}
 		UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
@@ -615,6 +664,14 @@ public class GoController {
 		if (go == null) {
 			throw new BusinessException("您查看的活动信息不存在");
 		}
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
+		}
 		request.setAttribute("go", go);
 		request.setAttribute("goOrderId", goOrderId);
 		request.setAttribute("backURL", request.getParameter("backURL"));
@@ -645,6 +702,14 @@ public class GoController {
 		}
 		if (!go.getUserId().equals(userInfo.getUserId())) {
 			throw new BusinessException("您不是活动发起方,不能点评哦~");
+		}
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body = new DoNotify();
+			body.setNotifyId(notifyId);
+			body.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body);
 		}
 		request.setAttribute("go", go);
 		request.setAttribute("goJoin", goJoin);
@@ -683,7 +748,14 @@ public class GoController {
 		request.setAttribute("applied", applied);
 		request.setAttribute("joint", joint);
 		request.setAttribute("go", go);
-
+		String notifyId = request.getParameter("notifyId");
+		if (!StringUtil.isBlank(notifyId)) {
+			// 发送已读指令
+			DoNotify body1 = new DoNotify();
+			body1.setNotifyId(notifyId);
+			body1.setHandleType(DoNotify.HandleType.READ.name());
+			NotifyMQSend.sendNotifyMQ(body1);
+		}
 		long timestamp = DateUtil.getCurrentTimeMillis();
 		String nonceStr = WXHelpUtil.createNoncestr();
 		String jsapiTicket = WXHelpUtil.getJSAPITicket();
