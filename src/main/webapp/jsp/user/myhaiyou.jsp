@@ -63,14 +63,22 @@
 				<div class="tj-main box-s mar-top-10 pad-0-10">
 					<div class="top-tie">
 						<span>推荐的海友</span>
-						<div class="btn-search" style="display:none"></div>
-						<div class="search-main" style="display:none">
+					</div> 
+					<div id="DIV_TUIJIANFRIENDS"></div>
+
+				</div>
+				
+				<div class="tj-main box-s mar-top-10 pad-0-10">
+					<div class="top-tie">
+						<span>海友搜索</span>
+						<div class="btn-search"></div>
+						<div class="search-main">
 							<div class="m">
-								<input type="text" placeholder="国家/行业/学校/职业" class="In-text">
+								<input type="text" placeholder="国家/行业/学校/职业" class="In-text" id="keyword1">
 							</div>
 						</div>
 					</div> 
-					<div id="DIV_TUIJIANFRIENDS"></div>
+					<div id="DIV_SEARCHFRIENDS"></div>
 
 				</div>
 			</div>
@@ -156,7 +164,17 @@
 						$(this).addClass('on')
 						$('#bd .bd').css({display:'none'})
 						$('#bd .bd').eq($(this).index()).css({display:'block'})
+					});
+					
+					$('.btn-search').tap(function(){
+						$(this).siblings('.search-main').fadeIn();
+					});
+					
+					$("#keyword1").on("blur",function(){
+						var keyword=$(this).val();
+						_this.searchFriends(keyword);
 					})
+
 
 				},
 				
@@ -305,6 +323,36 @@
 					});
 				},
 				
+				searchFriends: function(keyword){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/searchUsers",
+						type: "post", 
+						data: {
+							keyword: keyword
+						},
+						success: function(transport){
+							var data =transport.data;  
+							_this.renderSearchFriends(data); 
+						},
+						failure: function(transport){ 
+							_this.renderSearchFriends([]); 
+						}
+					});
+				},
+				
+				renderSearchFriends: function(data){
+					var opt= "";
+					if(data.length>0){
+						opt=$("#TuijianFriendsImpl").render(data);
+					}else{
+						opt="<div class=\"itms clearfix\">没有匹配的海友~~</div>"
+					}
+					
+					$("#DIV_SEARCHFRIENDS").html(opt); 
+					
+				},
+				
 				renderTuijianFriends: function(data){
 					var opt= "";
 					if(data.length>0){
@@ -343,7 +391,7 @@
 
 	$(document).ready(function(){
 		var b = new $.HarborBuilder();
-		b.buildFooter();
+		b.buildFooter({showBeGoQuick: "hide"});
 		
 		var p = new $.MyHaiyouPage({ 
 		});
