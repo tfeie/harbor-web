@@ -288,7 +288,7 @@ wx.config({
 					$("#INDEX_SILDER").html(opt); 
 					$(".banner").owlCarousel({
 						items : 1,
-						autoPlay: 3000
+						autoPlay: true
 					})
 				},
 				

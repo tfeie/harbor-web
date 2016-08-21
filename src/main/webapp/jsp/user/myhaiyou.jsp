@@ -21,8 +21,8 @@
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
-<link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/style.css">
+<link href="//static.tfeie.com/v2/css/footer.css" rel="stylesheet"
+	type="text/css" />
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css"> 
 <script type="text/javascript"
@@ -303,7 +303,7 @@
 					if(data.length>0){
 						opt=$("#MyFriendsImpl").render(data);
 					}else{
-						opt="<div class=\"itms clearfix\">您还没有海友哦~~</div>"
+						opt="<div class=\"tj-main box-s pad-0-10\"><div class=\"itms clearfix\">您还没有海友哦~~</div></div>"
 					}
 					
 					$("#DIV_MYFRIENDS").html(opt); 
