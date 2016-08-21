@@ -46,7 +46,7 @@ public class WXAuthFilter extends OncePerRequestFilter {
 				break;
 			}
 		}
-		initSession(request);
+		//initSession(request);
 
 		if (doFilter) {
 			LOG.info("当前地址在需要认证的地址列表中，需要进行认证。开始判断session是否有会话信息");
