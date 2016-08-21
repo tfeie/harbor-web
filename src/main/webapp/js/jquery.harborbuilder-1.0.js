@@ -27,7 +27,7 @@
 		html+="<footer class=\"footer po-f\">";
 		html+="<a href=\"../be/index.html\"><i class=\"icon-f1\"></i><span>Be</span></a>";
 		html+="<a href=\"../go/goindex.html\"><i class=\"icon-f2\"></i><span>Go</span></a>";
-		html+="<a href=\"../user/myhaiyou.html\" id=\"_btn_goto_frd_\"><i class=\"icon-f3\"></i><span>Frd</span></a>";
+		html+="<a href=\"../user/myhaiyou.html\" id=\"_btn_goto_frd_\"><i class=\"icon-f3\" id=\"_FOOTER_HAIYOU_COUNT\"></i><span>Frd</span></a>";
 		html+="<a href=\"../user/messagecenter.html\"><i class=\"icon-f4\" id=\"_FOOTER_MSG_COUNT\"></i><span id=\"_FOOTER_MSG\">Msg</span></a>";
 		html+="<a href=\"../user/userCenter.html\"><i class=\"icon-f5\"></i><span>Me</span></a>";
 		html+="</footer>";
@@ -53,6 +53,17 @@
 					$("#_FOOTER_MSG_COUNT").html("<font>"+count+"</font>");
 				}else{
 					$("#_FOOTER_MSG_COUNT").html("");
+				}
+				
+			});
+			
+			var source = new EventSource("../user/listenerNewHaiyou");
+			source.addEventListener('message', function(e) {
+				var count = e.data;
+				if(count>0){
+					$("#_FOOTER_HAIYOU_COUNT").html("<font>"+count+"</font>");
+				}else{
+					$("#_FOOTER_HAIYOU_COUNT").html("");
 				}
 				
 			});

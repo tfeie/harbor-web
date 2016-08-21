@@ -1238,6 +1238,25 @@ public class UserController {
 		return "data:" + notifyCount + "\n\n";
 	}
 
+	@RequestMapping("/listenerNewHaiyou")
+	public @ResponseBody String listenerNewHaiyou(HttpServletRequest request, HttpServletResponse response) {
+		response.setContentType("text/event-stream; charset=utf-8");
+		response.setHeader("Cache-Control", "no-cache");
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			LOG.error(e.getMessage());
+		}
+		int notifyCount = 0;
+		try {
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			notifyCount = HyUserUtil.getUserFriendApplies(userInfo.getUserId()).size();
+		} catch (Exception ex) {
+
+		}
+		return "data:" + notifyCount + "\n\n";
+	}
+
 	@RequestMapping("/saveData")
 	public ResponseData<String> saveData(HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<String> responseData = null;
@@ -1479,8 +1498,7 @@ public class UserController {
 			UserTuijianQueryReq userTuijianQueryReq = new UserTuijianQueryReq();
 			userTuijianQueryReq.setUserId(loginUser.getUserId());
 			userTuijianQueryReq.setKeyword(keyword);
-			UserTuijianQueryResp rep = DubboConsumerFactory.getService(IUserSV.class)
-					.searchUsers(userTuijianQueryReq);
+			UserTuijianQueryResp rep = DubboConsumerFactory.getService(IUserSV.class).searchUsers(userTuijianQueryReq);
 			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
 				throw new BusinessException(rep.getResponseHeader().getResultCode(),
 						rep.getResponseHeader().getResultMessage());
