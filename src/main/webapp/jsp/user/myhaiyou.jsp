@@ -237,12 +237,14 @@
 						},
 						success: function(transport){
 							var dom	=	$(_t).parents('.itms');
-							dom.fadeOut("200",function(){dom.detach();});
-							var len = $(".items").length;
-							if(len==0){
-								var opt="<div class=\"itms clearfix\">没有新的海友申请哦~</div>";
-								$("#DIV_HAIYOU_APPLY").append(opt); 
-							}
+							dom.fadeOut("200",function(){
+								dom.detach();
+								var len = $(".items").length;
+								if(len==0){
+									var opt="<div class=\"itms clearfix\">没有新的海友申请哦~</div>";
+									$("#DIV_HAIYOU_APPLY").append(opt); 
+								}
+							});
 						},
 						failure: function(transport){ 
 							weUI.showXToast(transport.statusInfo);
