@@ -128,8 +128,8 @@
 		</div>
 	</section>
 	<footer class="foot_fixed">
-		<section class="sec_01">
-			<a href="javascript:void(0)" id="BTN_GO_FAVOR"><span>想见</span></a>
+		<section class="sec_01" id="BTN_GO_FAVOR">
+			<a href="javascript:void(0)"><span>想见</span></a>
 		</section>
 		<section class="sec_02">
 			<a href="javascript:void(0)" id="BTN_GO_APPLY"><span>立即预约</span></a>
@@ -216,6 +216,7 @@ wx.config({
 							goId : goId
 						},
 						success : function(transport) {
+							$("#BTN_GO_FAVOR").addClass("on");
 							var busiCode = transport.busiCode;
 							var statusInfo = transport.statusInfo;
 							if(busiCode=="user_unregister"){

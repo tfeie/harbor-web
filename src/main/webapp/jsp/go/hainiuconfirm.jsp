@@ -72,11 +72,10 @@
 			</section>
 		</section>
 
-		<section class="sec_btn2">
-			<span><a href="javascript:void(0)" id="BTN_CONFIRM">确认</a></span>
-			<span><a href="javascript:void(0)" id="BTN_REJECT">拒绝</a></span>
-			<span><a href="javascript:void(0)" id="BTN_SEND_MQ">给TA发消息</a></span>
-		</section>
+		 <section class="sec_btn2 fabu"><input type="button" value="确认" id="BTN_CONFIRM"></section>
+        <section class="sec_btn2 fabu1"><input type="button" value="拒绝" id="BTN_REJECT"></section>
+        <section class="sec_btn2 fabu1"><input type="button" value="给TA发消息" id="BTN_SEND_MQ"></section>
+        
 	</section>
 </body>
 

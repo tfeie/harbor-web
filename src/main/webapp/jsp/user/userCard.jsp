@@ -57,9 +57,9 @@
 
 </head>
 <body class="barn">
-	<section class="mingpian">
-		<section class="uk" style="display:none">
-			<p><c:out value="${userInfo.hyId}"/></p>
+	<section class="mingpian yymp-main">
+		<section class="uk">
+			<p>海归海湾</p>
 		</section>
 		<section class="touxing_logo">
 			<p>
@@ -68,31 +68,34 @@
 		</section>
 		<section class="per_info">
 			<p class="name">
-				<span><c:out value="${userInfo.enName}"/></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></label><i><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}"/></font></i>
-			</p>
-			<p class="pengyou">
-				<a href="#">益友 <c:out value="${yiyou}"/></a><a href="#" class="on">助人 <c:out value="${zhuren}"/></a><a href="#">公益贝
-					0</a>
-			</p>
-			<p class="aihao" id="SELECTED_INTEREST_TAGS"></p>
-			<section class="jinrong">
-				<p><c:out value="${userInfo.employmentInfo}"/></p>
-				<p class="aihao" id="SELECTED_SKILL_TAGS"></p>
-			</section>
-			<p class="but">
-				<input type="button" value="分 享" id="BTN_SHARE"><input type="button"
-					value="应 邀"  id="BTN_ACCEPT">
-			</p>
+								<span><c:out value="${userInfo.enName}"/></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></label><i><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}"/></font></i>
 
+			</p>
+			<p class="yq">邀请您加入海归创业第一社区....</p>
+			<p class="bq">
+				<span>海创CEO</span> | <span>海归企业家</span> | <span>海内外投资人</span> | <span>海创服务机构</span>
+			</p>
 			<div class="clear"></div>
+			<p class="js">加速海创起航</p>
+			<c:if test="${self==true}">
 			<c:if test="${initcode!=null}">
-			<p >请记住邀请码 <font size="5"><c:out value="${initcode}"/></font>，在下一步输入注册</p>
-			<p>（<c:out value="${userInfo.enName}"/>还剩 ${ncount}个邀请名额）</p>
+			<p>（限量邀请码<c:out value="${initcode}"/>，请在应邀后输入）</p>
 			</c:if>
 			<c:if test="${initcode==null}">
 			<p >邀请码已经用完</p>
 			</c:if>
-			<p>海湾，我们的舞台...</p>
+			</c:if>
+			<p class="but">
+			
+				<c:if test="${self==true}">
+				<input type="button" value="分 享" id="BTN_SHARE" class="on">
+				</c:if>
+				<c:if test="${self==false}">
+				<input type="button"  class="on"
+					value="应 邀"  id="BTN_ACCEPT">
+				</c:if>
+			</p>
+
 		</section>
 	</section>
 	

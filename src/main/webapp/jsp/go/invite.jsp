@@ -97,6 +97,9 @@
 			</a>
 			</strong> <br> 海归创业第一站
 		</div>
+		    </section>
+    
+    	<section style="padding-bottom:4.5em"></section>
 		<section class="yanbaoming">
 			<section class="sec_btn2 fabu" style="display:none" id="SEL_SHOW_RESULT">
 				<input type="button" value="报名成功，等待审核" id="BTN_GOTO_MYJOIN">
@@ -153,7 +156,6 @@
 			</section>
 		</section> 
 
-	</section>
 
 </body>
 <script type="text/javascript"

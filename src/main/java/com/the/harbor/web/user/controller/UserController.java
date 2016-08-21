@@ -568,7 +568,7 @@ public class UserController {
 		userInvite.setStatus(UserInviteStatus.NOT_USE.getValue());
 		req.setUserInviteInfo(userInvite);
 		List<UserInviteInfo> userInviteList = DubboConsumerFactory.getService(IUserSV.class).queryUserInvite(req);
-		String code = "";
+		String code = null;
 		String sign = "";
 		String param = "";
 		int ncount = 0;
@@ -589,9 +589,7 @@ public class UserController {
 			throw new BusinessException("邀请码加密错误");
 		}
 
-		UserWealthQueryResp userWealth = DubboServiceUtil.getUserWealth(userInfo.getUserId());
-		request.setAttribute("yiyou", userWealth.getYiyou());
-		request.setAttribute("zhuren", userWealth.getZhuren());
+		
 
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
@@ -603,7 +601,7 @@ public class UserController {
 		request.setAttribute("inviteCode", param);
 		request.setAttribute("initcode", code);
 		request.setAttribute("ncount", ncount);
-
+		request.setAttribute("self", true);
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}
@@ -659,7 +657,7 @@ public class UserController {
 				GlobalSettings.getHarborDomain() + "/user/getUserCardDetail.html?inviteCode=" + param);
 		request.setAttribute("userInfo", userInfo);
 		request.setAttribute("inviteCode", param);
-
+		request.setAttribute("self", false);
 		ModelAndView view = new ModelAndView("user/userCard");
 		return view;
 	}
