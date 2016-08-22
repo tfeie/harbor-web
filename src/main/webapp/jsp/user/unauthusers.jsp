@@ -94,6 +94,7 @@
 					}else{
 						opt="<div class=\"itms clearfix\">没有待审核认证的用户哦~</div>";
 					}
+					alert(opt);
 					$("#DIV_USER").html(opt);
 				}
 			}
