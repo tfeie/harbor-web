@@ -70,6 +70,12 @@
 			<img src="//static.tfeie.com/images/img5.png" id="img_oversea"/>
 		</div>
 	</section>
+	<section class="me_qingke">
+		<p name="authIdentity" authIdentity="1000">创业者</p>
+		<p name="authIdentity" authIdentity="2000">投资人</p>
+		<p name="authIdentity" authIdentity="3000">导师</p>
+		<p name="authIdentity" authIdentity="4000">创业服务</p>
+	</section>
 	<div class="message-err" id="DIV_TIPS"></div>
 	<section class="but_baoc">
 		<p>
@@ -144,6 +150,19 @@
 						ruleMessages: {
 							required: "请上传海外学历认证/签证/学生证"
 						}
+					}).addRule({
+						labelName: "认证身份",
+						fieldName: "authIdentity",
+						getValue: function(){
+							var v = $.trim($("[name='authIdentity'].on").attr("authIdentity"));
+							return v;
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择认证身份"
+						}
 					});
 					this.valueValidator =valueValidator;
 				},
@@ -152,6 +171,11 @@
 					var _this = this; 
 					$("#BTN_SUBMIT").on("click",function(){
 						_this.submit();
+					});
+					
+					$("[name='authIdentity']").on("click",function(){
+						$("[name='authIdentity']").removeClass("on");
+						$(this).addClass("on");
 					});
 					
 					$("#IMGOverSeaPicker").on("click", function() {
@@ -274,7 +298,8 @@
 						data: {
 							userId: _this.getPropertyValue("userId"),
 							overseasPhoto: $("#overseasPhoto").val(),
-							idcardPhoto: $("#idcardPhoto").val()
+							idcardPhoto: $("#idcardPhoto").val(),
+							authIdentity: $.trim($("[name='authIdentity'].on").attr("authIdentity"))
 						},
 						success: function(transport){
 							weUI.showXToast("已提交等待审核");

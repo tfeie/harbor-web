@@ -66,6 +66,9 @@
 		</div>
 	</section>
 	<section class="me_qingke">
+		<c:out value="${userInfo.authIdentityName}"/>
+	</section>
+	<section class="me_qingke">
 		<p name="authResult" class="on" authStatus="12">通过</p>
 		<p name="authResult" authStatus="13">不通过</p>
 	</section>
