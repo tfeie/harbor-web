@@ -74,7 +74,7 @@
 						<div class="btn-search"></div>
 						<div class="search-main">
 							<div class="m">
-								<input type="text" placeholder="国家/行业/学校/职业" class="In-text" id="keyword1">
+								<input type="text" placeholder="留学国家/行业/地区" class="In-text" id="keyword1">
 							</div>
 						</div>
 					</div> 

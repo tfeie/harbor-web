@@ -71,7 +71,7 @@
 								<span><c:out value="${userInfo.enName}"/></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></label><i><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}"/></font></i>
 
 			</p>
-			<p class="yq">邀请您加入海归创业第一社区....</p>
+			<p class="yq">邀请您加入海归创业加速第一社区....</p>
 			<p class="bq">
 				<span>海创CEO</span> | <span>海归企业家</span> | <span>海内外投资人</span> | <span>海创服务机构</span>
 			</p>

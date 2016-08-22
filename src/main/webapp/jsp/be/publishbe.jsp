@@ -604,7 +604,7 @@
 	{{if type=="text"}}
 	<div class="wb-m">
 		{{if candel==false}}
-		<textarea class="In-text" name="BE_DETAIL_TEXTAREA" id="BE_DETAIL_TEXTAREA_TITLE"  _id="{{:_id}}" placeholder="请填写您的B&E...">{{:detail}}</textarea>
+		<textarea class="In-text" name="BE_DETAIL_TEXTAREA" id="BE_DETAIL_TEXTAREA_TITLE"  _id="{{:_id}}" placeholder="这里不可以超过140个字哦~">{{:detail}}</textarea>
 		{{/if}}
 		{{if candel==true}}
 		<textarea class="In-text" name="BE_DETAIL_TEXTAREA" id="BE_DETAIL_TEXTAREA_{{:_id}}"  _id="{{:_id}}">{{:detail}}</textarea>

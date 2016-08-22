@@ -75,21 +75,22 @@
 			<p><c:out value="${userInfo.title}"/></p>
 		</section>
 
-		<c:if test="${userInfo.userStatus!='20'}">
-		<section class="but_baoc but_baoc1">
+		<section class="ip_bianji">
 			<p>
-				<input type="button" value="申请认证" id="BTN_APPLY_CERT"/>
+				<a href="../user/editUserInfo.html">编辑信息</a>
+			</p>
+		</section>
+		
+		<c:if test="${userInfo.userStatus!='20'}">
+		<section class="ip_bianji">
+			<p>
+				<a href="javascript:void(0)" id="BTN_APPLY_CERT">申请认证</a>
 			</p>
 		</section>
 		<section class="zhangdemei">
 			<p>(据说长得美的都认证了....)</p>
 		</section>
 		</c:if>
-		<section class="ip_bianji">
-			<p>
-				<a href="../user/editUserInfo.html">编辑信息</a>
-			</p>
-		</section>
 	</section>
 
 </body>

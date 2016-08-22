@@ -1112,7 +1112,7 @@ jeDate({
 			<section class="zhuti_hanhua items">
 				<p>
 					{{if candel==false}}
-					<textarea name="GO_DETAIL_TEXTAREA"  id="GO_DETAIL_TEXTAREA_TOPIC" _id="{{:_id}}">{{:detail}}</textarea>
+					<textarea name="GO_DETAIL_TEXTAREA"  id="GO_DETAIL_TEXTAREA_TOPIC" _id="{{:_id}}" placeholder="请输入不超过3行的简介">{{:detail}}</textarea>
 					{{/if}}
 					{{if candel==true}}
 					<textarea name="GO_DETAIL_TEXTAREA"  id="GO_DETAIL_TEXTAREA_{{:_id}}" _id="{{:_id}}">{{:detail}}</textarea>
