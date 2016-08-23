@@ -70,7 +70,7 @@
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript"
-	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
 	//微信API配置
 	wx.config({

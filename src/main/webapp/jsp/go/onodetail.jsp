@@ -139,7 +139,7 @@
 
 </body>
 <script type="text/javascript"
-	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> 
+	src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> 
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
 <script type="text/javascript"
