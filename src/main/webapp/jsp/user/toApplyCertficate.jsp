@@ -73,7 +73,7 @@
 	<section class="me_qingke">
 		<p name="authIdentity" authIdentity="1000">创业者</p>
 		<p name="authIdentity" authIdentity="2000">投资人</p>
-		<p name="authIdentity" authIdentity="3000">导师</p>
+		<p name="authIdentity" authIdentity="3000">前辈导师</p>
 		<p name="authIdentity" authIdentity="4000">创业服务</p>
 	</section>
 	<div class="message-err" id="DIV_TIPS"></div>

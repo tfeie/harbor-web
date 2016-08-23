@@ -12,7 +12,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>名片</title>
+<title>邀请名片</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
@@ -71,12 +71,12 @@
 								<span><c:out value="${userInfo.enName}"/></span><label class="lbl2" style="background:<c:out value="${userInfo.abroadCountryRGB}" />"><c:out value="${userInfo.abroadCountryName}"/></label><i><font <c:if test="${userInfo.userStatus=='20'}">color="#FFB90F"</c:if>><c:out value="${userInfo.userStatusName}"/></font></i>
 
 			</p>
-			<p class="yq">邀请您加入海归创业加速第一社区....</p>
+			<p class="yq">邀请您加入海归创业加速第一社区</p>
 			<p class="bq">
 				<span>海创CEO</span> | <span>海归企业家</span> | <span>海内外投资人</span> | <span>海创服务机构</span>
 			</p>
 			<div class="clear"></div>
-			<p class="js">加速海创起航</p>
+			<p class="js">加速海创起航...</p>
 			<c:if test="${self==true}">
 			<c:if test="${initcode!=null}">
 			<p>（限量邀请码<c:out value="${initcode}"/>，请在应邀后输入）</p>
@@ -144,7 +144,7 @@
 						var code = "${initcode}"?"${initcode}":"邀请码已用完";
 						 var shareData = {
 								   title: '${userInfo.enName}在海归海湾创业' ,
-								   desc: "海归海湾，海归创业第一站，限量邀请码：" + code,
+								   desc: "海归海湾，海归创业加速第一社区，限量邀请码：" + code,
 								   imgUrl:'${userInfo.wxHeadimg}',
 								   link: '${url}'
 							};
