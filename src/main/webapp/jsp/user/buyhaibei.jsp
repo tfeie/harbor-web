@@ -65,7 +65,7 @@
 <script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
 <script type="text/javascript">
 wx.config({
-	debug : false,
+	debug : true,
 	appId : '<c:out value="${appId}"/>',
 	timestamp : <c:out value="${timestamp}"/>,
 	nonceStr : '<c:out value="${nonceStr}"/>',
@@ -128,6 +128,7 @@ wx.config({
 						            }, 1000);
 							    },
 							    fail: function(res){
+							    	console.log(res);
 							    	weUI.showXToast("支付失败");
 									setTimeout(function () {
 										weUI.hideXToast();
