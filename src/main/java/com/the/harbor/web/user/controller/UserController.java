@@ -1512,8 +1512,6 @@ public class UserController {
 
 	@RequestMapping("/login.html")
 	public ModelAndView login(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		WeixinUserInfo wxUserInfo = WXUserUtil.getWeixinUserInfo(request);
-		request.setAttribute("wxUserInfo", wxUserInfo);
 		ModelAndView view = new ModelAndView("user/login");
 		return view;
 	}
