@@ -57,7 +57,17 @@
 				</section>
 				<section class="info_time back1">
 					<p>
-						<span>Group邀请<c:out value="${go.inviteMembers}" />人</span><a href="#"><c:out value="${go.fixPriceYuan}" />元</a>
+						<span>Group邀请<c:out value="${go.inviteMembers}" />人</span>
+						<a href="#">
+						<c:if test="${go.payMode=='30' }">
+						<!-- 我请客，显示我请客 -->
+						<c:out value="${go.payModeName}" />
+						</c:if>
+						<c:if test="${go.payMode!='30' }">
+						<!-- 其它方式，显示费用 -->
+						<c:out value="${go.fixPriceYuan}" />元
+						</c:if>
+						</a>
 					</p>
 				</section>
 				<section class="info_time back2">

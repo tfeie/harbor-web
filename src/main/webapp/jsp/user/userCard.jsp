@@ -77,14 +77,14 @@
 			</p>
 			<div class="clear"></div>
 			<p class="js">加速海创起航...</p>
-			<c:if test="${self==true}">
+			
 			<c:if test="${initcode!=null}">
 			<p>（限量邀请码<c:out value="${initcode}"/>，请在应邀后输入）</p>
 			</c:if>
 			<c:if test="${initcode==null}">
 			<p >邀请码已经用完</p>
 			</c:if>
-			</c:if>
+			
 			<p class="but">
 			
 				<c:if test="${self==true}">
