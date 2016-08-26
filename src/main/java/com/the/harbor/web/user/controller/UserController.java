@@ -79,6 +79,7 @@ import com.the.harbor.commons.util.SignUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.util.UUIDUtil;
 import com.the.harbor.commons.web.model.ResponseData;
+import com.the.harbor.web.constants.WXConstants;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.util.DubboServiceUtil;
@@ -588,8 +589,6 @@ public class UserController {
 		} catch (Exception ex) {
 			throw new BusinessException("邀请码加密错误");
 		}
-
-		
 
 		request.setAttribute("appId", GlobalSettings.getWeiXinAppId());
 		request.setAttribute("timestamp", timestamp);
@@ -1507,6 +1506,95 @@ public class UserController {
 			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<List<UserViewInfo>>(ResponseData.AJAX_STATUS_FAILURE,
 					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/login.html")
+	public ModelAndView login(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		WeixinUserInfo wxUserInfo = WXUserUtil.getWeixinUserInfo(request);
+		request.setAttribute("wxUserInfo", wxUserInfo);
+		ModelAndView view = new ModelAndView("user/login");
+		return view;
+	}
+
+	@RequestMapping("/getLoginRandomCode")
+	public ResponseData<String> getLoginRandomCode(@NotBlank(message = "手机号码为空") String mobilePhone) {
+		ResponseData<String> responseData = null;
+		try {
+			if (StringUtil.isBlank(mobilePhone)) {
+				throw new BusinessException("请输入您的手机号码");
+			}
+			// 判断手机号码注册否
+			UserViewResp rep = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByMobilePhone(mobilePhone);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			UserViewInfo userViewInfo = rep.getUserInfo();
+			if (userViewInfo == null) {
+				throw new BusinessException("手机号码未注册");
+			}
+			String randomCode = SMSRandomCodeUtil.getSmsRandomCode("login_" + mobilePhone);
+			if (!StringUtil.isBlank(randomCode)) {
+				throw new BusinessException("验证码已经发送，一分钟内不要重复获取");
+			}
+			// 生成随机验证码，并且存入到缓存中
+			randomCode = SMSRandomCodeUtil.createRandomCode();
+			/* 调用API发送短信 */
+			SMSSendRequest req = new SMSSendRequest();
+			List<String> recNumbers = new ArrayList<String>();
+			recNumbers.add(mobilePhone);
+			JSONObject smsParams = new JSONObject();
+			smsParams.put("randomCode", randomCode);
+			req.setRecNumbers(recNumbers);
+			req.setSmsFreeSignName(GlobalSettings.getSMSFreeSignName());
+			req.setSmsParams(smsParams);
+			req.setSmsTemplateCode(GlobalSettings.getSMSUserRandomCodeTemplate());
+			SMSSender.send(req);
+			SMSRandomCodeUtil.setSmsRandomCode("login_" + mobilePhone, randomCode);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "验证码发送成功", randomCode);
+		} catch (BusinessException e) {
+			LOG.error(e.getErrorMessage(), e);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, ExceptCodeConstants.SUCCESS,
+					e.getMessage());
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	@RequestMapping("/login")
+	public ResponseData<String> login(@NotBlank(message = "手机号码为空") String mobilePhone,
+			@NotBlank(message = "验证码为空") String randomCode, HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			UserViewResp rep = DubboConsumerFactory.getService(IUserSV.class).queryUserViewByMobilePhone(mobilePhone);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			UserViewInfo userViewInfo = rep.getUserInfo();
+			if (userViewInfo == null) {
+				throw new BusinessException("手机号码未注册");
+			}
+			String code = SMSRandomCodeUtil.getSmsRandomCode("login_" + mobilePhone);
+			if (StringUtil.isBlank(code)) {
+				throw new BusinessException("验证码已过期");
+			}
+			if (!code.equals(randomCode)) {
+				throw new BusinessException("验证码错误");
+			}
+			request.getSession().setAttribute(WXConstants.SESSION_WEB_LOGIN, userViewInfo.getUserId());
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "登录成功", randomCode);
+		} catch (BusinessException e) {
+			LOG.error(e.getErrorMessage(), e);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_FAILURE, ExceptCodeConstants.SUCCESS,
+					e.getMessage());
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}
