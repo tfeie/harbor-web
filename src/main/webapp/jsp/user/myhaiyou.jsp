@@ -20,7 +20,6 @@
 	type="text/css" />
 <link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
 	type="text/css" />
-<link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
 <link href="//static.tfeie.com/v2/css/footer.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" type="text/css"
@@ -28,19 +27,24 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script> 
 <script type="text/javascript"
-	src="//static.tfeie.com/v2/js/swiper.min.js"></script> 	
-<script type="text/javascript"
 	src="//static.tfeie.com/v2/js/tap.js"></script> 
 <script type="text/javascript" src="//static.tfeie.com/js/json2.js"></script>
+<link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
+<script type="text/javascript"
+	src="//static.tfeie.com/v2/js/swiper.min.js"></script>
 
 
 </head>
 <body class="bg-eeeeee">
 
 	<section class="txl-main">
+		<div class="clear"></div>
 		<div class="swiper-container" id="banner-img">
-			<div class="swiper-wrapper" id="INDEX_SILDER"> 
-			</div> 
+			<div class="swiper-wrapper" id="INDEX_SILDER"></div>
+
+			<div class="pagination">
+				<div class="ppage"></div>
+			</div>
 		</div>
 
 		<div class="top-tap box-s">
@@ -372,13 +376,12 @@
 					var opt=$("#BannerSiderImpl").render(data);
 					$("#INDEX_SILDER").html(opt); 
 					
-					var mySwiper = new Swiper('.swiper-container', {
-						grabCursor : true,
-						loop : true,
-						paginationClickable : true,
-						pagination : '.ppage',
-						autoplay : 5000,
-
+					var mySwiper = new Swiper('.swiper-container',{
+						grabCursor: true,
+						loop:true,
+						paginationClickable: true,
+						pagination: '.ppage',
+						autoplay:5000,
 					}) 
 				},
 				

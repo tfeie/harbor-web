@@ -23,6 +23,9 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script> 
+<link rel="stylesheet" href="//static.tfeie.com/v2/css/swiper.min.css">
+<script type="text/javascript"
+	src="//static.tfeie.com/v2/js/swiper.min.js"></script>
 <style>
          #bg{ display: block;  position: absolute;  top: 0%;  left: 0%;  width: 100%;  height: 100%;  background-color: black;  z-index:1001;  -moz-opacity: 0.7;  opacity:.70;  filter: alpha(opacity=70);}
 
@@ -59,10 +62,16 @@
 </head>
 <body>
 	<header class="header"></header>
+	<div class="clear"></div>
+	<div class="swiper-container" id="banner-img">
+		<div class="swiper-wrapper" id="INDEX_SILDER">
+		</div>
 
-	<section class="banner" id="INDEX_SILDER">
-		 
-	</section>
+		<div class="pagination">
+			<div class="ppage"></div>
+		</div>
+	</div>
+
 	<div class="clear"></div>
 	<section class="mainer">
 
@@ -286,9 +295,12 @@ wx.config({
 					data= data?data:[];
 					var opt=$("#BannerSiderImpl").render(data);
 					$("#INDEX_SILDER").html(opt); 
-					$(".banner").owlCarousel({
-						items : 1,
-						autoPlay: true
+					var mySwiper = new Swiper('.swiper-container',{
+						grabCursor: true,
+						loop:true,
+						paginationClickable: true,
+						pagination: '.ppage',
+						autoplay:5000,
 					})
 				},
 				
@@ -418,9 +430,9 @@ wx.config({
 </script>
 
 <script id="BannerSiderImpl" type="text/x-jsrender"> 
-		<section class="item">
-			<a href="{{:linkURL}}"><img src="{{:imgURL}}" /></a>
-		</section>
+	<div class="swiper-slide">
+				<a href="{{:linkURL}}"><img src="{{:imgURL}}" width="100%"></a>
+			</div>
 </script>
 
 <script id="BeTagsImpl" type="text/x-jsrender"> 
