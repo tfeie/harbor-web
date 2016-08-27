@@ -1,5 +1,7 @@
 package com.the.harbor.web.user.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -15,13 +17,18 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.PutObjectRequest;
 import com.the.harbor.api.user.IUserSV;
 import com.the.harbor.api.user.param.CreateUserBuyHBOrderReq;
 import com.the.harbor.api.user.param.CreateUserBuyHBOrderResp;
@@ -56,6 +63,8 @@ import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.base.exception.BusinessException;
 import com.the.harbor.base.vo.Response;
 import com.the.harbor.commons.components.aliyuncs.im.IMSettings;
+import com.the.harbor.commons.components.aliyuncs.oss.OSSFactory;
+import com.the.harbor.commons.components.aliyuncs.oss.PutObjectProgressListener;
 import com.the.harbor.commons.components.aliyuncs.sms.SMSSender;
 import com.the.harbor.commons.components.aliyuncs.sms.param.SMSSendRequest;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
@@ -1512,6 +1521,7 @@ public class UserController {
 
 	@RequestMapping("/login.html")
 	public ModelAndView login(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setAttribute("redirectURL", request.getSession().getAttribute(WXConstants.SESSION_WEB_REDIRECTURL));
 		ModelAndView view = new ModelAndView("user/login");
 		return view;
 	}
@@ -1584,7 +1594,7 @@ public class UserController {
 			if (!code.equals(randomCode)) {
 				throw new BusinessException("验证码错误");
 			}
-			request.getSession().setAttribute(WXConstants.SESSION_WEB_LOGIN, userViewInfo.getUserId());
+			request.getSession().setAttribute(WXConstants.SESSION_WEB_LOGIN, userViewInfo);
 			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, "登录成功", randomCode);
 		} catch (BusinessException e) {
 			LOG.error(e.getErrorMessage(), e);
@@ -1595,6 +1605,40 @@ public class UserController {
 			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
+	}
+
+	@RequestMapping("/towebupload.html")
+	public ModelAndView webpublishbe(HttpServletRequest request) {
+		Object o = request.getSession().getAttribute(WXConstants.SESSION_WEB_LOGIN);
+		if (o == null) {
+			throw new BusinessException("您没有通过网页版登录，请先登录");
+		}
+		ModelAndView view = new ModelAndView("user/webupload");
+		return view;
+	}
+
+	@RequestMapping(value = "/webUploadToOSS", method = RequestMethod.POST)
+	public String webUploadToOSS(HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+		Object o = request.getSession().getAttribute(WXConstants.SESSION_WEB_LOGIN);
+		if (o == null) {
+			throw new BusinessException("您没有通过网页版登录，无权限上传");
+		}
+		UserViewInfo userInfo = (UserViewInfo) o;
+		String date = DateUtil.getDateString(DateUtil.YYYYMMDD);
+		String userId = userInfo.getUserId();
+		String fileName = "webupload/" + date + "/" + userId + "/" + file.getOriginalFilename();
+		InputStream in = file.getInputStream();
+		this.transerWXFile2OSS(in, fileName);
+		String fileURL = GlobalSettings.getHarborImagesDomain() + "/" + fileName;
+		return fileURL;
+	}
+
+	private void transerWXFile2OSS(InputStream in, String fileName) {
+		OSSClient ossClient = OSSFactory.getOSSClient();
+		ossClient.putObject(new PutObjectRequest(GlobalSettings.getHarborImagesBucketName(), fileName, in)
+				.<PutObjectRequest> withProgressListener(new PutObjectProgressListener()));
+		ossClient.shutdown();
 	}
 
 }

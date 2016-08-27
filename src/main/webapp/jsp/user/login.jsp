@@ -60,8 +60,9 @@
  
 	<script type="text/javascript">
 	(function($){
-		$.UserLoginPage = function(){
+		$.UserLoginPage = function(data){
 			this.settings = $.extend(true,{},$.UserLoginPage.defaults);
+			this.params= data?data:{}
 		}
 		$.extend($.UserLoginPage,{
 			defaults: { 
@@ -105,6 +106,11 @@
 						}
 					});
 					this.valueValidator =valueValidator;
+				},
+				
+				getPropertyValue: function(propertyName){
+					if(!propertyName)return;
+					return this.params[propertyName];
 				},
 				
 				bindEvents: function(){
@@ -151,8 +157,12 @@
 						},
 						success: function(transport){
 							weUI.showXToast("登录成功");
+							var redirectURL = _this.getPropertyValue("redirectURL");
 							setTimeout(function () {
 								weUI.hideXToast();
+								if(redirectURL!=""){
+									window.location.href=redirectURL;
+								}
 								//window.location.href="../user/setUserSkills.html"
 				            }, 1000);
 						},
@@ -227,7 +237,9 @@
 
 	$(document).ready(function(){
 		var p = new $.UserLoginPage();
-		p.init();
+		p.init({
+			redirectURL: "<c:out value="${redirectURL}"/>"
+		});
 	});
 	</script>
 

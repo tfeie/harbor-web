@@ -17,4 +17,7 @@ public class WXConstants {
 	// WEB登录后的SESSION
 	public static final String SESSION_WEB_LOGIN = "_WEB_LOGIN_SESSION_"; 
 	
+	//WEB登录成功后的跳转页面
+	public static final String SESSION_WEB_REDIRECTURL = "_WEB_LOGIN_REDIRECTURL_"; 
+	
 }
