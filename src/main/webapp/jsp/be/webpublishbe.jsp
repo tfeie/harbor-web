@@ -131,7 +131,7 @@
 					
 					//提交按钮
 					$("#BTN_SUBMIT").on("click",function(){
-						alert("暂时还没有实现");
+						_this.submit();
 					}); 
 					//已选标签的删除事件代理
 					$("#SELECTED_BE_TAGS").delegate("[name='TAG_DEL']","click",function(){
@@ -496,23 +496,15 @@
 							weUI.showXToast("发布成功");
 							setTimeout(function () {
 								weUI.hideXToast();
-								window.location.href="../be/index.html";
+								window.location.href="../be/webpublishbe.html";
 				            }, 1000);
 						},
 						failure: function(transport){
 							weUI.hideLoadingToast();
-							var busiCode = transport.busiCode;
-							var statusInfo = transport.statusInfo;
-							if(busiCode=="user_unregister"){
-								weUI.confirm({content:"您还没有注册,是否先注册后再发表~",ok: function(){
-									window.location.href="../user/toUserRegister.html";
-								}});
-							}else{
-								weUI.showXToast(transport.statusInfo);
-								setTimeout(function () {
-									weUI.hideXToast();
-					            }, 1000);
-							}
+							weUI.showXToast(transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 1000);
 						}
 						
 					});

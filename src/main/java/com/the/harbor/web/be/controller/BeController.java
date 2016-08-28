@@ -775,10 +775,9 @@ public class BeController {
 	public ModelAndView webpublishbe(HttpServletRequest request) {
 		Object o = request.getSession().getAttribute(WXConstants.SESSION_WEB_LOGIN);
 		if (o == null) {
-			UserViewInfo userInfo = WXUserUtil.getUserViewInfoByUserId("hy00000192");
-			request.getSession().setAttribute(WXConstants.SESSION_WEB_LOGIN, userInfo);
+			request.getSession().setAttribute(WXConstants.SESSION_WEB_REDIRECTURL, "../be/webpublishbe.html");
+			throw new BusinessException("您还没有通过网页登录，请先登录",true,"../user/login.html");
 		}
-		request.getSession().setAttribute(WXConstants.SESSION_WEB_REDIRECTURL, "../be/webpublishbe.html");
 		UserViewInfo userInfo = (UserViewInfo) o;
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("be/webpublishbe");

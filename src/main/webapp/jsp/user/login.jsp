@@ -135,7 +135,7 @@
 				
 				login: function(){
 					var _this=this;
-					
+					var redirectURL = _this.getPropertyValue("redirectURL");
 					var res=_this.valueValidator.fireRulesAndReturnFirstError();
 					if(res){
 						weUI.showXToast(res);
@@ -236,10 +236,10 @@
 	
 
 	$(document).ready(function(){
-		var p = new $.UserLoginPage();
-		p.init({
+		var p = new $.UserLoginPage({
 			redirectURL: "<c:out value="${redirectURL}"/>"
 		});
+		p.init();
 	});
 	</script>
 
