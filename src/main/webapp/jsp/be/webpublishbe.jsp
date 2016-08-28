@@ -32,6 +32,7 @@
 <script src="//static.tfeie.com/js/jquery-te/jquery-te-1.4.0.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/js/jquery-te/jquery-te-1.4.0.css"> 
+<script src="//static.tfeie.com/js/layer/layer.js"></script>
 </head>
 
 <body>
@@ -93,21 +94,14 @@
 					//添加图片按钮事件
 					$("#SPAN_ADD_IMAGE").on("click",function(){
 						var url="../user/towebupload.html";
-						var images = window.showModalDialog(url,"","dialogWidth=800px;dialogHeight=500px"); 
-						if(!images ||images.length==0){
-							return;
-						}
-						$.each(images,function(index,url){
-							_this.bedetails.push({
-								_id: new Date().getTime(),
-								type: "image",
-								imageUrl: url,
-								imgThumbnailUrl: url+"@!be_thumbnail"
-							});
-						})
-						console.log(_this.bedetails);
-						//渲染详情页面
-						_this.renderBeDetails();
+						layer.open({
+							type: 2,
+							title: '图片上传',
+							maxmin: true,
+							shadeClose: true, //点击遮罩关闭层
+							area : ['800px' , '520px'],
+							content: url
+						});
 					});
 					
 					//添加文字按钮事件
@@ -239,6 +233,25 @@
 						detail:""
 					}];
 					this.getAllBeTags(); 
+				},
+				
+				returnDataToLayer: function(images){
+					var _this = this;
+					layer.closeAll();
+					if(!images || images.length==0){
+						return;
+					}
+					$.each(images,function(index,url){
+						_this.bedetails.push({
+							_id: new Date().getTime(),
+							type: "image",
+							imageUrl: url,
+							imgThumbnailUrl: url+"@!be_thumbnail"
+						});
+					})
+					console.log(_this.bedetails);
+					//渲染详情页面
+					_this.renderBeDetails();
 				},
 				
 				initRenders: function(){
@@ -515,8 +528,9 @@
 	})(jQuery);
 	
 
+	var p;
 	$(document).ready(function(){ 
-		var p = new $.PublishBePage({
+		p = new $.PublishBePage({
 			userId: "<c:out value="${userInfo.userId}"/>"
 		});
 		p.init();

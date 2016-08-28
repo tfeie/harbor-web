@@ -53,7 +53,7 @@
 			<div class="queueList">
 				<div id="dndArea" class="placeholder">
 					<div id="filePicker"></div>
-					<p>或将照片拖到这里，单次最多可选300张</p>
+					<p>或将照片拖到这里，单次最多可选20张</p>
 				</div>
 			</div>
 			<div class="statusBar" style="display: none;">
@@ -141,8 +141,7 @@
 	            }, 1000);
 				return ;
 			}
-			window.returnValue=successImages;
-			window.close();
+			parent.p.returnDataToLayer(successImages);
 		})
 
 		// 实例化
@@ -164,7 +163,7 @@
 
 			chunked : true,
 			server : '../user/webUploadToOSS',
-			fileNumLimit : 300,
+			fileNumLimit : 20,
 			fileSizeLimit : 5 * 1024 * 1024, // 200 M
 			fileSingleSizeLimit : 1 * 1024 * 1024
 		});
