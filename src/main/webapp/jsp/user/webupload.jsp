@@ -141,7 +141,7 @@
 	            }, 1000);
 				return ;
 			}
-			parent.p.returnDataToLayer(successImages);
+			parent.p.returnDataToLayer(successImages,"<c:out value="${type}"/>");
 		})
 
 		// 实例化
@@ -163,7 +163,7 @@
 
 			chunked : true,
 			server : '../user/webUploadToOSS',
-			fileNumLimit : 20,
+			fileNumLimit : <c:out value="${limit}"/>,
 			fileSizeLimit : 5 * 1024 * 1024, // 200 M
 			fileSingleSizeLimit : 1 * 1024 * 1024
 		});

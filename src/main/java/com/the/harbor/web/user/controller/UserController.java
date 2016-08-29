@@ -1608,11 +1608,15 @@ public class UserController {
 	}
 
 	@RequestMapping("/towebupload.html")
-	public ModelAndView webpublishbe(HttpServletRequest request) {
+	public ModelAndView towebupload(HttpServletRequest request) {
 		Object o = request.getSession().getAttribute(WXConstants.SESSION_WEB_LOGIN);
 		if (o == null) {
 			throw new BusinessException("您没有通过网页版登录，请先登录");
 		}
+		String type = request.getParameter("type");
+		String limit = request.getParameter("limit");
+		request.setAttribute("limit", !StringUtil.isBlank(limit) ? Integer.parseInt(limit) : 20);
+		request.setAttribute("type", type);
 		ModelAndView view = new ModelAndView("user/webupload");
 		return view;
 	}

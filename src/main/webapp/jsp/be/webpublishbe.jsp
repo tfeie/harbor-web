@@ -235,7 +235,7 @@
 					this.getAllBeTags(); 
 				},
 				
-				returnDataToLayer: function(images){
+				returnDataToLayer: function(images,type){
 					var _this = this;
 					layer.closeAll();
 					if(!images || images.length==0){

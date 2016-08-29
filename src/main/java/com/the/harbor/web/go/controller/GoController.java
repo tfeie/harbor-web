@@ -84,6 +84,7 @@ import com.the.harbor.commons.util.ExceptionUtil;
 import com.the.harbor.commons.util.StringUtil;
 import com.the.harbor.commons.util.UUIDUtil;
 import com.the.harbor.commons.web.model.ResponseData;
+import com.the.harbor.web.constants.WXConstants;
 import com.the.harbor.web.system.utils.WXRequestUtil;
 import com.the.harbor.web.system.utils.WXUserUtil;
 import com.the.harbor.web.util.DubboServiceUtil;
@@ -1850,6 +1851,20 @@ public class GoController {
 			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
+	}
+	
+	
+	@RequestMapping("/webpublishgo.html")
+	public ModelAndView webpublishgo(HttpServletRequest request) {
+		Object o = request.getSession().getAttribute(WXConstants.SESSION_WEB_LOGIN);
+		if (o == null) {
+			request.getSession().setAttribute(WXConstants.SESSION_WEB_REDIRECTURL, "../be/webpublishbe.html");
+			throw new BusinessException("您还没有通过网页登录，请先登录",true,"../user/login.html");
+		}
+		UserViewInfo userInfo = (UserViewInfo) o;
+		request.setAttribute("userInfo", userInfo);
+		ModelAndView view = new ModelAndView("go/webpublishgo");
+		return view;
 	}
 
 }
