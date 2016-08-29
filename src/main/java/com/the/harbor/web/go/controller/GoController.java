@@ -1858,7 +1858,7 @@ public class GoController {
 	public ModelAndView webpublishgo(HttpServletRequest request) {
 		Object o = request.getSession().getAttribute(WXConstants.SESSION_WEB_LOGIN);
 		if (o == null) {
-			request.getSession().setAttribute(WXConstants.SESSION_WEB_REDIRECTURL, "../be/webpublishbe.html");
+			request.getSession().setAttribute(WXConstants.SESSION_WEB_REDIRECTURL, "../go/webpublishgo.html");
 			throw new BusinessException("您还没有通过网页登录，请先登录",true,"../user/login.html");
 		}
 		UserViewInfo userInfo = (UserViewInfo) o;
