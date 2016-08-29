@@ -532,7 +532,7 @@ wx.config({
 						</section>
 						<section class="info_time back2">
 							<p>
-								<span>{{:location}}</span>
+								<span>{{:offlineProvinceName}}{{:offlineCityName}}{{:location}}</span>
 							</p>
 						</section>
 						<section class="info_fangf">

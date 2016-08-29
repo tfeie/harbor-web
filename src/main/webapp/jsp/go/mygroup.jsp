@@ -292,7 +292,7 @@
 			<div class="yq" name="TD_YQ">
 				Group邀请{{:inviteMembers}}人<span class="fc-f5922f">{{if payMode=="10"}}{{:fixPriceYuan}}元{{else payMode=="20"}}{{:payModeName}}{{:fixPriceYuan}}元 {{else payMode=="30"}} {{:payModeName}} {{/if}}</span>
 			</div>
-			<div class="dz" name="TD_LOCAL">{{:location}}</div>
+			<div class="dz" name="TD_LOCAL">{{:offlineProvinceName}}{{:offlineCityName}}{{:location}}</div>
 			<div class="js chaochu_2" name="TD_CONTENT">{{:contentSummary}}</div>
 			<div class="bottom">
 				<div class="list" id='liulan'>

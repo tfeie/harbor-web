@@ -24,18 +24,10 @@
 <script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/owl.carousel.js"></script> 
-
+<script type="text/javascript" src="<%=_base%>/js/jedate/jedate.js"></script>
 <script src="//static.tfeie.com/js/jquery-te/jquery-te-1.4.0.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/js/jquery-te/jquery-te-1.4.0.css"> 
-  <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
-  <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
-<style>
-.inp_time	.l {
-	position: relative;
-	z-index: 99;
-}
-</style>
 
 </head>
 <body class="body">
@@ -58,21 +50,20 @@
 				</span> <span name="goType" goType="oneonone">One on One</span>
 			</p>
 		</section>
-		
-        <section class="inp_time">
-			<label class="l"><input type="datetime-local" id="expectedStartTime"/></label>
-
-			<div class="r">
-            	<select id="expectedDuration">
-					<option value="">时长</option>
-					<option value="约1个小时">约1小时</option>
-					<option value="约2小时">约2小时</option>
-					<option value="半天">半天</option>
-					<option value="一天">一天</option>
-				</select>
-            </div>
-        </section>
-		
+		<section class="inp_time">
+			<p>
+				<span><input class="datainp" id="expectedStartTime" type="text" placeholder="请选择"  readonly><!-- <input type="text" placeholder="2016-5-25 10:00 " id="expectedStartTime"
+					class="datepicker" /> --></span><label>
+							<select id="expectedDuration" class="chooes_2">
+								<option value="">时长</option>
+								<option value="约1个小时">约1小时</option>
+								<option value="约2小时">约2小时</option>
+								<option value="半天">半天</option>
+								<option value="一天">一天</option>
+							</select>
+					</label>
+			</p> 
+		</section>
 		<section class="me_qingke">
 			<p name="payMode" payMode="10">
 				固定费用<input type="text" id="price" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">元/人
@@ -82,38 +73,14 @@
 			</p>
 			<p name="payMode" payMode="30">我请客</p>
 		</section>
-		
-		
 		<section class="online_no">
-            <p>
+			<p>
 				<span name="orgMode" orgMode="offline" class="on">线下服务</span><span name="orgMode" orgMode="online">在线服务</span>
 			</p>
-            <div class="xx">
-                <div class="sel">
-                    <select id="offlineProvince">
-                       
-                    </select>
-                </div>
-                <div class="sel">
-                    <select id="offlineCity">
-                        
-                    </select>
-                </div>
-            	<p>
-					<input type="text" placeholder="例如：朝阳区星巴克(中关村店)" id="location"/>
-				</p>
-            </div>
-            <div class="online" style="display:none;">
-            	<p><input type="text" placeholder="例：http://...  或微信号码" id="onlineNet"></p>
-                
-                <section class="jia_img  items">
-                    <p><img src="//static.tfeie.com/images/img51-1.png" id="IMG_ONLINEPIC"></p> 
-                    <input type="hidden" id="onlinePic">
-                </section>
-            </div>
-        </section>
-		
-		
+			<p id="p_location">
+				<input type="text" placeholder="例如：北京朝阳区星巴克(中关村店)" id="location"/>
+			</p>
+		</section>
 		<section class="fabu_zhuti disan">
 			<p>活动详情</p>
 		</section>
@@ -178,6 +145,13 @@
 <script type="text/javascript"
 	src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
+jeDate({
+	dateCell:"#expectedStartTime",
+	format:"YYYY-MM-DD hh:mm",
+	//isinitVal:true,
+	isTime:true, //isClear:false,
+	minDate:jeDate.now(0),
+})
 	//微信API配置
 	wx.config({
 		debug : false,
@@ -208,14 +182,13 @@
 				bindEvents: function(){
 					var _this = this; 
 					
-					
-					
 					//活动类型选择事件
 					$("[name='goType']").on("click",function(){
 						$("[name='goType']").removeClass("on");
 						$(this).addClass("on");
 						var goType = $(this).attr("goType");
 						if(goType=="oneonone"){
+							$("#expectedStartTime").hide();
 							$("[name='payMode']").each(function(i,o){
 								var payMode =$(this).attr("payMode");
 								if(payMode=="10"){
@@ -225,9 +198,8 @@
 								}
 							});
 							$("[name='SELECTION_MYSTORY']").show();
-							$('.inp_time').addClass('on');
 						}else if(goType=="group"){
-							$('.inp_time').removeClass('on');
+							$("#expectedStartTime").show();
 							$("[name='payMode']").show();
 							$("[name='SELECTION_MYSTORY']").hide();
 						}
@@ -246,13 +218,10 @@
 						
 						var orgMode = $(this).attr("orgMode");
 						if(orgMode=="offline"){
-							$(this).parents(".online_no").children('.xx').css({display:'block'})
-							$(this).parents(".online_no").children('.online').css({display:'none'})
+							$("#p_location").show();
 						}else{
-							$(this).parents(".online_no").children('.online').css({display:'block'})
-							$(this).parents(".online_no").children('.xx').css({display:'none'})
+							$("#p_location").hide();
 						}
-						
 					});
 					
 					//添加图片按钮事件
@@ -291,58 +260,6 @@
 						var val = $(this).val();
 						_this.modifyGoDetail(_id,val,"");
 					}); 
-					
-					//线上活动图片上传
-					$("#IMG_ONLINEPIC").on("click",function(){
-						var _this = this;
-						wx.chooseImage({
-							count : 1,
-							sizeType: ['compressed'],
-							success : function(res) {
-								var localId = res.localIds[0]; 
-								wx.uploadImage({
-									localId : localId,
-									isShowProgressTips : 1,
-									success : function(r) {
-										var mediaId = r.serverId;
-										weUI.showLoadingToast("图片转存中..")
-										ajaxController.ajax({
-											url: "../go/uploadGoImgToOSS",
-											type: "post",
-											data: {
-												mediaId: mediaId,
-												userId: _this.getPropertyValue("userId")
-											},
-											success: function(transport){
-												weUI.hideLoadingToast();
-												weUI.showXToast("图片转存成功");
-												setTimeout(function () {
-													weUI.hideXToast();
-									            }, 1000);
-												var imgURL  = transport.data;
-												$("#IMG_ONLINEPIC").attr("src", imgURL+"@!go_thumbnail");
-												$("#onlinePic").val(imgURL);
-											},
-											failure: function(transport){
-												weUI.hideLoadingToast();
-												weUI.showXToast("图片转存失败");
-												setTimeout(function () {
-													weUI.hideXToast();
-									            }, 1000);
-											}
-											
-										});
-									},
-									fail : function(res) {
-										weUI.showXToast("图片上传失败");
-										setTimeout(function () {
-											weUI.hideXToast();
-							            }, 1000);
-									}
-								});
-							}
-						});
-					});
 					
 					//图片上传服务
 					$("#SECTION_GO_DETAILS").delegate("[name='P_GO_UPLOAD_IMG']","click",function(){
@@ -412,12 +329,6 @@
 					$("#UI_CAN_SELECT_GO_TAGS").delegate("[name='LI_ADD_TAG']","click",function(){
 						var tagName = $(this).attr("tagName");
 						_this.addNewGoTag(tagName);
-					});
-					
-					//选择省份
-					$("#offlineProvince").on("change",function(){
-						var provinceCode =$(this).val();
-						_this.getAllHyCities(provinceCode);
 					});
 					
 					//自定义标签绑定事件
@@ -596,8 +507,6 @@
 						detail:""
 					}];
 					this.getAllTags(); 
-					
-					this.getAllHyProvincies();
 				},
 				
 				initRenders: function(){
@@ -659,65 +568,6 @@
 					}
 					var opt=$("#SelectedTagImpl").render(d);
 					$("#SELECTED_GO_TAGS").html(opt);
-				},
-				
-				
-				getAllHyProvincies: function(){
-					var _this = this;
-					ajaxController.ajax({
-						url: "../sys/getAllProvincies",
-						type: "post", 
-						success: function(transport){
-							var data =transport.data;
-							_this.fillAtProvinceSelelct(data);
-						},
-						failure: function(transport){
-							_this.fillAtProvinceSelelct([]);
-						}
-						
-					});
-				},
-				
-				fillAtProvinceSelelct: function(options){
-					var d  = {
-						showAll: true,
-						allValue: "",
-						allDesc: "请选择省份",
-						options: options?options:[]
-					};
-					var opt=$("#AreaSelectOptionImpl").render(d);
-					$("#offlineProvince").append(opt);
-				},
-				
-				
-				getAllHyCities: function(offlineProvince){
-					var _this = this;
-					ajaxController.ajax({
-						url: "../sys/getCities",
-						type: "post", 
-						data: {
-							proviceCode: offlineProvince
-						},
-						success: function(transport){
-							var data =transport.data;
-							_this.fillAtCitySelelct(data);
-						},
-						failure: function(transport){
-							_this.fillAtCitySelelct([]);
-						}
-						
-					});
-				},
-				
-				fillAtCitySelelct: function(options){
-					var d  = {
-						showAll: true,
-						allValue: "",
-						allDesc: "请选择地市",
-						options: options?options:[]
-					};
-					var opt=$("#AreaSelectOptionImpl").render(d);
-					$("#offlineCity").html(opt);
 				},
 				
 				addNewGoTag: function(tagName){
@@ -962,10 +812,6 @@
 					var orgMode = $.trim($("[name='orgMode'].on").attr("orgMode"));
 					var location = $.trim($("#location").val());
 					var myStory = $.trim($("#myStory").val()); 
-					var offlineProvince = $.trim($("#offlineProvince").val());
-					var offlineCity = $.trim($("#offlineCity").val());
-					var onlineNet = $.trim($("#onlineNet").val());
-					var onlinePic = $.trim($("#onlinePic").val());
 					//绑定规则
 					var valueValidator = new $.ValueValidator();
 					valueValidator.addRule({
@@ -1175,10 +1021,6 @@
 						price: (payMode=="30")?"":price,
 						orgMode: orgMode,
 						location: (orgMode=="online")?"":location,
-						offlineProvince: (orgMode=="online")?"":offlineProvince,
-						offlineCity: (orgMode=="online")?"":offlineCity,
-						onlineNet: (orgMode=="online")?onlineNet:"",
-						onlinePic: (orgMode=="online")?onlinePic:"",
 						goStories: (goType=="oneonone")?_this.gostories:[],
 						goDetails: _this.godetails,
 						goTags: _this.selectedGoTags
@@ -1324,14 +1166,5 @@
 			</section>
 		{{/if}}
 	{{/for}}
-</script>	
-
-	<script id="AreaSelectOptionImpl" type="text/x-jsrender"> 
-	{{if showAll==true}}
-    <option value="{{:allValue}}">{{:allDesc}}</option>
-	{{/if}}
-    {{for options ~defaultValue=defaultValue}}
-        <option value="{{:areaCode}}"  {{if ~defaultValue==areaCode}} selected {{/if}}>{{:areaName}}</option>
-    {{/for}}
-	</script>		
+</script>			
 </html>
