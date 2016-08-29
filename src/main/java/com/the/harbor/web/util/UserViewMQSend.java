@@ -14,7 +14,7 @@ import com.the.harbor.base.enumeration.mns.MQType;
 import com.the.harbor.commons.components.aliyuncs.mns.MNSFactory;
 import com.the.harbor.commons.components.globalconfig.GlobalSettings;
 import com.the.harbor.commons.indices.mq.MNSRecord;
-import com.the.harbor.commons.indices.mq.MNSRecordThread;
+import com.the.harbor.commons.indices.mq.MNSRecordHandle;
 import com.the.harbor.commons.util.UUIDUtil;
 
 public class UserViewMQSend {
@@ -52,7 +52,7 @@ public class UserViewMQSend {
 		mns.setSendStatus(sendStatus);
 		mns.setSendError(sendError);
 		mns.setMqBody(body);
-		new Thread(new MNSRecordThread(mns)).start();
+		MNSRecordHandle.sendMNSRecord(mns);
 
 		client.close();
 
@@ -95,7 +95,7 @@ public class UserViewMQSend {
 		mns.setSendStatus(sendStatus);
 		mns.setSendError(sendError);
 		mns.setMqBody(body);
-		new Thread(new MNSRecordThread(mns)).start();
+		MNSRecordHandle.sendMNSRecord(mns);
 
 		client.close();
 

@@ -87,6 +87,51 @@
 		<section class="ip_bianji">
 			<p><a href="javascript:void(0)" id="BTN_ADD_FRIEND">加为好友</a></p>
 		</section>
+		
+		 <section class="ip_tie">
+        	Ta的服务资源
+        </section>
+        <section class="ip_fwzy">
+        	<div class="itms">
+            	<div class="t">创意视频的展现方式</div>
+                <div class="c">
+                	<div class="jg">200元</div>
+                	<div class="num">100人</div>
+                </div>
+            </div>
+        	<div class="itms">
+            	<div class="t">创意视频的展现方式</div>
+                <div class="c">
+                	<div class="jg">200元</div>
+                	<div class="num">100人</div>
+                </div>
+            </div>
+        	<div class="itms">
+            	<div class="t">创意视频的展现方式</div>
+                <div class="c">
+                	<div class="jg">200元</div>
+                	<div class="num">100人</div>
+                </div>
+            </div>
+        	<div class="itms">
+            	<div class="t">创意视频的展现方式</div>
+                <div class="c">
+                	<div class="jg">200元</div>
+                	<div class="num">100人</div>
+                </div>
+            </div>
+        	<div class="itms">
+            	<div class="t">创意视频的展现方式</div>
+                <div class="c">
+                	<div class="jg">200元</div>
+                	<div class="num">100人</div>
+                </div>
+            </div>
+        </section>
+		<section class="ip_bianji ip_more">
+			<p><a href="javascript:void('0')">展开查看更多</a></p>
+		</section>
+		
 	</section> 
 </body>
 <script type="text/javascript"
