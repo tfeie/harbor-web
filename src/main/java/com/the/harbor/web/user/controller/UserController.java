@@ -1620,6 +1620,13 @@ public class UserController {
 		ModelAndView view = new ModelAndView("user/webupload");
 		return view;
 	}
+	
+	
+	@RequestMapping("/webentrance.html")
+	public ModelAndView webentrance(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView("user/webentrance");
+		return view;
+	}
 
 	@RequestMapping(value = "/webUploadToOSS", method = RequestMethod.POST)
 	public String webUploadToOSS(HttpServletResponse response, HttpServletRequest request,

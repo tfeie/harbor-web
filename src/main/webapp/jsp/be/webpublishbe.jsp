@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>发布Be</title>
+<title><c:if test="${islogin==true}">发布be</c:if><c:if test="${islogin!=true}">登录跳转中</c:if></title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
@@ -33,6 +33,14 @@
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/js/jquery-te/jquery-te-1.4.0.css"> 
 <script src="//static.tfeie.com/js/layer/layer.js"></script>
+
+<script type="text/javascript">
+	var isLogin="<c:out value="${islogin}"/>";
+	if(isLogin=="false"){
+		window.location.href="../user/login.html";
+	}
+</script>
+
 </head>
 
 <body>
@@ -496,7 +504,7 @@
 							weUI.showXToast("发布成功");
 							setTimeout(function () {
 								weUI.hideXToast();
-								window.location.href="../be/webpublishbe.html";
+								window.location.href="../user/webentrance.html";
 				            }, 1000);
 						},
 						failure: function(transport){

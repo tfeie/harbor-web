@@ -12,7 +12,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title>WEB发布G&O</title>
+<title><c:if test="${islogin==true}">发布G&O</c:if><c:if test="${islogin!=true}">登录跳转中</c:if></title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
@@ -37,6 +37,14 @@
 	z-index: 99;
 }
 </style>
+
+
+<script type="text/javascript">
+	var isLogin="<c:out value="${islogin}"/>";
+	if(isLogin=="false"){
+		window.location.href="../user/login.html";
+	}
+</script>
 
 </head>
 <body class="body">
@@ -1076,7 +1084,7 @@
 							weUI.showXToast("发布成功");
 							setTimeout(function () {
 								weUI.hideXToast();
-								window.location.href="../go/webpublishgo.html";
+								window.location.href="../user/webentrance.html";
 				            }, 1000);
 						},
 						failure: function(transport){

@@ -162,6 +162,8 @@
 								weUI.hideXToast();
 								if(redirectURL!=""){
 									window.location.href=redirectURL;
+								}else{
+									window.location.href="../user/webentrance.html";
 								}
 								//window.location.href="../user/setUserSkills.html"
 				            }, 1000);

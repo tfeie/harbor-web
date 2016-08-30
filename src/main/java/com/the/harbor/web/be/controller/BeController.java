@@ -774,12 +774,12 @@ public class BeController {
 	@RequestMapping("/webpublishbe.html")
 	public ModelAndView webpublishbe(HttpServletRequest request) {
 		Object o = request.getSession().getAttribute(WXConstants.SESSION_WEB_LOGIN);
-		if (o == null) {
-			request.getSession().setAttribute(WXConstants.SESSION_WEB_REDIRECTURL, "../be/webpublishbe.html");
-			throw new BusinessException("您还没有通过网页登录，请先登录",true,"../user/login.html");
+		request.setAttribute("islogin", o != null);
+		request.getSession().setAttribute(WXConstants.SESSION_WEB_REDIRECTURL, "../be/webpublishbe.html");
+		if(o!=null){
+			UserViewInfo userInfo = (UserViewInfo) o;
+			request.setAttribute("userInfo", userInfo);
 		}
-		UserViewInfo userInfo = (UserViewInfo) o;
-		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("be/webpublishbe");
 		return view;
 	}
