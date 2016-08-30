@@ -27,13 +27,6 @@
 	href="//static.tfeie.com/css/style.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-
-</head>
-<body style="background:#ffffff">
-	<section class="wdgz-main" id="DIV_USER">
-
-	</section>
-</body>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script> 
 <script type="text/javascript"
@@ -43,6 +36,13 @@
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
+</head>
+<body style="background:#ffffff">
+	<section class="wdgz-main" id="DIV_USER">
+
+	</section>
+</body>
+
 <script type="text/javascript">
 
 	(function() {
@@ -94,7 +94,6 @@
 					}else{
 						opt="<div class=\"itms clearfix\">没有待审核认证的用户哦~</div>";
 					}
-					alert(opt);
 					$("#DIV_USER").html(opt);
 				}
 			}
