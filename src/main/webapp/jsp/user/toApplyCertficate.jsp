@@ -13,91 +13,79 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="dns-prefetch" href="//static.tfeie.com" />
 <title>申请认证</title>
+<link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
+	type="text/css" />
+<link href="//static.tfeie.com/v2/css/css.css" rel="stylesheet"
+	type="text/css" />
+<link href="//static.tfeie.com/v2/css/footer.css" rel="stylesheet"
+	type="text/css" />
 <link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/style.css">
-<link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/owl.carousel.min.css">
-<link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/weui.min.css"> 
+	href="//static.tfeie.com/css/weui.min.css">
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="//static.tfeie.com/js/main.js"></script>
-<script type="text/javascript"
-	src="//static.tfeie.com/js/owl.carousel.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jquery.ajaxcontroller.js"></script>
+<script type="text/javascript" src="//static.tfeie.com/js/json2.js"></script>
 <script type="text/javascript"
-	src="//static.tfeie.com/js/json2.js"></script>
-
-</head>
-
-<body>
-	<section class="sec_item">
-		<div class="div_title">
-			<h3>
-				<span>申请认证请提交以下材料</span>
-				<c:if test="${userInfo.authSts=='13'}">
-				<p><font color='red'>您提交的材料审核不通过，原因:<c:out value="${userInfo.certRemark }"/>。请重新按照要求提交</font></p>
-				</c:if>
-			</h3>
-		</div>
-		<ul>
-			<li>海外学历认证、学生证、毕业证或工作证</li>
-			<li>学生签证、或海外居住证明
-			</li>
-			<li>认证通过之后，将点亮头像旁边的“已认证”字样，并可享受更多权限哦。</li>
-			
-			
-		</ul>
-	</section>
-	<section class="sec_item sec_item_img">
-		<div class="div_title">
-			<h3>
-				<span>上传海外学历认证、学生证、毕业证或工作证</span>
-			</h3>
-		</div>
-		<div class="img" id="IMGIDCardPicker">
-			<img src="//static.tfeie.com/images/img5.png" id="img_idcard"/>
-		</div>
-	</section>
-	<section class="sec_item sec_item_img">
-		<div class="div_title">
-			<h3>
-				<span>上传学生签证、或海外居住证明</span>
-			</h3>
-		</div>
-		<div class="img" id="IMGOverSeaPicker">
-			<img src="//static.tfeie.com/images/img5.png" id="img_oversea"/>
-		</div>
-	</section>
-	<section class="me_qingke">
-		<p name="authIdentity" authIdentity="1000">创业者</p>
-		<p name="authIdentity" authIdentity="2000">投资人</p>
-		<p name="authIdentity" authIdentity="3000">前辈导师</p>
-		<p name="authIdentity" authIdentity="4000">创业服务</p>
-	</section>
-	<div class="message-err" id="DIV_TIPS"></div>
-	<section class="but_baoc">
-		<p>
-			<input type="hidden" id="idcardPhoto"/>
-			<input type="hidden" id="overseasPhoto"/>
-			<input type="button" value="提交认证" id="BTN_SUBMIT"/>
-		</p>
-	</section>
-</body>
+	src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
+<script type="text/javascript"
+	src="//static.tfeie.com/js/jquery.weui.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsrender.min.js"></script>
 <script type="text/javascript"
 	src="//static.tfeie.com/js/jsviews/jsviews.min.js"></script>
 <script type="text/javascript"
-	src="//static.tfeie.com/js/jquery.weui.js"></script>
-<script type="text/javascript"
 	src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script type="text/javascript"
-		src="//static.tfeie.com/js/jquery.valuevalidator.js"></script>
 <script src="//static.tfeie.com/js/jquery.harborbuilder-1.0.js"></script>
+</head>
+
+<body class="bg-eeeeee">
+	<section class="rztj-main">
+    	<div class="top bor-bot">通过认证后，头像点亮角色字样，享受更多字样</div>
+    	<c:if test="${userInfo.authSts=='13'}">
+			<p><font color='red'>您提交的材料审核不通过，原因:<c:out value="${userInfo.certRemark }"/>。请重新按照要求提交</font></p>
+		</c:if>
+        <div class="hd">
+        	<div class="t">请选择角色认证</div>
+            <div class="m clearfix">
+            	 <c:forEach var="ai" items="${authIdentityList}">
+            	<label class="itms"><input type="radio" name="authIdentity" value="${ai.paramValue}"  class="In-radio">${ai.paramDesc}</label>
+            	</c:forEach>
+            </div>
+        </div>
+        <div class="bd">
+            <div class="m">
+            	<div class="itms">
+                	<div class="up-1">
+                        <div class="t">请上传海外经历证件</div>
+                        <p>任选其一，留学签证，访问学者签证，工作签证，海外学生证，海外学历认证，</p>
+                        <label class="upimg" id="IMGOverSeaPicker"><img src="//static.tfeie.com/v2/images/img51-1.png" id="img_oversea"></label>
+                    </div>
+                	<div class="up-2" style="display:none">
+                        <div class="t">请上传认证角色资料</div>
+                        <p>请上传公司名片</p>
+                        <label class="upimg" id="IMGIDCardPicker"><img src="//static.tfeie.com/v2/images/img51-1.png" id="img_idcard"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="but-btn"><input type="hidden" id="idcardPhoto"/>
+			<input type="hidden" id="overseasPhoto"/>
+			<input type="button" value="提交认证" id="BTN_SUBMIT"/></div>
+    </section>
+</body>
+
 
 <script type="text/javascript">
+	$(document).ready(function(){
+		var b = new $.HarborBuilder();
+		b.buildFooter({showBeGoQuick: "hide"});
+		var p = new $.UserCertificatePage({
+			userId: "<c:out value="${userInfo.userId}" />"
+		});
+		p.init();
+	});
+	
 	wx.config({
 		debug : false,
 		appId : '<c:out value="${appId}"/>',
@@ -119,52 +107,6 @@
 			prototype: {
 				init: function(){
 					this.bindEvents(); 
-					this.bindRules(); 
-				}, 
-				
-				bindRules: function(){
-					var valueValidator = new $.ValueValidator();
-					valueValidator.addRule({
-						labelName: "身份证正面",
-						fieldName: "idcardPhoto",
-						getValue: function(){
-							var v = $("#idcardPhoto").val();
-							return v;
-						},
-						fieldRules: {
-							required: true
-						},
-						ruleMessages: {
-							required: "请上传身份证正面照"
-						}
-					}).addRule({
-						labelName: "海外学历认证/签证/学生证",
-						fieldName: "overseasPhoto",
-						getValue: function(){
-							var v = $("#overseasPhoto").val();
-							return v;
-						},
-						fieldRules: {
-							required: true
-						},
-						ruleMessages: {
-							required: "请上传海外学历认证/签证/学生证"
-						}
-					}).addRule({
-						labelName: "认证身份",
-						fieldName: "authIdentity",
-						getValue: function(){
-							var v = $.trim($("[name='authIdentity'].on").attr("authIdentity"));
-							return v;
-						},
-						fieldRules: {
-							required: true
-						},
-						ruleMessages: {
-							required: "请选择认证身份"
-						}
-					});
-					this.valueValidator =valueValidator;
 				},
 				
 				bindEvents: function(){
@@ -176,6 +118,26 @@
 					$("[name='authIdentity']").on("click",function(){
 						$("[name='authIdentity']").removeClass("on");
 						$(this).addClass("on");
+						var v=$(this).val();
+						if(	v==	'1000'){
+							$('.up-1').css({display:'block'})
+							$('.up-2').css({display:'none'})
+						}else if(v=='2000'){
+							$('.up-1').css({display:'block'})
+							$('.up-2').css({display:'block'})
+						}else if(v=='3000'){
+							$('.up-1').css({display:'block'})
+							$('.up-2').css({display:'block'})
+						}else if(v=='4000'){
+							$('.up-1').css({display:'none'})
+							$('.up-2').css({display:'block'})
+						}else if(v=='5000'){
+							$('.up-1').css({display:'none'})
+							$('.up-2').css({display:'block'})
+						}else if(v=='6000'){
+							$('.up-1').css({display:'none'})
+							$('.up-2').css({display:'block'})	
+						}
 					});
 					
 					$("#IMGOverSeaPicker").on("click", function() {
@@ -203,10 +165,10 @@
 									            }, 1000);
 												var imgURL  = transport.data;
 												$("#overseasPhoto").val(imgURL);
-												$("#img_oversea").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
+												$("#img_oversea").attr("src", imgURL);
 											},
 											failure: function(transport){
-												$("#img_oversea").attr("src", "//static.tfeie.com/images/img5.png");
+												$("#img_oversea").attr("src", "//static.tfeie.com/v2/images/img51-1.png");
 												weUI.showXToast("上传失败请重试");
 												setTimeout(function () {
 													weUI.hideXToast();
@@ -216,7 +178,7 @@
 										});
 									},
 									fail : function(res) {
-										$("#img_oversea").attr("src", "//static.tfeie.com/images/img5.png");
+										$("#img_oversea").attr("src", "//static.tfeie.com/v2/images/img51-1.png");
 										weUI.showXToast("上传失败请重试");
 										setTimeout(function () {
 											weUI.hideXToast();
@@ -252,14 +214,14 @@
 									            }, 1000);
 												var imgURL  = transport.data;
 												$("#idcardPhoto").val(imgURL);
-												$("#img_idcard").attr("src", imgURL).css({"width":"193.8px","height":"120px"});
+												$("#img_idcard").attr("src", imgURL);
 											},
 											failure: function(transport){
 												weUI.showXToast("上传失败请重试");
 												setTimeout(function () {
 													weUI.hideXToast();
 									            }, 1000);
-												$("#img_idcard").attr("src", "//static.tfeie.com/images/img5.png");
+												$("#img_idcard").attr("src", "//static.tfeie.com/v2/images/img51-1.png");
 											}
 											
 										});
@@ -284,7 +246,55 @@
 			
 				submit: function(){
 					var _this=this;
-					var res=_this.valueValidator.fireRulesAndReturnFirstError();
+					var v = $("[name='authIdentity']:checked").val();
+					var valueValidator = new $.ValueValidator();
+					valueValidator.addRule({
+						labelName: "认证身份",
+						fieldName: "authIdentity",
+						getValue: function(){
+							return v;
+						},
+						fieldRules: {
+							required: true
+						},
+						ruleMessages: {
+							required: "请选择角色认证"
+						}
+					});
+					
+					if(v=="2000" || v=="3000"  || v=="4000"  || v=="5000"  || v=="6000"){
+						valueValidator.addRule({
+							labelName: "请上传认证角色资料",
+							fieldName: "idcardPhoto",
+							getValue: function(){
+								var v = $("#idcardPhoto").val();
+								return v;
+							},
+							fieldRules: {
+								required: true
+							},
+							ruleMessages: {
+								required: "请上传认证角色资料"
+							}
+						});
+					}
+					if(v=="1000" || v=="2000"  || v=="3000"){
+						valueValidator.addRule({
+							labelName: "请上传海外经历证件",
+							fieldName: "overseasPhoto",
+							getValue: function(){
+								var v = $("#overseasPhoto").val();
+								return v;
+							},
+							fieldRules: {
+								required: true
+							},
+							ruleMessages: {
+								required: "请上传海外经历证件"
+							}
+						});
+					} 
+					var res=valueValidator.fireRulesAndReturnFirstError();
 					if(res){
 						weUI.showXToast(res);
 						setTimeout(function () {
@@ -299,7 +309,7 @@
 							userId: _this.getPropertyValue("userId"),
 							overseasPhoto: $("#overseasPhoto").val(),
 							idcardPhoto: $("#idcardPhoto").val(),
-							authIdentity: $.trim($("[name='authIdentity'].on").attr("authIdentity"))
+							authIdentity: v
 						},
 						success: function(transport){
 							weUI.showXToast("已提交等待审核");
@@ -321,15 +331,5 @@
 			}
 		})
 	})(jQuery);
-	
-
-	$(document).ready(function(){
-		var b = new $.HarborBuilder();
-		b.buildFooter({showBeGoQuick: "hide"});
-		var p = new $.UserCertificatePage({
-			userId: "<c:out value="${userInfo.userId}" />"
-		});
-		p.init();
-	});
 </script>
 </html>

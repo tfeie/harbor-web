@@ -56,6 +56,8 @@ import com.the.harbor.api.user.param.UserViewInfo;
 import com.the.harbor.api.user.param.UserViewResp;
 import com.the.harbor.api.user.param.UserWealthQueryResp;
 import com.the.harbor.base.constants.ExceptCodeConstants;
+import com.the.harbor.base.enumeration.dict.ParamCode;
+import com.the.harbor.base.enumeration.dict.TypeCode;
 import com.the.harbor.base.enumeration.hypaymentorder.PayType;
 import com.the.harbor.base.enumeration.hyuser.UserInviteStatus;
 import com.the.harbor.base.enumeration.hyuser.UserStatus;
@@ -75,6 +77,7 @@ import com.the.harbor.commons.dubbo.util.DubboConsumerFactory;
 import com.the.harbor.commons.redisdata.def.DoNotify;
 import com.the.harbor.commons.redisdata.def.HyTagVo;
 import com.the.harbor.commons.redisdata.util.HyCfgUtil;
+import com.the.harbor.commons.redisdata.util.HyDictUtil;
 import com.the.harbor.commons.redisdata.util.HyNotifyUtil;
 import com.the.harbor.commons.redisdata.util.HyTagUtil;
 import com.the.harbor.commons.redisdata.util.HyUserUtil;
@@ -319,6 +322,8 @@ public class UserController {
 		request.setAttribute("signature", signature);
 		request.setAttribute("url", url);
 		request.setAttribute("userInfo", userInfo);
+		request.setAttribute("authIdentityList", HyDictUtil.getHyDicts(TypeCode.HY_USER.getValue(),
+								ParamCode.AUTH_IDENTITY.getValue()));
 		ModelAndView view = new ModelAndView("user/toApplyCertficate");
 		return view;
 	}

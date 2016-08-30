@@ -48,7 +48,7 @@
 	<section class="sec_item sec_item_img">
 		<div class="div_title">
 			<h3>
-				<span>身份证（正）</span>
+				<span>请上传认证角色资料</span>
 			</h3>
 		</div>
 		<div class="img" id="IMGIDCardPicker">
@@ -58,7 +58,7 @@
 	<section class="sec_item sec_item_img">
 		<div class="div_title">
 			<h3>
-				<span>海外学历认证/签证/学生证</span>
+				<span>请上传海外经历证件</span>
 			</h3>
 		</div>
 		<div class="img" id="IMGOverSeaPicker">
