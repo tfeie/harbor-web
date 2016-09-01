@@ -168,7 +168,7 @@
 													weUI.hideXToast();
 									            }, 1000);
 												var imgURL  = transport.data;
-												$(s).find("#IMG_BE").attr("src", imgURL+"@!be_thumbnail");
+												$(s).find("#IMG_BE").attr("src", imgURL+"@300h_330w_1e");
 												_this.modifyBeDetail(_id,"",imgURL);
 											},
 											failure: function(transport){

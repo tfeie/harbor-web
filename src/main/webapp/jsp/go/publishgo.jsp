@@ -314,13 +314,14 @@
 												userId: _this.getPropertyValue("userId")
 											},
 											success: function(transport){
+												alert(112);
 												weUI.hideLoadingToast();
 												weUI.showXToast("图片转存成功");
 												setTimeout(function () {
 													weUI.hideXToast();
 									            }, 1000);
 												var imgURL  = transport.data;
-												$("#IMG_ONLINEPIC").attr("src", imgURL+"@!go_thumbnail");
+												$("#IMG_ONLINEPIC").attr("src", imgURL+"@300h_330w_1e");
 												$("#onlinePic").val(imgURL);
 											},
 											failure: function(transport){
@@ -373,7 +374,7 @@
 													weUI.hideXToast();
 									            }, 1000);
 												var imgURL  = transport.data;
-												$(s).find("#IMG_GO").attr("src", imgURL+"@!go_thumbnail");
+												$(s).find("#IMG_GO").attr("src", imgURL+"@300h_330w_1e");
 												_this.modifyGoDetail(_id,"",imgURL);
 											},
 											failure: function(transport){
@@ -555,7 +556,7 @@
 													weUI.hideXToast();
 									            }, 1000);
 												var imgURL  = transport.data;
-												$(s).find("#IMG_GO_STORY").attr("src", imgURL+"@!go_thumbnail");
+												$(s).find("#IMG_GO_STORY").attr("src", imgURL+"@300h_330w_1e");
 												_this.modifyGoStory(_id,"",imgURL);
 											},
 											failure: function(transport){
