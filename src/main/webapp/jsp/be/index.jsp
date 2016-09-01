@@ -472,7 +472,7 @@ wx.config({
 								</p>
 								{{if hasimg==true}} 
 								<div class="img">
-									<img src="{{:imageURL}}" width="100%">
+									<img src="{{:imageURL}}@300h_330w_0e" width="100%">
 								</div>
 								{{else}}
 								<div  width="100%"></div>

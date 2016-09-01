@@ -94,7 +94,7 @@
 						</c:if>
 						<c:if test="${detail.type=='image'}">
 							<p>
-								<img src="<c:out value="${detail.imgThumbnailUrl}"/>" width="100%">
+								<img src="<c:out value="${detail.imageUrl}"/>@300h_330w_1e"/>" width="100%">
 							</p>
 						</c:if>
 					</c:forEach>
