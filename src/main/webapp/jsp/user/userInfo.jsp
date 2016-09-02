@@ -31,7 +31,7 @@
 	src="//static.tfeie.com/js/json2.js"></script>
 </head>
 <body class="body">
-	<section class="ip_info oc">
+	<section class="ip_info oc hyxx-main">
 		<section class="top_info">
 			<p class="span_file">
 				<img src="<c:out value="${userInfo.homePageBg}"/>" >
@@ -87,49 +87,15 @@
 		<section class="ip_bianji">
 			<p><a href="javascript:void(0)" id="BTN_ADD_FRIEND">加为好友</a></p>
 		</section>
-		
+
 		 <section class="ip_tie">
         	Ta的服务资源
         </section>
-        <section class="ip_fwzy">
-        	<div class="itms">
-            	<div class="t">创意视频的展现方式</div>
-                <div class="c">
-                	<div class="jg">200元</div>
-                	<div class="num">100人</div>
-                </div>
-            </div>
-        	<div class="itms">
-            	<div class="t">创意视频的展现方式</div>
-                <div class="c">
-                	<div class="jg">200元</div>
-                	<div class="num">100人</div>
-                </div>
-            </div>
-        	<div class="itms">
-            	<div class="t">创意视频的展现方式</div>
-                <div class="c">
-                	<div class="jg">200元</div>
-                	<div class="num">100人</div>
-                </div>
-            </div>
-        	<div class="itms">
-            	<div class="t">创意视频的展现方式</div>
-                <div class="c">
-                	<div class="jg">200元</div>
-                	<div class="num">100人</div>
-                </div>
-            </div>
-        	<div class="itms">
-            	<div class="t">创意视频的展现方式</div>
-                <div class="c">
-                	<div class="jg">200元</div>
-                	<div class="num">100人</div>
-                </div>
-            </div>
+        <section class="ip_fwzy" id="DIV_TASGOES">
+        	
         </section>
 		<section class="ip_bianji ip_more">
-			<p><a href="javascript:void('0')">展开查看更多</a></p>
+			<p><a href="javascript:void('0')" id="BTN_MORE">展开查看更多</a></p>
 		</section>
 		
 	</section> 
@@ -169,11 +135,16 @@
 						//打开IM聊天
 						var userId = _this.getPropertyValue("userId");
 						window.location.href="../user/im.html?touchId="+userId;
-					})
+					});
+					$("#BTN_MORE").on("click",function(){
+						_this.renderTasOnoes(_this.alltagoes);
+					});
+					
 				},
 				
 				initData: function(){ 
 					this.getAllTags(); 
+					this.queryTaOnOs();
 				},
 				
 				applyFriend: function(){
@@ -223,7 +194,52 @@
 						}
 					});
 				},
+				
+				
+				
+				queryTaOnOs: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../go/getTaGoes",
+						type: "post",  
+						data : {
+							userId: _this.getPropertyValue("userId"),
+							pageNo : 1,
+							pageSize : 100,
+							goType: "oneonone"
+						},
+						success: function(transport){
+							var data =transport.data; 
+							var arr = data.result;
+							//取前两个初始化
+							var newd= new Array();
+							$.each(arr,function(index,d){
+								if(index<2){
+									newd.push(d);
+								}else{
+									return;
+								}
+								
+							})
+							_this.alltagoes = arr;
+							_this.renderTasOnoes(newd); 
+						},
+						failure: function(transport){  
+							_this.renderTasOnoes([]); 
+						}
+					});
+				},
 
+				renderTasOnoes : function(data) {
+					data = data ? data : [];
+					var opt="";
+					if(data.length>0){
+						 opt = $("#TasGoesImpl").render(data);
+					}else{
+						opt="<div class=\"itms\"><div class=\"t\">暂无服务</div></div>";
+					}
+					$("#DIV_TASGOES").html(opt);
+				},
 				
 				renderSelectedSkillTags: function(tags){ 
 					var opt=$("#SelectedTagImpl").render(tags);
@@ -258,4 +274,13 @@
 				<span>{{:tagName}}</span>
 	</script>
 
+	<script id="TasGoesImpl" type="text/x-jsrender"> 
+			<div class="itms">
+            	<div class="t">{{:topic}}</div>
+                <div class="c">
+                	<div class="jg">{{if payMode=="10"}}{{:fixPriceYuan}}元{{else payMode=="20"}}{{:payModeName}}{{:fixPriceYuan}}元 {{else payMode=="30"}} {{:payModeName}} {{/if}}</div>
+                	<div class="num">{{:joinCount}}人</div>
+                </div>
+            </div>	
+	</script>
 </html>

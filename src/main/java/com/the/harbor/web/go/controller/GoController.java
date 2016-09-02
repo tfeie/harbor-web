@@ -1854,17 +1854,16 @@ public class GoController {
 		}
 		return responseData;
 	}
-	
-	
+
 	@RequestMapping("/webpublishgo.html")
-	public ModelAndView webpublishgo(HttpServletRequest request,HttpServletResponse response) {
+	public ModelAndView webpublishgo(HttpServletRequest request, HttpServletResponse response) {
 		Object o = request.getSession().getAttribute(WXConstants.SESSION_WEB_LOGIN);
 		request.setAttribute("islogin", o != null);
 		request.getSession().setAttribute(WXConstants.SESSION_WEB_REDIRECTURL, "../go/webpublishgo.html");
-		if(o!=null){
+		if (o != null) {
 			UserViewInfo userInfo = (UserViewInfo) o;
 			request.setAttribute("userInfo", userInfo);
-		}else{
+		} else {
 			try {
 				response.sendRedirect("../user/login.html");
 			} catch (IOException e) {
@@ -1874,6 +1873,31 @@ public class GoController {
 		}
 		ModelAndView view = new ModelAndView("go/webpublishgo");
 		return view;
+	}
+
+	@RequestMapping("/getTaGoes")
+	@ResponseBody
+	public ResponseData<PageInfo<Go>> getTaGoes(@NotNull(message = "参数为空") QueryMyGoReq queryMyGoReq,
+			HttpServletRequest request) {
+		ResponseData<PageInfo<Go>> responseData = null;
+		try {
+			// 获取用户信息
+			if (StringUtil.isBlank(queryMyGoReq.getUserId())) {
+				throw new BusinessException("用户为空");
+			}
+			QueryMyGoResp rep = DubboConsumerFactory.getService(IGoSV.class).queryMyGoes(queryMyGoReq);
+			if (!ExceptCodeConstants.SUCCESS.equals(rep.getResponseHeader().getResultCode())) {
+				throw new BusinessException(rep.getResponseHeader().getResultCode(),
+						rep.getResponseHeader().getResultMessage());
+			}
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"查询成功", rep.getPagInfo());
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = new ResponseData<PageInfo<Go>>(ResponseData.AJAX_STATUS_FAILURE,
+					ExceptCodeConstants.SYSTEM_ERROR, "系统繁忙，请重试");
+		}
+		return responseData;
 	}
 
 }
