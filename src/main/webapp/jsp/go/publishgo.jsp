@@ -294,7 +294,6 @@
 					
 					//线上活动图片上传
 					$("#IMG_ONLINEPIC").on("click",function(){
-						var _this = this;
 						wx.chooseImage({
 							count : 1,
 							sizeType: ['compressed'],
@@ -304,8 +303,6 @@
 									localId : localId,
 									isShowProgressTips : 1,
 									success : function(r) {
-										console.log("hello");
-										console.log(r);
 										var mediaId = r.serverId;
 										weUI.showLoadingToast("图片转存中..")
 										ajaxController.ajax({
