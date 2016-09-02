@@ -140,6 +140,10 @@
 						_this.renderTasOnoes(_this.alltagoes);
 					});
 					
+					$("#DIV_TASGOES").delegate("[name='GO_ITEM']","click",function(){
+						var goId=$(this).attr("goId");
+						window.location.href="../go/onodetail.html?goId="+goId;
+					});
 				},
 				
 				initData: function(){ 
@@ -275,7 +279,7 @@
 	</script>
 
 	<script id="TasGoesImpl" type="text/x-jsrender"> 
-			<div class="itms">
+			<div class="itms" name="GO_ITEM" goId="{{:goId}}">
             	<div class="t">{{:topic}}</div>
                 <div class="c">
                 	<div class="jg">{{if payMode=="10"}}{{:fixPriceYuan}}元{{else payMode=="20"}}{{:payModeName}}{{:fixPriceYuan}}元 {{else payMode=="30"}} {{:payModeName}} {{/if}}</div>
