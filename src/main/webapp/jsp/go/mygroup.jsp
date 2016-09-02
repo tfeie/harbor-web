@@ -270,7 +270,7 @@
 			<i class="icon-sc" name="GO_DEL" goId="{{:goId}}"></i>
 			</c:if>
 			<div class="tie" name="TD_TOPIC">
-				<p>{{:topic}}</p>
+				<p><b>{{:topic}}</b></p>
 				<div class="tim">{{:createTimeStr}}</div>
 			</div>
 			<div class="name clearfix" name="TD_NAME">

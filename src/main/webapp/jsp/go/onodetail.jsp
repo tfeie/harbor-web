@@ -121,7 +121,7 @@
 		<!--底栏的来自海归海湾-->
 		<div align="center">
 			来自 <strong> <a
-				href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzAxMjg3NDQ0Ng==&scene=115#wechat_redirect">
+				href="../user/qrcode.html">
 					<font color="orange">海归海湾</font>
 			</a>
 			</strong> | 海归创业加速第一社区

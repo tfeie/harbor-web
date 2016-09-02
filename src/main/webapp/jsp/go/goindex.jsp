@@ -500,7 +500,7 @@ wx.config({
 <script id="GroupsImpl" type="text/x-jsrender"> 
 				<section class="wuwai_jiansheng" goId="{{:goId}}" goType="{{:goType}}">
 					<section class="title_jiansheng">
-						<p>{{:topic}} {{if topFlag=="1"}}<font color='red'>[已置顶]</font>{{/if}}</p>
+						<p><b>{{:topic}}</b> {{if topFlag=="1"}}<font color='red'>[已置顶]</font>{{/if}}</p>
 						<section class="pos_yuan">
 							<span></span><span class="on"></span>
 							<div class="clear"></div>
@@ -551,7 +551,7 @@ wx.config({
 <script id="OneOnOnImpl" type="text/x-jsrender"> 
 				<section class="wuwai_jiansheng" goId="{{:goId}}" goType="{{:goType}}">
 					<section class="title_jiansheng">
-						<p>{{:topic}} {{if topFlag=="1"}}<font color='red'>[已置顶]</font>{{/if}}</p>
+						<p><b>{{:topic}}</b> {{if topFlag=="1"}}<font color='red'>[已置顶]</font>{{/if}}</p>
 						<section class="pos_yuan">
 							<span></span><span class="on"></span>
 							<div class="clear"></div>
@@ -569,7 +569,7 @@ wx.config({
 										class="online"><a href="#">{{:orgModeName}}</a></em>
 								</p>
 								<p>
-									{{:employmentInfo}}<em>{{:joinCount}}人见过</em>
+									{{:employmentInfo}}<em>{{:fixPriceYuan}}元</em>
 								</p>
 							</section>
 							<div class="clear"></div>
@@ -579,7 +579,7 @@ wx.config({
 						</section>
 					</section>
 					<section class="oneon_span">
-						<a href="javascript:void(0)">浏览 {{:viewCount}}</a><a href="javascript:void(0)" name='GO_FAVORITE' value='{{:favorCount}}'>收藏 {{:favorCount}}</a>
+						<a href="javascript:void(0)">浏览 {{:viewCount}}</a><a href="javascript:void(0)">{{:joinCount}}人见过</a>
 						<div class="clear"></div>
 					</section>
 				</section>

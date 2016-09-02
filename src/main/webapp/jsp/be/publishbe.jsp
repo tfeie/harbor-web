@@ -131,12 +131,21 @@
 						_this.deleteBeDetail(_id);
 					});
 					
-					//活动明细文本框失去焦点事件代理
+					//纯文本框失去焦点事件代理
 					$("#DIV_BE_DETAILS").delegate("#BE_DETAIL_TEXTAREA_TITLE","blur",function(){
 						var _id =$(this).attr("_id");
 						var val = $(this).val();
 						_this.modifyBeDetail(_id,val,"");
 					}); 
+					
+					//富文本框失去焦点事件代理
+					$("#DIV_BE_DETAILS").delegate("[name='BE_DETAIL_TEXTAREA']","blur",function(){
+						var _id =$(this).attr("_id");
+						var val = $(this).val();
+						_this.modifyBeDetail(_id,val,"");
+					}); 
+					
+					
 					
 					
 					//图片上传服务

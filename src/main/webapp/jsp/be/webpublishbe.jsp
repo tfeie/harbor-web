@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#035c9b">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="dns-prefetch" href="//static.tfeie.com" />
-<title><c:if test="${islogin==true}">发布be</c:if><c:if test="${islogin!=true}">登录跳转中</c:if></title>
+<title>发布be</title>
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/style.css">
 <link href="//static.tfeie.com/v2/css/global.css" rel="stylesheet"
@@ -130,8 +130,15 @@
 						_this.deleteBeDetail(_id);
 					});
 					
-					//活动明细文本框失去焦点事件代理
+					//纯文本框失去焦点事件代理
 					$("#DIV_BE_DETAILS").delegate("#BE_DETAIL_TEXTAREA_TITLE","blur",function(){
+						var _id =$(this).attr("_id");
+						var val = $(this).val();
+						_this.modifyBeDetail(_id,val,"");
+					}); 
+					
+					//富文本框失去焦点事件代理
+					$("#DIV_BE_DETAILS").delegate("[name='BE_DETAIL_TEXTAREA']","blur",function(){
 						var _id =$(this).attr("_id");
 						var val = $(this).val();
 						_this.modifyBeDetail(_id,val,"");

@@ -100,7 +100,7 @@
                     </select>
                 </div>
             	<p>
-					<input type="text" placeholder="例如：朝阳区星巴克(中关村店)" id="location"/>
+					<input type="text" placeholder="海淀区星巴克(中关村店)" id="location"/>
 				</p>
             </div>
             <div class="online" style="display:none;">
@@ -285,11 +285,25 @@
 						_this.deleteGoDetail(_id);
 					});
 					
-					//活动明细文本框失去焦点事件代理
+					//内容纯文本框失去焦点事件代理
 					$("#SECTION_GO_DETAILS").delegate("#GO_DETAIL_TEXTAREA_TOPIC","blur",function(){
 						var _id =$(this).attr("_id");
 						var val = $(this).val();
 						_this.modifyGoDetail(_id,val,"");
+					}); 
+					
+					//内容富文本框失去焦点事件代理
+					$("#SECTION_GO_DETAILS").delegate("[name='GO_DETAIL_TEXTAREA']","blur",function(){
+						var _id =$(this).attr("_id");
+						var val = $(this).val();
+						_this.modifyGoDetail(_id,val,"");
+					}); 
+					
+					//我的故事富文本框失去焦点事件代理
+					$("#SECTION_GO_STORIES").delegate("[name='GO_STORY_TEXTAREA']","blur",function(){
+						var _id =$(this).attr("_id");
+						var val = $(this).val();
+						_this.modifyGoStory(_id,val,"");
 					}); 
 					
 					//线上活动图片上传
@@ -1085,6 +1099,31 @@
 					
 					if(orgMode=="offline"){
 						valueValidator.addRule({
+							labelName: "省份",
+							fieldName: "offlineProvince",
+							getValue: function(){
+								return offlineProvince;
+							},
+							fieldRules: {
+								required: true
+							},
+							ruleMessages: {
+								required: "请选择省份"
+							}
+						}).addRule({
+							labelName: "城市",
+							fieldName: "offlineCity",
+							getValue: function(){
+								return offlineCity;
+							},
+							fieldRules: {
+								required: true, 
+								cnlength: 300
+							},
+							ruleMessages: {
+								required: "请选择城市"
+							}
+						}).addRule({
 							labelName: "活动地址",
 							fieldName: "location",
 							getValue: function(){
@@ -1095,10 +1134,32 @@
 								cnlength: 300
 							},
 							ruleMessages: {
-								required: "请填写活动线下举办地址",
+								required: "请填写活动地址",
 								cnlength:"活动地址最多输入150个汉字"
 							}
 						});
+					}
+					
+					if(orgMode=="online"){
+						valueValidator.addRule({
+							labelName: "线上服务方式",
+							fieldName: "onlinesvrtype",
+							getValue: function(){
+								if(onlineNet!=""){
+									return onlineNet;
+								}
+								if(onlinePic!=""){
+									return onlinePic;
+								}
+								return "";
+							},
+							fieldRules: {
+								required: true
+							},
+							ruleMessages: {
+								required: "填写一种线上服务方式"
+							}
+						})
 					}
 					valueValidator.addRule({
 						labelName: "活动明细",

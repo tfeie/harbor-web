@@ -314,7 +314,7 @@
 <script id="GroupsImpl" type="text/x-jsrender"> 
 				<section class="wuwai_jiansheng" goId="{{:goId}}" goType="{{:goType}}">
 					<section class="title_jiansheng">
-						<p>{{:topic}}</p>
+						<p><b>{{:topic}}</b></p>
 						<section class="pos_yuan">
 							<span></span><span class="on"></span>
 							<div class="clear"></div>
@@ -365,7 +365,7 @@
 <script id="OneOnOnImpl" type="text/x-jsrender"> 
 				<section class="wuwai_jiansheng" goId="{{:goId}}" goType="{{:goType}}">
 					<section class="title_jiansheng">
-						<p>{{:topic}}</p>
+						<p><b>{{:topic}}</b></p>
 						<section class="pos_yuan">
 							<span></span><span class="on"></span>
 							<div class="clear"></div>

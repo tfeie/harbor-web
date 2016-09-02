@@ -1,5 +1,6 @@
 package com.the.harbor.web.go.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
 import org.apache.log4j.Logger;
@@ -1855,13 +1857,20 @@ public class GoController {
 	
 	
 	@RequestMapping("/webpublishgo.html")
-	public ModelAndView webpublishgo(HttpServletRequest request) {
+	public ModelAndView webpublishgo(HttpServletRequest request,HttpServletResponse response) {
 		Object o = request.getSession().getAttribute(WXConstants.SESSION_WEB_LOGIN);
 		request.setAttribute("islogin", o != null);
 		request.getSession().setAttribute(WXConstants.SESSION_WEB_REDIRECTURL, "../go/webpublishgo.html");
 		if(o!=null){
 			UserViewInfo userInfo = (UserViewInfo) o;
 			request.setAttribute("userInfo", userInfo);
+		}else{
+			try {
+				response.sendRedirect("../user/login.html");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		ModelAndView view = new ModelAndView("go/webpublishgo");
 		return view;

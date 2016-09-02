@@ -322,8 +322,8 @@ public class UserController {
 		request.setAttribute("signature", signature);
 		request.setAttribute("url", url);
 		request.setAttribute("userInfo", userInfo);
-		request.setAttribute("authIdentityList", HyDictUtil.getHyDicts(TypeCode.HY_USER.getValue(),
-								ParamCode.AUTH_IDENTITY.getValue()));
+		request.setAttribute("authIdentityList",
+				HyDictUtil.getHyDicts(TypeCode.HY_USER.getValue(), ParamCode.AUTH_IDENTITY.getValue()));
 		ModelAndView view = new ModelAndView("user/toApplyCertficate");
 		return view;
 	}
@@ -1531,6 +1531,12 @@ public class UserController {
 		return view;
 	}
 
+	@RequestMapping("/qrcode.html")
+	public ModelAndView qrcode(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView view = new ModelAndView("user/qrcode");
+		return view;
+	}
+
 	@RequestMapping("/getLoginRandomCode")
 	public ResponseData<String> getLoginRandomCode(@NotBlank(message = "手机号码为空") String mobilePhone) {
 		ResponseData<String> responseData = null;
@@ -1625,8 +1631,7 @@ public class UserController {
 		ModelAndView view = new ModelAndView("user/webupload");
 		return view;
 	}
-	
-	
+
 	@RequestMapping("/webentrance.html")
 	public ModelAndView webentrance(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView("user/webentrance");
