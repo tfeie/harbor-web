@@ -304,6 +304,8 @@
 									localId : localId,
 									isShowProgressTips : 1,
 									success : function(r) {
+										console.log("hello");
+										console.log(r);
 										var mediaId = r.serverId;
 										weUI.showLoadingToast("图片转存中..")
 										ajaxController.ajax({
@@ -314,7 +316,6 @@
 												userId: _this.getPropertyValue("userId")
 											},
 											success: function(transport){
-												alert(112);
 												weUI.hideLoadingToast();
 												weUI.showXToast("图片转存成功");
 												setTimeout(function () {
