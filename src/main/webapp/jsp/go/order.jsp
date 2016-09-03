@@ -11,12 +11,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="dns-prefetch" href="//static.tfeie.com" />
+<link rel="dns-prefetch" href="http://static.tfeie.com" />
 <title>预约</title>
 <link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/style.css">
+	href="http://static.tfeie.com/css/style.css">
 <link rel="stylesheet" type="text/css"
-	href="//static.tfeie.com/css/owl.carousel.min.css">
+	href="http://static.tfeie.com/css/owl.carousel.min.css">
 <link rel="stylesheet" type="text/css"
 	href="//static.tfeie.com/css/weui.min.css">
 <script type="text/javascript"
