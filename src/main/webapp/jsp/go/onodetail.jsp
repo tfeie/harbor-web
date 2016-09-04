@@ -133,7 +133,7 @@
 			<a href="javascript:void(0)"><span>想见</span></a>
 		</section>
 		<section class="sec_02">
-			<a href="javascript:void(0)" id="BTN_GO_APPLY"><span>立即预约</span></a>
+			<a href="javascript:void(0)" id="BTN_GO_APPLY"><span><c:if test="${ordered==true }">已预约</c:if><c:if test="${ordered==false }">立即预约</c:if></span></a>
 		</section>
 	</footer>
 
@@ -191,7 +191,8 @@ wx.config({
 					var _this = this;
 					//预约
 					$("#BTN_GO_APPLY").on("click", function() {
-						_this.checkGoOrder();
+						var jumpURL=_this.getPropertyValue("jumpURL");
+						window.location.href=jumpURL;
 					});
 					
 					$("#BTN_GO_FAVOR").on("click", function() {
@@ -241,28 +242,6 @@ wx.config({
 					});
 				},
 				
-				checkGoOrder : function() {
-					var _this = this;
-					var goId=_this.getPropertyValue("goId");
-					ajaxController.ajax({
-						url : "../go/checkGoOrder",
-						type : "post",
-						data : {
-							goId : goId
-						},
-						success : function(transport) {
-							window.location.href="../go/toOrder.html?goId="+goId;
-						},
-						failure : function(transport) {
-							weUI.showXToast(transport.statusInfo);
-							setTimeout(function () {
-								weUI.hideXToast();
-				            }, 1000);
-						}
-
-					});
-				},
-
 				getGoComments : function() {
 					var _this = this;
 					ajaxController.ajax({
@@ -297,7 +276,8 @@ wx.config({
 
 	$(document).ready(function() {
 		var p = new $.OnOGoDetailPage({
-			goId : "<c:out value="${go.goId}"/>"
+			goId : "<c:out value="${go.goId}"/>",
+			jumpURL : "<c:out value="${jumpURL}"/>"
 		});
 		p.init();
 	});

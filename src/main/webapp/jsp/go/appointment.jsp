@@ -95,10 +95,10 @@
 						<input type="hidden" id="confirmLocation" value="<c:out value="${goOrder.expectedLocation2}" escapeXml="false" />"/>
 					</p>
 				</c:if>
-				<c:if test="${setMeetLocalFlag==false}">
+			</section>
+			<c:if test="${setMeetLocalFlag==false}">
 				<p>海牛还没有设定约见地点，请耐心等待哦~</p>
 				</c:if>
-			</section>
 			<c:if test="${setMeetLocalFlag==true && confirm==false}">
 			<section class="yuejian-but">
 				<button id="BTN_CONFITM_MEET_LOCAL">确认时间地点</button>

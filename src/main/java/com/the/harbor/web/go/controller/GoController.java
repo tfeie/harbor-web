@@ -288,16 +288,6 @@ public class GoController {
 		if (userInfo.getUserId().equals(go.getUserId())) {
 			throw new BusinessException("此活动是您自己发布，不可预约，请重新选择", true, "../go/oneononeindex.html");
 		}
-		// 校验当前用户对于此活动的状态来执行处理
-		GoOrder goOrder = DubboServiceUtil.queryGoOrder(userInfo.getUserId(), goId);
-		if (goOrder != null) {
-			String goOrderId = goOrder.getOrderId();
-			String orderStatus = goOrder.getOrderStatus();
-			Map<String, String> m = this.getJumpURLAndMessageForJoiner(orderStatus, goOrder.getGoId(), goOrderId);
-			String jumpURL = m.get("jumpURL");
-			String message = m.get("message");
-			throw new BusinessException("您已经预约了此活动," + message, true, jumpURL);
-		}
 		request.setAttribute("goId", goId);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("go/order");
@@ -579,6 +569,44 @@ public class GoController {
 			throw new BusinessException("您查看的活动信息不存在");
 		}
 		UserViewInfo userInfo = WXUserUtil.getUserViewInfoUnCheckWXAuth(request);
+
+		// 校验当前用户对于此活动的状态来执行处理
+		String jumpURL = "../go/toOrder.html?goId="+goId;
+		boolean ordered = false;
+		if (userInfo != null) {
+			// 如果用户已经登录，判断用户对于此活动的预约状态
+			List<GoOrder> goOrders = DubboServiceUtil.queryGoOrders(userInfo.getUserId(), goId);
+			if (!CollectionUtil.isEmpty(goOrders)) {
+				for (GoOrder goOrder : goOrders) {
+					String status = goOrder.getOrderStatus();
+					String goOrderId = goOrder.getOrderId();
+					if (OrderStatus.WAIT_PAY.getValue().equals(status)
+							|| OrderStatus.PAY_FAILURE.getValue().equals(status)) {
+						// 待支付或支付失败
+						ordered = true;
+						jumpURL = "../go/toPay.html?goId=" + goId + "&goOrderId=" + goOrderId;
+					} else if (OrderStatus.WAIT_CONFIRM.getValue().equals(status)) {
+						// 待海牛确认
+						ordered = true;
+						jumpURL = "../go/toConfirm.html?goOrderId=" + goOrderId;
+					} else if (OrderStatus.WAIT_MEET.getValue().equals(status)) {
+						// 待约见
+						ordered = true;
+						jumpURL = "../go/toAppointment.html?goOrderId=" + goOrderId;
+					} else {
+						// 其它状态，可以重发预约
+						continue;
+					}
+					if (ordered) {
+						break;
+					}
+				}
+			}
+		}
+
+		request.setAttribute("ordered", ordered);
+		request.setAttribute("jumpURL", jumpURL);
+
 		/* 发送浏览记录 */
 		DoGoView body = new DoGoView();
 		body.setGoId(goId);
@@ -1200,25 +1228,6 @@ public class GoController {
 			LOG.error(e.getMessage(), e);
 			responseData = new ResponseData<List<GoComment>>(ResponseData.AJAX_STATUS_FAILURE,
 					ExceptCodeConstants.SYSTEM_ERROR, "操作失败");
-		}
-		return responseData;
-	}
-
-	@RequestMapping("/checkGoOrder")
-	@ResponseBody
-	public ResponseData<String> checkGoOrder(@NotBlank(message = "GO标识为空") String goId, HttpServletRequest request) {
-		ResponseData<String> responseData = null;
-		try {
-			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
-			GoOrder goOrder = DubboServiceUtil.queryGoOrder(userInfo.getUserId(), goId);
-			if (goOrder != null && !OrderStatus.CANCEL.getValue().equals(goOrder.getOrderStatus())) {
-				throw new BusinessException("您已经预约过此活动哦~");
-			}
-			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
-					"操作成功", "");
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			responseData = ExceptionUtil.convert(e, String.class);
 		}
 		return responseData;
 	}

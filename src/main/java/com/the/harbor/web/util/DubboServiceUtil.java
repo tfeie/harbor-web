@@ -1,5 +1,7 @@
 package com.the.harbor.web.util;
 
+import java.util.List;
+
 import com.the.harbor.api.go.IGoSV;
 import com.the.harbor.api.go.param.Go;
 import com.the.harbor.api.go.param.GoJoin;
@@ -65,13 +67,13 @@ public final class DubboServiceUtil {
 		return resp.getGoJoin();
 	}
 
-	public static GoOrder queryGoOrder(String userId, String goId) {
+	public static List<GoOrder> queryGoOrders(String userId, String goId) {
 		GoOrderQueryReq goOrderQueryReq = new GoOrderQueryReq();
 		goOrderQueryReq.setGoId(goId);
 		goOrderQueryReq.setUserId(userId);
 		GoOrderQueryResp resp = null;
 		try {
-			resp = DubboConsumerFactory.getService(IGoSV.class).queryUserOrderGo(goOrderQueryReq);
+			resp = DubboConsumerFactory.getService(IGoSV.class).queryUserOrderGoes(goOrderQueryReq);
 		} catch (Exception ex) {
 			GenericException ge = ExceptionUtil.convert2GenericException(ex);
 			throw ge;
@@ -79,7 +81,7 @@ public final class DubboServiceUtil {
 		if (!ExceptCodeConstants.SUCCESS.equals(resp.getResponseHeader().getResultCode())) {
 			throw new BusinessException(resp.getResponseHeader().getResultMessage());
 		}
-		return resp.getGoOrder();
+		return resp.getGoOrders();
 	}
 
 	public static GoOrder queryGoOrder(String goOrderId) {
