@@ -1127,6 +1127,7 @@ public class UserController {
 					d.put("title", u.getTitle());
 					d.put("atCityName", u.getAtCityName());
 					d.put("abroadCountryRGB", u.getAbroadCountryRGB());
+					d.put("employmentInfo", u.getEmploymentInfo());
 					arr.add(d);
 				}
 			}
