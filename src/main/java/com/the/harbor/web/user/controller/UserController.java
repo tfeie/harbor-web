@@ -1073,7 +1073,7 @@ public class UserController {
 					d.put("title", u.getTitle());
 					d.put("atCityName", u.getAtCityName());
 					d.put("abroadCountryRGB", u.getAbroadCountryRGB());
-
+					d.put("employmentInfo", u.getEmploymentInfo());
 					char firstChar = Pinyin.getPinyin(u.getEnName()).toUpperCase().charAt(0);
 					String fc = String.valueOf(firstChar);
 					if (m.containsKey(fc)) {
