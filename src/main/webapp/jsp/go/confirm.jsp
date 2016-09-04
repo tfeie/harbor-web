@@ -101,7 +101,8 @@
 			bindEvents: function(){
 				var _this = this;
 				$("#BTN_SEND_MQ").on("click", function() {
-					weUI.alert({content:"发送消息测试"});
+					var userId=_this.getPropertyValue("userId");
+					window.location.href="../user/im.html?touchId="+userId;
 				}); 
 			},
  
