@@ -197,6 +197,7 @@
 							weUI.showXToast("好友关系解除");
 							setTimeout(function () {
 								weUI.hideXToast();
+								window.location.href="../user/userInfo.html?userId="+this.getPropertyValue("userId");
 				            }, 500);
 						},
 						failure: function(transport){  

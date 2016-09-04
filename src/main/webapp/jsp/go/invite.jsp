@@ -222,7 +222,7 @@ wx.config({
 				});
 				
 				$("#BTN_GOTO_MYJOIN").on("click",function(){
-					window.location.href="../go/myjointgoes.html?goType=group";
+					window.location.href="../go/goindex.html";
 				});
 				
 				$("#GO_FAVORITE").on("click",function(){
