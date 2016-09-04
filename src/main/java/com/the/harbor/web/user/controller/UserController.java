@@ -426,6 +426,13 @@ public class UserController {
 		if (userInfo == null) {
 			throw new BusinessException("USER-100001", "您访问的用户不存在");
 		}
+		UserViewInfo loginUserInfo = WXUserUtil.getUserViewInfoUnCheckWXAuth(request);
+		boolean isfriend = false;
+		if (loginUserInfo != null) {
+			Set<String> sets = HyUserUtil.getUserFriends(userId);
+			isfriend = sets.contains(loginUserInfo.getUserId());
+		}
+		request.setAttribute("isfriend", isfriend);
 		request.setAttribute("userInfo", userInfo);
 		ModelAndView view = new ModelAndView("user/userInfo");
 		return view;
@@ -949,6 +956,36 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
+	@RequestMapping("/delFriend")
+	@ResponseBody
+	public ResponseData<String> delFriend(@NotBlank(message = "好友用户ID为空") String friendUserId,
+			HttpServletRequest request) {
+		ResponseData<String> responseData = null;
+		try {
+			// 获取当前登录的用户信息
+			UserViewInfo userInfo = WXUserUtil.checkUserRegAndGetUserViewInfo(request);
+			Set<String> sets = HyUserUtil.getUserFriends(userInfo.getUserId());
+			if (!sets.contains(friendUserId)) {
+				throw new BusinessException("TA不是您的好友");
+			}
+			this.sendCancelFriendMQ(userInfo.getUserId(), friendUserId);
+			responseData = new ResponseData<String>(ResponseData.AJAX_STATUS_SUCCESS, ExceptCodeConstants.SUCCESS,
+					"操作成功", "");
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			responseData = ExceptionUtil.convert(e, String.class);
+		}
+		return responseData;
+	}
+
+	/**
+	 * 主动申请某人成为自己的好友
+	 * 
+	 * @param friendUserId
+	 * @param applyMq
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/applyFriend")
 	@ResponseBody
 	public ResponseData<String> applyFriend(@NotBlank(message = "好友用户ID为空") String friendUserId, String applyMq,
@@ -1182,6 +1219,17 @@ public class UserController {
 		body.setUserId(userId);
 		body.setTime(DateUtil.getSysDate());
 		body.setHandleType(DoUserFriend.HandleType.AGREE.name());
+		body.setMqId(UUIDUtil.genId32());
+		body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
+		UserInteractionMQSend.sendMQ(body);
+	}
+
+	private void sendCancelFriendMQ(String userId, String friendUserId) {
+		DoUserFriend body = new DoUserFriend();
+		body.setFriendUserId(friendUserId);
+		body.setUserId(userId);
+		body.setTime(DateUtil.getSysDate());
+		body.setHandleType(DoUserFriend.HandleType.CANCEL.name());
 		body.setMqId(UUIDUtil.genId32());
 		body.setMqType(MQType.MQ_HY_USER_FRIEND.getValue());
 		UserInteractionMQSend.sendMQ(body);

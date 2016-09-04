@@ -85,7 +85,12 @@
 		</section>
 		
 		<section class="ip_bianji">
-			<p><a href="javascript:void(0)" id="BTN_ADD_FRIEND">加为好友</a></p>
+			<c:if test="${isfriend==false }">
+				<p><a href="javascript:void(0)" id="BTN_ADD_FRIEND">加为好友</a></p>
+			</c:if>
+			<c:if test="${isfriend==true }">
+				<p><a href="javascript:void(0)" id="BTN_DEL_FRIEND">删除好友</a></p>
+			</c:if>
 		</section>
 
 		 <section class="ip_tie">
@@ -128,9 +133,12 @@
 				
 				bindEvents: function(){
 					var _this= this;
-					$("#BTN_ADD_FRIEND").on("click",function(){
+					$(document).delegate("#BTN_ADD_FRIEND","click",function(){
 						_this.applyFriend();
-					});
+					})
+					$(document).delegate("#BTN_DEL_FRIEND","click",function(){
+						_this.delFriend();
+					})
 					$("#BTN_IM").on("click",function(){
 						//打开IM聊天
 						var userId = _this.getPropertyValue("userId");
@@ -163,6 +171,30 @@
 						success: function(transport){
 							var data =transport.data;
 							weUI.showXToast("好友申请已经发送，请等待TA同意");
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
+						},
+						failure: function(transport){  
+							weUI.showXToast( transport.statusInfo);
+							setTimeout(function () {
+								weUI.hideXToast();
+				            }, 500);
+						}
+					});
+				},
+				
+				delFriend: function(){
+					var _this = this;
+					ajaxController.ajax({
+						url: "../user/delFriend",
+						type: "post", 
+						data: {
+							friendUserId: this.getPropertyValue("userId")
+						},
+						success: function(transport){
+							var data =transport.data;
+							weUI.showXToast("好友关系解除");
 							setTimeout(function () {
 								weUI.hideXToast();
 				            }, 500);
