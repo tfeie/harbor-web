@@ -277,7 +277,7 @@ wx.config({
 	$(document).ready(function() {
 		var p = new $.OnOGoDetailPage({
 			goId : "<c:out value="${go.goId}"/>",
-			jumpURL : "<c:out value="${jumpURL}"/>"
+			jumpURL : "<c:out value="${jumpURL}" escapeXml="false"/>"
 		});
 		p.init();
 	});
